@@ -1,6 +1,7 @@
 package de.jpaw.api;
 
 import java.io.Serializable;
+import java.util.List;
 
 /** Describes a generic data provider, which can provide read-only access to some configuration, or perform R/W operations.
  * Implementations have to provide much less functionality than for a Map. 
@@ -28,4 +29,10 @@ public interface DataProvider<KEY extends Serializable, DATA> {
     
     /** Initializes some cache from disk, if required. Does nothing if caching is not supported. */
     public void init();
+
+    /** Retrieves all entries.
+     * May throw an UnsupportedOperationException if this is not supported by the provider.
+     */
+    public List<DATA> getAll();
+    
 }

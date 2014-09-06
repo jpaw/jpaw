@@ -15,6 +15,7 @@
         <guava.version>18.0</guava.version>             <!-- http://code.google.com/p/guava-libraries/ 14.0.1 UPTODATE 2013-06-09, 
             18.0 UPTODATE 2014-08-25 -->
         <jodatime.version>2.4</jodatime.version>        <!-- UPTODATE 2014-07-27 -->
+        <icu.version>53.1</icu.version>                 <!-- UPTODATE 2014-09-06 -->
         <testng.version>5.12.1</testng.version>         <!-- 5.14.9 or 6.7 use waaay more dependencies -->
         <junit.version>4.11</junit.version>
         
@@ -152,6 +153,7 @@
     <modules>
         <module>../jpaw-enums/pom.xml</module>
         <module>../jpaw-util/pom.xml</module>
+        <module>../jpaw-icu/pom.xml</module>
         <module>../jpaw-benchmarks/pom.xml</module>
     </modules>
 

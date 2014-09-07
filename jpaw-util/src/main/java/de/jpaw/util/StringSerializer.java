@@ -65,4 +65,46 @@ public class StringSerializer {
         }
         return result;
     }
+    
+    public static String altToString(String src) {
+        StringBuilder result = new StringBuilder();
+        int i = 0;
+        while (i < src.length()) {
+            char c = src.charAt(i);
+            if (c < 32) {
+                // escaped
+                result.append('<').append((char) (c + 64)).append('>');
+            } else {
+                // leave everything else untouched
+                result.append(c);
+            }
+        }
+        return result.toString();
+    }
+
+    /**
+     * Converts a bonaPortable provided with a simple String representation to Stringbuilder.
+     */
+    public static String altFromString(String src) {
+        StringBuilder result = new StringBuilder();
+        int i = 0;
+        while (i < src.length()) {
+            char c = src.charAt(i);
+            if (c == '<' && i < src.length() - 2 && src.charAt(i+2) == '>') {
+                // escaped?
+                c = src.charAt(i+1);
+                if (c >= '@' && c < 96) {
+                    result.append((char)(c - 64));
+                    i += 3;
+                } else {
+                    result.append(src.charAt(i));
+                    ++i;
+                }
+            } else {
+                result.append(src.charAt(i));
+                ++i;
+            }
+        }
+        return result.toString();
+    }
 }

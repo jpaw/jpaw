@@ -20,7 +20,7 @@
         <junit.version>4.11</junit.version>
         
         <!--  benchmarking -->
-        <jmh.version>0.9.8</jmh.version>                <!-- http://openjdk.java.net/projects/code-tools/jmh/ UPTODATE 2014-08-29 -->
+        <jmh.version>1.0.1</jmh.version>                <!-- http://openjdk.java.net/projects/code-tools/jmh/ UPTODATE 2014-08-29 -->
     </properties>
 
     <licenses>

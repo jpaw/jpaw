@@ -132,6 +132,22 @@ public final class ByteArray implements Externalizable, Cloneable {
         return this.length;
     }
 
+//    public int getOffset() {
+//        return this.offset;
+//    }
+//    
+//    /** Returns the internal buffer of this object. It may only be used for read-only access.
+//     * Java is missing a "const" specifier for arrays as it is available in C and C++.
+//     * 
+//     * Java-purists will complain against exposing this internal state of an immutable object, but as long as
+//     * access is possible via reflection anyway, just with performance penalty, it would be outright stupid
+//     * to force people to use reflection, or even defensive copies. Instead I hope the name of the method
+//     * documents the intended use.
+//     */
+//    public byte /* const */ [] unsafe$getConstBufferOfConstBytes() {
+//        return this.buffer;
+//    }
+
     public int indexOf(byte x) {
         int i = 0;
         while (i < length) {

@@ -153,7 +153,9 @@
     <modules>
         <module>../jpaw-enums/pom.xml</module>
         <module>../jpaw-util/pom.xml</module>
+        <module>../jpaw-xml/pom.xml</module>
         <module>../jpaw-icu/pom.xml</module>
+        <module>../jpaw-xenum-init/pom.xml</module>
         <module>../jpaw-benchmarks/pom.xml</module>
     </modules>
 

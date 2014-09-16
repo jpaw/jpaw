@@ -14,6 +14,7 @@
         <logback.version>1.1.2</logback.version>        <!-- http://logback.qos.ch/ UPTODATE 2014-04-02 -->
         <guava.version>18.0</guava.version>             <!-- http://code.google.com/p/guava-libraries/ 14.0.1 UPTODATE 2013-06-09, 
             18.0 UPTODATE 2014-08-25 -->
+        <xtend.version>2.7.1</xtend.version>            <!-- UPTODATE 2014-09-03 -->
         <jodatime.version>2.4</jodatime.version>        <!-- UPTODATE 2014-07-27 -->
         <icu.version>53.1</icu.version>                 <!-- UPTODATE 2014-09-06 -->
         <testng.version>5.12.1</testng.version>         <!-- 5.14.9 or 6.7 use waaay more dependencies -->
@@ -153,6 +154,8 @@
     <modules>
         <module>../jpaw-enums/pom.xml</module>
         <module>../jpaw-util/pom.xml</module>
+        <module>../jpaw-money/pom.xml</module>
+        <module>../jpaw-money-test/pom.xml</module>
         <module>../jpaw-xml/pom.xml</module>
         <module>../jpaw-icu/pom.xml</module>
         <module>../jpaw-xenum-init/pom.xml</module>

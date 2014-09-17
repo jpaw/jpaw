@@ -13,10 +13,6 @@
 
     <description>Common configuration settings for all jpaw basic / utility projects</description>
 
-    <properties>
-        <icu.version>53.1</icu.version>                 <!-- UPTODATE 2014-09-06 -->
-    </properties>
-
     <build>
         <pluginManagement>
             <plugins>

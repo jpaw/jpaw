@@ -12,22 +12,7 @@
     <artifactId>jpaw-xenum-init</artifactId>
     <packaging>jar</packaging>
 
-    <description>BONAPARTE initializer for xenums</description>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <!-- bonaparte core should be compiled for a 1.6 target in order to allow Android compatibility -->
-                    <source>1.6</source>
-                    <target>1.6</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <description>initializer for xenums</description>
     
     <dependencies>
         <dependency>
@@ -43,7 +28,7 @@
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>0.9.9-RC2</version>
+            <version>${reflections.version}</version>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>

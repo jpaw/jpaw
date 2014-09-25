@@ -3,7 +3,7 @@
 
     <groupId>de.jpaw</groupId>
     <artifactId>jpaw-defs</artifactId>
-    <version>0.9.9-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
 
     <description>Common configuration settings / revision defaults for all jpaw projects</description>

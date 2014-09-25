@@ -21,7 +21,7 @@
         <xtext.version>2.7.2</xtext.version>            <!-- UPTODATE 2014-09-17 -->
         <jodatime.version>2.4</jodatime.version>        <!-- UPTODATE 2014-07-27 -->
         <jsap.version>2.1</jsap.version>
-        <reflections.version>0.9.9-RC2A-JDK6</reflections.version>  <!-- use forked repo at jpaw, branch MYTAG, which is a JDK6 build post RC2 -->
+        <reflections.version>0.9.9</reflections.version>  <!-- UPTODATE 2014-09-25 -->
         <icu.version>53.1</icu.version>                 <!-- UPTODATE 2014-09-06 -->
         
         <!-- testing support -->

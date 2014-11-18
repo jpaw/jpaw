@@ -3,14 +3,14 @@
 
     <groupId>de.jpaw</groupId>
     <artifactId>jpaw-defs</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <description>Common configuration settings / revision defaults for all jpaw projects</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jpaw.version>1.0.2</jpaw.version>
+        <jpaw.version>1.0.3-SNAPSHOT</jpaw.version>
         
         <!-- logging -->
         <slf4j.version>1.7.7</slf4j.version>            <!-- http://www.slf4j.org/ UPTODATE 2014-04-04 -->

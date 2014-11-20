@@ -18,8 +18,7 @@
         
         <!-- core tools used -->
         <guava.version>18.0</guava.version>             <!-- http://code.google.com/p/guava-libraries/ 14.0.1 UPTODATE 2013-06-09, 18.0 UPTODATE 2014-08-25 -->
-        <xtend.version>2.7.2</xtend.version>            <!-- UPTODATE 2014-09-17 -->
-        <xtext.version>2.7.2</xtext.version>            <!-- UPTODATE 2014-09-17 -->
+        <xtend.version>2.7.3</xtend.version>            <!-- UPTODATE 2014-11-20 -->
         <jodatime.version>2.5</jodatime.version>        <!-- UPTODATE 2014-10-30 -->
         <jsap.version>2.1</jsap.version>
         <reflections.version>0.9.9</reflections.version><!-- UPTODATE 2014-09-25 -->

@@ -9,5 +9,4 @@ echo "Cleaning repo folder..."
 git clean -fdx
 
 echo "executing mvn $GOAL..."
-(cd jpaw-defs && mvn $GOAL)
 (cd jpaw-base && mvn $GOAL)

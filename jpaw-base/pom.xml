@@ -94,6 +94,8 @@
     <modules>
         <module>../jpaw-enums/pom.xml</module>
         <module>../jpaw-util/pom.xml</module>
+        <module>../jpaw-socket/pom.xml</module>
+        <module>../jpaw-batch/pom.xml</module>
         <module>../jpaw-money/pom.xml</module>
         <module>../jpaw-money-test/pom.xml</module>
         <module>../jpaw-xml/pom.xml</module>

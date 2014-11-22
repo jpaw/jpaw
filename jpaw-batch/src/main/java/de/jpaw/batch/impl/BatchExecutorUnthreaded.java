@@ -1,11 +1,10 @@
 package de.jpaw.batch.impl;
 
-import de.jpaw.batch.api.BatchExecutor;
 import de.jpaw.batch.api.BatchProcessor;
 import de.jpaw.batch.api.BatchProcessorFactory;
 import de.jpaw.batch.api.BatchWriter;
 
-public class BatchExecutorUnthreaded<E,F> extends ContributorNoop implements BatchExecutor<E,F> {
+public class BatchExecutorUnthreaded<E,F> extends BatchMain<E,F> {
     private BatchProcessor<E,F> localProcessor = null;
     private BatchWriter<? super F> localWriter = null; 
     private int numRecords = 0;         // number of records read (added to input queue)

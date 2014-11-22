@@ -14,13 +14,12 @@ import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPResult;
 
-import de.jpaw.batch.api.BatchExecutor;
 import de.jpaw.batch.api.BatchProcessor;
 import de.jpaw.batch.api.BatchProcessorFactory;
 import de.jpaw.batch.api.BatchWriter;
 import de.jpaw.batch.api.DataWithOrdinal;
 
-public class BatchExecutor3Threads<E,F> implements BatchExecutor<E,F> {
+public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
     private static final Logger LOG = LoggerFactory.getLogger(BatchExecutor3Threads.class);
 
     

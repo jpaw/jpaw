@@ -12,12 +12,11 @@ import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPResult;
 
-import de.jpaw.batch.api.BatchExecutor;
 import de.jpaw.batch.api.BatchProcessorFactory;
 import de.jpaw.batch.api.BatchWriter;
 import de.jpaw.batch.api.DataWithOrdinal;
 
-public class BatchExecutorMultiThreaded<E,F> implements BatchExecutor<E,F> {
+public class BatchExecutorMultiThreaded<E,F> extends BatchMain<E,F> {
     private static final Logger LOG = LoggerFactory.getLogger(BatchExecutorMultiThreaded.class);
     public static int EOF = -1;
     

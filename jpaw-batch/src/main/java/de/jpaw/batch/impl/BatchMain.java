@@ -21,7 +21,7 @@ import de.jpaw.batch.api.BatchWriter;
  * A specific application must call the mainSub method with appropriate parameters for input, output and processing.
  */
 
-public class BatchMain<E, F> {
+abstract public class BatchMain<E, F> extends ContributorNoop implements BatchExecutor<E,F> {
     private static final Logger LOG = LoggerFactory.getLogger(BatchMain.class);
     
     // some statistics data
@@ -37,8 +37,9 @@ public class BatchMain<E, F> {
     public void run(String [] args,
             BatchReader<? extends E> reader,
             BatchWriter<? super F> writer,
-            BatchProcessorFactory<E,F> processorFactory,
-            BatchExecutor<E,F> executor) throws Exception {
+            BatchProcessorFactory<E,F> processorFactory) throws Exception {
+
+        BatchExecutor<E,F> executor = this;             // extensions of this class should implement the engine
         programStart = new Date();
         // add the main command line parameters
         SimpleJSAP commandLineOptions = null;
@@ -90,29 +91,5 @@ public class BatchMain<E, F> {
         timediffInMillis = programEnd.getTime() - programStart.getTime();
         LOG.info("{}, Bonaparte batch: processed {} records, total time = {} ms, {} records per second, {} exceptions",
                 programEnd,numRecords, timediffInMillis, recPerSec(timediffInMillis, numRecords), numExceptions);
-    }
-    
-    // shorthand to save an arg
-    public void runST(String [] args,
-            BatchReader<? extends E> reader,
-            BatchWriter<? super F> writer,
-            BatchProcessorFactory<E,F> processorFactory) throws Exception {
-        run(args, reader, writer, processorFactory, new BatchExecutorUnthreaded<E, F>());
-    }
-    
-    // shorthand to save an arg
-    public void runMT(String [] args,
-            BatchReader<? extends E> reader,
-            BatchWriter<? super F> writer,
-            BatchProcessorFactory<E,F> processorFactory) throws Exception {
-        run(args, reader, writer, processorFactory, new BatchExecutorMultiThreaded<E, F>());
-    }
-    
-    // shorthand to save an arg
-    public void run3T(String [] args,
-            BatchReader<? extends E> reader,
-            BatchWriter<? super F> writer,
-            BatchProcessorFactory<E,F> processorFactory) throws Exception {
-        run(args, reader, writer, processorFactory, new BatchExecutor3Threads<E, F>());
     }
 }

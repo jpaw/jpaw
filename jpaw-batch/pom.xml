@@ -12,7 +12,7 @@
     <artifactId>jpaw-batch</artifactId>
     <packaging>jar</packaging>
 
-    <name>Jpaw batch processor API and basic implementations</name>
+    <description>Jpaw batch processor API and basic implementations</description>
 
     <dependencies>
         <dependency>

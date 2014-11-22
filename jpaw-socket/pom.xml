@@ -12,7 +12,7 @@
     <artifactId>jpaw-socket</artifactId>
     <packaging>jar</packaging>
 
-    <name>Basic TCP/IP socket utility classes</name>
+    <description>Basic TCP/IP socket utility classes</description>
     
     <dependencies>
         <dependency>

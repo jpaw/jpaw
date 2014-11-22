@@ -15,8 +15,18 @@ import com.martiansoftware.jsap.JSAPResult;
  * 
  */
 abstract public class BatchWriterTextFileAbstract extends BatchWriterFile {
-    private Charset encoding = StandardCharsets.UTF_8;
-    private BufferedWriter bufferedWriter = null;
+    protected Charset encoding = StandardCharsets.UTF_8;
+    protected BufferedWriter bufferedWriter = null;
+    private final String header;
+    private final String footer;
+
+    public BatchWriterTextFileAbstract(String header, String footer) {
+        this.header = header;
+        this.footer = footer;
+    }
+    public BatchWriterTextFileAbstract() {
+        this(null, null);
+    }
     
     @Override
     public void addCommandlineParameters(JSAP params) throws Exception {
@@ -33,7 +43,10 @@ abstract public class BatchWriterTextFileAbstract extends BatchWriterFile {
         super.evalCommandlineParameters(params);
         
         // provide the buffering and charset decoding on top...
-        bufferedWriter = new BufferedWriter(new OutputStreamWriter(uncompressedStream, encoding));      
+        bufferedWriter = new BufferedWriter(new OutputStreamWriter(uncompressedStream, encoding));
+        
+        if (header != null)
+            bufferedWriter.write(header);
     }
     
     public void write(String line) throws IOException, InterruptedException {
@@ -44,6 +57,8 @@ abstract public class BatchWriterTextFileAbstract extends BatchWriterFile {
     
     @Override
     public void close() throws Exception {
+        if (footer != null)
+            bufferedWriter.write(footer);
         bufferedWriter.flush();
         bufferedWriter.close();
         super.close();  // redundant / duplicate close call?

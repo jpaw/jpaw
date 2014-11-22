@@ -8,6 +8,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.testng.annotations.Test;
 
 import de.jpaw.batch.endpoints.BatchReaderRepeater;
+import de.jpaw.batch.endpoints.BatchReaderXmlFile;
+import de.jpaw.batch.endpoints.BatchWriterDevNull;
 import de.jpaw.batch.endpoints.BatchWriterTextFile;
 import de.jpaw.batch.endpoints.BatchWriterXmlFile;
 import de.jpaw.batch.impl.BatchExecutorUnthreaded;
@@ -60,5 +62,19 @@ public class TestXmlWriter {
                 new BatchProcessorFactoryToXml(context));
         
     }
-    
+
+
+    @Test(dependsOnMethods={"testXmlInWriter"})
+    public void testXmlReader() throws Exception {
+        String [] cmdline = { "-i", "/tmp/data1.xml.gz" };
+        JAXBContext context = JAXBContext.newInstance(DummyClass.class);
+        
+        new BatchExecutorUnthreaded<DummyClass,DummyClass>().run(
+                cmdline,
+                new BatchReaderXmlFile<DummyClass>(context, DummyClass.class),
+                new BatchWriterDevNull<Object>(),
+                new BatchProcessorFactoryIdentity<TestXmlWriter.DummyClass>());
+        
+    }
+
 }

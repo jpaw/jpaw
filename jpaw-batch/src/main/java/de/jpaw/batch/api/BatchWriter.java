@@ -7,8 +7,10 @@ package de.jpaw.batch.api;
  * A single thread (or the main thread) will be allocated to writing.
  * 
  * The writer should make use of the Contributor interface to obtain parameters like filename and such.
+ * 
+ * This interface loosely corresponds to the Java 8 Consumer<F> interface. accept(F arg) for a BiStream
  */
 
 public interface BatchWriter<F> extends Contributor {
-    public void storeResult(int recordno, F response) throws Exception;
+    public void apply(int recordno, F response) throws Exception;       // store the result
 }

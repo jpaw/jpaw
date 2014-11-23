@@ -66,7 +66,7 @@ public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
         @Override
         public void onEvent(DataWithOrdinal<F> data, long sequence, boolean isLast) throws Exception {
             // and write the output to the writer
-            localWriter.storeResult(data.recordno, data.data);
+            localWriter.apply(data.recordno, data.data);
         }
         
     }
@@ -168,7 +168,7 @@ public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
     
     // BatchMainCallback. Calls to this procedure feed the input disruptor
     @Override
-    public void scheduleForProcessing(E record) {
+    public void apply(E record) {
         ++numRecords;
         
         long sequence = ringBufferIn.next();  // Grab the next sequence

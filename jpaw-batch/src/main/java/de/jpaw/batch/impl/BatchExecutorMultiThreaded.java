@@ -87,7 +87,7 @@ public class BatchExecutorMultiThreaded<E,F> extends BatchMain<E,F> {
     
     // BatchMainCallback
     @Override
-    public void scheduleForProcessing(E record) {
+    public void apply(E record) {
         ++numRecords;
         try {
             DataWithOrdinal<E> newRecord = new DataWithOrdinal<E>(numRecords, record);

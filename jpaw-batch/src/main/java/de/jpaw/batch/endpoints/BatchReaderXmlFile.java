@@ -32,7 +32,7 @@ public class BatchReaderXmlFile<E> extends BatchReaderFile implements BatchReade
         while (r.getEventType() == XMLStreamConstants.START_ELEMENT) {
             Object elem = u.unmarshal(r);
             if (targetClass.isAssignableFrom(elem.getClass())) {
-                whereToPut.scheduleForProcessing((E)elem);
+                whereToPut.apply((E)elem);
                 r.nextTag();
             } else {
                 throw new Exception("Record is of type " + elem.getClass().getCanonicalName());

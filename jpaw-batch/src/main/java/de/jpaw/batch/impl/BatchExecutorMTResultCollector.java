@@ -40,7 +40,7 @@ public class BatchExecutorMTResultCollector<F> implements Runnable {
             // we got a record
             ++numProcessed;
             try {
-                writer.storeResult(newRecord.recordno, newRecord.data);
+                writer.apply(newRecord.recordno, newRecord.data);
             } catch (Exception e) {
                 ++numExceptions;
             }

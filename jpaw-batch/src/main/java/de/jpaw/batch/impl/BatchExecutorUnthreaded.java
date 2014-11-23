@@ -22,13 +22,13 @@ public class BatchExecutorUnthreaded<E,F> extends BatchMain<E,F> {
     }
     
     @Override
-    public void scheduleForProcessing(E record) {  // called by the reader
+    public void apply(E record) {  // called by the reader
         ++numRecords;
         try {
             // process it immediately
             F result = localProcessor.process(numRecords, record);
             // and write the output to the writer
-            localWriter.storeResult(numRecords, result);
+            localWriter.apply(numRecords, result);
         } catch (Exception e) {
             ++numExceptions;
         }

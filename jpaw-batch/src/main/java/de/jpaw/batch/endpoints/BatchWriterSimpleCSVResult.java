@@ -13,7 +13,7 @@ public class BatchWriterSimpleCSVResult extends BatchWriterTextFileAbstract impl
     }
     
     @Override
-    public void storeResult(int no, Boolean response) throws Exception {
+    public void apply(int no, Boolean response) throws Exception {
         super.write(no + "," + getResult(response) + "\n");
     }
 }

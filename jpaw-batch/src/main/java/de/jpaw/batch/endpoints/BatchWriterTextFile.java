@@ -13,7 +13,7 @@ public class BatchWriterTextFile extends BatchWriterTextFileAbstract implements 
     }
 
     @Override
-    public void storeResult(int no, String response) throws Exception {
+    public void apply(int no, String response) throws Exception {
         super.write(response);
     }
 }

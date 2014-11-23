@@ -6,6 +6,6 @@ import de.jpaw.batch.impl.ContributorNoop;
 public class BatchWriterDevNull<E> extends ContributorNoop implements BatchWriter<E> {
 
     @Override
-    public void apply(int no, E response) {
+    public void accept(int no, E response) {
     }
 }

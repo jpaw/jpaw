@@ -12,5 +12,5 @@ package de.jpaw.batch.api;
  */
 
 public interface BatchWriter<F> extends Contributor {
-    public void apply(int recordno, F response) throws Exception;       // store the result
+    public void accept(int recordno, F response) throws Exception;       // store the result
 }

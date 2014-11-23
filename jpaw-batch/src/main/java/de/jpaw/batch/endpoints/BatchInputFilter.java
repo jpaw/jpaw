@@ -21,11 +21,11 @@ public abstract class BatchInputFilter<B> extends BatchLink implements BatchFilt
     }
     
     @Override
-    public final void apply(B record) {
+    public final void accept(B record) {
         ++countTotal;
         if (test(record)) {
             ++countUsed;
-            myTarget.apply(record);
+            myTarget.accept(record);
         }
     }
     

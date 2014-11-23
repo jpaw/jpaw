@@ -10,7 +10,7 @@ public class BatchReaderTextFile extends BatchReaderTextFileAbstract implements 
     public void produceTo(BatchMainCallback<? super String> whereToPut) throws Exception {
         String line;
         while ((line = getNext()) != null) {
-            whereToPut.apply(line);
+            whereToPut.accept(line);
         }
     }
 }

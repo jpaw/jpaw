@@ -21,7 +21,7 @@ public class BatchWriterXmlFile extends BatchWriterTextFileAbstract implements B
     }
     
     @Override
-    public void apply(int no, Object response) throws Exception {
+    public void accept(int no, Object response) throws Exception {
         // marshall the object and write it to the output
         m.marshal(response, bufferedWriter);
         if (formatted)

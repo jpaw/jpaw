@@ -5,5 +5,5 @@ package de.jpaw.batch.api;
  * Corresponds to a Consumer in the Java 8 streams API.
  */
 public interface BatchMainCallback<E> {
-    void apply(E record);
+    void accept(E record);
 }

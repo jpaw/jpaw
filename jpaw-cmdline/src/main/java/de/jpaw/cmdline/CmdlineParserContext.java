@@ -49,7 +49,7 @@ public class CmdlineParserContext {
     
     private final Map<String,ParserAttribs> options = new HashMap<String,ParserAttribs>(31);
     private final Map<Character,String> shortOptions = new HashMap<Character,String>(31);
-    private final Set<Callback> registeredInstances = new HashSet<Callback>(40);
+    private final Set<CmdlineCallback> registeredInstances = new HashSet<CmdlineCallback>(40);
     
     public CmdlineParserContext(String execName, String help) {
         SimpleJSAP pctx = null;
@@ -60,13 +60,14 @@ public class CmdlineParserContext {
             System.exit(1);
         }
         ctx = pctx;
+        lastContext = this;
     }
     
     private static boolean isSame(String a, String b) {
         return a == null ? b == null : a.equals(b);
     }
     
-    public void registerCallback(Callback instance) {
+    public void registerCallback(CmdlineCallback instance) {
         if (instance != null)
             registeredInstances.add(instance);
     }
@@ -150,7 +151,7 @@ public class CmdlineParserContext {
     }
     
     private void callbackInvocations() {
-        for (Callback e : registeredInstances)
+        for (CmdlineCallback e : registeredInstances)
             e.readParameters(this);
     }
 

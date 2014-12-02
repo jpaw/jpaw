@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.AbstractCollection;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.function.Consumer;
 
 /** An alternate implementation of EnumSet, but with the ability to obtain the resulting bitmap, for either transfer or storing in a database.
  * The underlying object is an int, therefore the maximum number of enum tokens is 31 (as we don't want negative values). */

@@ -20,7 +20,7 @@ class SetOfEnumProcessor extends AbstractClassProcessor {
         val abstractEnumSetName = AbstractEnumSet.newTypeReference.type.qualifiedName
         
         if (cls.extendedClass === null || cls.extendedClass.class.canonicalName != abstractEnumSetName) {
-            cls.addError('''Must extend «abstractEnumSetName»''')
+            cls.addError('''Must extend «abstractEnumSetName», but does «cls.extendedClass?.class?.canonicalName ?: "null"»''')
             return
         }
         val enumType = cls.extendedClass?.actualTypeArguments?.head      

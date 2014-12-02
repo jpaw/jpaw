@@ -32,7 +32,7 @@ class SetOfEnumProcessor extends AbstractClassProcessor {
             final = true
             visibility = Visibility::PRIVATE
             type = newArrayTypeReference(enumType)
-            initializer = [ '''«toJavaCode(enumType)».values();''' ]  
+            initializer = [ '''«toJavaCode(enumType)».values()''' ]  
         ]
         cls.addField("NUMBER_OF_INSTANCES") [
             final = true

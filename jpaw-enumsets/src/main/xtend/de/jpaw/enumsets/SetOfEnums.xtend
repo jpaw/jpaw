@@ -19,8 +19,8 @@ class SetOfEnumProcessor extends AbstractClassProcessor {
         val overrideAnno = Override.newAnnotationReference
         val abstractEnumSetName = AbstractEnumSet.newTypeReference.type.qualifiedName
         
-        if (cls.extendedClass === null || cls.extendedClass.class.canonicalName != abstractEnumSetName) {
-            cls.addError('''Must extend «abstractEnumSetName», but does «cls.extendedClass?.class?.canonicalName ?: "null"»''')
+        if (cls.extendedClass === null || cls.extendedClass.type.qualifiedName != abstractEnumSetName) {
+            cls.addError('''Must extend «abstractEnumSetName», but does «cls.extendedClass?.type?.qualifiedName ?: "null"»''')
             return
         }
         val enumType = cls.extendedClass?.actualTypeArguments?.head      
@@ -31,7 +31,7 @@ class SetOfEnumProcessor extends AbstractClassProcessor {
         cls.addField("VALUES") [
             final = true
             visibility = Visibility::PRIVATE
-            type = newArrayTypeReference(String.newTypeReference)
+            type = newArrayTypeReference(enumType)
             initializer = [ '''«toJavaCode(enumType)».values();''' ]  
         ]
         cls.addField("NUMBER_OF_INSTANCES") [
@@ -61,27 +61,27 @@ class SetOfEnumProcessor extends AbstractClassProcessor {
         cls.addConstructor[
             visibility = Visibility::PUBLIC
             body = [ '''
-                super());
+                super();
             ''']
         ]
         cls.addConstructor[
             visibility = Visibility::PUBLIC
             addParameter("bitmap", primitiveInt)
             body = [ '''
-                super(bitmap));
+                super(bitmap);
             ''']
         ]
         cls.addMethod("of") [
             visibility = Visibility::PUBLIC
             returnType = cls.newTypeReference
-            addParameter("arg", enumType)
+            addParameter("arg", newArrayTypeReference(enumType))
             varArgs = true
             static = true
             body = [ '''
                 int val = 0;
                 for (int i = 0; i < arg.length; ++i)
                     val |= 1 << arg[i].ordinal();
-                return new «toJavaCode(enumType)»(val);
+                return new «toJavaCode(cls.newTypeReference)»(val);
             ''']
         ]
     }

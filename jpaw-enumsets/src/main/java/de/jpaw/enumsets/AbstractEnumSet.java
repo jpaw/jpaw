@@ -77,11 +77,11 @@ public abstract class AbstractEnumSet<E extends Enum<E>> extends AbstractCollect
     
     static protected class SetOfEnumsIterator<E extends Enum<E>> implements Iterator<E> {
         private final Class<E> enumType;
-        private final String [] values;
+        private final E [] values;
         private int bitmap;
         private int index;
         
-        protected SetOfEnumsIterator(Class<E> enumType, String [] values, int bitmap) {
+        public SetOfEnumsIterator(Class<E> enumType, E [] values, int bitmap) {
             this.enumType = enumType;
             this.values = values;
             this.bitmap = bitmap;
@@ -101,7 +101,7 @@ public abstract class AbstractEnumSet<E extends Enum<E>> extends AbstractCollect
             while ((bitmap & (1 << index)) == 0)
                 ++index;
             bitmap &= ~ (1 << index);
-            return Enum.valueOf(enumType, values[index]);
+            return values[index];
         }
 
         @Override

@@ -1,6 +1,6 @@
 package de.jpaw.enumsets.tests
 
-import de.jpaw.enumsets.AbstractEnumSet
+import de.jpaw.enums.AbstractEnumSet
 import de.jpaw.enumsets.SetOfEnum
 import org.testng.annotations.Test
 

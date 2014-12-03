@@ -7,6 +7,8 @@ import org.eclipse.xtend.lib.macro.TransformationContext
 import org.eclipse.xtend.lib.macro.declaration.MutableClassDeclaration
 import org.eclipse.xtend.lib.macro.declaration.Visibility
 
+import de.jpaw.enums.AbstractEnumSet
+
 /** Generates a specific conrete class implementing some EnumSet.
  * The annotated class must extend AbstractEnumSet.
  */
@@ -55,7 +57,7 @@ class SetOfEnumProcessor extends AbstractClassProcessor {
             final = true
             addAnnotation(overrideAnno)
             body = [ '''
-                return new SetOfEnumsIterator(«toJavaCode(enumType)».class, VALUES, getBitmap());
+                return new SetOfEnumsIterator<«toJavaCode(enumType)»>(VALUES, getBitmap());
             ''']
         ]
         cls.addConstructor[

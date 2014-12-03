@@ -55,6 +55,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>de.jpaw</groupId>
+            <artifactId>jpaw-enums</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.eclipse.xtend</groupId>
             <artifactId>org.eclipse.xtend.lib</artifactId>
             <version>${xtend.version}</version>

@@ -1,4 +1,4 @@
-package de.jpaw.enumsets;
+package de.jpaw.enums;
 
 import java.io.Serializable;
 import java.util.AbstractCollection;
@@ -47,7 +47,7 @@ public abstract class AbstractEnumSet<E extends Enum<E>> extends AbstractCollect
     @Override
     public boolean add(E e) {
         int q = e.ordinal();   // may throw NPE
-        if (q >= 31)
+        if (q >= 31 || q > getMaxOrdinal())
             throw new IllegalArgumentException(e.getClass().getCanonicalName() + "." + e.name() + " has ordinal " + e.ordinal());
         int b = 1 << q;
         if ((bitmap & b) != 0)
@@ -60,7 +60,7 @@ public abstract class AbstractEnumSet<E extends Enum<E>> extends AbstractCollect
     public boolean remove(Object o) {
         E e = (E)o;
         int q = e.ordinal();   // may throw NPE
-        if (q >= 31)
+        if (q >= 31 || q > getMaxOrdinal())
             throw new IllegalArgumentException(e.getClass().getCanonicalName() + "." + e.name() + " has ordinal " + e.ordinal());
         int b = 1 << q;
         if ((bitmap & b) != 0)
@@ -75,13 +75,11 @@ public abstract class AbstractEnumSet<E extends Enum<E>> extends AbstractCollect
     }
     
     static protected class SetOfEnumsIterator<E extends Enum<E>> implements Iterator<E> {
-        private final Class<E> enumType;
         private final E [] values;
         private int bitmap;
         private int index;
         
-        public SetOfEnumsIterator(Class<E> enumType, E [] values, int bitmap) {
-            this.enumType = enumType;
+        public SetOfEnumsIterator(E [] values, int bitmap) {
             this.values = values;
             this.bitmap = bitmap;
             this.index = -1;

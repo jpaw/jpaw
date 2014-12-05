@@ -3,13 +3,13 @@
 
     <parent>
         <groupId>de.jpaw</groupId>
-        <artifactId>jpaw-defs</artifactId>
-        <version>1.0.2</version>
-        <relativePath>../jpaw-defs/pom.xml</relativePath>
+        <artifactId>jpaw-se-parent</artifactId>
+        <version>1.0.0</version>
+        <relativePath/>
     </parent>
 
     <artifactId>jpaw-base</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>pom</packaging>
 
     <description>Common configuration settings for all jpaw basic / utility projects</description>
@@ -20,7 +20,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.9.1</version>
+                    <version>${javadoc.plugin.version}</version>
                     <configuration>
                         <charset>UTF-8</charset>
                     </configuration>
@@ -29,7 +29,7 @@
                     <!-- must delete generated sources as well -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>2.5</version>
+                    <version>${clean.plugin.version}</version>
                     <configuration>
                         <filesets>
                             <fileset>
@@ -44,7 +44,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.14</version>
+                    <version>${surefire.plugin.version}</version>
                     <configuration>
                         <!-- cannot use target/lib because we depend on additional 4rd party libraries (lz4), which are not in this project -->
                         <argLine>-Djava.library.path=${user.home}/lib</argLine>
@@ -83,7 +83,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>${javadoc.plugin.version}</version>
                 <configuration>
                     <charset>UTF-8</charset>
                 </configuration>
@@ -94,11 +94,17 @@
     <modules>
         <module>../jpaw-enums/pom.xml</module>
         <module>../jpaw-util/pom.xml</module>
+        <module>../jpaw-socket/pom.xml</module>
+        <module>../jpaw-cmdline/pom.xml</module>
+        <module>../jpaw-batch/pom.xml</module>
+        <module>../jpaw-batch-lmax/pom.xml</module>
         <module>../jpaw-money/pom.xml</module>
         <module>../jpaw-money-test/pom.xml</module>
         <module>../jpaw-xml/pom.xml</module>
         <module>../jpaw-icu/pom.xml</module>
         <module>../jpaw-xenum-init/pom.xml</module>
+        <module>../jpaw-enumsets/pom.xml</module>
+        <module>../jpaw-enumsets-test/pom.xml</module>
         <module>../jpaw-benchmarks/pom.xml</module>
     </modules>
 

@@ -92,6 +92,7 @@
     </reporting>
 
     <modules>
+        <module>../jpaw-bom/pom.xml</module>
         <module>../jpaw-enums/pom.xml</module>
         <module>../jpaw-util/pom.xml</module>
         <module>../jpaw-socket/pom.xml</module>

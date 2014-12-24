@@ -6,33 +6,31 @@ import java.util.Iterator;
 import java.util.Set;
 
 /** An alternate implementation of EnumSet, but with the ability to obtain the resulting bitmap, for either transfer or storing in a database.
- * The underlying object is an int, therefore the maximum number of enum tokens is 31 (as we don't want negative values). */
-@Deprecated  // use AbstractIntEnumSet instead
-public abstract class AbstractEnumSet<E extends Enum<E>> extends AbstractCollection<E> implements Set<E>, Serializable {
-    private static final long serialVersionUID = 34398390989170000L + 31;
-    private static final int BIT = 1;
-    public static final int MAX_TOKENS = 31;
-    
-    private int bitmap;
+ * The underlying object is a byte, therefore the maximum number of enum tokens is 7 (as we don't want negative values). */
+public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractCollection<E> implements Set<E>, Serializable {
+    private static final long serialVersionUID = 34398390989170000L + 7;
+    private static final byte BIT = 1;
+    public static final int MAX_TOKENS = 7;
+    private byte bitmap;
     
     abstract protected int getMaxOrdinal();
     
-    public AbstractEnumSet() {
+    public AbstractByteEnumSet() {
         bitmap = 0;
     }
     
-    public AbstractEnumSet(int bitmap) {
+    public AbstractByteEnumSet(byte bitmap) {
         this.bitmap = bitmap;
     }
     
     
-    public int getBitmap() {
+    public byte getBitmap() {
         return bitmap;
     }
     
     /** Creates a bitmap from an array of arbitrary enums. */
-    public static int bitmapOf(Enum<?> [] arg) {
-        int val = 0;
+    public static byte bitmapOf(Enum<?> [] arg) {
+        byte val = 0;
         for (int i = 0; i < arg.length; ++i)
             val |= BIT << arg[i].ordinal();   
         return val;
@@ -40,7 +38,7 @@ public abstract class AbstractEnumSet<E extends Enum<E>> extends AbstractCollect
     
     @Override
     public int size() {
-        return Integer.bitCount(bitmap);
+        return Long.bitCount(bitmap);
     }
     
     @Override
@@ -61,7 +59,7 @@ public abstract class AbstractEnumSet<E extends Enum<E>> extends AbstractCollect
         int q = e.ordinal();   // may throw NPE
         if (q >= MAX_TOKENS || q > getMaxOrdinal())
             throw new IllegalArgumentException(e.getClass().getCanonicalName() + "." + e.name() + " has ordinal " + e.ordinal());
-        int b = BIT << q;
+        byte b = (byte) (BIT << q);
         if ((bitmap & b) != 0)
             return false;
         bitmap |= b;
@@ -74,7 +72,7 @@ public abstract class AbstractEnumSet<E extends Enum<E>> extends AbstractCollect
         int q = e.ordinal();   // may throw NPE
         if (q >= MAX_TOKENS || q > getMaxOrdinal())
             throw new IllegalArgumentException(e.getClass().getCanonicalName() + "." + e.name() + " has ordinal " + e.ordinal());
-        int b = BIT << q;
+        byte b = (byte) (BIT << q);
         if ((bitmap & b) == 0)
             return false;
         bitmap &= ~b;
@@ -88,10 +86,10 @@ public abstract class AbstractEnumSet<E extends Enum<E>> extends AbstractCollect
     
     static protected class SetOfEnumsIterator<E extends Enum<E>> implements Iterator<E> {
         private final E [] values;
-        private int bitmap;
+        private byte bitmap;
         private int index;
         
-        public SetOfEnumsIterator(E [] values, int bitmap) {
+        public SetOfEnumsIterator(E [] values, byte bitmap) {
             this.values = values;
             this.bitmap = bitmap;
             this.index = -1;

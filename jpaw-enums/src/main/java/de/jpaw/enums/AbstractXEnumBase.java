@@ -1,9 +1,12 @@
 package de.jpaw.enums;
 
+import java.io.Serializable;
+
 /** An instance of an XEnum. */
 
-public abstract class AbstractXEnumBase<E extends AbstractXEnumBase<E>> implements XEnum<E>, Comparable<E> {
-    private final Enum<?> _enum;
+public abstract class AbstractXEnumBase<E extends AbstractXEnumBase<E>> implements XEnum<E>, Comparable<E>, Serializable {
+	private static final long serialVersionUID = 6954125049968610802L;
+	private final Enum<?> _enum;
     private final int _ordinal;
     private final String _name;
     private final String _token;

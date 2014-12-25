@@ -5,7 +5,6 @@ import java.util.AbstractCollection;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
 
 /** An alternate implementation of EnumSet, which stores the contained elements as a component inside Strings.
  * The class is not thread safe. Implementations which intend to perform parallel modification must use external locking mechanisms.
@@ -96,6 +95,11 @@ public abstract class AbstractStringXEnumSet<E extends AbstractXEnumBase<E>> ext
     
     @Override
     public boolean add(E e) {
+    	return addEnum(e);
+    }
+    
+    // Utility method to add a component enum
+    public boolean addEnum(TokenizableEnum e) {
     	String token = e.getToken();   	// may throw NPE, as per contract
         verify$Not$Frozen();			// check if modification is allowed
     	if (bitmap.length() == 0) {

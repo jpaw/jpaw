@@ -76,7 +76,7 @@ public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractCol
         byte b = (byte) (BIT << q);
         if ((bitmap & b) != 0)
             return false;
-        verify$Not$Frozen();			// check if modification is allowed
+        verify$Not$Frozen();            // check if modification is allowed
         bitmap |= b;
         return true;
     }
@@ -90,29 +90,29 @@ public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractCol
         byte b = (byte) (BIT << q);
         if ((bitmap & b) == 0)
             return false;
-        verify$Not$Frozen();			// check if modification is allowed
+        verify$Not$Frozen();            // check if modification is allowed
         bitmap &= ~b;
         return true;
     }
 
     @Override
     public void clear() {
-    	if (bitmap != 0) {
-    		verify$Not$Frozen();			// check if modification is allowed
-    		bitmap = 0;
-    	}
+        if (bitmap != 0) {
+            verify$Not$Frozen();            // check if modification is allowed
+            bitmap = 0;
+        }
     }
     
     @Override
     public int hashCode() {
-    	return bitmap;
+        return bitmap;
     }
     
     @Override
     public boolean equals(Object o) {
-    	if (o == null || getClass() != o.getClass())
-    		return false;
-    	return bitmap == ((AbstractByteEnumSet<?>)o).getBitmap();
+        if (o == null || getClass() != o.getClass())
+            return false;
+        return bitmap == ((AbstractByteEnumSet<?>)o).getBitmap();
     }
     
     static protected class SetOfEnumsIterator<E extends Enum<E>> implements Iterator<E> {

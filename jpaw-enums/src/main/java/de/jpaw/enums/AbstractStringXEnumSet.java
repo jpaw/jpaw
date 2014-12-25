@@ -32,7 +32,7 @@ public abstract class AbstractStringXEnumSet<E extends AbstractXEnumBase<E>> ext
     abstract protected int getMaxOrdinal();
     
     public AbstractStringXEnumSet() {
-    	bitmap = "";
+        bitmap = "";
     }
     
     public AbstractStringXEnumSet(String bitmap) {
@@ -46,13 +46,13 @@ public abstract class AbstractStringXEnumSet<E extends AbstractXEnumBase<E>> ext
     
     /** Creates a bitmap from an array of arbitrary enums. */
     public static String bitmapOf(TokenizableEnum [] arg) {
-    	TreeSet<String> values = new TreeSet<String>();
+        TreeSet<String> values = new TreeSet<String>();
         for (int i = 0; i < arg.length; ++i) {
-        	values.add(arg[i].getToken());
+            values.add(arg[i].getToken());
         }
         StringBuilder buff = new StringBuilder(values.size());
         for (String token : values)
-        	buff.append(token);
+            buff.append(token);
         return buff.toString();
     }
     
@@ -82,33 +82,33 @@ public abstract class AbstractStringXEnumSet<E extends AbstractXEnumBase<E>> ext
     protected void add(String token) {
         final char c = token.charAt(0);
         for (int pos = 0; pos < bitmap.length(); ++pos) {
-        	// perform the Java equivalent of C's strncmp, without GC overhead (extracting substrings)
-			if (bitmap.charAt(pos) > c) {
-				// insert it before here
-				bitmap = pos == 0 ? token + bitmap : bitmap.substring(0, pos) + token + bitmap.substring(pos);
-				return;
-        	}
+            // perform the Java equivalent of C's strncmp, without GC overhead (extracting substrings)
+            if (bitmap.charAt(pos) > c) {
+                // insert it before here
+                bitmap = pos == 0 ? token + bitmap : bitmap.substring(0, pos) + token + bitmap.substring(pos);
+                return;
+            }
         }
-    	// at end: append it!
+        // at end: append it!
         bitmap = bitmap + token;
     }
     
     @Override
     public boolean add(E e) {
-    	return addEnum(e);
+        return addEnum(e);
     }
     
     // Utility method to add a component enum
     public boolean addEnum(TokenizableEnum e) {
-    	String token = e.getToken();   	// may throw NPE, as per contract
-        verify$Not$Frozen();			// check if modification is allowed
-    	if (bitmap.length() == 0) {
-    		// shortcut for a simple case
-    		bitmap = token;
-    		return true;
-    	}
+        String token = e.getToken();    // may throw NPE, as per contract
+        verify$Not$Frozen();            // check if modification is allowed
+        if (bitmap.length() == 0) {
+            // shortcut for a simple case
+            bitmap = token;
+            return true;
+        }
         if (contains(token))
-            return false;				// was already present
+            return false;               // was already present
         // find it: skip any tokens before. Assumption is that linear search is effectively faster than bisection here due to small sizes
         add(token);
         return true;
@@ -118,11 +118,11 @@ public abstract class AbstractStringXEnumSet<E extends AbstractXEnumBase<E>> ext
     public boolean remove(Object o) {
         E e = (E)o;
         String token = ((TokenizableEnum)o).getToken();
-        verify$Not$Frozen();			// check if modification is allowed
+        verify$Not$Frozen();            // check if modification is allowed
         if (bitmap.equals(token)) {
-        	// shortcut, removing the last element: avoid substrings
-        	bitmap = "";
-        	return true;
+            // shortcut, removing the last element: avoid substrings
+            bitmap = "";
+            return true;
         }
         final char c = token.charAt(0);
         int index = bitmap.indexOf(c);
@@ -134,20 +134,20 @@ public abstract class AbstractStringXEnumSet<E extends AbstractXEnumBase<E>> ext
 
     @Override
     public void clear() {
-        verify$Not$Frozen();			// check if modification is allowed
+        verify$Not$Frozen();            // check if modification is allowed
         bitmap = "";
     }
     
     @Override
     public int hashCode() {
-    	return bitmap.hashCode();
+        return bitmap.hashCode();
     }
     
     @Override
     public boolean equals(Object o) {
-    	if (o == null || getClass() != o.getClass())
-    		return false;
-    	return bitmap == ((AbstractStringXEnumSet<?>)o).getBitmap();
+        if (o == null || getClass() != o.getClass())
+            return false;
+        return bitmap == ((AbstractStringXEnumSet<?>)o).getBitmap();
     }
     
     /** Iterator which returns the elements of the set in order of tokens sorted ascending. */
@@ -168,10 +168,10 @@ public abstract class AbstractStringXEnumSet<E extends AbstractXEnumBase<E>> ext
 
         @Override
         public E next() {
-        	if (bitmap.length() <= index)
-        		return null;				// shortcut
-        	++index;
-        	return myFactory.getByToken(bitmap.substring(index-1, index)); 
+            if (bitmap.length() <= index)
+                return null;                // shortcut
+            ++index;
+            return myFactory.getByToken(bitmap.substring(index-1, index)); 
         }
 
         @Override

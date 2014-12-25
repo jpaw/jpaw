@@ -134,6 +134,18 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
         bitmap = "";
     }
     
+    @Override
+    public int hashCode() {
+    	return bitmap.hashCode();
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+    	if (o == null || getClass() != o.getClass())
+    		return false;
+    	return bitmap == ((AbstractStringEnumSet<?>)o).getBitmap();
+    }
+    
     /** Iterator which returns the elements of the set in order of tokens sorted ascending. */
     static protected class SetOfEnumsIterator<E extends TokenizableEnum> implements Iterator<E> {
         private final E [] values;

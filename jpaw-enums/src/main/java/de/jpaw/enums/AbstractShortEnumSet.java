@@ -103,6 +103,18 @@ public abstract class AbstractShortEnumSet<E extends Enum<E>> extends AbstractCo
     	}
     }
     
+    @Override
+    public int hashCode() {
+    	return bitmap;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+    	if (o == null || getClass() != o.getClass())
+    		return false;
+    	return bitmap == ((AbstractShortEnumSet<?>)o).getBitmap();
+    }
+    
     static protected class SetOfEnumsIterator<E extends Enum<E>> implements Iterator<E> {
         private final E [] values;
         private short bitmap;

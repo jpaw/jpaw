@@ -103,6 +103,18 @@ public abstract class AbstractIntEnumSet<E extends Enum<E>> extends AbstractColl
     	}
     }
     
+    @Override
+    public int hashCode() {
+    	return bitmap;
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+    	if (o == null || getClass() != o.getClass())
+    		return false;
+    	return bitmap == ((AbstractIntEnumSet<?>)o).getBitmap();
+    }
+    
     static protected class SetOfEnumsIterator<E extends Enum<E>> implements Iterator<E> {
         private final E [] values;
         private int bitmap;

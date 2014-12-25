@@ -13,6 +13,20 @@ public abstract class AbstractIntEnumSet<E extends Enum<E>> extends AbstractColl
     public static final int MAX_TOKENS = 31;
     private int bitmap;
     
+    // allow to make the set immutable
+    private transient boolean _is$Frozen = false;      // current state of this instance
+
+    public final boolean is$Frozen() {
+        return _is$Frozen;
+    }
+    protected final void verify$Not$Frozen() {
+        if (_is$Frozen)
+            throw new RuntimeException("Setter called for frozen instance of class " + getClass().getName());
+    }
+    public void freeze() {
+        _is$Frozen = true;
+    }
+    
     abstract protected int getMaxOrdinal();
     
     public AbstractIntEnumSet() {
@@ -62,6 +76,7 @@ public abstract class AbstractIntEnumSet<E extends Enum<E>> extends AbstractColl
         int b = (int) (BIT << q);
         if ((bitmap & b) != 0)
             return false;
+        verify$Not$Frozen();			// check if modification is allowed
         bitmap |= b;
         return true;
     }
@@ -75,13 +90,17 @@ public abstract class AbstractIntEnumSet<E extends Enum<E>> extends AbstractColl
         int b = (int) (BIT << q);
         if ((bitmap & b) == 0)
             return false;
+        verify$Not$Frozen();			// check if modification is allowed
         bitmap &= ~b;
         return true;
     }
 
     @Override
     public void clear() {
-        bitmap = 0;
+    	if (bitmap != 0) {
+    		verify$Not$Frozen();			// check if modification is allowed
+    		bitmap = 0;
+    	}
     }
     
     static protected class SetOfEnumsIterator<E extends Enum<E>> implements Iterator<E> {

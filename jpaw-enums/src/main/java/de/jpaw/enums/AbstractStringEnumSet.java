@@ -15,6 +15,20 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
     private static final long serialVersionUID = 34398390989170000L + 99;
     private String bitmap;
     
+    // allow to make the set immutable
+    private transient boolean _is$Frozen = false;      // current state of this instance
+
+    public final boolean is$Frozen() {
+        return _is$Frozen;
+    }
+    protected final void verify$Not$Frozen() {
+        if (_is$Frozen)
+            throw new RuntimeException("Setter called for frozen instance of class " + getClass().getName());
+    }
+    public void freeze() {
+        _is$Frozen = true;
+    }
+    
     // not required for String type, but defined for consistency
     abstract protected int getMaxOrdinal();
     
@@ -83,6 +97,7 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
     @Override
     public boolean add(E e) {
     	String token = e.getToken();   	// may throw NPE, as per contract
+        verify$Not$Frozen();			// check if modification is allowed
     	if (bitmap.length() == 0) {
     		// shortcut for a simple case
     		bitmap = token;
@@ -99,6 +114,7 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
     public boolean remove(Object o) {
         E e = (E)o;
         String token = ((TokenizableEnum)o).getToken();
+        verify$Not$Frozen();			// check if modification is allowed
         if (bitmap.equals(token)) {
         	// shortcut, removing the last element: avoid substrings
         	bitmap = "";
@@ -114,6 +130,7 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
 
     @Override
     public void clear() {
+        verify$Not$Frozen();			// check if modification is allowed
         bitmap = "";
     }
     

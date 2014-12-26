@@ -246,14 +246,12 @@ public final class ByteArray implements Externalizable, Cloneable {
 
     // two ByteArrays are considered equal if they have the same visible contents
     @Override
-    public boolean equals(Object xthat) {
-        if (xthat == null)
-            return false;
-        if (!(xthat instanceof ByteArray))
-            return false;
-        if (this == xthat)
+    public boolean equals(Object _that) {
+        if (this == _that)
             return true;
-        ByteArray that = (ByteArray)xthat;
+        if (_that == null || getClass() != _that.getClass())
+            return false;
+        ByteArray that = (ByteArray)_that;
         // same as contentEqualsSub(..) now
         if (this.length != that.length)
             return false;

@@ -203,15 +203,10 @@ public final class BonaCurrency implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
+        if (this == obj)
             return true;
-        }
-        if (obj == null) {
+        if (obj == null || getClass() != obj.getClass())
             return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
         BonaCurrency other = (BonaCurrency) obj;
         if (currencyCode == null) {
             if (other.currencyCode != null) {

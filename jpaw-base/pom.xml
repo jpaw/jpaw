@@ -4,12 +4,12 @@
     <parent>
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-se-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
         <relativePath/>
     </parent>
 
     <artifactId>jpaw-base</artifactId>
-    <version>1.0.3</version>
+    <version>1.2.0</version>
     <packaging>pom</packaging>
 
     <description>Common configuration settings for all jpaw basic / utility projects</description>
@@ -83,15 +83,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${javadoc.plugin.version}</version>
-                <configuration>
-                    <charset>UTF-8</charset>
-                </configuration>
             </plugin>
         </plugins>
     </reporting>
 
     <modules>
+        <module>../jpaw-bom/pom.xml</module>
         <module>../jpaw-enums/pom.xml</module>
         <module>../jpaw-util/pom.xml</module>
         <module>../jpaw-socket/pom.xml</module>

@@ -1,15 +1,19 @@
 package de.jpaw.enumsets;
 
+import de.jpaw.enums.AbstractByteEnumSet
+import de.jpaw.enums.AbstractIntEnumSet
+import de.jpaw.enums.AbstractLongEnumSet
+import de.jpaw.enums.AbstractShortEnumSet
+import de.jpaw.enums.AbstractStringEnumSet
 import java.util.Iterator
 import org.eclipse.xtend.lib.macro.AbstractClassProcessor
 import org.eclipse.xtend.lib.macro.Active
 import org.eclipse.xtend.lib.macro.TransformationContext
 import org.eclipse.xtend.lib.macro.declaration.MutableClassDeclaration
+import org.eclipse.xtend.lib.macro.declaration.TypeReference
 import org.eclipse.xtend.lib.macro.declaration.Visibility
 
-import de.jpaw.enums.AbstractEnumSet
-
-/** Generates a specific conrete class implementing some EnumSet.
+/** Generates a specific concrete class implementing some EnumSet.
  * The annotated class must extend AbstractEnumSet.
  */
 @Active(SetOfEnumProcessor)
@@ -19,13 +23,30 @@ class SetOfEnumProcessor extends AbstractClassProcessor {
 
     override doTransform(MutableClassDeclaration cls, extension TransformationContext context) {
         val overrideAnno = Override.newAnnotationReference
-        val abstractEnumSetName = AbstractEnumSet.newTypeReference.type.qualifiedName
+        var TypeReference tmpRetType
         
-        if (cls.extendedClass === null || cls.extendedClass.type.qualifiedName != abstractEnumSetName) {
-            cls.addError('''Must extend «abstractEnumSetName», but does «cls.extendedClass?.type?.qualifiedName ?: "null"»''')
+        if (cls.extendedClass === null) {
+            cls.addError('''Must extend one of the AbstractEnum*Set classes, but does not inherit from any class''')
             return
         }
-        val enumType = cls.extendedClass?.actualTypeArguments?.head      
+        switch (cls.extendedClass.type.qualifiedName) {
+        case AbstractByteEnumSet.newTypeReference.type.qualifiedName:
+            tmpRetType = primitiveByte
+        case AbstractShortEnumSet.newTypeReference.type.qualifiedName:
+            tmpRetType = primitiveShort
+        case AbstractIntEnumSet.newTypeReference.type.qualifiedName:
+            tmpRetType = primitiveInt
+        case AbstractLongEnumSet.newTypeReference.type.qualifiedName:
+            tmpRetType = primitiveLong
+        case AbstractStringEnumSet.newTypeReference.type.qualifiedName:
+            tmpRetType = string
+        default: {        
+            cls.addError('''Must extend one of the AbstractEnum*Set classes, but does «cls.extendedClass.type.qualifiedName»''')
+            return
+            }
+        }
+        val finalRetType = tmpRetType
+        val enumType = cls.extendedClass.actualTypeArguments?.head      
         val iteratorType = Iterator.newTypeReference(enumType) 
         
         cls.final = true
@@ -68,7 +89,7 @@ class SetOfEnumProcessor extends AbstractClassProcessor {
         ]
         cls.addConstructor[
             visibility = Visibility::PUBLIC
-            addParameter("bitmap", primitiveInt)
+            addParameter("bitmap", finalRetType)
             body = [ '''
                 super(bitmap);
             ''']
@@ -76,14 +97,11 @@ class SetOfEnumProcessor extends AbstractClassProcessor {
         cls.addMethod("of") [
             visibility = Visibility::PUBLIC
             returnType = cls.newTypeReference
-            addParameter("arg", newArrayTypeReference(enumType))
+            addParameter("args", newArrayTypeReference(enumType))
             varArgs = true
             static = true
             body = [ '''
-                int val = 0;
-                for (int i = 0; i < arg.length; ++i)
-                    val |= 1 << arg[i].ordinal();
-                return new «toJavaCode(cls.newTypeReference)»(val);
+                return new «toJavaCode(cls.newTypeReference)»(bitmapOf(args));
             ''']
         ]
     }

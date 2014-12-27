@@ -120,4 +120,14 @@ public class XEnumFactory<E extends AbstractXEnumBase<E>> {
             result.add(of(i));
         return result;
     }
+    
+    /** Returns the number of different instances for this xenum. */
+    public int size() {
+        return tokenToXEnum.size();
+    }
+    
+    /** Returns a copy of the list of values, as in enm.values(). */
+    public E [] values() {
+        return (E[])tokenToXEnum.values().toArray();  // cast should not be required...
+    }
 }

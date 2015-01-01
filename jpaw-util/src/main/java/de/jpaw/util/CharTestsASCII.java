@@ -30,11 +30,16 @@ import java.util.regex.Pattern;
  *
  * @author Michael Bischoff
  *
+ * Changes:
+ * 1.2.1:   changed 0x7f to be no longer considered as a "printable" character, in order to be consistent with the Java patterns and common expectation
  */
 
 public class CharTestsASCII {
-    public static final Pattern UPPERCASE_PATTERN = Pattern.compile("\\A[A-Z]*\\z");  // tests if a field consists of uppercase characters only
-    public static final Pattern LOWERCASE_PATTERN = Pattern.compile("\\A[a-z]*\\z");  // tests if a field consists of lowercase characters only
+    public static final Pattern UPPERCASE_PATTERN        = Pattern.compile("\\A[A-Z]*\\z");             // tests if a field consists of uppercase characters only
+    public static final Pattern LOWERCASE_PATTERN        = Pattern.compile("\\A[a-z]*\\z");             // tests if a field consists of lowercase characters only
+    public static final Pattern DIGIT_PATTERN            = Pattern.compile("\\A[0-9]*\\z");             // tests if a field consists of digits characters only
+    public static final Pattern PRINTABLE_PATTERN        = Pattern.compile("\\A[\\x20-\\x7e]*\\z");     // tests if a field consists of printable ASCII characters only
+    public static final Pattern PRINTABLE_OR_TAB_PATTERN = Pattern.compile("\\A[\\x20-\\x7e\t]*\\z");   // tests if a field consists of printable ASCII characters or TABs only
 
     /**
      * The constructor is defined as private, in order to prevent that anyone
@@ -44,6 +49,7 @@ public class CharTestsASCII {
     private CharTestsASCII() {
     }
 
+    /** Returns true if the whole String contains ASCII upper case characters only, else false. */
     public static boolean isUpperCase(String s) {
         for (int i = 0; i < s.length(); ++i) {
             if (!isAsciiUpperCase(s.charAt(i))) {
@@ -52,6 +58,8 @@ public class CharTestsASCII {
         }
         return true;
     }
+    
+    /** Returns true if the whole String contains ASCII lower case characters only, else false. */
     public static boolean isLowerCase(String s) {
         for (int i = 0; i < s.length(); ++i) {
             if (!isAsciiLowerCase(s.charAt(i))) {
@@ -60,16 +68,37 @@ public class CharTestsASCII {
         }
         return true;
     }
-    // same functionality, manual implementation. Which one is faster?
-    public static boolean isUpperCaseByPattern(String s) {
-        Matcher m = UPPERCASE_PATTERN.matcher(s);
-        return m.find();
+    
+    /** Returns true if the whole String contains ASCII printable characters only (range 0x20 .. 0x7e), else false. */
+    public static boolean isPrintable(String s) {
+        for (int i = 0; i < s.length(); ++i) {
+            if (!isAsciiPrintable(s.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
-    public static boolean isLowerCaseByPattern(String s) {
-        Matcher m = LOWERCASE_PATTERN.matcher(s);
-        return m.find();
+    
+    /** Returns true if the whole String contains ASCII printable characters or TABs only (range 0x20 .. 0x7e and 0x09), else false. */
+    public static boolean isPrintableOrTab(String s) {
+        for (int i = 0; i < s.length(); ++i) {
+            if (!isAsciiPrintableOrTab(s.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
-
+    
+    /** Returns true if the whole String contains ASCII digits only, else false. */
+    public static boolean isDigit(String s) {
+        for (int i = 0; i < s.length(); ++i) {
+            if (!isAsciiDigit(s.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     /**
      * <code>isAsciiPrintable()</code> tests if a character is a US-ASCII (7
      * bit) printable character, which mainly means that such a character is
@@ -82,7 +111,22 @@ public class CharTestsASCII {
      *         character, <code>false</code> otherwise.
      */
     public static boolean isAsciiPrintable(char c) {
-        return (c >= 0x20) && (c <= 0x7f);
+        return (c >= 0x20) && (c <= 0x7e);
+    }
+
+    /**
+     * <code>isAsciiPrintable()</code> tests if a character is a US-ASCII (7
+     * bit) printable character, or a tab character, which mainly means that such a character is
+     * available in every character encoding, no matter if single byte or
+     * multi-byte.
+     *
+     * @param c
+     *            the character to test
+     * @return <code>true</code> if the parameter represents a printable ASCII
+     *         character or a TAB, <code>false</code> otherwise.
+     */
+    public static boolean isAsciiPrintableOrTab(char c) {
+        return ((c >= 0x20) && (c <= 0x7e)) || (c == '\t');
     }
 
     /**
@@ -125,5 +169,37 @@ public class CharTestsASCII {
     public static boolean isAsciiDigit(char c) {
         return (c >= '0') && (c <= '9');
     }
+    
+    
+    // some redundant implementations, for comparison (GC overhead / execution time) and preference purposes
 
+    /** Returns true if the whole String contains ASCII upper case characters only, else false. */
+    public static boolean isUpperCaseByPattern(String s) {
+        Matcher m = UPPERCASE_PATTERN.matcher(s);
+        return m.find();
+    }
+    
+    /** Returns true if the whole String contains ASCII lower case characters only, else false. */
+    public static boolean isLowerCaseByPattern(String s) {
+        Matcher m = LOWERCASE_PATTERN.matcher(s);
+        return m.find();
+    }
+    
+    /** Returns true if the whole String contains ASCII digits only, else false. */
+    public static boolean isDigitByPattern(String s) {
+        Matcher m = DIGIT_PATTERN.matcher(s);
+        return m.find();
+    }
+
+    /** Returns true if the whole String contains ASCII printable characters only (range 0x20 .. 0x7e), else false. */
+    public static boolean isPrintableByPattern(String s) {
+        Matcher m = PRINTABLE_PATTERN.matcher(s);
+        return m.find();
+    }
+    
+    /** Returns true if the whole String contains ASCII printable characters or TABs only (range 0x20 .. 0x7e and 0x09), else false. */
+    public static boolean isPrintableOrTabByPattern(String s) {
+        Matcher m = PRINTABLE_OR_TAB_PATTERN.matcher(s);
+        return m.find();
+    }
 }

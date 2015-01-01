@@ -23,6 +23,8 @@ package de.jpaw.util;
  *
  * @author Michael Bischoff
  *
+ * Changes:
+ * 1.2.1:   changed 0x7f to be no longer considered as a "printable" character, in order to be consistent with the Java patterns and common expectation
  */
 
 public class ByteTestsASCII {
@@ -46,7 +48,22 @@ public class ByteTestsASCII {
      *         character, <code>false</code> otherwise.
      */
     public static boolean isAsciiPrintable(byte c) {
-        return c >= 0x20 && c <= 0x7f;
+        return c >= 0x20 && c <= 0x7e;
+    }
+
+    /**
+     * <code>isAsciiPrintable()</code> tests if a byte is a US-ASCII (7
+     * bit) printable character or a TAB, which mainly means that such a character is
+     * available in every character encoding, no matter if single byte or
+     * multi-byte.
+     *
+     * @param c
+     *            the byte to test
+     * @return <code>true</code> if the parameter represents a printable ASCII
+     *         character, <code>false</code> otherwise.
+     */
+    public static boolean isAsciiPrintableOrTab(byte c) {
+        return (c >= 0x20 && c <= 0x7e) || (c == '\t');
     }
 
     /**

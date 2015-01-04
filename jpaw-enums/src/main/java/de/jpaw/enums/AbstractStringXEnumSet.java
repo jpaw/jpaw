@@ -163,7 +163,7 @@ public abstract class AbstractStringXEnumSet<E extends AbstractXEnumBase<E>> ext
         
         @Override
         public boolean hasNext() {
-            return bitmap.length() <= index;
+            return index< bitmap.length();
         }
 
         @Override

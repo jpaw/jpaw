@@ -165,7 +165,7 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
         
         @Override
         public boolean hasNext() {
-            return bitmap.length() <= index;
+            return index < bitmap.length();
         }
 
         @Override

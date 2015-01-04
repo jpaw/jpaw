@@ -3,3 +3,6 @@ This files lists the changes, starting after revision 1.2.0:
 1.2.1:
 - complete the methods in CharTestsASCII, add test cases for them. 0x7f is no longer considered as printable, in line with 3rd party understanding.
 
+1.2.2:
+- bugfix: the hasNext() was not working correctly in the Iterator of EnumSet<String> and XenumSet.
+

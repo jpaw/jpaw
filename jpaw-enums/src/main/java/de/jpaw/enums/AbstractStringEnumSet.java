@@ -112,7 +112,6 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
 
     @Override
     public boolean remove(Object o) {
-        E e = (E)o;
         String token = ((TokenizableEnum)o).getToken();
         verify$Not$Frozen();            // check if modification is allowed
         if (bitmap.equals(token)) {
@@ -148,13 +147,11 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
     
     /** Iterator which returns the elements of the set in order of tokens sorted ascending. */
     static protected class SetOfEnumsIterator<E extends TokenizableEnum> implements Iterator<E> {
-        private final E [] values;
         private final String bitmap;
         private int index = 0;
         static private final ConcurrentHashMap<String, TokenizableEnum> lookupTable = new ConcurrentHashMap<String, TokenizableEnum>();
         
         public SetOfEnumsIterator(E [] values, String bitmap) {
-            this.values = values;
             this.bitmap = bitmap;
             if (lookupTable.size() < values.length) {
                 // hashmap not up to date. fill it. Possible duplicate fills are accepted, they perform logically correct, with just a small performance overhead
@@ -173,7 +170,9 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
             if (bitmap.length() <= index)
                 return null;                // shortcut
             ++index;
-            return (E) lookupTable.get(bitmap.substring(index-1, index));   // GC overhead due to new String. But a Character would be as well... 
+            @SuppressWarnings("unchecked")
+            E data = (E) lookupTable.get(bitmap.substring(index-1, index));   // GC overhead due to new String. But a Character would be as well... 
+            return data;
         }
 
         @Override

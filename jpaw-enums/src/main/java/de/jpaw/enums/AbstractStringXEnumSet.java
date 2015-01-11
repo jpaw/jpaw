@@ -116,7 +116,6 @@ public abstract class AbstractStringXEnumSet<E extends AbstractXEnumBase<E>> ext
 
     @Override
     public boolean remove(Object o) {
-        E e = (E)o;
         String token = ((TokenizableEnum)o).getToken();
         verify$Not$Frozen();            // check if modification is allowed
         if (bitmap.equals(token)) {

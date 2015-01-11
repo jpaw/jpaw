@@ -99,6 +99,7 @@ public class XEnumFactory<E extends AbstractXEnumBase<E>> {
         // the following line does not compile. Why not? B the bound, the lower object type should be known!
         //E [] result = new E [arrayOfEnums.length];
         // the following line does compile, but has a warning of course
+        @SuppressWarnings("unchecked")
         E [] result = (E[]) new AbstractXEnumBase [arrayOfEnums.length];
         for (int i = 0; i < arrayOfEnums.length; ++i)
             result[i] = of(arrayOfEnums[i]);
@@ -127,6 +128,7 @@ public class XEnumFactory<E extends AbstractXEnumBase<E>> {
     }
     
     /** Returns a copy of the list of values, as in enm.values(). */
+    @SuppressWarnings("unchecked")
     public E [] values() {
         return (E[])tokenToXEnum.values().toArray();  // cast should not be required...
     }

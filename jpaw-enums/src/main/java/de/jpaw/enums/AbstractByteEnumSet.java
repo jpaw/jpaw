@@ -27,6 +27,8 @@ public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractCol
         _is$Frozen = true;
     }
     
+    /** This method returns the number of instances (max Ordinal + 1), the name is misleading!!!!
+     * This definition has been made to avoid a negative return code in the case of empty enums. */
     abstract protected int getMaxOrdinal();
     
     public AbstractByteEnumSet() {
@@ -71,7 +73,7 @@ public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractCol
     @Override
     public boolean add(E e) {
         int q = e.ordinal();   // may throw NPE
-        if (q >= MAX_TOKENS || q > getMaxOrdinal())
+        if (q >= MAX_TOKENS || q >= getMaxOrdinal())
             throw new IllegalArgumentException(e.getClass().getCanonicalName() + "." + e.name() + " has ordinal " + e.ordinal());
         byte b = (byte) (BIT << q);
         if ((bitmap & b) != 0)
@@ -83,14 +85,15 @@ public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractCol
 
     @Override
     public boolean remove(Object o) {
-        E e = (E)o;
-        int q = e.ordinal();   // may throw NPE
-        if (q >= MAX_TOKENS || q > getMaxOrdinal())
-            throw new IllegalArgumentException(e.getClass().getCanonicalName() + "." + e.name() + " has ordinal " + e.ordinal());
+        if (o == null || !(o instanceof Enum))      // preliminary check for "not contained"
+            return false;
+        int q = ((Enum<?>)o).ordinal();
+        if (q >= MAX_TOKENS || q >= getMaxOrdinal())
+            throw new IllegalArgumentException(o.getClass().getCanonicalName() + "." + o.toString() + " has ordinal " + q + " which is too big for this set");
         byte b = (byte) (BIT << q);
         if ((bitmap & b) == 0)
             return false;
-        verify$Not$Frozen();            // check if modification is allowed
+        verify$Not$Frozen();                // check if modification is allowed
         bitmap &= ~b;
         return true;
     }
@@ -113,6 +116,41 @@ public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractCol
         if (o == null || getClass() != o.getClass())
             return false;
         return bitmap == ((AbstractByteEnumSet<?>)o).getBitmap();
+    }
+    
+    /** Merges (boolean OR) another bitmap into this one. */
+    public void unifyWith(AbstractByteEnumSet<E> that) {
+        verify$Not$Frozen();                // check if modification is allowed
+        bitmap |= that.bitmap;
+    }
+    
+    /** Merges (boolean AND) another bitmap into this one. */
+    public void intersectWith(AbstractByteEnumSet<E> that) {
+        verify$Not$Frozen();                // check if modification is allowed
+        bitmap &= that.bitmap;
+    }
+    
+    /** Subtracts another bitmap from this one. */
+    public void exclude(AbstractByteEnumSet<E> that) {
+        verify$Not$Frozen();                // check if modification is allowed
+        bitmap &= ~that.bitmap;
+    }
+    
+    /** Merges (XOR) another bitmap into this one. Provided for completeness */
+    public void exactlyOneOf(AbstractByteEnumSet<E> that) {
+        verify$Not$Frozen();                // check if modification is allowed
+        bitmap ^= that.bitmap;
+    }
+    
+    /** Returns the bitmap of the full set with all elements included. */
+    public byte bitmapFullSet() {
+        return (byte) ((BIT << getMaxOrdinal()) - BIT);      // Java looses type on binary operations such that a cast is required for byte and byte
+    }
+    
+    /** Negates a set. */
+    public void complement() {
+        verify$Not$Frozen();                // check if modification is allowed
+        bitmap = (byte) (~bitmap & bitmapFullSet());      // Java looses type on binary operations such that a cast is required for byte and byte
     }
     
     static protected class SetOfEnumsIterator<E extends Enum<E>> implements Iterator<E> {

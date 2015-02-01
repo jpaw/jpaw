@@ -16,16 +16,13 @@ public class HashMapPrimitiveLongObject<V> extends AbstractHashMap {
      */
     transient Entry<V>[] elementData;
     
-    static class Entry<V>{
-        final int origKeyHash;
-
+    static class Entry<V> {
         final long key;
         V value;
         Entry<V> next;
 
-        public Entry(long key, int hash) {
+        public Entry(long key) {
             this.key = key;
-            this.origKeyHash = hash;
         }
     }
     /*
@@ -127,14 +124,14 @@ public class HashMapPrimitiveLongObject<V> extends AbstractHashMap {
     }
 
     final Entry<V> getEntry(long key) {
-        int hash = HashMapPrimitiveLongObject.longHash(key^hashSalt);
+        int hash = longHash(key);
         int index = hash & (elementData.length - 1);
         return findNonNullKeyEntry(key, index, hash);
     }
 
     final Entry<V> findNonNullKeyEntry(long key, int index, int keyHash) {
         Entry<V> m = elementData[index];
-        while (m != null && (m.origKeyHash != keyHash || key != m.key)) {
+        while (m != null && key != m.key) {
             m = m.next;
         }
         return m;
@@ -159,12 +156,12 @@ public class HashMapPrimitiveLongObject<V> extends AbstractHashMap {
      */
     public V put(long key, V value) {
         Entry<V> entry;
-        int hash = HashMapPrimitiveLongObject.longHash(key^hashSalt);
+        int hash = longHash(key);
         int index = hash & (elementData.length - 1);
         entry = findNonNullKeyEntry(key, index, hash);
         if (entry == null) {
            modCount++;
-           entry = createHashedEntry(key, index, hash);
+           entry = createHashedEntry(key, index);
            if (++elementCount > threshold) {
                rehash();
            }
@@ -176,22 +173,22 @@ public class HashMapPrimitiveLongObject<V> extends AbstractHashMap {
     }
 
 
-    Entry<V> createHashedEntry(long key, int index, int hash) {
-        Entry<V> entry = new Entry<V>(key,hash);
+    Entry<V> createHashedEntry(long key, int index) {
+        Entry<V> entry = new Entry<V>(key);
         entry.next = elementData[index];
         elementData[index] = entry;
         return entry;
     }
     
     void rehash(int capacity) {
-        int length = calculateCapacity((capacity == 0 ? 1 : capacity << 1));
+        int length = calculateCapacity(capacity << 1);
 
         Entry<V>[] newData = newElementArray(length);
         for (int i = 0; i < elementData.length; i++) {
             Entry<V> entry = elementData[i];
             elementData[i] = null;
             while (entry != null) {
-                int index = entry.origKeyHash & (length - 1);
+                int index = longHash(entry.key) & (length - 1);
                 Entry<V> next = entry.next;
                 entry.next = newData[index];
                 newData[index] = entry;
@@ -219,10 +216,10 @@ public class HashMapPrimitiveLongObject<V> extends AbstractHashMap {
         Entry<V> entry;
         Entry<V> last = null;
 
-        int hash = HashMapPrimitiveLongObject.longHash(key^hashSalt);
+        int hash = longHash(key);
         index = hash & (elementData.length - 1);
         entry = elementData[index];
-        while (entry != null && !(entry.origKeyHash == hash && key == entry.key)) {
+        while (entry != null && key != entry.key) {
              last = entry;
              entry = entry.next;
         }

@@ -6,14 +6,12 @@ import java.util.Arrays;
 public class HashMapObjectPrimitiveLong<K> extends AbstractHashMap {
     
     static class Entry<K>{
-        final int origKeyHash;
         final K key;
         long value;
         Entry<K> next;
 
-        public Entry(K key, int hash) {
+        public Entry(K key) {
             this.key = key;
-            this.origKeyHash = hash;
         }
     }
     /*
@@ -125,7 +123,7 @@ public class HashMapObjectPrimitiveLong<K> extends AbstractHashMap {
 
     final Entry<K> findNonNullKeyEntry(K key, int index, int keyHash) {
         Entry<K> m = elementData[index];
-        while (m != null && (m.origKeyHash != keyHash || key != m.key)) {
+        while (m != null && key != m.key) {
             m = m.next;
         }
         return m;
@@ -148,7 +146,7 @@ public class HashMapObjectPrimitiveLong<K> extends AbstractHashMap {
         entry = findNonNullKeyEntry(key, index, hash);
         if (entry == null) {
            modCount++;
-           entry = createHashedEntry(key, index, hash);
+           entry = createHashedEntry(key, index);
            if (++elementCount > threshold) {
                rehash();
            }
@@ -160,8 +158,8 @@ public class HashMapObjectPrimitiveLong<K> extends AbstractHashMap {
     }
 
 
-    Entry<K> createHashedEntry(K key, int index, int hash) {
-        Entry<K> entry = new Entry<K>(key, hash);
+    Entry<K> createHashedEntry(K key, int index) {
+        Entry<K> entry = new Entry<K>(key);
         entry.next = elementData[index];
         elementData[index] = entry;
         return entry;
@@ -175,7 +173,7 @@ public class HashMapObjectPrimitiveLong<K> extends AbstractHashMap {
             Entry<K> entry = elementData[i];
             elementData[i] = null;
             while (entry != null) {
-                int index = entry.origKeyHash & (length - 1);
+                int index = entry.key.hashCode() & (length - 1);
                 Entry<K> next = entry.next;
                 entry.next = newData[index];
                 newData[index] = entry;
@@ -206,7 +204,7 @@ public class HashMapObjectPrimitiveLong<K> extends AbstractHashMap {
         int hash = key.hashCode();
         index = hash & (elementData.length - 1);
         entry = elementData[index];
-        while (entry != null && !(entry.origKeyHash == hash && key == entry.key)) {
+        while (entry != null && key != entry.key) {
              last = entry;
              entry = entry.next;
         }

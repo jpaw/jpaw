@@ -1,6 +1,5 @@
 package de.jpaw.primitivecollections;
 
-import java.util.Random;
 
 public class AbstractHashMap {
 
@@ -23,15 +22,6 @@ public class AbstractHashMap {
      * maximum number of elements that can be put in this map before having to rehash
      */
     int threshold;
-
-    /**
-     * Salt added to keys before hashing, so it is harder to trigger hash collision attack.
-     */
-    protected final long hashSalt = hashSaltValue();
-
-    protected long hashSaltValue() {
-        return new Random().nextLong();
-    }
 
     /**
      * Calculates the capacity of storage required for storing given number of elements. The result is a power of 2.

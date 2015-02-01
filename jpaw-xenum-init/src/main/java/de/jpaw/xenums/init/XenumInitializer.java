@@ -1,6 +1,5 @@
 package de.jpaw.xenums.init;
 
-import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +10,7 @@ public class XenumInitializer {
     
     public static void initializeXenums(String packageName) {
         int ctr = 0;
-        for (Class<? extends AbstractXEnumBase> cls : new Reflections(packageName).getSubTypesOf(AbstractXEnumBase.class)) {
+        for (Class<? extends AbstractXEnumBase> cls : ReflectionsPackageCache.get(packageName).getSubTypesOf(AbstractXEnumBase.class)) {
             try {
                 cls.getMethod("xenum$MetaData").invoke(null);
                 ++ctr;

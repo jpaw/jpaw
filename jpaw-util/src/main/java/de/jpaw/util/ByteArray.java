@@ -15,6 +15,7 @@
   */
 package de.jpaw.util;
 
+import java.io.DataInput;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -47,14 +48,15 @@ public final class ByteArray implements Externalizable, Cloneable {
     static private final byte[] ZERO_JAVA_BYTE_ARRAY = new byte [0];
     static public final ByteArray ZERO_BYTE_ARRAY = new ByteArray();
 
+    /** Constructs an empty ByteArray. Prefer access to the static member ZERO_BYTE_ARRAY to reduce GC. */
+    @Deprecated
     public ByteArray() {
-        // constructs an empty ByteArray. Does not really make sense.
         buffer = ZERO_JAVA_BYTE_ARRAY;
         offset = 0;
         length = 0;
     }
 
-    // construct a ByteArray from a source byte []
+    /** Constructs a ByteArray from a source byte [], which is defensively copied. */
     public ByteArray(byte [] source) {
         if (source == null || source.length == 0) {
             buffer = ZERO_JAVA_BYTE_ARRAY;
@@ -68,6 +70,8 @@ public final class ByteArray implements Externalizable, Cloneable {
     }
 
     // construct a ByteArray from a trusted source byte []
+    // this method is always called with unsafeTrustedReuseOfJavaByteArray = true, the parameter is only required in order to distinguish the constructor
+    // from the copying one
     private ByteArray(byte [] source, boolean unsafeTrustedReuseOfJavaByteArray) {
         if (source == null || source.length == 0) {
             buffer = ZERO_JAVA_BYTE_ARRAY;
@@ -80,7 +84,16 @@ public final class ByteArray implements Externalizable, Cloneable {
         }
     }
 
-    // construct a ByteArray from a source byte [], with offset and length. source may not be null
+    /** Constructs a ByteArray from the provided DataInput, with a predefined length. */
+    public static ByteArray fromDataInput(DataInput in, int len) throws IOException {
+        if (len <= 0)
+            return ZERO_BYTE_ARRAY;
+        byte [] tmp = new byte[len];
+        in.readFully(tmp);
+        return new ByteArray(tmp, true);
+    }
+    
+    /** construct a ByteArray from a source byte [], with offset and length. source may not be null. */
     public ByteArray(byte [] source, int offset, int length) {
         if (source == null || offset < 0 || length < 0 || offset + length > source.length)
             throw new IllegalArgumentException();
@@ -90,8 +103,8 @@ public final class ByteArray implements Externalizable, Cloneable {
         this.length = length;
     }
 
-    // construct a ByteArray from another one
-    // TODO: change it to private? external callers should use plain assignment or clone() instead!
+    /** Construct a ByteArray from another one. Could also just assign it due to immutability.
+     * The only benefit of this constructor is that it converts a null parameter into the non-null empty ByteArray. */
     public ByteArray(ByteArray source) {
         if (source == null) {
             buffer = ZERO_JAVA_BYTE_ARRAY;
@@ -104,8 +117,8 @@ public final class ByteArray implements Externalizable, Cloneable {
         }
     }
 
-    // construct a ByteArray from a source byte [], with offset and length. source may not be null
-    // TODO: change it to private? external callers should use the subArray() method
+    /** Construct a ByteArray from a source byte [], with offset and length. source may not be null.
+     * Similar to the subArray member method. */
     public ByteArray(ByteArray source, int offset, int length) {
         if (source == null || offset < 0 || length < 0 || offset + length > source.length)
             throw new IllegalArgumentException();
@@ -115,12 +128,22 @@ public final class ByteArray implements Externalizable, Cloneable {
         this.length = length;
     }
 
-    // same as above, but as a member method, ensuring
+    /** Returns a ByteArray which contains a subsequence of the bytes of this one. The underlying buffer is shared.
+     * Functionality wise this corresponds to String.substring (before Java 6) or ByteBuffer.slice. */
     public ByteArray subArray(int offset, int length) {
-        if (offset < 0 || length < 0 || offset + length > this.length)
-            throw new IllegalArgumentException();
         // create a new ByteArray sharing the same buffer
         return new ByteArray(this, offset, length);
+    }
+
+    /** Returns a ByteArray which contains a subsequence of the bytes of this one. The underlying buffer is not shared.
+     * Use this variant if the original ByteArray holds a much larger byte [] and can be GCed afterwards. */
+    public ByteArray subArrayUnshared(int offset, int length) {
+        if (offset < 0 || length < 0 || offset + length > this.length)
+            throw new IllegalArgumentException();
+        byte [] newBuffer = new byte[length];
+        System.arraycopy(buffer, offset, newBuffer, 0, length);
+        // create a new ByteArray using the new buffer
+        return new ByteArray(newBuffer, true);
     }
 
     @Override

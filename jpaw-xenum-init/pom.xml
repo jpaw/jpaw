@@ -5,7 +5,7 @@
     <parent>
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-base</artifactId>
-        <version>1.2.2</version>
+        <version>1.2.3</version>
         <relativePath>../jpaw-base/pom.xml</relativePath>
     </parent>
 
@@ -18,6 +18,11 @@
         <dependency>
             <groupId>de.jpaw</groupId>
             <artifactId>jpaw-enums</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.jpaw</groupId>
+            <artifactId>jpaw-util</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

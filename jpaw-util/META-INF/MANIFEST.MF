@@ -5,6 +5,8 @@ Bundle-Name: jpaw utility libraries
 Bundle-SymbolicName: jpaw.util
 Bundle-Version: 1.2.4.qualifier
 Bundle-Vendor: Michael Bischoff
-Export-Package: de.jpaw.util
+Export-Package: de.jpaw.util,
+ de.jpaw.api,
+ de.jpaw.api.iso
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6 

@@ -12,7 +12,7 @@ import org.openjdk.jmh.infra.Blackhole;
 
 /** Miscellaneous benchmarks, to find out which implementation of alternative standard Java stuff is faster. */
 
-//java -jar target/fixedpoint-benchmarks.jar -i 3 -f 3 -wf 1 -wi 3 ".*MiscJava.*"
+//java -jar target/jpaw-benchmarks.jar -i 3 -f 3 -wf 1 -wi 3 ".*MiscJava.*"
 
 //Benchmark                                    Mode  Samples   Score  Score error  Units
 //d.j.b.m.MiscJava.fourCharAppends             avgt        6  10.470        0.317  ns/op

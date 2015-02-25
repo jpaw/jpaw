@@ -1,7 +1,7 @@
 package de.jpaw.api.iso;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import de.jpaw.util.CharTestsASCII;
 
@@ -11,7 +11,7 @@ public class CurrencyKeyConverter {
     static private final String [] FREQUENT_CURRENCY_CODES_A3 = {            // sorted by descending gross domestic product, 2012
         "XXX", "USD", "CNY", "JPY", "EUR", "BRR", "RUB", "INR", "GBP", "CHF", "HKD", "AUD", "CAD" // plus "XXX" for default
     };
-    static private final Map<String, Integer> FREQUENT_CURRENCY_CODES_A3_MAP = new HashMap<String,Integer>(20);
+    static private final ConcurrentMap<String, Integer> FREQUENT_CURRENCY_CODES_A3_MAP = new ConcurrentHashMap<String,Integer>(500);
     static {
         for (int i = 0; i < FREQUENT_CURRENCY_CODES_A3.length; ++i)
             FREQUENT_CURRENCY_CODES_A3_MAP.put(FREQUENT_CURRENCY_CODES_A3[i], Integer.valueOf(i + 1));
@@ -20,7 +20,7 @@ public class CurrencyKeyConverter {
     
     /** convert a country code string into a number, or return 0 if the code does not conform to the spec.
      * Frequently occurring codes will get small numbers.
-     * The range is within [1..776) (10 bit) */
+     * The range is within [1..17k) (31 bit) */
     public static int currencyCodeA3ToInt(String currencyCode) {
         Integer frequent = FREQUENT_CURRENCY_CODES_A3_MAP.get(currencyCode);
         if (frequent != null)
@@ -48,4 +48,20 @@ public class CurrencyKeyConverter {
                 + String.valueOf((char)('A' + currencyCodeIndex % 26));
     }
 
+    /** Fill cache entries for all known currencies.
+     * If called, subsequent String construction and resulting GC overhead can be avoided. */
+    public static void populateCache(CurrencyDataProvider dp) {
+        for (CurrencyData cd: dp.getAll()) {
+            String currencyCode = cd.getCurrencyCode();
+            Integer code = FREQUENT_CURRENCY_CODES_A3_MAP.get(currencyCode);
+            if (code == null) {
+                // not yet in cache
+                int newCode = currencyCodeA3ToInt(currencyCode);
+                if (newCode > 0) {
+                    // valid code: store it with the predictable index
+                    FREQUENT_CURRENCY_CODES_A3_MAP.putIfAbsent(currencyCode, Integer.valueOf(newCode));
+                }
+            }
+        }
+    }
 }

@@ -1,7 +1,8 @@
 package de.jpaw.api.iso;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Locale;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import de.jpaw.util.CharTestsASCII;
 
@@ -11,7 +12,7 @@ public class CountryKeyConverter {
     static private final String [] FREQUENT_COUNTRY_CODES_A2 = {            // sorted by descending gross domestic product, 2012
         "XX", "US", "CN", "JP", "DE", "FR", "BR", "GB", "RU", "IN", "IT"    // plus "XX" for default
     };
-    static private final Map<String, Integer> FREQUENT_COUNTRY_CODES_A2_MAP = new HashMap<String,Integer>(20);
+    static private final ConcurrentMap<String, Integer> FREQUENT_COUNTRY_CODES_A2_MAP = new ConcurrentHashMap<String,Integer>(400);
     static {
         for (int i = 0; i < FREQUENT_COUNTRY_CODES_A2.length; ++i)
             FREQUENT_COUNTRY_CODES_A2_MAP.put(FREQUENT_COUNTRY_CODES_A2[i], Integer.valueOf(i + 1));
@@ -43,5 +44,23 @@ public class CountryKeyConverter {
             return null;  // error
         countryCodeIndex -= OFFSET_COMPUTED;
         return String.valueOf((char)('A' + countryCodeIndex / 26)) + String.valueOf((char)('A' + countryCodeIndex % 26));
+    }
+    
+    /** Fill cache entries for all known countries.
+     * If called, subsequent String construction and resulting GC overhead can be avoided. */
+    public static void populateCache() {
+        final String [] countries = Locale.getISOCountries(); 
+        for (int i = 0; i < countries.length; ++i) {
+            String countryCode = countries[i];
+            Integer code = FREQUENT_COUNTRY_CODES_A2_MAP.get(countryCode);
+            if (code == null) {
+                // not yet in cache
+                int newCode = countryCodeA2ToInt(countryCode);
+                if (newCode > 0) {
+                    // valid code: store it with the predictable index
+                    FREQUENT_COUNTRY_CODES_A2_MAP.putIfAbsent(countryCode, Integer.valueOf(newCode));
+                }
+            }
+        }
     }
 }

@@ -38,23 +38,57 @@ public class ApplicationException extends Exception {
     /** The classification of return codes indicating success (which would never be instantiated as an exception). */
     static public final int SUCCESS = 0;
     /** The classification of return codes indicating a decline or negative decision, without being a parameter or processing problem, and therefore also never be instantiated as an exception. */
+    @Deprecated
     static public final int DENIED  = 1;
     /** The classification of return codes indicating an invalid message format. */
+    @Deprecated
     static public final int PARSER_ERROR = 2;
     /** The classification of return codes indicating an invalid reference or field value (for example an invalid customer no or invalid country code). */
+    @Deprecated
     static public final int PARAMETER_ERROR = 3;
     /** The classification of return codes indicating a processing timeout. The requester should react by resending the request some time later. The resource was available but did not respond back in the expected time. */
+    @Deprecated
     static public final int TIMEOUT = 4;
     /** The classification of return codes indicating a (hopefully temporary) problem of resource shortage (no free sockets, disk full, cannot fork due to too many processes...). */
+    @Deprecated
     static public final int RESOURCE_EXHAUSTED = 5;
     /** The classification of return codes indicating a resource or service which is temporarily unavailable. This could be due to a downtime of an OSGi component or remote service. Senders should treat such return code similar to a timeout return code and retry later. */
+    @Deprecated
     static public final int SERVICE_UNAVAILABLE = 6;
     /** An intermediate classification returned by internal validation algorithms such as bonaparte validation or Java Bean Validation. Contentwise, this is a subset of the <code>PARAMETER_ERROR</code> range, but these codes will most likely be caught and mapped to more generic return codes, or used as user feedback in the UI. */
+    @Deprecated
     static public final int VALIDATION_ERROR = 7;
     /** The classification of return codes indicating failure of an internal plausibility check. This should never happen and therefore usually indicates a programming error. */
+    @Deprecated
     static public final int INTERNAL_LOGIC_ERROR = 8;  // assertion failed
     /** The classification of problems occurring in the persistence layer (usually database), which has not been caught by a specific exception handler. This can be due to resource exhaustion, but also programming errors. Usually deeper investigation is required. Callers receiving this code should retry at maximum one time, and then defer the request and queue it into a manual analysis queue. */
+    @Deprecated
     static public final int DATABASE_ERROR = 9;
+    
+    // for better separation of actual codes and classifications, the classifications are prefixed by CL_
+    /** The classification of return codes indicating success (which would never be instantiated as an exception). */
+    static public final int CL_SUCCESS = 0;
+    /** The classification of return codes indicating a decline or negative decision, without being a parameter or processing problem, and therefore also never be instantiated as an exception. */
+    static public final int CL_DENIED  = 1;
+    /** The classification of return codes indicating an invalid message format. */
+    static public final int CL_PARSER_ERROR = 2;
+    /** The classification of return codes indicating an invalid reference or field value (for example an invalid customer no or invalid country code). */
+    static public final int CL_PARAMETER_ERROR = 3;
+    /** The classification of return codes indicating a processing timeout. The requester should react by resending the request some time later. The resource was available but did not respond back in the expected time. */
+    static public final int CL_TIMEOUT = 4;
+    /** The classification of return codes indicating a (hopefully temporary) problem of resource shortage (no free sockets, disk full, cannot fork due to too many processes...). */
+    static public final int CL_RESOURCE_EXHAUSTED = 5;
+    /** The classification of return codes indicating a resource or service which is temporarily unavailable. This could be due to a downtime of an OSGi component or remote service. Senders should treat such return code similar to a timeout return code and retry later. */
+    static public final int CL_SERVICE_UNAVAILABLE = 6;
+    /** An intermediate classification returned by internal validation algorithms such as bonaparte validation or Java Bean Validation. Contentwise, this is a subset of the <code>PARAMETER_ERROR</code> range, but these codes will most likely be caught and mapped to more generic return codes, or used as user feedback in the UI. */
+    static public final int CL_VALIDATION_ERROR = 7;
+    /** The classification of return codes indicating failure of an internal plausibility check. This should never happen and therefore usually indicates a programming error. */
+    static public final int CL_INTERNAL_LOGIC_ERROR = 8;  // assertion failed
+    /** The classification of problems occurring in the persistence layer (usually database), which has not been caught by a specific exception handler. This can be due to resource exhaustion, but also programming errors. Usually deeper investigation is required. Callers receiving this code should retry at maximum one time, and then defer the request and queue it into a manual analysis queue. */
+    static public final int CL_DATABASE_ERROR = 9;
+    
+    /** The classification which specifies that no result has been returned, but a future. */
+    static public final int CL_FUTURE = 20;
 
 
     /** The factor by which the classification code is multiplied. An error code modulus the classification factor gives details about where and why the problem occured. */
@@ -95,9 +129,14 @@ public class ApplicationException extends Exception {
         return returnCode >= 0 && returnCode < CLASSIFICATION_FACTOR;
     }
     
+    /** Returns information if a code is a "Future" code. */
+    public static boolean isFuture(int returnCode) {
+        return returnCode >= CL_FUTURE;
+    }
+    
     /** returns a text representation of an error code, independent of an existing exception */
     public static String codeToString(int code) {
-        String msg = codeToDescription.get(code);
+        String msg = codeToDescription.get(Integer.valueOf(code));
         return msg != null ? msg : "unknown code";
     }
     

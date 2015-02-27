@@ -33,8 +33,8 @@ public class MonetaryException extends ApplicationException {
      */
     private static final long serialVersionUID = 5464727960916479900L;
 
-    private static final int OFFSET = (PARAMETER_ERROR * CLASSIFICATION_FACTOR) + 18000; // offset for all codes in this class
-    private static final int OFFSET_ILE = (INTERNAL_LOGIC_ERROR * CLASSIFICATION_FACTOR) + 18000; // offset for all codes in this class
+    private static final int OFFSET = (CL_PARAMETER_ERROR * CLASSIFICATION_FACTOR) + 18000; // offset for all codes in this class
+    private static final int OFFSET_ILE = (CL_INTERNAL_LOGIC_ERROR * CLASSIFICATION_FACTOR) + 18000; // offset for all codes in this class
 
     static public final int ILLEGAL_CURRENCY_CODE        = OFFSET + 1;
     static public final int ILLEGAL_NUMBER_OF_DECIMALS   = OFFSET + 2;

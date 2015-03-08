@@ -8,11 +8,11 @@ import de.jpaw.enums.AbstractXEnumBase;
 
 public class XenumInitializer {
     private static final Logger LOGGER = LoggerFactory.getLogger(XenumInitializer.class);
-    
+
     public static void initializeXenums(String packageName) {
         initializeXenums(ReflectionsPackageCache.get(packageName));
     }
-    
+
     public static void initializeXenums(Reflections ... reflections) {
         for (int i = 0; i < reflections.length; ++i) {
             int ctr = 0;

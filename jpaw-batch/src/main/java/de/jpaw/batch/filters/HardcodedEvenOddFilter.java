@@ -5,7 +5,7 @@ import de.jpaw.batch.endpoints.BatchInputFilter;
 
 public class HardcodedEvenOddFilter<B> extends BatchInputFilter<B> {
     private final boolean odd;
-    
+
     public HardcodedEvenOddFilter(BatchReader<B> reader, boolean odd) {
         super(reader);
         this.odd = odd;

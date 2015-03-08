@@ -12,7 +12,7 @@ import de.jpaw.batch.api.DataWithOrdinal;
  * A single thread of this is running. */
 public class BatchExecutorMTResultCollector<F> implements Runnable {
     private static final Logger LOG = LoggerFactory.getLogger(BatchExecutorMTResultCollector.class);
-    
+
     private final BlockingQueue<DataWithOrdinal<F>> outputQueue;
     private final BatchWriter<? super F> writer;
     // redundant counters...
@@ -26,7 +26,7 @@ public class BatchExecutorMTResultCollector<F> implements Runnable {
 
     @Override
     public void run() {
-        
+
         while (true) {
             DataWithOrdinal<F> newRecord = null;
             try {
@@ -35,7 +35,7 @@ public class BatchExecutorMTResultCollector<F> implements Runnable {
                 // interrupt means end of processing, we are done!
                 break;
             }
-            if (newRecord.recordno == BatchExecutorMultiThreaded.EOF)  // record number -1 means EOF 
+            if (newRecord.recordno == BatchExecutorMultiThreaded.EOF)  // record number -1 means EOF
                 break;
             // we got a record
             ++numProcessed;

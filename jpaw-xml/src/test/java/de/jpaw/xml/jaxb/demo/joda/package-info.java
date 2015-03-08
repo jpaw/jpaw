@@ -11,7 +11,7 @@
         value=LocalDateTimeAdapter.class)
 })
 package de.jpaw.xml.jaxb.demo.joda;
- 
+
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters;
 import org.joda.time.DateTime;

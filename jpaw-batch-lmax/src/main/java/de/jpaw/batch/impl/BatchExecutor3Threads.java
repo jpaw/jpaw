@@ -22,7 +22,7 @@ import de.jpaw.batch.api.DataWithOrdinal;
 public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
     private static final Logger LOG = LoggerFactory.getLogger(BatchExecutor3Threads.class);
 
-    
+
     private static class DWOFactory<T> implements EventFactory<DataWithOrdinal<T>> {
 
         @Override
@@ -31,19 +31,19 @@ public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
         }
     }
     private final EventFactory<DataWithOrdinal<E>> inFactory = new DWOFactory<E>();
-    
-    
+
+
 //    private final EventFactory<DataWithOrdinal<E>> inFactory;
 //    private final EventFactory<DataWithOrdinal<F>> outFactory;
-//    
+//
 //    public BatchExecutor3Threads(EventFactory<DataWithOrdinal<E>> inFactory, EventFactory<DataWithOrdinal<F>> outFactory) {
 //        this.inFactory = inFactory;
 //        this.outFactory = outFactory;
 //    }
 
     private BatchProcessor<E,F> localProcessor = null;
-    private BatchWriter<? super F> localWriter = null; 
-    
+    private BatchWriter<? super F> localWriter = null;
+
     private int inBufferSize = 1024;
     private int outBufferSize = 1024;
 //    private long timeout = 300;
@@ -51,34 +51,34 @@ public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
     private int numExceptions = 0;      // number of records which could not be scheduled
 
     Disruptor<DataWithOrdinal<E>> disruptorIn;
-    
+
     RingBuffer<DataWithOrdinal<E>> ringBufferIn = null;
 
     private FirstEventHandler hdlr1 = null;
-    
+
     private class SecondEventHandler implements EventHandler<DataWithOrdinal<F>> {
         private final BatchWriter<? super F> localWriter;
 
         private SecondEventHandler(BatchWriter<? super F> localWriter) {
             this.localWriter = localWriter;
         }
-        
+
         @Override
         public void onEvent(DataWithOrdinal<F> data, long sequence, boolean isLast) throws Exception {
             // and write the output to the writer
             localWriter.accept(data.recordno, data.data);
         }
-        
+
     }
 
-    
-//    private BlockingQueue<DataWithOrdinal<E>> inputQueue = null; 
+
+//    private BlockingQueue<DataWithOrdinal<E>> inputQueue = null;
 //    private BlockingQueue<DataWithOrdinal<F>> outputQueue = null;
 //    private BatchExecutorMTResultCollector<F> collector = null;
 //    private Thread collectorThread = null;
 //    private Thread [] workerThreads = null;
 
-    
+
     private class FirstEventHandler implements EventHandler<DataWithOrdinal<E>> {
         private final BatchProcessor<E,F> localProcessor;
         private int numRecords = 0;         // number of records read (added to input queue)
@@ -87,11 +87,11 @@ public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
         private int outBufferSize = 1024;
         Disruptor<DataWithOrdinal<F>> disruptorOut;
         RingBuffer<DataWithOrdinal<F>> ringBufferOut = null;
-        
+
         private FirstEventHandler(BatchProcessor<E,F> localProcessor, BatchWriter<? super F> localWriter, int bs) {
             this.localProcessor = localProcessor;
             this.outBufferSize = bs;
-            
+
             // create the output ring buffer
             // Executor that will be used to construct new threads for consumers
             Executor executorPoolOut = Executors.newCachedThreadPool();
@@ -106,7 +106,7 @@ public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
             // and get the ring buffer from the Disruptor to be used for publishing.
             ringBufferOut = disruptorOut.start();
         }
-        
+
         private void close() {
             LOG.info("Output buffer will be shut down");
             disruptorOut.shutdown();
@@ -129,19 +129,19 @@ public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
                 } finally {
                     ringBufferOut.publish(sequence2);
                 }
-            
+
             } catch (Exception e) {
                 ++numExceptions;
             }
         }
     }
-    
+
     // if worker threads are desired, create
     @Override
     public void open(BatchProcessorFactory<E,F> processorFactory, BatchWriter<? super F> writer) throws Exception {
         this.localWriter = writer;
         this.localProcessor = processorFactory.getProcessor(0);
-        
+
         // Executor that will be used to construct new threads for consumers
         Executor executorPoolIn = Executors.newCachedThreadPool();
 
@@ -157,7 +157,7 @@ public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
         ringBufferIn = disruptorIn.start();
         LOG.info("Input buffer has been started");
     }
-    
+
     @Override
     public void close() throws Exception {
         LOG.info("Input buffer will be shut down");
@@ -165,12 +165,12 @@ public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
         LOG.info("Input buffer has been shut down");
         hdlr1.close();
     }
-    
+
     // BatchMainCallback. Calls to this procedure feed the input disruptor
     @Override
     public void accept(E record) {
         ++numRecords;
-        
+
         long sequence = ringBufferIn.next();  // Grab the next sequence
         try {
             DataWithOrdinal<E> event = ringBufferIn.get(sequence); // Get the entry in the Disruptor for the sequence

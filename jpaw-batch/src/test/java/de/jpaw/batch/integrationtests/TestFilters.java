@@ -11,11 +11,11 @@ import de.jpaw.batch.processors.BatchProcessorFactoryIdentity;
 
 public class TestFilters {
     static private final String TESTDATA = "Hello, world";
-    
+
     @Test
     public void testHardCodedEvenOddFilter() throws Exception {
         String [] cmdline = { "-n", "3" };
-        
+
         new BatchExecutorUnthreaded<String,String>().run(
                 cmdline,
                 new HardcodedEvenOddFilter<String>(new BatchReaderRepeater<String>(TESTDATA), true),
@@ -26,7 +26,7 @@ public class TestFilters {
     @Test
     public void testCmdlineEvenOddFilter() throws Exception {
         String [] cmdline = { "-n", "3" };
-        
+
         new BatchExecutorUnthreaded<String,String>().run(
                 cmdline,
                 new EvenOddFilter<String>(new BatchReaderRepeater<String>(TESTDATA)),

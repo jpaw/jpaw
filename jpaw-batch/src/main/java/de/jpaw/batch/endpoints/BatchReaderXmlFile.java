@@ -19,7 +19,7 @@ public class BatchReaderXmlFile<E> extends BatchReaderFile implements BatchReade
     private final Class<E> targetClass;
     private final Unmarshaller u;
     private XMLStreamReader r;
-    
+
     public BatchReaderXmlFile(JAXBContext context, Class<E> targetClass) throws JAXBException {
         this.targetClass = targetClass;
         u = context.createUnmarshaller();
@@ -39,11 +39,11 @@ public class BatchReaderXmlFile<E> extends BatchReaderFile implements BatchReade
             }
         }
     }
-    
+
     @Override
     public void evalCommandlineParameters(JSAPResult params) throws Exception {
         super.evalCommandlineParameters(params);
-        
+
         // this method is used to set up the parser
         XMLInputFactory f = XMLInputFactory.newInstance();
         r = f.createXMLStreamReader(uncompressedStream);

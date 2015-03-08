@@ -34,7 +34,7 @@ public class SimpleRawTcpClient {
     public SimpleRawTcpClient(String hostname, int port, boolean useSsl) throws IOException {
         this(hostname, port, useSsl, 64000);
     }
-    
+
     public SimpleRawTcpClient(String hostname, int port, boolean useSsl, int bufferSize) throws IOException {
         addr = InetAddress.getByName(hostname);
         responseBuffer = new byte [bufferSize];
@@ -73,7 +73,7 @@ public class SimpleRawTcpClient {
             return null;
         return responseBuffer;
     }
-    
+
     // close the connection
     public void close() throws IOException {
         conn.close();

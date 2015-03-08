@@ -29,7 +29,7 @@ import org.openjdk.jmh.infra.Blackhole;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class MiscJava {
-    
+
     private StringBuilder sb = new StringBuilder();
 
     @Benchmark
@@ -37,7 +37,7 @@ public class MiscJava {
         sb.setLength(0);
         bh.consume(sb);
     }
-    
+
     @Benchmark
     public void twoCharAppends(Blackhole bh) {
         sb.setLength(0);
@@ -45,7 +45,7 @@ public class MiscJava {
         sb.append(' ');
         bh.consume(sb);
     }
-    
+
     @Benchmark
     public void threeCharAppends(Blackhole bh) {
         sb.setLength(0);
@@ -54,7 +54,7 @@ public class MiscJava {
         sb.append(' ');
         bh.consume(sb);
     }
-    
+
     @Benchmark
     public void fourCharAppends(Blackhole bh) {
         sb.setLength(0);
@@ -64,7 +64,7 @@ public class MiscJava {
         sb.append('x');
         bh.consume(sb);
     }
-    
+
     @Benchmark
     public void singleStringAppend2Chars(Blackhole bh) {
         sb.setLength(0);
@@ -76,7 +76,7 @@ public class MiscJava {
         sb.setLength(0);
         sb.append(". Ax");
         bh.consume(sb);
-    }    
+    }
     @Benchmark
     public void singleStringAppend6Chars(Blackhole bh) {
         sb.setLength(0);

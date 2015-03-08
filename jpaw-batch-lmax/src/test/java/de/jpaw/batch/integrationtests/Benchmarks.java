@@ -15,7 +15,7 @@ public class Benchmarks {
     private void runMain(BatchMain<String,String> engine, String ... cmdline) throws Exception {
         engine.run(cmdline, new BatchReaderRepeater<String>("Hello, world"), new BatchWriterDevNull<String>(), new BatchProcessorFactoryIdentity<String>());
     }
-    
+
     @Test
     public void testTmpST() throws Exception {
         runMain(new BatchExecutorUnthreaded<String,String>(), "-n", "10000");
@@ -25,7 +25,7 @@ public class Benchmarks {
     public void testTmpMT4() throws Exception {
         runMain(new BatchExecutorMultiThreaded<String,String>(), "-n", "10000", "-t", "4");
     }
-    
+
     @Test
     public void testTmpLMAX() throws Exception {
         runMain(new BatchExecutor3Threads<String,String>(), "-n", "10000");

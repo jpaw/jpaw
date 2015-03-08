@@ -13,11 +13,11 @@ public class BatchReaderRepeater<E> implements BatchReader<E> {
     private final E objectToRepeat;
     private int numRepeats = 1;
     private int delayInMillis = 0;
-    
+
     public BatchReaderRepeater(E objectToRepeat) {
         this.objectToRepeat = objectToRepeat;
     }
-    
+
     @Override
     public void addCommandlineParameters(JSAP params) throws Exception {
         params.registerParameter(new FlaggedOption("num", JSAP.INTEGER_PARSER, "1", JSAP.NOT_REQUIRED, 'n', "num", "number of repetitions"));
@@ -37,7 +37,7 @@ public class BatchReaderRepeater<E> implements BatchReader<E> {
             whereToPut.accept(objectToRepeat);
         }
     }
-    
+
     @Override
     public void close() throws Exception {
     }

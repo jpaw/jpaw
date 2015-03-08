@@ -13,7 +13,7 @@ public class ICUCurrencyDataProvider implements CurrencyDataProvider {
     static public final ICUCurrencyDataProvider instance = new ICUCurrencyDataProvider();
     private ICUCurrencyDataProvider() {
     }
-    
+
     public static class ICUCurrencyData implements CurrencyData {
         private final Currency currency;
         private ICUCurrencyData(Currency currency) {
@@ -44,12 +44,12 @@ public class ICUCurrencyDataProvider implements CurrencyDataProvider {
         public int getDefaultFractionDigits() {
             return currency.getDefaultFractionDigits();
         }
-        
+
     }
     @Override
     public CurrencyData get(String key) {
         try {
-            return new ICUCurrencyData(Currency.getInstance(key)); 
+            return new ICUCurrencyData(Currency.getInstance(key));
         } catch (IllegalArgumentException e) {
             return null;
         }

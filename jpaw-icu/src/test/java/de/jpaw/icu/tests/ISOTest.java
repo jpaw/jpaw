@@ -51,7 +51,7 @@ public class ISOTest {
         Locale [] all = Locale.getAvailableLocales();
         System.out.println("I got " + all.length + " locales from Java");
         assert(all.length > 150);   // jdk 1.8.031: 160  ?? less locales than languages? 44, 108
-        
+
         int sum2 = 0, sum5 = 0;
         for (int i = 0; i < all.length; ++i) {
             String s = all[i].toString();
@@ -90,7 +90,7 @@ public class ISOTest {
         ULocale [] all = ULocale.getAvailableLocales();
         System.out.println("I got " + all.length + " locales from ICU");
         assert(all.length > 150);   // ICU 54.1.1: 684, 118, 356
-        
+
         int sum2 = 0, sum5 = 0;
         for (int i = 0; i < all.length; ++i) {
             String s = all[i].getName();

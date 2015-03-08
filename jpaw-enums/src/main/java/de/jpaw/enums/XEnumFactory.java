@@ -19,9 +19,9 @@ public class XEnumFactory<E extends AbstractXEnumBase<E>> {
     private final Map<Enum<?>,E> baseEnumToXEnum = new ConcurrentHashMap<Enum<?>,E>();
     private static final Map<String, XEnumFactory<?>> registry = new ConcurrentHashMap<String, XEnumFactory<?>>(200);
     private static final Map<Class<? extends AbstractXEnumBase<?>>, XEnumFactory<?>> classRegistry = new ConcurrentHashMap<Class<? extends AbstractXEnumBase<?>>, XEnumFactory<?>>(200);
-    // private final List<Class<? extends E>> listOfSubclasses = new ArrayList<E>(10);   // remembers all XEnum classes which use this factory 
+    // private final List<Class<? extends E>> listOfSubclasses = new ArrayList<E>(10);   // remembers all XEnum classes which use this factory
     private E nullToken = null;     // stores an instance which has the empty token
-    
+
     // TODO: should only be invoked from XEnum classes. How to verify this? (C++ "friend" needed here...)
     public XEnumFactory(int maxTokenLength, Class<E> baseClass, String pqon) {
         this.maxTokenLength = maxTokenLength;
@@ -56,7 +56,7 @@ public class XEnumFactory<E extends AbstractXEnumBase<E>> {
         registry.put(thisPqon, this);
         classRegistry.put(xenumClass, this);
     }
-    
+
     public Class<E> getBaseClass() {
         return baseClass;
     }
@@ -91,7 +91,7 @@ public class XEnumFactory<E extends AbstractXEnumBase<E>> {
             throw new IllegalArgumentException(enumVal.getClass().getSimpleName() + "." + enumVal.name() + " is not a valid instance for " + baseClass.getSimpleName());
         return myEnum;
     }
-    
+
     // array conversion
     public E [] of(Enum<?> [] arrayOfEnums) {
         if (arrayOfEnums == null)
@@ -121,12 +121,12 @@ public class XEnumFactory<E extends AbstractXEnumBase<E>> {
             result.add(of(i));
         return result;
     }
-    
+
     /** Returns the number of different instances for this xenum. */
     public int size() {
         return tokenToXEnum.size();
     }
-    
+
     /** Returns a copy of the list of values, as in enm.values(). */
     @SuppressWarnings("unchecked")
     public E [] values() {

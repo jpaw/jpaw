@@ -28,11 +28,11 @@ public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X,X> {
     private int port = 80;
     private boolean useSsl = false;
     private InetAddress addr;
-    
+
     public BatchProcessorFactoryTcp(BatchProcessorMarshaller<X> marshaller) {
         this.marshaller = marshaller;
     }
-    
+
     @Override
     public void addCommandlineParameters(JSAP params) throws Exception {
         params.registerParameter(new FlaggedOption("host", JSAP.STRING_PARSER, "localhost", JSAP.NOT_REQUIRED, 'H', "host", "remote host name or IP address"));
@@ -53,7 +53,7 @@ public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X,X> {
     @Override
     public void close() throws Exception {
     }
-    
+
     private static void printSocketInfo(SSLSocket s) {
         LOG.info("Socket class: " + s.getClass());
         LOG.info("   Remote address = " + s.getInetAddress().toString());
@@ -84,22 +84,22 @@ public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X,X> {
         }
         return new BatchProcessorTcp<X>(bufferSize, marshaller, conn);
     }
-    
+
     private static class BatchProcessorTcp<X> implements BatchProcessor<X,X> {
         private final Socket conn;
         private final byte [] responseBuffer;
         private final BatchProcessorMarshaller<X> marshaller;
-        
+
         private BatchProcessorTcp(int bufferSize, BatchProcessorMarshaller<X> marshaller, Socket conn) {
             responseBuffer = new byte [bufferSize];
             this.marshaller = marshaller;
             this.conn = conn;
         }
-        
+
         @Override
         public X process(int recordNo, X data) throws Exception {
             // get the raw data
-            boolean foundDelimiter = false; 
+            boolean foundDelimiter = false;
 //          byte [] payload = marshaller.marshal(data);
 //          conn.getOutputStream().write(payload);
             marshaller.marshal(data, conn.getOutputStream());
@@ -119,7 +119,7 @@ public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X,X> {
             } while (!foundDelimiter);
             if (haveBytes <= 0)
                 return null;
-            
+
             return marshaller.unmarshal(responseBuffer, haveBytes);
         }
 

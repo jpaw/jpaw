@@ -34,32 +34,32 @@ public class StringConversion {
     public String utf8Name = "UTF-8";
     public String sampleText = "ksjdhf ssjkdfh sdf sdjkf sdfkjÄ skjfsÜ skdfs kdfhßsdfksjdfhsk € dfhsdklfj";
     public byte [] sampleByteArray = null;
-    
+
     @Setup
     public void doSetup() throws UnsupportedEncodingException {
         sampleByteArray = sampleText.getBytes("UTF-8");
     }
-    
+
     @Benchmark
     public String withText() throws UnsupportedEncodingException {
         return new String(sampleByteArray, utf8Name);
     }
-    
+
     @Benchmark
     public String withCharset() {
         return new String(sampleByteArray, utf8Charset);
     }
-    
+
     @Benchmark
     public byte [] encodeText() throws UnsupportedEncodingException {
         return sampleText.getBytes(utf8Name);
     }
-    
+
     @Benchmark
     public byte [] encodeCharset() {
         return sampleText.getBytes(utf8Charset);
     }
-    
+
     @Benchmark
     public byte [] encodeCesu() {
         return Cesu8Encoder.encodeToCesu8(sampleText);

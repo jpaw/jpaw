@@ -69,7 +69,7 @@ import java.util.Arrays;
  * @author Mikael Grev
  *         Date: 2004-aug-02
  *         Time: 11:31:11
- *         
+ *
  * Changes for bonaparte:
  * stripped out functions not required (String and char[] versions) and only left the byte[] version
  * moved package to de.jpaw.util (from just util)
@@ -107,7 +107,7 @@ public final class Base64 {
         target.ensureCapacity(dLen);
         byte[] dArr = target.getCurrentBuffer();
         int left = offset + length - eLen; // 0 - 2.
-        
+
         // Encode even 24-bits
         while (offset < eLen) {
             // Copy next three bytes into lower 24 bits of int, paying attention to sign.
@@ -126,7 +126,7 @@ public final class Base64 {
             int i = ((sArr[eLen] & 0xff) << 10) | (left == 2 ? ((sArr[length - 1] & 0xff) << 2) : 0);
             if (d != dLen - 4)
                 System.out.println("Mismatch! d = " + d + ", dLen-4 = " + (dLen - 4));
-            
+
 
             // Set last four chars
             dArr[dLen - 4] = (byte) CA[i >> 12];

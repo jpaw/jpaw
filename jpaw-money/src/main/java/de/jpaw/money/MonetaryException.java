@@ -48,7 +48,7 @@ public class MonetaryException extends ApplicationException {
     static public final int NOT_AN_ISO4217_CODE          = OFFSET + 10;
 
     static public final int UNEXPECTED_ROUNDING_PROBLEM  = OFFSET_ILE + 21;
-    
+
     static {
         codeToDescription.put(ILLEGAL_CURRENCY_CODE        , "Currency code may not be null, must have 3 upper case characters length");
         codeToDescription.put(ILLEGAL_NUMBER_OF_DECIMALS   , "The number of fractional digits must be between 0 and 6");

@@ -22,7 +22,7 @@ public class BatchProcessorFactoryToXml extends ContributorNoop implements Batch
     public BatchProcessorFactoryToXml(JAXBContext context) throws JAXBException {
         this.context = context;
     }
-    
+
     @Override
     public void addCommandlineParameters(JSAP params) throws Exception {
         params.registerParameter(new Switch("formatted", 'F', "formatted", "write formatted output"));
@@ -31,19 +31,19 @@ public class BatchProcessorFactoryToXml extends ContributorNoop implements Batch
     @Override
     public void evalCommandlineParameters(JSAPResult params) throws Exception {
         formatted = params.getBoolean("formatted");
-    }    
-    
-    
+    }
+
+
     @Override
     public BatchProcessor<Object,String> getProcessor(int threadNo) throws Exception {
         // create a new Marshaller and hand it to the Processor
         Marshaller m = context.createMarshaller();
-        m.setProperty(Marshaller.JAXB_FRAGMENT, true); 
+        m.setProperty(Marshaller.JAXB_FRAGMENT, true);
         if (formatted)
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         return new BatchProcessorToXml(m, formatted);
     }
-    
+
     static private class BatchProcessorToXml implements BatchProcessor<Object,String> {
         private final Marshaller m;
         private final boolean formatted;
@@ -52,7 +52,7 @@ public class BatchProcessorFactoryToXml extends ContributorNoop implements Batch
             this.m = m;
             this.formatted = formatted;
         }
-        
+
         @Override
         public String process(int recordNo, Object data) throws Exception {
             StringWriter w = new StringWriter(1000);

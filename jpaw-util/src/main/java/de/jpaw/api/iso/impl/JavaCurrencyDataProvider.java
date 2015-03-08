@@ -12,7 +12,7 @@ public class JavaCurrencyDataProvider implements CurrencyDataProvider {
     static public final JavaCurrencyDataProvider instance = new JavaCurrencyDataProvider();
     private JavaCurrencyDataProvider() {
     }
-    
+
     public static class JavaCurrencyData implements CurrencyData {
         private final Currency currency;
         private JavaCurrencyData(Currency currency) {
@@ -43,12 +43,12 @@ public class JavaCurrencyDataProvider implements CurrencyDataProvider {
         public int getDefaultFractionDigits() {
             return currency.getDefaultFractionDigits();
         }
-        
+
     }
     @Override
     public CurrencyData get(String key) {
         try {
-            return new JavaCurrencyData(Currency.getInstance(key)); 
+            return new JavaCurrencyData(Currency.getInstance(key));
         } catch (IllegalArgumentException e) {
             return null;
         }

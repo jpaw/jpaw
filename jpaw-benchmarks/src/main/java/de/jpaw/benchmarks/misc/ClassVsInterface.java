@@ -30,7 +30,7 @@ import org.openjdk.jmh.annotations.State;
 public class ClassVsInterface {
     public static Map<Integer, Integer> myMapI = new ConcurrentHashMap<Integer, Integer>(1000);
     public static ConcurrentHashMap<Integer, Integer> myMapC = new ConcurrentHashMap<Integer, Integer>(1000);
-    
+
     @Setup
     public void setup() {
         for (int i = 0; i < 1000; ++i) {

@@ -13,7 +13,7 @@ public class StringSerializer {
     /**
      * Converts a bonaPortable provided with a Stringbuilder to a simple string representation. All bonaportable control characters, tabs and backslashes are
      * converted to escaped chars.
-     * 
+     *
      * @param builder
      *            A Stringbuilder that containes a bonaportable
      * @return the converted bonaportable
@@ -65,7 +65,7 @@ public class StringSerializer {
         }
         return result;
     }
-    
+
     public static String altToString(String src) {
         StringBuilder result = new StringBuilder();
         int i = 0;

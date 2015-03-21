@@ -14,17 +14,17 @@ public abstract class AbstractShortEnumSet<E extends Enum<E>> extends AbstractCo
     private short bitmap;
 
     // allow to make the set immutable
-    private transient boolean _is$Frozen = false;      // current state of this instance
+    private transient boolean _was$Frozen = false;      // current state of this instance
 
-    public final boolean is$Frozen() {
-        return _is$Frozen;
+    public final boolean was$Frozen() {
+        return _was$Frozen;
     }
     protected final void verify$Not$Frozen() {
-        if (_is$Frozen)
+        if (_was$Frozen)
             throw new RuntimeException("Setter called for frozen instance of class " + getClass().getName());
     }
     public void freeze() {
-        _is$Frozen = true;
+        _was$Frozen = true;
     }
 
     /** This method returns the number of instances (max Ordinal + 1), the name is misleading!!!!

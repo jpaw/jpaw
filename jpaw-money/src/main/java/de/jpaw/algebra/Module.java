@@ -7,5 +7,5 @@ package de.jpaw.algebra;
  *  */
 public interface Module<S,V> extends AbelianGroup<V> {
     S getIdentity();        // this is really a static method and should not require an object instance. Is that possible in Java?!
-    
+
 }

@@ -92,7 +92,7 @@ public final class ByteArray implements Externalizable, Cloneable {
         in.readFully(tmp);
         return new ByteArray(tmp, true);
     }
-    
+
     /** construct a ByteArray from a source byte [], with offset and length. source may not be null. */
     public ByteArray(byte [] source, int offset, int length) {
         if (source == null || offset < 0 || length < 0 || offset + length > source.length)
@@ -158,10 +158,10 @@ public final class ByteArray implements Externalizable, Cloneable {
 //    public int getOffset() {
 //        return this.offset;
 //    }
-//    
+//
 //    /** Returns the internal buffer of this object. It may only be used for read-only access.
 //     * Java is missing a "const" specifier for arrays as it is available in C and C++.
-//     * 
+//     *
 //     * Java-purists will complain against exposing this internal state of an immutable object, but as long as
 //     * access is possible via reflection anyway, just with performance penalty, it would be outright stupid
 //     * to force people to use reflection, or even defensive copies. Instead I hope the name of the method
@@ -283,7 +283,7 @@ public final class ByteArray implements Externalizable, Cloneable {
                 return false;
         return true;
     }
-    
+
     // support function to allow dumping contents to DataOutput without the need to expose our internal buffer
     public void writeToDataOutput(DataOutput out) throws IOException {
         out.write(buffer, offset, length);

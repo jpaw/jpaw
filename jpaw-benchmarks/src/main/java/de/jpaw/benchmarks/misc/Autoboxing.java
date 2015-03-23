@@ -26,26 +26,26 @@ import org.openjdk.jmh.annotations.State;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class Autoboxing {
-    private static final int NUM = 1000; 
-    
+    private static final int NUM = 1000;
+
     public static int [] a;
-    
+
     @Setup
     public void init() {
         a = new int[NUM];
-        
+
         Random r = new Random(System.nanoTime());
         for (int i = 0; i < NUM; ++i) {
             a[i] = (r.nextInt() & 0xffffff) + 0x32000000;       // bit enough to ensure the values are not cached.
         }
     }
-    
-    
+
+
     @Benchmark
     public int returnNative() {
         return a[33];
     }
-    
+
     @Benchmark
     public Integer returnAutoboxed() {
         return a[33];

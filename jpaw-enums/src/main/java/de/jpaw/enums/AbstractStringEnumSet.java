@@ -14,37 +14,37 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends AbstractCollection<E> implements Set<E>, Serializable {
     private static final long serialVersionUID = 34398390989170000L + 99;
     private String bitmap;
-    
-    // allow to make the set immutable
-    private transient boolean _is$Frozen = false;      // current state of this instance
 
-    public final boolean is$Frozen() {
-        return _is$Frozen;
+    // allow to make the set immutable
+    private transient boolean _was$Frozen = false;      // current state of this instance
+
+    public final boolean was$Frozen() {
+        return _was$Frozen;
     }
     protected final void verify$Not$Frozen() {
-        if (_is$Frozen)
+        if (_was$Frozen)
             throw new RuntimeException("Setter called for frozen instance of class " + getClass().getName());
     }
     public void freeze() {
-        _is$Frozen = true;
+        _was$Frozen = true;
     }
-    
+
     // not required for String type, but defined for consistency
     abstract protected int getMaxOrdinal();
-    
+
     public AbstractStringEnumSet() {
         bitmap = "";
     }
-    
+
     public AbstractStringEnumSet(String bitmap) {
         this.bitmap = bitmap;
     }
-    
-    
+
+
     public String getBitmap() {
         return bitmap;
     }
-    
+
     /** Creates a bitmap from an array of arbitrary enums. */
     public static String bitmapOf(TokenizableEnum [] arg) {
         TreeSet<String> values = new TreeSet<String>();
@@ -56,12 +56,12 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
             buff.append(token);
         return buff.toString();
     }
-    
+
     @Override
     public int size() {
         return bitmap.length();
     }
-    
+
     @Override
     public boolean isEmpty() {
         return bitmap.length() == 0;
@@ -73,7 +73,7 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
             return false;
         return contains(((TokenizableEnum)o).getToken());
     }
-    
+
     // Override this to implement scenarios where tests must align at multiples of the token size
     protected boolean contains(String token) {
         return bitmap.contains(token);
@@ -93,7 +93,7 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
         // at end: append it!
         bitmap = bitmap + token;
     }
-    
+
     @Override
     public boolean add(E e) {
         String token = e.getToken();    // may throw NPE, as per contract
@@ -123,7 +123,7 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
         int index = bitmap.indexOf(c);
         if (index < 0)
             return false;
-        bitmap = index == 0 ? bitmap.substring(1) : bitmap.substring(0, index) + bitmap.substring(index + 1);  
+        bitmap = index == 0 ? bitmap.substring(1) : bitmap.substring(0, index) + bitmap.substring(index + 1);
         return true;
     }
 
@@ -132,25 +132,25 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
         verify$Not$Frozen();            // check if modification is allowed
         bitmap = "";
     }
-    
+
     @Override
     public int hashCode() {
         return bitmap.hashCode();
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass())
             return false;
         return bitmap == ((AbstractStringEnumSet<?>)o).getBitmap();
     }
-    
+
     /** Iterator which returns the elements of the set in order of tokens sorted ascending. */
     static protected class SetOfEnumsIterator<E extends TokenizableEnum> implements Iterator<E> {
         private final String bitmap;
         private int index = 0;
         static private final ConcurrentHashMap<String, TokenizableEnum> lookupTable = new ConcurrentHashMap<String, TokenizableEnum>();
-        
+
         public SetOfEnumsIterator(E [] values, String bitmap) {
             this.bitmap = bitmap;
             if (lookupTable.size() < values.length) {
@@ -159,7 +159,7 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
                     lookupTable.putIfAbsent(z.getToken(), z);
             }
         }
-        
+
         @Override
         public boolean hasNext() {
             return index < bitmap.length();
@@ -171,7 +171,7 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
                 return null;                // shortcut
             ++index;
             @SuppressWarnings("unchecked")
-            E data = (E) lookupTable.get(bitmap.substring(index-1, index));   // GC overhead due to new String. But a Character would be as well... 
+            E data = (E) lookupTable.get(bitmap.substring(index-1, index));   // GC overhead due to new String. But a Character would be as well...
             return data;
         }
 

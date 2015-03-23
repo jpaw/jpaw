@@ -8,7 +8,7 @@ public class SockJSJsonEscaperForAppendables extends DefaultJsonEscaperForAppend
     public SockJSJsonEscaperForAppendables(Appendable appendable) {
         super(appendable);
     }
-    
+
     protected void writeUnicodeEscape(char c) throws IOException {
         appendable.append('\\');
         appendable.append('u');
@@ -22,7 +22,7 @@ public class SockJSJsonEscaperForAppendables extends DefaultJsonEscaperForAppend
     /** Write the String s (which may not be null) to the Appendable.
      * This implementation may not yet be fully Unicode-compliant.
      * See here for the explanation: http://stackoverflow.com/questions/1527856/how-can-i-iterate-through-the-unicode-codepoints-of-a-java-string
-     *  */ 
+     *  */
     @Override
     public void outputUnicodeNoControls(String s) throws IOException {
         appendable.append('\"');
@@ -39,7 +39,7 @@ public class SockJSJsonEscaperForAppendables extends DefaultJsonEscaperForAppend
         }
         appendable.append('\"');
     }
-    
+
     @Override
     public void outputUnicodeWithControls(String s) throws IOException {
         outputUnicodeNoControls(s);

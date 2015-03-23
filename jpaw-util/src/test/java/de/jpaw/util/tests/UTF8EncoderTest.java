@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 import de.jpaw.util.Cesu8Encoder;
 
 public class UTF8EncoderTest {
-    
+
     @Test
     public void testEncoder() throws UnsupportedEncodingException {
         // for the range tested, CESU8 is identical to UTF8
@@ -19,7 +19,7 @@ public class UTF8EncoderTest {
             Assert.assertEquals(fromString, myOwn, "for index " + i);
         }
     }
-    
+
 //  commented out, CESU8 direct was experimental
 //    @Test
 //    public void testUnsafeEncoder() throws UnsupportedEncodingException {

@@ -58,7 +58,7 @@ public class CharTestsASCII {
         }
         return true;
     }
-    
+
     /** Returns true if the whole String contains ASCII lower case characters only, else false. */
     public static boolean isLowerCase(String s) {
         for (int i = 0; i < s.length(); ++i) {
@@ -68,7 +68,7 @@ public class CharTestsASCII {
         }
         return true;
     }
-    
+
     /** Returns true if the whole String contains ASCII printable characters only (range 0x20 .. 0x7e), else false. */
     public static boolean isPrintable(String s) {
         for (int i = 0; i < s.length(); ++i) {
@@ -78,7 +78,7 @@ public class CharTestsASCII {
         }
         return true;
     }
-    
+
     /** Returns true if the whole String contains ASCII printable characters or TABs only (range 0x20 .. 0x7e and 0x09), else false. */
     public static boolean isPrintableOrTab(String s) {
         for (int i = 0; i < s.length(); ++i) {
@@ -88,7 +88,7 @@ public class CharTestsASCII {
         }
         return true;
     }
-    
+
     /** Returns true if the whole String contains ASCII digits only, else false. */
     public static boolean isDigit(String s) {
         for (int i = 0; i < s.length(); ++i) {
@@ -98,7 +98,7 @@ public class CharTestsASCII {
         }
         return true;
     }
-    
+
     /**
      * <code>isAsciiPrintable()</code> tests if a character is a US-ASCII (7
      * bit) printable character, which mainly means that such a character is
@@ -169,8 +169,8 @@ public class CharTestsASCII {
     public static boolean isAsciiDigit(char c) {
         return (c >= '0') && (c <= '9');
     }
-    
-    
+
+
     // some redundant implementations, for comparison (GC overhead / execution time) and preference purposes
 
     /** Returns true if the whole String contains ASCII upper case characters only, else false. */
@@ -178,13 +178,13 @@ public class CharTestsASCII {
         Matcher m = UPPERCASE_PATTERN.matcher(s);
         return m.find();
     }
-    
+
     /** Returns true if the whole String contains ASCII lower case characters only, else false. */
     public static boolean isLowerCaseByPattern(String s) {
         Matcher m = LOWERCASE_PATTERN.matcher(s);
         return m.find();
     }
-    
+
     /** Returns true if the whole String contains ASCII digits only, else false. */
     public static boolean isDigitByPattern(String s) {
         Matcher m = DIGIT_PATTERN.matcher(s);
@@ -196,7 +196,7 @@ public class CharTestsASCII {
         Matcher m = PRINTABLE_PATTERN.matcher(s);
         return m.find();
     }
-    
+
     /** Returns true if the whole String contains ASCII printable characters or TABs only (range 0x20 .. 0x7e and 0x09), else false. */
     public static boolean isPrintableOrTabByPattern(String s) {
         Matcher m = PRINTABLE_OR_TAB_PATTERN.matcher(s);

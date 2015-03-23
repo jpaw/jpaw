@@ -29,19 +29,19 @@ import org.openjdk.jmh.infra.Blackhole;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ModVsAnd {
-    private static final int NUM = 1000; 
-    
+    private static final int NUM = 1000;
+
     public static int [] a;
     public static int [] b;
     public static int [] c;
-    
-    
+
+
     @Setup
     public void init() {
         a = new int[NUM];
         b = new int[NUM];
         c = new int[NUM];
-        
+
         Random r = new Random(System.nanoTime());
         for (int i = 0; i < NUM; ++i) {
             a[i] = (r.nextInt() & 0xffff) + 0x3240000;
@@ -49,7 +49,7 @@ public class ModVsAnd {
             c[i] = 100000;
         }
     }
-    
+
     @Benchmark
     public void modulusRand(Blackhole bh) {
         int sum = 0;

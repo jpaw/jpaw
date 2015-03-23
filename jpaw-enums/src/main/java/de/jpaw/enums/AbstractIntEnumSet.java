@@ -12,51 +12,51 @@ public abstract class AbstractIntEnumSet<E extends Enum<E>> extends AbstractColl
     private static final int BIT = 1;
     public static final int MAX_TOKENS = 31;
     private int bitmap;
-    
-    // allow to make the set immutable
-    private transient boolean _is$Frozen = false;      // current state of this instance
 
-    public final boolean is$Frozen() {
-        return _is$Frozen;
+    // allow to make the set immutable
+    private transient boolean _was$Frozen = false;      // current state of this instance
+
+    public final boolean was$Frozen() {
+        return _was$Frozen;
     }
     protected final void verify$Not$Frozen() {
-        if (_is$Frozen)
+        if (_was$Frozen)
             throw new RuntimeException("Setter called for frozen instance of class " + getClass().getName());
     }
     public void freeze() {
-        _is$Frozen = true;
+        _was$Frozen = true;
     }
-    
+
     /** This method returns the number of instances (max Ordinal + 1), the name is misleading!!!!
      * This definition has been made to avoid a negative return code in the case of empty enums. */
     abstract protected int getMaxOrdinal();
-    
+
     public AbstractIntEnumSet() {
         bitmap = 0;
     }
-    
+
     public AbstractIntEnumSet(int bitmap) {
         this.bitmap = bitmap;
     }
-    
-    
+
+
     public int getBitmap() {
         return bitmap;
     }
-    
+
     /** Creates a bitmap from an array of arbitrary enums. */
     public static int bitmapOf(Enum<?> [] arg) {
         int val = 0;
         for (int i = 0; i < arg.length; ++i)
-            val |= BIT << arg[i].ordinal();   
+            val |= BIT << arg[i].ordinal();
         return val;
     }
-    
+
     @Override
     public int size() {
         return Long.bitCount(bitmap);
     }
-    
+
     @Override
     public boolean isEmpty() {
         return bitmap == 0;
@@ -69,7 +69,7 @@ public abstract class AbstractIntEnumSet<E extends Enum<E>> extends AbstractColl
         int q = ((Enum<?>)o).ordinal();
         return q < MAX_TOKENS && (bitmap & (BIT << q)) != 0;
     }
-    
+
     @Override
     public boolean add(E e) {
         int q = e.ordinal();   // may throw NPE
@@ -105,65 +105,65 @@ public abstract class AbstractIntEnumSet<E extends Enum<E>> extends AbstractColl
             bitmap = 0;
         }
     }
-    
+
     @Override
     public int hashCode() {
         return bitmap;
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass())
             return false;
         return bitmap == ((AbstractIntEnumSet<?>)o).getBitmap();
     }
-    
+
     /** Merges (boolean OR) another bitmap into this one. */
     public void unifyWith(AbstractIntEnumSet<E> that) {
         verify$Not$Frozen();                // check if modification is allowed
         bitmap |= that.bitmap;
     }
-    
+
     /** Merges (boolean AND) another bitmap into this one. */
     public void intersectWith(AbstractIntEnumSet<E> that) {
         verify$Not$Frozen();                // check if modification is allowed
         bitmap &= that.bitmap;
     }
-    
+
     /** Subtracts another bitmap from this one. */
     public void exclude(AbstractIntEnumSet<E> that) {
         verify$Not$Frozen();                // check if modification is allowed
         bitmap &= ~that.bitmap;
     }
-    
+
     /** Merges (XOR) another bitmap into this one. Provided for completeness */
     public void exactlyOneOf(AbstractIntEnumSet<E> that) {
         verify$Not$Frozen();                // check if modification is allowed
         bitmap ^= that.bitmap;
     }
-    
+
     /** Returns the bitmap of the full set with all elements included. */
     public int bitmapFullSet() {
         return (BIT << getMaxOrdinal()) - BIT;      // Java looses type on binary operations such that a cast is required for byte and int
     }
-    
+
     /** Negates a set. */
     public void complement() {
         verify$Not$Frozen();                // check if modification is allowed
         bitmap = ~bitmap & bitmapFullSet();      // Java looses type on binary operations such that a cast is required for byte and int
     }
-    
+
     static protected class SetOfEnumsIterator<E extends Enum<E>> implements Iterator<E> {
         private final E [] values;
         private int bitmap;
         private int index;
-        
+
         public SetOfEnumsIterator(E [] values, int bitmap) {
             this.values = values;
             this.bitmap = bitmap;
             this.index = -1;
         }
-        
+
         @Override
         public boolean hasNext() {
             return bitmap != 0;

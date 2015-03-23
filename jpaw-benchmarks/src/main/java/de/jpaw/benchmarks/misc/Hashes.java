@@ -32,8 +32,8 @@ import org.openjdk.jmh.infra.Blackhole;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class Hashes {
-    private static final int NUM = 1000; 
-    
+    private static final int NUM = 1000;
+
     public static AtomicBoolean conflict = new AtomicBoolean();
     public static int [] a;
     public static byte [] b;
@@ -41,7 +41,7 @@ public class Hashes {
     public static String [] d;      // 32 chars +/- 2
     int sizeC = 0;
     int sizeD = 0;
-    
+
     @Setup
     public void init() {
         if (conflict.getAndSet(true))
@@ -50,7 +50,7 @@ public class Hashes {
         b = new byte[NUM];
         c = new String[NUM];
         d = new String[NUM];
-        
+
         Random r = new Random(System.nanoTime());
         for (int i = 0; i < NUM; ++i) {
             a[i] = (r.nextInt() & 0xffffff) + 0x32000000;
@@ -61,12 +61,12 @@ public class Hashes {
             sizeD += d[i].length();
         }
     }
-    
+
 //    @TearDown
 //    public void info() {
 //        System.out.println("Tested size: " + NUM + " members, short strings total length = " + sizeC + ", long strings total size = " + sizeD);
 //    }
-    
+
     @Benchmark
     public void intHash(Blackhole bh) {
         bh.consume(Arrays.hashCode(a));

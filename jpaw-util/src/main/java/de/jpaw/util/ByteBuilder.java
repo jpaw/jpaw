@@ -78,9 +78,9 @@ public class ByteBuilder {
         if (currentLength + delta > currentAllocSize)
             createMoreSpace(currentLength + delta - currentLength);
     }
-    
+
     /** Sets the length of the contents, assuming contents has been added externally.
-     * External class must have obtained buffer through getCurrentBuffer() after calling ensureCapacity and getLength(). 
+     * External class must have obtained buffer through getCurrentBuffer() after calling ensureCapacity and getLength().
      * @param newLength
      */
     public void setLength(int newLength) {
@@ -89,7 +89,7 @@ public class ByteBuilder {
         currentLength = newLength;
     }
     /** Advances the current position by some positive integer, assuming contents has been added externally.
-     * External class must have obtained buffer through getCurrentBuffer() after calling ensureCapacity and getLength(). 
+     * External class must have obtained buffer through getCurrentBuffer() after calling ensureCapacity and getLength().
      * @param delta
      */
     public void advanceBy(int delta) {

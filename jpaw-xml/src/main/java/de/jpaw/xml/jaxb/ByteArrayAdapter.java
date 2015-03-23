@@ -6,7 +6,7 @@ import de.jpaw.util.ByteArray;
 /** Maps between the immutable object ByteArray and a byte[]. */
 
 public class ByteArrayAdapter extends XmlAdapter<byte [], ByteArray> {
-      
+
     @Override
     public ByteArray unmarshal(byte[] v) throws Exception {
         return new ByteArray(v);

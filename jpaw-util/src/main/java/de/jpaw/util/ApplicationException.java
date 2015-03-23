@@ -64,7 +64,7 @@ public class ApplicationException extends Exception {
     /** The classification of problems occurring in the persistence layer (usually database), which has not been caught by a specific exception handler. This can be due to resource exhaustion, but also programming errors. Usually deeper investigation is required. Callers receiving this code should retry at maximum one time, and then defer the request and queue it into a manual analysis queue. */
     @Deprecated
     static public final int DATABASE_ERROR = 9;
-    
+
     // for better separation of actual codes and classifications, the classifications are prefixed by CL_
     /** The classification of return codes indicating success (which would never be instantiated as an exception). */
     static public final int CL_SUCCESS = 0;
@@ -86,7 +86,7 @@ public class ApplicationException extends Exception {
     static public final int CL_INTERNAL_LOGIC_ERROR = 8;  // assertion failed
     /** The classification of problems occurring in the persistence layer (usually database), which has not been caught by a specific exception handler. This can be due to resource exhaustion, but also programming errors. Usually deeper investigation is required. Callers receiving this code should retry at maximum one time, and then defer the request and queue it into a manual analysis queue. */
     static public final int CL_DATABASE_ERROR = 9;
-    
+
     /** The classification which specifies that no result has been returned, but a future. */
     static public final int CL_FUTURE = 20;
 
@@ -128,18 +128,18 @@ public class ApplicationException extends Exception {
     public static boolean isOk(int returnCode) {
         return returnCode >= 0 && returnCode < CLASSIFICATION_FACTOR;
     }
-    
+
     /** Returns information if a code is a "Future" code. */
     public static boolean isFuture(int returnCode) {
         return returnCode >= CL_FUTURE;
     }
-    
+
     /** returns a text representation of an error code, independent of an existing exception */
     public static String codeToString(int code) {
         String msg = codeToDescription.get(Integer.valueOf(code));
         return msg != null ? msg : "unknown code";
     }
-    
+
     /** Returns a textual description of the error code.
      *  The method is declared as final as long as it's used from the constructors of superclasses.
      *

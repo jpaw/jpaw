@@ -23,12 +23,12 @@ import com.martiansoftware.jsap.Switch;
 
 /** Encapsulates the SimpleJSAP class and JSAPResult.
  * This class offers additional functionality such as:
- * 
+ *
  *  - Sharing of options (no error if the same option
  * is initialized multiple times, as long as all attributes are the same.
- * 
+ *
  *  - Provising a static access point getContext(), to avoid the need to pass around the context in real (non-test) applications.
- *  
+ *
  *  - Callback functionality, to invoke methods as soon as the command line has been parsed.
  *
  */
@@ -39,18 +39,18 @@ public class CmdlineParserContext {
     private final Integer lock = 636238237;
     private final SimpleJSAP ctx;
     private JSAPResult result = null;
-    
+
     static class ParserAttribs {
         String longOption;
         String defaultValue;
         String help;
         StringParser parser;
     }
-    
+
     private final Map<String,ParserAttribs> options = new HashMap<String,ParserAttribs>(31);
     private final Map<Character,String> shortOptions = new HashMap<Character,String>(31);
     private final Set<CmdlineCallback> registeredInstances = new HashSet<CmdlineCallback>(40);
-    
+
     public CmdlineParserContext(String execName, String help) {
         SimpleJSAP pctx = null;
         try {
@@ -62,16 +62,16 @@ public class CmdlineParserContext {
         ctx = pctx;
         lastContext = this;
     }
-    
+
     private static boolean isSame(String a, String b) {
         return a == null ? b == null : a.equals(b);
     }
-    
+
     public void registerCallback(CmdlineCallback instance) {
         if (instance != null)
             registeredInstances.add(instance);
     }
-    
+
     public CmdlineParserContext addFlaggedOption(String longOption, StringParser parser, String defaultValue, boolean isRequired,
             char shortOption, String help) {
         synchronized (lock) {
@@ -84,7 +84,7 @@ public class CmdlineParserContext {
                                   shortOption, shortOptions.get(shortOption), longOption);
                         shortOption = JSAP.NO_SHORTFLAG;
                     } else {
-                        shortOptions.put(shortOption, longOption); 
+                        shortOptions.put(shortOption, longOption);
                     }
                 }
                 // this is a new option: store it
@@ -93,7 +93,7 @@ public class CmdlineParserContext {
                 } catch (JSAPException e) {
                     LOG.error("Cannot register option {}, ignoring it, for reason ", longOption, e);
                 }
-                    
+
                 p = new ParserAttribs();
                 p.longOption = longOption;
                 p.defaultValue = defaultValue;
@@ -103,7 +103,7 @@ public class CmdlineParserContext {
             } else {
                 // if the previous one is identical to this one, silently ignore duplicate definition (it will work anyway), else complain
                 if (p.longOption.equals(longOption) && p.help.equals(help) && isSame(p.defaultValue, defaultValue) && p.parser == parser) {
-                    
+
                 } else {
                     LOG.error("Contradicting definitions for option {}", longOption);
                 }
@@ -149,7 +149,7 @@ public class CmdlineParserContext {
         }
         return this;
     }
-    
+
     private void callbackInvocations() {
         for (CmdlineCallback e : registeredInstances)
             e.readParameters(this);
@@ -176,43 +176,43 @@ public class CmdlineParserContext {
     public boolean getBoolean(String longOption) {
         return result.getBoolean(longOption);
     }
-    
+
     public String getString(String longOption) {
         return result.getString(longOption);
     }
-    
+
     public int getInt(String longOption) {
         return result.getInt(longOption);
     }
-    
+
     public URL getURL(String longOption) {
         return result.getURL(longOption);
     }
-    
+
     public InetAddress getInetAddress(String longOption) {
         return result.getInetAddress(longOption);
     }
-    
+
     public BigDecimal getBigDecimal(String longOption) {
         return result.getBigDecimal(longOption);
     }
-    
+
     public Date getDate(String longOption) {
         return result.getDate(longOption);
     }
-    
+
     public Class<?> getClass(String longOption) {
         return result.getClass(longOption);
     }
-    
+
     public Package getPackage(String longOption) {
         return result.getPackage(longOption);
     }
-    
+
     // static API: for convenience, to avoid passing around the context
     public static CmdlineParserContext getContext() {
         return lastContext;
     }
-    
+
 }
 

@@ -10,7 +10,7 @@ import de.jpaw.batch.endpoints.BatchInputFilter;
 public class EvenOddFilter<B> extends BatchInputFilter<B> {
     private boolean odd = false;
     private boolean even = false;
-    
+
     public EvenOddFilter(BatchReader<B> reader) {
         super(reader);
     }
@@ -25,7 +25,7 @@ public class EvenOddFilter<B> extends BatchInputFilter<B> {
             // first, third etc
             return odd;
     }
-    
+
     @Override
     public void addCommandlineParameters(JSAP params) throws Exception {
         super.addCommandlineParameters(params);

@@ -1,5 +1,5 @@
 package de.jpaw.xml.jaxb.demo.byteArray;
- 
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
@@ -15,7 +15,7 @@ public class Demo {
         root.array1 = "Hello, world".getBytes();
         root.array2 = new ByteArray("Hello, world".getBytes());
         JAXBContext jc = JAXBContext.newInstance(ByteArrayMappers.class);
- 
+
         Marshaller marshaller = jc.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         marshaller.marshal(root, System.out);

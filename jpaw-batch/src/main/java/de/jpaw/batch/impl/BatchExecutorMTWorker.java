@@ -14,16 +14,16 @@ import de.jpaw.batch.api.DataWithOrdinal;
  */
 public class BatchExecutorMTWorker<E,F> implements Runnable {
     private static final Logger LOG = LoggerFactory.getLogger(BatchExecutorMTWorker.class);
-    
+
     private final int threadIndex;
     private final BlockingQueue<DataWithOrdinal<E>> inQueue;
     private final BlockingQueue<DataWithOrdinal<F>> outQueue;
     private final BatchProcessor<E,F> processor;
-    
+
     private int numProcessed = 0;
     private int numExceptions = 0;
     private int numError = 0;
-    
+
     public BatchExecutorMTWorker(int threadIndex,
             BlockingQueue<DataWithOrdinal<E>> inQueue,
             BlockingQueue<DataWithOrdinal<F>> outQueue,
@@ -33,10 +33,10 @@ public class BatchExecutorMTWorker<E,F> implements Runnable {
         this.outQueue = outQueue;
         this.processor = processor;
     }
-    
+
     @Override
     public void run() {
-        
+
         while (true) {
             DataWithOrdinal<E> newRecord = null;
             try {
@@ -45,7 +45,7 @@ public class BatchExecutorMTWorker<E,F> implements Runnable {
                 // interrupt means end of processing, we are done!
                 break;
             }
-            if (newRecord.recordno == BatchExecutorMultiThreaded.EOF)  // record number -1 means EOF 
+            if (newRecord.recordno == BatchExecutorMultiThreaded.EOF)  // record number -1 means EOF
                 break;
             // we got a record
             ++numProcessed;

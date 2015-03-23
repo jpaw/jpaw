@@ -13,7 +13,7 @@ public class ByteUtil {
         System.arraycopy(org, 0, result, 0, org.length);
         return result;
     }
-    
+
     private static String readable(byte[] a, int offset, StringBuilder w, int max) {
         w.setLength(0);
         int l = max < 8 ? max : 8;
@@ -37,7 +37,7 @@ public class ByteUtil {
             return "   ";
         return String.format("%02x ", a[i]);
     }
-    
+
     /**
      * <code>dump()</code> dumps the contents of a byte array in a readable 2-column format (hex as well as masked ASCII)
      * to the logger at <code>trace</code> logging level.
@@ -47,7 +47,7 @@ public class ByteUtil {
     public static String dump(byte[] a, int maxlength) {
         return dump(a, 0, maxlength);
     }
-    
+
     /**
      * <code>dump()</code> dumps the contents of a byte array in a readable 2-column format (hex as well as masked ASCII)
      * to the logger at <code>trace</code> logging level.

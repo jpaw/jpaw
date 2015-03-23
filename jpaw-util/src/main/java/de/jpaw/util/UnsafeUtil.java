@@ -39,7 +39,7 @@ public class UnsafeUtil {
             }
         }
         stringValueOffset = finalStringValueOffset;
-        
+
         long finalAddressOffset = 0L;
         if (unsafe != null) {
             try {
@@ -53,20 +53,20 @@ public class UnsafeUtil {
 
 //        System.out.println("UnsafeUtil initialized - String buffer " + (stringValueOffset == 0L ? " does NOT work" : "works"));
     }
-    
+
     public static char [] getStringBuffer(String s) {
         if (stringValueOffset != 0L) {
             // steal buffer
             return (char[]) unsafe.getObject(s, stringValueOffset);
         } else {
-            return s.toCharArray();     // COPY as a fallback for JDP 6 
+            return s.toCharArray();     // COPY as a fallback for JDP 6
         }
     }
-    
+
     public static long getAddress(ByteBuffer buff) {
         return unsafe.getLong(buff, byteBufferAddressOffset);
     }
-    
+
     public static void putByte(long address, byte b) {
         unsafe.putByte(address, b);
     }

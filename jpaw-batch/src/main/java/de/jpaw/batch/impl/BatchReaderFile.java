@@ -24,12 +24,12 @@ abstract public class BatchReaderFile implements Contributor {
     private String filename = null;
     private InputStream rawStream = null;
     protected InputStream uncompressedStream = null;    // the effective input. Subclasses can add buffering and decoding
-    protected boolean isBuffered = false;               // information if this stream is buffered already, to avoid duplicate buffers 
+    protected boolean isBuffered = false;               // information if this stream is buffered already, to avoid duplicate buffers
     protected int delayInMillis = 0;
     protected int skip = 0;
     protected int maxRecords = 0;
-    
-    
+
+
     @Override
     public void addCommandlineParameters(JSAP params) throws Exception {
         params.registerParameter(new FlaggedOption("in", JSAP.STRING_PARSER, null, JSAP.NOT_REQUIRED, 'i', "in", "input filename (extensions .gz and .zip are understood)"));
@@ -39,14 +39,14 @@ abstract public class BatchReaderFile implements Contributor {
         params.registerParameter(new FlaggedOption("skip", JSAP.INTEGER_PARSER, "0", JSAP.NOT_REQUIRED, 's', "skip", "number of input records to skip"));
         params.registerParameter(new FlaggedOption("maxnum", JSAP.INTEGER_PARSER, "999999999", JSAP.NOT_REQUIRED, 'm', "num", "maximum number of records to process"));
     }
-    
-    
+
+
     @Override
     public void evalCommandlineParameters(JSAPResult params) throws Exception {
         skip = params.getInt("skip");
         maxRecords = params.getInt("maxnum");
         delayInMillis = params.getInt("indelay");
-        
+
         useGzip = params.getBoolean("ingzip");
         useZip = params.getBoolean("inzip");
         filename = params.getString("in");
@@ -62,7 +62,7 @@ abstract public class BatchReaderFile implements Contributor {
             // fatal error, terminate
             System.exit(1);
         }
-        
+
         // command line parsed, now open the input (and check for existence of file)
         // if the file does not exist, we terminate without doing anything
         if (filename == null) {
@@ -88,7 +88,7 @@ abstract public class BatchReaderFile implements Contributor {
             uncompressedStream = rawStream;
         }
     }
-    
+
     @Override
     public void close() throws Exception {
         uncompressedStream.close();

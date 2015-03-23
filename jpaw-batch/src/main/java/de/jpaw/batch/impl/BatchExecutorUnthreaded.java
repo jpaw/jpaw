@@ -6,10 +6,10 @@ import de.jpaw.batch.api.BatchWriter;
 
 public class BatchExecutorUnthreaded<E,F> extends BatchMain<E,F> {
     private BatchProcessor<E,F> localProcessor = null;
-    private BatchWriter<? super F> localWriter = null; 
+    private BatchWriter<? super F> localWriter = null;
     private int numRecords = 0;         // number of records read (added to input queue)
     private int numExceptions = 0;      // number of records which resulted in an exception
-    
+
     @Override
     public void open(BatchProcessorFactory<E, F> processorFactory, BatchWriter<? super F> writer) throws Exception {
         localProcessor = processorFactory.getProcessor(0);
@@ -18,9 +18,9 @@ public class BatchExecutorUnthreaded<E,F> extends BatchMain<E,F> {
 
     @Override
     public void close() throws Exception {
-        localProcessor.close();     
+        localProcessor.close();
     }
-    
+
     @Override
     public void accept(E record) {  // called by the reader
         ++numRecords;

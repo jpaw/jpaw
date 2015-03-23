@@ -25,8 +25,8 @@ abstract public class BatchWriterFile implements Contributor {
     private OutputStream rawStream = null;
     protected OutputStream uncompressedStream = null;  // the effective input. Subclasses can add buffering and decoding
     protected int delayInMillis = 0;
-    
-    
+
+
     @Override
     public void addCommandlineParameters(JSAP params) throws Exception {
         params.registerParameter(new FlaggedOption("out", JSAP.STRING_PARSER, null, JSAP.NOT_REQUIRED, 'o', "out", "output filename (extensions .gz and .zip are understood)"));
@@ -34,8 +34,8 @@ abstract public class BatchWriterFile implements Contributor {
         params.registerParameter(new Switch("outgzip", JSAP.NO_SHORTFLAG, "out-gzip", "gunzip output file on the fly"));
         params.registerParameter(new FlaggedOption("outdelay", JSAP.INTEGER_PARSER, "0", JSAP.NOT_REQUIRED, JSAP.NO_SHORTFLAG, "out-delay", "additional throttling of output (in ms per record)"));
     }
-    
-    
+
+
     @Override
     public void evalCommandlineParameters(JSAPResult params) throws Exception {
         delayInMillis = params.getInt("outdelay");
@@ -54,7 +54,7 @@ abstract public class BatchWriterFile implements Contributor {
             // fatal error, terminate
             System.exit(1);
         }
-        
+
         // command line parsed, now open the output (and check for writeability of file)
         // if the file does not exist, we terminate without doing anything
         if (filename == null) {
@@ -79,7 +79,7 @@ abstract public class BatchWriterFile implements Contributor {
             uncompressedStream = rawStream;
         }
     }
-    
+
     @Override
     public void close() throws Exception {
         if (useZip)

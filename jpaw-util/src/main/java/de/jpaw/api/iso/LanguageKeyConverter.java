@@ -48,7 +48,7 @@ public class LanguageKeyConverter {
             + ((languageCode.charAt(3) & 0x1f) <<  5)
             + ((languageCode.charAt(4) & 0x1f) );
     }
-    
+
     public static String intToLanguageCode(int languageCodeIndex) {
         if (languageCodeIndex <= 0)
             return null;  // error

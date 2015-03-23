@@ -6,8 +6,8 @@ import java.util.concurrent.ConcurrentMap;
 import de.jpaw.util.CharTestsASCII;
 
 public class CurrencyKeyConverter {
-    static private final int OFFSET_COMPUTED = 100; 
-    static private final int NUM_COMPUTED = 26*26*26; 
+    static private final int OFFSET_COMPUTED = 100;
+    static private final int NUM_COMPUTED = 26*26*26;
     static private final String [] FREQUENT_CURRENCY_CODES_A3 = {            // sorted by descending gross domestic product, 2012
         "XXX", "USD", "CNY", "JPY", "EUR", "BRR", "RUB", "INR", "GBP", "CHF", "HKD", "AUD", "CAD" // plus "XXX" for default
     };
@@ -16,8 +16,8 @@ public class CurrencyKeyConverter {
         for (int i = 0; i < FREQUENT_CURRENCY_CODES_A3.length; ++i)
             FREQUENT_CURRENCY_CODES_A3_MAP.put(FREQUENT_CURRENCY_CODES_A3[i], Integer.valueOf(i + 1));
     }
-    
-    
+
+
     /** convert a country code string into a number, or return 0 if the code does not conform to the spec.
      * Frequently occurring codes will get small numbers.
      * The range is within [1..17k) (31 bit) */
@@ -34,7 +34,7 @@ public class CurrencyKeyConverter {
         // default: by formula
         return OFFSET_COMPUTED + (currencyCode.charAt(0) - 'A') * 676 + (currencyCode.charAt(1) - 'A') * 26 + (currencyCode.charAt(2) - 'A');
     }
-    
+
     public static String intToCurrencyCodeA3(int currencyCodeIndex) {
         if (currencyCodeIndex <= 0)
             return null;  // error

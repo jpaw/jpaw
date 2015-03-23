@@ -14,12 +14,12 @@ public abstract class BatchInputFilter<B> extends BatchLink implements BatchFilt
     private BatchMainCallback<? super B> myTarget;
     protected int countTotal = 0;
     protected int countUsed = 0;
-    
+
     public BatchInputFilter(BatchReader<B> primaryReader) {
         super(primaryReader);
         this.primaryReader = primaryReader;
     }
-    
+
     @Override
     public final void accept(B record) {
         ++countTotal;
@@ -28,7 +28,7 @@ public abstract class BatchInputFilter<B> extends BatchLink implements BatchFilt
             myTarget.accept(record);
         }
     }
-    
+
     @Override
     public void produceTo(BatchMainCallback<? super B> whereToPut) throws Exception {
         myTarget = whereToPut;

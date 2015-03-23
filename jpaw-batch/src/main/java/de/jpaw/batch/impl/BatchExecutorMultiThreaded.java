@@ -19,7 +19,7 @@ import de.jpaw.batch.api.DataWithOrdinal;
 public class BatchExecutorMultiThreaded<E,F> extends BatchMain<E,F> {
     private static final Logger LOG = LoggerFactory.getLogger(BatchExecutorMultiThreaded.class);
     public static int EOF = -1;
-    
+
     private int numberOfThreads = 1;
     private int inQueueSize = 100;
     private int outQueueSize = 100;
@@ -27,7 +27,7 @@ public class BatchExecutorMultiThreaded<E,F> extends BatchMain<E,F> {
     private int numRecords = 0;         // number of records read (added to input queue)
     private int numExceptions = 0;      // number of records which could not be scheduled
 
-    private BlockingQueue<DataWithOrdinal<E>> inputQueue = null; 
+    private BlockingQueue<DataWithOrdinal<E>> inputQueue = null;
     private BlockingQueue<DataWithOrdinal<F>> outputQueue = null;
     private BatchExecutorMTResultCollector<? super F> collector = null;
     private Thread collectorThread = null;
@@ -55,7 +55,7 @@ public class BatchExecutorMultiThreaded<E,F> extends BatchMain<E,F> {
             workerThreads[i].start();
         }
     }
-    
+
     @Override
     public void close() throws Exception {
         // store the EOFs... (1 record of recordNo -1 per thread)
@@ -75,7 +75,7 @@ public class BatchExecutorMultiThreaded<E,F> extends BatchMain<E,F> {
         // and wait for writer to finish...
         collectorThread.join();
     }
-    
+
     private void storeToInputQueueWithTimeout(DataWithOrdinal<E> record) throws InterruptedException, TimeoutException {
         // inputQueue.put(record);
         boolean couldDoIt = inputQueue.offer(record, timeout, TimeUnit.SECONDS);
@@ -84,7 +84,7 @@ public class BatchExecutorMultiThreaded<E,F> extends BatchMain<E,F> {
             throw new TimeoutException("Couldn't store record " + record.recordno + " within " + timeout + " seconds");
         }
     }
-    
+
     // BatchMainCallback
     @Override
     public void accept(E record) {

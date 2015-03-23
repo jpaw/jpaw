@@ -14,12 +14,12 @@ public class BatchWriterXmlFile extends BatchWriterTextFileAbstract implements B
     private final JAXBContext context;
     private boolean formatted = false;
     private Marshaller m;
-    
+
     public BatchWriterXmlFile(JAXBContext context, String header, String footer) {
         super(header, footer);
         this.context = context;
     }
-    
+
     @Override
     public void accept(int no, Object response) throws Exception {
         // marshall the object and write it to the output
@@ -28,21 +28,21 @@ public class BatchWriterXmlFile extends BatchWriterTextFileAbstract implements B
             bufferedWriter.append('\n');
     }
 
-    
+
     @Override
     public void addCommandlineParameters(JSAP params) throws Exception {
         super.addCommandlineParameters(params);
         params.registerParameter(new Switch("formatted", 'F', "formatted", "write formatted output"));
     }
-    
-    
+
+
     @Override
     public void evalCommandlineParameters(JSAPResult params) throws Exception {
         formatted = params.getBoolean("formatted");
-        
+
         // encoding has been clarified. Now technically everything is fine, get the actual file. That will provide the stream uncompressedStream in the superclass
         super.evalCommandlineParameters(params);
-       
+
         m = context.createMarshaller();
         if (formatted)
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);

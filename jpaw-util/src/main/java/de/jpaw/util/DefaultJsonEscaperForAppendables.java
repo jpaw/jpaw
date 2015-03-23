@@ -22,13 +22,13 @@ public class DefaultJsonEscaperForAppendables implements JsonEscaper {
                 jsonEscapes[i] = "\\u00" + hextab[i/16] + hextab[i & 15];
         }
     }
-    
+
     protected final Appendable appendable;
-    
+
     public DefaultJsonEscaperForAppendables(Appendable appendable) {
         this.appendable = appendable;
     }
-    
+
     /** Writes a quoted string. We know that we don't need escaping. */
     @Override
     public void outputAscii(String s) throws IOException {
@@ -47,7 +47,7 @@ public class DefaultJsonEscaperForAppendables implements JsonEscaper {
     /** Write the String s (which may not be null) to the Appendable.
      * This implementation may not yet be fully Unicode-compliant.
      * See here for the explanation: http://stackoverflow.com/questions/1527856/how-can-i-iterate-through-the-unicode-codepoints-of-a-java-string
-     *  */ 
+     *  */
     @Override
     public void outputUnicodeWithControls(String s) throws IOException {
         appendable.append('\"');

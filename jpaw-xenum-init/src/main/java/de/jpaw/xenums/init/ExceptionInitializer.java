@@ -8,11 +8,11 @@ import de.jpaw.util.ApplicationException;
 
 public class ExceptionInitializer {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionInitializer.class);
-    
+
     public static void initializeExceptionClasses(String packageName) {
         initializeExceptionClasses(ReflectionsPackageCache.get(packageName));
     }
-        
+
     public static void initializeExceptionClasses(Reflections ... reflections) {
         for (int i = 0; i < reflections.length; ++i) {
             int ctr = 0;

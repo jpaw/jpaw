@@ -33,26 +33,37 @@ public class ByteBuilder {
     private static final byte [] DEFAULT_EMPTY_BUFFER = new byte [0];
     // per instance variables
     private Charset charset;
+
     private int currentAllocSize;
     private int currentLength;
     private byte[] buffer;
 
-    // set all private variables except charset
+    // set all private variables
     private final void constructorHelper(int size) {
         buffer = size > 0 ? new byte[size] : DEFAULT_EMPTY_BUFFER;
         currentAllocSize = size;
         currentLength = 0;
+        charset = DEFAULT_CHARSET;
     }
 
     public ByteBuilder() {  // default constructor
         constructorHelper(DEFAULT_INITIAL_CAPACITY);
-        charset = DEFAULT_CHARSET;
     }
     public ByteBuilder(int initialSize, Charset charset) {  // constructor with possibility to override settings
         constructorHelper(initialSize >= 0 ? initialSize : DEFAULT_INITIAL_CAPACITY);
-        this.charset = charset == null ? DEFAULT_CHARSET : charset;
+        if (charset != null)
+            this.charset = charset;
     }
 
+    
+    public Charset getCharset() {
+        return charset;
+    }
+
+    public void setCharset(Charset charset) {
+        this.charset = charset;
+    }
+    
     /** Extend the buffer because we ran out of space. */
     private void createMoreSpace(int minimumRequired) {
         // allocate the space

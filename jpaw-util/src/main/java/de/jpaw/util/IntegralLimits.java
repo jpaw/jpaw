@@ -41,4 +41,19 @@ public class IntegralLimits {
     public static final double  [] EXPONENTS  = { 1.0, 1.0e+1, 1.0e+2, 1.0e+3, 1.0e+4, 1.0e+5, 1.0e+6, 1.0e+7, 1.0e+8, 1.0e+9,
         1.0e+10, 1.0e+11, 1.0e+12, 1.0e+13, 1.0e+14, 1.0e+15, 1.0e+16, 1.0e+17, 1.0e+18, 1.0e+19 // last is unused
     };
+    
+    public static int nextPowerOf2(int x) {
+        if (x == 0)
+            return 1;
+        if (x >= 1 << 30) {
+            return 1 << 30;     // more would turn negative
+        }
+        x = x - 1;
+        x |= x >> 1;
+        x |= x >> 2;
+        x |= x >> 4;
+        x |= x >> 8;
+        x |= x >> 16;
+        return x + 1;
+    }
 }

@@ -22,7 +22,7 @@ public class ReflectionsPackageCache {
         return r;
     }
 
-    /** Scan a list of package names and returns the array of Relfections. */
+    /** Scan a list of package names and returns the array of Reflections. */
     public static Reflections [] getAll(String ... packagename) {
         Reflections [] result = new Reflections [packagename.length];
         for (int i = 0; i < packagename.length; ++i) {

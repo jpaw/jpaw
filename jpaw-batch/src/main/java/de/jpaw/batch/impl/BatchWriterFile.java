@@ -26,6 +26,10 @@ abstract public class BatchWriterFile implements Contributor {
     protected OutputStream uncompressedStream = null;  // the effective input. Subclasses can add buffering and decoding
     protected int delayInMillis = 0;
 
+    public String getFilename() {
+        return filename;
+    }
+
 
     @Override
     public void addCommandlineParameters(JSAP params) throws Exception {

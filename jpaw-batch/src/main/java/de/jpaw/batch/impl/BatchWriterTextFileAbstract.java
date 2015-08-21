@@ -20,6 +20,10 @@ abstract public class BatchWriterTextFileAbstract extends BatchWriterFile {
     private final String header;
     private final String footer;
 
+    public String getEncoding() {
+        return encoding.name();
+    }
+    
     public BatchWriterTextFileAbstract(String header, String footer) {
         this.header = header;
         this.footer = footer;

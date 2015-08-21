@@ -30,6 +30,10 @@ abstract public class BatchReaderFile implements Contributor {
     protected int maxRecords = 0;
 
 
+    public String getFilename() {
+        return filename;
+    }
+
     @Override
     public void addCommandlineParameters(JSAP params) throws Exception {
         params.registerParameter(new FlaggedOption("in", JSAP.STRING_PARSER, null, JSAP.NOT_REQUIRED, 'i', "in", "input filename (extensions .gz and .zip are understood)"));

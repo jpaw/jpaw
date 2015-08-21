@@ -19,6 +19,10 @@ abstract public class BatchReaderTextFileAbstract extends BatchReaderFile {
     private BufferedReader bufferedReader = null;  // the buffered and decoded input.
     private int recordCounter = 0;                  // used to count so we can do max records at most
 
+    public String getEncoding() {
+        return encoding.name();
+    }
+
     @Override
     public void addCommandlineParameters(JSAP params) throws Exception {
         super.addCommandlineParameters(params);

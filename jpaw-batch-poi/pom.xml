@@ -9,15 +9,15 @@
         <relativePath>../jpaw-base/pom.xml</relativePath>
     </parent>
 
-    <artifactId>jpaw-batch</artifactId>
+    <artifactId>jpaw-batch-poi</artifactId>
     <packaging>jar</packaging>
 
-    <description>Jpaw batch processor API and basic implementations</description>
+    <description>Jpaw batch processor using the LMAX disruptor</description>
 
     <dependencies>
         <dependency>
             <groupId>de.jpaw</groupId>
-            <artifactId>jpaw-socket</artifactId>
+            <artifactId>jpaw-batch</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -25,13 +25,16 @@
             <artifactId>jsap</artifactId>
             <version>${jsap.version}</version>
         </dependency>
-        <!-- only needed for the error diagnostics on charset right now. Alternative would be the string joiner in Java8 -->
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>

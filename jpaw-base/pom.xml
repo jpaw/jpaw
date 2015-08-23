@@ -9,11 +9,15 @@
     </parent>
 
     <artifactId>jpaw-base</artifactId>
-    <version>1.2.10</version>
+    <version>1.2.11</version>
     <packaging>pom</packaging>
 
     <description>Common configuration settings for all jpaw basic / utility projects</description>
 
+    <properties>
+        <poi.version>3.12</poi.version>                 <!-- http://poi.apache.org/ UPTODATE 2014-12-21 -->
+    </properties>
+    
     <build>
         <pluginManagement>
             <plugins>
@@ -95,6 +99,8 @@
         <module>../jpaw-cmdline/pom.xml</module>
         <module>../jpaw-batch/pom.xml</module>
         <module>../jpaw-batch-lmax/pom.xml</module>
+        <module>../jpaw-batch-poi/pom.xml</module>
+        <module>../jpaw-batch-xls2csv/pom.xml</module>
         <module>../jpaw-money/pom.xml</module>
         <module>../jpaw-money-test/pom.xml</module>
         <module>../jpaw-xml/pom.xml</module>

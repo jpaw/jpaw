@@ -9,11 +9,11 @@ import javax.xml.stream.XMLStreamReader;
 
 import com.martiansoftware.jsap.JSAPResult;
 
+import de.jpaw.batch.api.BatchFileReader;
 import de.jpaw.batch.api.BatchMainCallback;
-import de.jpaw.batch.api.BatchReader;
 import de.jpaw.batch.impl.BatchReaderFile;
 
-public class BatchReaderXmlFile<E> extends BatchReaderFile implements BatchReader<E> {
+public class BatchReaderXmlFile<E> extends BatchReaderFile implements BatchFileReader<E> {
 
 //    private final JAXBContext context;
     private final Class<E> targetClass;
@@ -51,5 +51,10 @@ public class BatchReaderXmlFile<E> extends BatchReaderFile implements BatchReade
         r.require(XMLStreamConstants.START_ELEMENT, null, null);
         r.nextTag();
 
+    }
+
+    @Override
+    public String getEncoding() {
+        return "UTF-8";
     }
 }

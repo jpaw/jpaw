@@ -16,11 +16,11 @@ import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
 import com.martiansoftware.jsap.JSAPResult;
 
+import de.jpaw.batch.api.BatchFileReader;
 import de.jpaw.batch.api.BatchMainCallback;
-import de.jpaw.batch.api.BatchReader;
 import de.jpaw.batch.api.Contributor;
 
-public class BatchReaderPoi implements Contributor, BatchReader<String> {
+public class BatchReaderPoi implements Contributor, BatchFileReader<String> {
     private static final Logger LOGGER = LoggerFactory.getLogger(BatchReaderPoi.class);
     private String filename = null;
     private String sheetName = null;
@@ -29,12 +29,29 @@ public class BatchReaderPoi implements Contributor, BatchReader<String> {
     protected String delimiter = ";";
     protected int firstCol = 1;
     protected int lastCol = 0;      // if 0: export until an empty field has been encountered
+    protected int whileCol = 0;      // if 0: export until an empty field has been encountered
     
     protected Workbook xls = null;
     protected Sheet sheet = null;
     
+    @Override
     public String getFilename() {
         return filename;
+    }
+    
+    @Override
+    public int getSkip() {
+        return skip;
+    }
+
+    @Override
+    public int getMaxRecords() {
+        return maxRecords;
+    }
+
+    @Override
+    public String getEncoding() {
+        return "UTF-8";     // no variable encoding for Excel
     }
 
     @Override
@@ -42,10 +59,11 @@ public class BatchReaderPoi implements Contributor, BatchReader<String> {
         params.registerParameter(new FlaggedOption("in",    JSAP.STRING_PARSER, null, JSAP.REQUIRED, 'i', "in", "input filename (extensions .xls and .xlsx are understood)"));
         params.registerParameter(new FlaggedOption("sheet", JSAP.STRING_PARSER, null, JSAP.NOT_REQUIRED, JSAP.NO_SHORTFLAG, "sheet", "name of the sheet to use (by default, uses the first one)"));
         params.registerParameter(new FlaggedOption("skip",   JSAP.INTEGER_PARSER, "0", JSAP.NOT_REQUIRED, 's', "skip", "number of input rows to skip"));
-        params.registerParameter(new FlaggedOption("maxnum", JSAP.INTEGER_PARSER, "999999999", JSAP.NOT_REQUIRED, 'm', "num", "maximum number of records to process"));
+        params.registerParameter(new FlaggedOption("maxnum", JSAP.INTEGER_PARSER, "65535", JSAP.NOT_REQUIRED, 'm', "num", "maximum number of records to process"));
         params.registerParameter(new FlaggedOption("delimiter", JSAP.STRING_PARSER, delimiter, JSAP.NOT_REQUIRED, 'd', "delimiter", "delimiter character (usually ; or : or the pipe character)"));
         params.registerParameter(new FlaggedOption("first", JSAP.INTEGER_PARSER, "1", JSAP.NOT_REQUIRED, 'f', "first", "first column to export"));
         params.registerParameter(new FlaggedOption("last",  JSAP.INTEGER_PARSER, "0", JSAP.NOT_REQUIRED, 'l', "last", "last column to export"));
+        params.registerParameter(new FlaggedOption("while", JSAP.INTEGER_PARSER, "0", JSAP.NOT_REQUIRED, 'w', "while", "process rows while this column is not empty"));
     }
 
 
@@ -58,6 +76,7 @@ public class BatchReaderPoi implements Contributor, BatchReader<String> {
         maxRecords = params.getInt("maxnum");
         firstCol   = params.getInt("first");
         lastCol    = params.getInt("last");
+        whileCol   = params.getInt("while");
         
         if (filename.endsWith(".xls")) {
             xls = new HSSFWorkbook(new FileInputStream(filename));
@@ -89,7 +108,12 @@ public class BatchReaderPoi implements Contributor, BatchReader<String> {
             if (DateUtil.isCellDateFormatted(cell)) {
                 return cell.getDateCellValue().toString();
             } else {
-                return Double.toString(cell.getNumericCellValue());
+                double d = cell.getNumericCellValue();
+                if (Double.isFinite(d) && d == Math.floor(d)) {
+                    // integral
+                    return Long.toString(Double.valueOf(d).longValue());
+                }
+                return Double.toString(d);
             }
         case Cell.CELL_TYPE_BOOLEAN:
             return Boolean.toString(cell.getBooleanCellValue());
@@ -106,15 +130,19 @@ public class BatchReaderPoi implements Contributor, BatchReader<String> {
         int lineNo = skip - 1;  // first row has index 0
         for (;;) {
             buff.setLength(0);
+            
+            // get row, stop if not present
             Row row = sheet.getRow(++lineNo);
             if (row == null)
                 break;
-            Cell cell = row.getCell(firstCol - 1, Row.RETURN_BLANK_AS_NULL);
-            if (cell == null)     // get the indicator line
+            
+            // break criteria if indicator column is empty
+            if (whileCol > 0 && row.getCell(whileCol - 1, Row.RETURN_BLANK_AS_NULL) == null)
                 break;   // end of data
-            buff.append(asString(cell));
+            
             int last = lastCol == 0 ? row.getLastCellNum() : lastCol;
-            for (int i = firstCol - 1; i < last; ++i) {
+            buff.append(asString(row.getCell(firstCol - 1, Row.RETURN_BLANK_AS_NULL)));
+            for (int i = firstCol; i < last; ++i) {
                 buff.append(delimiter);
                 buff.append(asString(row.getCell(i, Row.RETURN_BLANK_AS_NULL)));
             }

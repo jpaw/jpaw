@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-base</artifactId>
-        <version>1.2.11</version>
+        <version>1.2.12-SNAPSHOT</version>
         <relativePath>../jpaw-base/pom.xml</relativePath>
     </parent>
 
@@ -16,7 +16,7 @@
     <!-- Define my own version as a convenience for users. Possibly not required. -->
 <!-- 
     <properties>
-        <jpaw.version>1.2.11</jpaw.version>
+        <jpaw.version>1.2.12-SNAPSHOT</jpaw.version>
     </properties>
  -->
  

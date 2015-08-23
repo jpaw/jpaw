@@ -106,7 +106,9 @@ public class BatchReaderPoi implements Contributor, BatchReader<String> {
         int lineNo = skip - 1;  // first row has index 0
         for (;;) {
             buff.setLength(0);
-            Row row = sheet.getRow(++lineNo);  
+            Row row = sheet.getRow(++lineNo);
+            if (row == null)
+                break;
             Cell cell = row.getCell(firstCol - 1, Row.RETURN_BLANK_AS_NULL);
             if (cell == null)     // get the indicator line
                 break;   // end of data
@@ -116,6 +118,7 @@ public class BatchReaderPoi implements Contributor, BatchReader<String> {
                 buff.append(delimiter);
                 buff.append(asString(row.getCell(i, Row.RETURN_BLANK_AS_NULL)));
             }
+            buff.append('\n');
             whereToPut.accept(buff.toString());
             if (--maxRecords == 0)
                 break;

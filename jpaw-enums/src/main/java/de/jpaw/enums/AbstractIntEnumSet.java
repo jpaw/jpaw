@@ -7,7 +7,7 @@ import java.util.Set;
 
 /** An alternate implementation of EnumSet, but with the ability to obtain the resulting bitmap, for either transfer or storing in a database.
  * The underlying object is a int, therefore the maximum number of enum tokens is 31 (as we don't want negative values). */
-public abstract class AbstractIntEnumSet<E extends Enum<E>> extends AbstractCollection<E> implements Set<E>, Serializable {
+public abstract class AbstractIntEnumSet<E extends Enum<E>> extends AbstractCollection<E> implements Set<E>, Serializable, EnumSetMarker {
     private static final long serialVersionUID = 34398390989170000L + 31;
     private static final int BIT = 1;
     public static final int MAX_TOKENS = 31;

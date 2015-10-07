@@ -191,37 +191,8 @@ public class DefaultJsonEscaperForAppendables implements JsonEscaper {
             return;
         }
         if (obj.getClass().isArray()) {
-            if (obj instanceof byte []) {
-                // special case: not an array, but a base64 encoded string
-                byte [] array = (byte [])obj;
-                ByteBuilder tmp = new ByteBuilder(0, null);
-                Base64.encodeToByte(tmp, array, 0, array.length);
-                outputAscii(tmp.toString());
-                return;
-            }
-            if (obj instanceof int []) {
-                int [] array = (int [])obj;
-                appendable.append('[');
-                for (int i = 0; i < array.length; ++i) {
-                    if (i > 0)
-                        appendable.append(',');
-                    appendable.append(Integer.toString(array[i]));
-                }
-                appendable.append(']');
-                return;
-            }
-            if (obj instanceof boolean []) {
-                boolean [] array = (boolean [])obj;
-                appendable.append('[');
-                for (int i = 0; i < array.length; ++i) {
-                    if (i > 0)
-                        appendable.append(',');
-                    appendable.append(array[i] ? "true" : "false");
-                }
-                appendable.append(']');
-                return;
-            }
-            throw new IOException("Not yet supported: primitive array " + obj.getClass().getSimpleName());
+            outputPrimitiveArrays(obj);
+            return;
         }
         // last resort: use toString()
         outputUnicodeWithControls(obj.toString());      // UUID, Character
@@ -235,5 +206,95 @@ public class DefaultJsonEscaperForAppendables implements JsonEscaper {
     @Override
     public void outputBoolean(boolean b) throws IOException {
         appendable.append(b ? "true" : "false");
+    }
+
+    // code moved out due to excessive length
+    private void outputPrimitiveArrays(Object obj) throws IOException {
+        if (obj instanceof byte []) {
+            // special case: not an array, but a base64 encoded string
+            byte [] array = (byte [])obj;
+            ByteBuilder tmp = new ByteBuilder(0, null);
+            Base64.encodeToByte(tmp, array, 0, array.length);
+            outputAscii(tmp.toString());
+            return;
+        }
+        if (obj instanceof int []) {
+            int [] array = (int [])obj;
+            appendable.append('[');
+            for (int i = 0; i < array.length; ++i) {
+                if (i > 0)
+                    appendable.append(',');
+                appendable.append(Integer.toString(array[i]));
+            }
+            appendable.append(']');
+            return;
+        }
+        if (obj instanceof boolean []) {
+            boolean [] array = (boolean [])obj;
+            appendable.append('[');
+            for (int i = 0; i < array.length; ++i) {
+                if (i > 0)
+                    appendable.append(',');
+                appendable.append(array[i] ? "true" : "false");
+            }
+            appendable.append(']');
+            return;
+        }
+        if (obj instanceof char []) {
+            char [] array = (char [])obj;
+            appendable.append('[');
+            for (int i = 0; i < array.length; ++i) {
+                if (i > 0)
+                    appendable.append(',');
+                outputUnicodeWithControls(Character.toString(array[i]));
+            }
+            appendable.append(']');
+            return;
+        }
+        if (obj instanceof long []) {
+            long [] array = (long [])obj;
+            appendable.append('[');
+            for (int i = 0; i < array.length; ++i) {
+                if (i > 0)
+                    appendable.append(',');
+                appendable.append(Long.toString(array[i]));
+            }
+            appendable.append(']');
+            return;
+        }
+        if (obj instanceof short []) {
+            short [] array = (short [])obj;
+            appendable.append('[');
+            for (int i = 0; i < array.length; ++i) {
+                if (i > 0)
+                    appendable.append(',');
+                appendable.append(Short.toString(array[i]));
+            }
+            appendable.append(']');
+            return;
+        }
+        if (obj instanceof double []) {
+            double [] array = (double [])obj;
+            appendable.append('[');
+            for (int i = 0; i < array.length; ++i) {
+                if (i > 0)
+                    appendable.append(',');
+                appendable.append(Double.toString(array[i]));
+            }
+            appendable.append(']');
+            return;
+        }
+        if (obj instanceof float []) {
+            float [] array = (float [])obj;
+            appendable.append('[');
+            for (int i = 0; i < array.length; ++i) {
+                if (i > 0)
+                    appendable.append(',');
+                appendable.append(Float.toString(array[i]));
+            }
+            appendable.append(']');
+            return;
+        }
+        throw new IOException("Not yet supported: primitive array " + obj.getClass().getSimpleName());
     }
 }

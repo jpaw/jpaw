@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-ManifestVersion: 2
+Bundle-Name: jpaw JSON
+Bundle-SymbolicName: jpaw.json
+Bundle-Version: 1.2.12.qualifier
+Bundle-Vendor: Michael Bischoff
+Export-Package: de.jpaw.json
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6 

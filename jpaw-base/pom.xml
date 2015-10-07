@@ -95,6 +95,7 @@
         <module>../jpaw-bom/pom.xml</module>
         <module>../jpaw-enums/pom.xml</module>
         <module>../jpaw-util/pom.xml</module>
+        <module>../jpaw-json/pom.xml</module>
         <module>../jpaw-socket/pom.xml</module>
         <module>../jpaw-cmdline/pom.xml</module>
         <module>../jpaw-batch/pom.xml</module>

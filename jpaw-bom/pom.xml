@@ -34,6 +34,11 @@
             </dependency>
             <dependency>
                 <groupId>de.jpaw</groupId>
+                <artifactId>jpaw-json</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.jpaw</groupId>
                 <artifactId>jpaw-socket</artifactId>
                 <version>${project.version}</version>
             </dependency>

@@ -110,7 +110,7 @@ public class DefaultJsonEscaperForAppendables implements JsonEscaper {
                     appendable.append(',');
                 outputUnicodeNoControls(elem.getKey());
                 appendable.append(':');
-                outputJsonElement(elem.getValue());
+                outputOptionalJsonElement(elem.getValue());
                 needDelim = true;
             }
         }
@@ -128,7 +128,7 @@ public class DefaultJsonEscaperForAppendables implements JsonEscaper {
         for (Object o : obj) {
             if (needDelim)
                 appendable.append(',');
-            outputJsonElement(o);
+            outputOptionalJsonElement(o);
             needDelim = true;
         }
         appendable.append(']');
@@ -136,10 +136,6 @@ public class DefaultJsonEscaperForAppendables implements JsonEscaper {
 
     @Override
     public void outputJsonElement(Object obj) throws IOException {
-        if (obj == null) {
-            appendable.append("null");
-            return;
-        }
         if (obj instanceof Number) {
             outputNumber((Number)obj);
             return;
@@ -162,7 +158,7 @@ public class DefaultJsonEscaperForAppendables implements JsonEscaper {
             for (Object o : (Set<?>)obj) {
                 if (needDelim)
                     appendable.append(',');
-                outputJsonElement(o);
+                outputOptionalJsonElement(o);
                 needDelim = true;
             }
             appendable.append(']');
@@ -184,7 +180,7 @@ public class DefaultJsonEscaperForAppendables implements JsonEscaper {
             for (Object o : (Object[])obj) {
                 if (needDelim)
                     appendable.append(',');
-                outputJsonElement(o);
+                outputOptionalJsonElement(o);
                 needDelim = true;
             }
             appendable.append(']');
@@ -295,6 +291,15 @@ public class DefaultJsonEscaperForAppendables implements JsonEscaper {
             appendable.append(']');
             return;
         }
-        throw new IOException("Not yet supported: primitive array " + obj.getClass().getSimpleName());
+        throw new RuntimeException("Not yet supported: primitive array " + obj.getClass().getSimpleName());
+    }
+
+    @Override
+    public void outputOptionalJsonElement(Object obj) throws IOException {
+        if (obj == null) {
+            appendable.append("null");
+        } else {
+            outputJsonElement(obj);
+        }
     }
 }

@@ -54,6 +54,10 @@ public interface JsonEscaper {
 
     /** Writes a JSON field. Autodetects the type. field can be null.
      */
+    public void outputOptionalJsonElement(Object field) throws IOException;
+
+    /** Writes a JSON field. Autodetects the type. field can be null.
+     */
     public void outputJsonElement(Object field) throws IOException;
 
     /** Writes a JSON array (from a List). List can be null.

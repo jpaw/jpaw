@@ -46,10 +46,6 @@ public class ExtendedJsonEscaperForAppendables extends DefaultJsonEscaperForAppe
 
     @Override
     public void outputJsonElement(Object obj) throws IOException {
-        if (obj == null) {
-            appendable.append("null");
-            return;
-        }
         // add Joda-Time types and enum types 
         if (obj instanceof Enum) {
             // distinguish Tokenizable
@@ -74,7 +70,7 @@ public class ExtendedJsonEscaperForAppendables extends DefaultJsonEscaperForAppe
             } else if (obj instanceof AbstractShortEnumSet<?>) {
                 appendable.append(Short.toString(((AbstractShortEnumSet<?>)obj).getBitmap()));
             } else {
-                throw new IOException("Cannot transform enum set of type " + obj.getClass().getSimpleName() + " to JSON");
+                throw new RuntimeException("Cannot transform enum set of type " + obj.getClass().getSimpleName() + " to JSON");
             }
             return;
         }

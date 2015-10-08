@@ -6,6 +6,7 @@ import org.joda.time.Instant;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
+import org.joda.time.ReadablePartial;
 
 import de.jpaw.enums.AbstractByteEnumSet;
 import de.jpaw.enums.AbstractIntEnumSet;
@@ -86,19 +87,22 @@ public class ExtendedJsonEscaperForAppendables extends DefaultJsonEscaperForAppe
             }
             return;
         }
-        if (obj instanceof LocalDate) {
-            int [] values = ((LocalDate)obj).getValues();   // 3 values: year, month, day
-            outputAscii(toDay(values));
-            return;
-        }
-        if (obj instanceof LocalTime) {
-            outputAscii(toTimeOfDay(((LocalTime)obj).getMillisOfDay()));
-            return;
-        }
-        if (obj instanceof LocalDateTime) {
-            int [] values = ((LocalDateTime)obj).getValues();   // 4 values: year, month, day, millis
-            outputAscii(toDay(values) + "T" + toTimeOfDay(values[3]) + "Z");
-            return;
+        if (obj instanceof ReadablePartial) {
+            if (obj instanceof LocalDate) {
+                int [] values = ((LocalDate)obj).getValues();   // 3 values: year, month, day
+                outputAscii(toDay(values));
+                return;
+            }
+            if (obj instanceof LocalTime) {
+                outputAscii(toTimeOfDay(((LocalTime)obj).getMillisOfDay()));
+                return;
+            }
+            if (obj instanceof LocalDateTime) {
+                int [] values = ((LocalDateTime)obj).getValues();   // 4 values: year, month, day, millis
+                outputAscii(toDay(values) + "T" + toTimeOfDay(values[3]) + "Z");
+                return;
+            }
+            throw new RuntimeException("Cannot transform joda readable partial of type " + obj.getClass().getSimpleName() + " to JSON");
         }
         super.outputJsonElement(obj);
     }

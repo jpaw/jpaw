@@ -41,6 +41,33 @@ public class CharTestsASCII {
     public static final Pattern PRINTABLE_PATTERN        = Pattern.compile("\\A[\\x20-\\x7e]*\\z");     // tests if a field consists of printable ASCII characters only
     public static final Pattern PRINTABLE_OR_TAB_PATTERN = Pattern.compile("\\A[\\x20-\\x7e\t]*\\z");   // tests if a field consists of printable ASCII characters or TABs only
 
+    // ID map:
+    // 0 = lowercase
+    // 1 = uppercase
+    // 2 = digit
+    // 3 = other identifier in Javascript
+    // 9 = anything else
+    // index ranges from 0x20 to 0x7f
+    private static final byte CHAR_TYPE [] = {
+        9, 9, 9, 9, 3, 9, 9, 9,  9, 9, 9, 9, 9, 9, 9, 9,
+        2, 2, 2, 2, 2, 2, 2, 2,  2, 2, 9, 9, 9, 9, 9, 9,
+        9, 1, 1, 1, 1, 1, 1, 1,  1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1,  1, 1, 1, 9, 9, 9, 9, 3,
+        9, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 9, 9, 9, 9, 9
+    };
+    // ID map:
+    // 0 = no number
+    // 1 = integral number (digits, + / -, ., e / E)
+    private static final byte NUMBER_TYPE [] = {        // digits, +, -, . and e / E
+        0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 1, 0, 1, 1, 0,
+        1, 1, 1, 1, 1, 1, 1, 1,  1, 1, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 1, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0
+    };
+    
     /**
      * The constructor is defined as private, in order to prevent that anyone
      * instantiates this class, which is not meaningful, because it contains
@@ -141,6 +168,58 @@ public class CharTestsASCII {
      */
     public static boolean isAsciiUpperCase(char c) {
         return (c >= 'A') && (c <= 'Z');
+    }
+
+    /**
+     * <code>isAsciiLetter()</code> tests if a character is a US-ASCII (7
+     * bit) printable character, and represents an English upper case character
+     * <code>(A .. Z)</code> or lower case character <code>(a .. z)</code>.
+     *
+     * @param c
+     *            the character to test
+     * @return <code>true</code> if the parameter represents an upper case ASCII
+     *         character or lower case character <code>(a .. z)</code>, <code>false</code> otherwise.
+     */
+    public static boolean isAsciiLetter(char c) {
+        return (c >= 'A') && (c <= 'Z');
+    }
+
+    /**
+     * <code>isAsciiAlnum()</code> tests if a character is a US-ASCII (7
+     * bit) printable character, and represents an English upper case character
+     * <code>(A .. Z)</code> or lower case character <code>(a .. z)</code> or a digit <code>(0 .. 9)</code>.
+     *
+     * @param c
+     *            the character to test
+     * @return <code>true</code> if the parameter represents an upper case or lower case ASCII letter or a digit, <code>false</code> otherwise.
+     */
+    public static boolean isAsciiAlnum(char c) {
+        return (c >= ' ') && (c <= 0x7f) && CHAR_TYPE[c - ' '] < 3;
+    }
+
+    /**
+     * <code>isJavascriptIdChar()</code> tests if a character is a US-ASCII (7
+     * bit) printable character, and represents an English upper case character
+     * <code>(A .. Z)</code> or lower case character <code>(a .. z)</code> or a digit <code>(0 .. 9)</code> or a dollar or an underscore.
+     *
+     * @param c
+     *            the character to test
+     * @return <code>true</code> if the parameter represents an upper case or lower case ASCII letter or a digit, or dollar or underscore, <code>false</code> otherwise.
+     */
+    public static boolean isJavascriptIdChar(char c) {
+        return (c >= ' ') && (c <= 0x7f) && CHAR_TYPE[c - ' '] <= 3;
+    }
+
+    /**
+     * <code>isJavascriptNumberChar()</code> tests if a character is a US-ASCII (7
+     * bit) printable character, and represents a valid character inside a Javascript / JSON number.
+     *
+     * @param c
+     *            the character to test
+     * @return <code>true</code> if the parameter represents an upper case or lower case ASCII letter or a digit, or dollar or underscore, <code>false</code> otherwise.
+     */
+    public static boolean isJavascriptNumberChar(char c) {
+        return (c >= ' ') && (c <= 0x7f) && NUMBER_TYPE[c - ' '] != 0;
     }
 
     /**

@@ -71,7 +71,7 @@ public class JsonParser {
         while (CharTestsASCII.isJavascriptIdChar(c)) {
             sb.append(c);
             ++i;
-            c = s.charAt(i);
+            c = peekNeededChar();
         }
         if (c != '\"' || sb.length() == 0)
             throw new JsonException(JsonException.JSON_SYNTAX, i);
@@ -88,7 +88,7 @@ public class JsonParser {
         while (c != '\"') {
             sb.append(c);           // TODO: unescape!
             ++i;
-            c = s.charAt(i);
+            c = peekNeededChar();
         }
         ++i;
         skipSpaces();
@@ -128,7 +128,7 @@ public class JsonParser {
             if (c == '+' || c == '-') {
                 sb.append(c);
                 ++i;
-                c = s.charAt(i);
+                c = peekNeededChar();
             }
             try {
                 if (CharTestsASCII.isAsciiDigit(c)) {
@@ -136,12 +136,18 @@ public class JsonParser {
                     do {
                         sb.append(c);
                         ++i;
+                        if (i == len) {
+                            c = 0;
+                            break;
+                        }
                         c = s.charAt(i);
                     } while (CharTestsASCII.isAsciiDigit(c));
                     if (!CharTestsASCII.isJavascriptNumberChar(c)) {
                         // pattern is integral
                         long l = Long.parseLong(sb.toString());
                         skipSpaces();
+                        if((int)l == l)
+                            return Integer.valueOf((int)l);
                         return Long.valueOf(l);
                     }
                     // fall through to fractional numbers
@@ -149,6 +155,10 @@ public class JsonParser {
                 do {
                     sb.append(c);
                     ++i;
+                    if (i == len) {
+                        c = 0;
+                        break;
+                    }
                     c = s.charAt(i);
                 } while (CharTestsASCII.isJavascriptNumberChar(c));
                 skipSpaces();
@@ -170,8 +180,8 @@ public class JsonParser {
         // loop through key / value pairs
         char c = peekNeededChar();
         while (c != '}') {
-            if (needComma && c != ',')
-                throw new JsonException(JsonException.JSON_SYNTAX, i);
+            if (needComma)
+                requireNext(',');
             // parse one key / value pair
             String key = parseId();
             requireNext(':');
@@ -180,6 +190,7 @@ public class JsonParser {
             c = peekNeededChar();
             needComma = true;
         }
+        ++i;
         skipSpaces();
         return map;
     }

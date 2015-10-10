@@ -32,7 +32,7 @@ public class DefaultJsonEscaperForAppendables implements JsonEscaper {
 
     public DefaultJsonEscaperForAppendables(Appendable appendable) {
         this.appendable     = appendable;
-        this.writeNulls     = false;
+        this.writeNulls     = true;
         this.escapeNonASCII = false;
     }
 

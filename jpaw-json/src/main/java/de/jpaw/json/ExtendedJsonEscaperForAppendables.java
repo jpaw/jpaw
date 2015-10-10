@@ -25,7 +25,7 @@ public class ExtendedJsonEscaperForAppendables extends DefaultJsonEscaperForAppe
     protected final boolean instantInMillis;
     
     public ExtendedJsonEscaperForAppendables(Appendable appendable) {
-        super(appendable);
+        super(appendable);      // default: writeNulls = true, escapeNonAscii = false
         instantInMillis = true;
     }
 

@@ -242,7 +242,7 @@ public class DefaultJsonEscaperForAppendables implements JsonEscaper {
             for (int i = 0; i < array.length; ++i) {
                 if (i > 0)
                     appendable.append(',');
-                outputUnicodeWithControls(Character.toString(array[i]));
+                outputUnicodeWithControls(Character.toString(array[i]));    // converts char [] to a string
             }
             appendable.append(']');
             return;

@@ -68,7 +68,7 @@ public class ByteBuilder implements DataOutput {
     }
     
     /** Extend the buffer because we ran out of space. */
-    private void createMoreSpace(int minimumRequired) {
+    private void createMoreSpace(final int minimumRequired) {
         // allocate the space
         int newAllocSize = currentAllocSize <=16 ? 32 : 2 * currentAllocSize;
         if (newAllocSize < currentLength + minimumRequired)
@@ -130,14 +130,14 @@ public class ByteBuilder implements DataOutput {
     }
     // append the contents of String, assuming all characters are single-byte. No test is done. Argument must not be null.
     public void appendAscii(String s) {
-        int length = s.length();
+        final int length = s.length();
         if (currentLength + length > currentAllocSize)
             createMoreSpace(length);
         for (int i = 0; i < length; ++i)
             buffer[currentLength++] = (byte) s.charAt(i);
     }
     public void appendAscii(StringBuilder s) {
-        int length = s.length();
+        final int length = s.length();
         if (currentLength + length > currentAllocSize)
             createMoreSpace(length);
         for (int i = 0; i < length; ++i)

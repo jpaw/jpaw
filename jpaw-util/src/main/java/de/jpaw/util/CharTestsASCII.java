@@ -77,7 +77,7 @@ public class CharTestsASCII {
     }
 
     /** Returns true if the whole String contains ASCII upper case characters only, else false. */
-    public static boolean isUpperCase(String s) {
+    public static boolean isUpperCase(final String s) {
         for (int i = 0; i < s.length(); ++i) {
             if (!isAsciiUpperCase(s.charAt(i))) {
                 return false;
@@ -87,7 +87,7 @@ public class CharTestsASCII {
     }
 
     /** Returns true if the whole String contains ASCII lower case characters only, else false. */
-    public static boolean isLowerCase(String s) {
+    public static boolean isLowerCase(final String s) {
         for (int i = 0; i < s.length(); ++i) {
             if (!isAsciiLowerCase(s.charAt(i))) {
                 return false;
@@ -97,7 +97,7 @@ public class CharTestsASCII {
     }
 
     /** Returns true if the whole String contains ASCII printable characters only (range 0x20 .. 0x7e), else false. */
-    public static boolean isPrintable(String s) {
+    public static boolean isPrintable(final String s) {
         for (int i = 0; i < s.length(); ++i) {
             if (!isAsciiPrintable(s.charAt(i))) {
                 return false;
@@ -107,7 +107,7 @@ public class CharTestsASCII {
     }
 
     /** Returns true if the whole String contains ASCII printable characters or TABs only (range 0x20 .. 0x7e and 0x09), else false. */
-    public static boolean isPrintableOrTab(String s) {
+    public static boolean isPrintableOrTab(final String s) {
         for (int i = 0; i < s.length(); ++i) {
             if (!isAsciiPrintableOrTab(s.charAt(i))) {
                 return false;
@@ -117,7 +117,7 @@ public class CharTestsASCII {
     }
 
     /** Returns true if the whole String contains ASCII digits only, else false. */
-    public static boolean isDigit(String s) {
+    public static boolean isDigit(final String s) {
         for (int i = 0; i < s.length(); ++i) {
             if (!isAsciiDigit(s.charAt(i))) {
                 return false;
@@ -137,7 +137,7 @@ public class CharTestsASCII {
      * @return <code>true</code> if the parameter represents a printable ASCII
      *         character, <code>false</code> otherwise.
      */
-    public static boolean isAsciiPrintable(char c) {
+    public static boolean isAsciiPrintable(final char c) {
         return (c >= 0x20) && (c <= 0x7e);
     }
 
@@ -152,7 +152,7 @@ public class CharTestsASCII {
      * @return <code>true</code> if the parameter represents a printable ASCII
      *         character or a TAB, <code>false</code> otherwise.
      */
-    public static boolean isAsciiPrintableOrTab(char c) {
+    public static boolean isAsciiPrintableOrTab(final char c) {
         return ((c >= 0x20) && (c <= 0x7e)) || (c == '\t');
     }
 
@@ -166,7 +166,7 @@ public class CharTestsASCII {
      * @return <code>true</code> if the parameter represents an upper case ASCII
      *         character, <code>false</code> otherwise.
      */
-    public static boolean isAsciiUpperCase(char c) {
+    public static boolean isAsciiUpperCase(final char c) {
         return (c >= 'A') && (c <= 'Z');
     }
 
@@ -180,7 +180,7 @@ public class CharTestsASCII {
      * @return <code>true</code> if the parameter represents an upper case ASCII
      *         character or lower case character <code>(a .. z)</code>, <code>false</code> otherwise.
      */
-    public static boolean isAsciiLetter(char c) {
+    public static boolean isAsciiLetter(final char c) {
         return (c >= 'A') && (c <= 'Z');
     }
 
@@ -193,7 +193,7 @@ public class CharTestsASCII {
      *            the character to test
      * @return <code>true</code> if the parameter represents an upper case or lower case ASCII letter or a digit, <code>false</code> otherwise.
      */
-    public static boolean isAsciiAlnum(char c) {
+    public static boolean isAsciiAlnum(final char c) {
         return (c >= ' ') && (c <= 0x7f) && CHAR_TYPE[c - ' '] < 3;
     }
 
@@ -206,8 +206,26 @@ public class CharTestsASCII {
      *            the character to test
      * @return <code>true</code> if the parameter represents an upper case or lower case ASCII letter or a digit, or dollar or underscore, <code>false</code> otherwise.
      */
-    public static boolean isJavascriptIdChar(char c) {
+    public static boolean isJavascriptIdChar(final char c) {
         return (c >= ' ') && (c <= 0x7f) && CHAR_TYPE[c - ' '] <= 3;
+    }
+
+    /**
+     * <code>isJavascriptId()</code> tests if a String is a valid Javascript identifier
+     *
+     * @param s
+     *            the string to test
+     * @return <code>true</code> if the parameter represents an upper case or lower case ASCII letter or a digit, or dollar or underscore, <code>false</code> otherwise.
+     */
+    public static boolean isJavascriptId(final String s) {
+        final int len = s.length();
+        
+        if (len == 0 || isAsciiDigit(s.charAt(0)))
+            return false;
+        for (int i = 0; i < len; ++i)
+            if (!isJavascriptIdChar(s.charAt(i)))
+                return false;
+        return true;
     }
 
     /**
@@ -218,7 +236,7 @@ public class CharTestsASCII {
      *            the character to test
      * @return <code>true</code> if the parameter represents an upper case or lower case ASCII letter or a digit, or dollar or underscore, <code>false</code> otherwise.
      */
-    public static boolean isJavascriptNumberChar(char c) {
+    public static boolean isJavascriptNumberChar(final char c) {
         return (c >= ' ') && (c <= 0x7f) && NUMBER_TYPE[c - ' '] != 0;
     }
 
@@ -232,7 +250,7 @@ public class CharTestsASCII {
      * @return <code>true</code> if the parameter represents an lower case ASCII
      *         character, <code>false</code> otherwise.
      */
-    public static boolean isAsciiLowerCase(char c) {
+    public static boolean isAsciiLowerCase(final char c) {
         return (c >= 'a') && (c <= 'z');
     }
 
@@ -245,7 +263,7 @@ public class CharTestsASCII {
      * @return <code>true</code> if the parameter represents a digit,
      *         <code>false</code> otherwise.
      */
-    public static boolean isAsciiDigit(char c) {
+    public static boolean isAsciiDigit(final char c) {
         return (c >= '0') && (c <= '9');
     }
 
@@ -253,31 +271,31 @@ public class CharTestsASCII {
     // some redundant implementations, for comparison (GC overhead / execution time) and preference purposes
 
     /** Returns true if the whole String contains ASCII upper case characters only, else false. */
-    public static boolean isUpperCaseByPattern(String s) {
+    public static boolean isUpperCaseByPattern(final String s) {
         Matcher m = UPPERCASE_PATTERN.matcher(s);
         return m.find();
     }
 
     /** Returns true if the whole String contains ASCII lower case characters only, else false. */
-    public static boolean isLowerCaseByPattern(String s) {
+    public static boolean isLowerCaseByPattern(final String s) {
         Matcher m = LOWERCASE_PATTERN.matcher(s);
         return m.find();
     }
 
     /** Returns true if the whole String contains ASCII digits only, else false. */
-    public static boolean isDigitByPattern(String s) {
+    public static boolean isDigitByPattern(final String s) {
         Matcher m = DIGIT_PATTERN.matcher(s);
         return m.find();
     }
 
     /** Returns true if the whole String contains ASCII printable characters only (range 0x20 .. 0x7e), else false. */
-    public static boolean isPrintableByPattern(String s) {
+    public static boolean isPrintableByPattern(final String s) {
         Matcher m = PRINTABLE_PATTERN.matcher(s);
         return m.find();
     }
 
     /** Returns true if the whole String contains ASCII printable characters or TABs only (range 0x20 .. 0x7e and 0x09), else false. */
-    public static boolean isPrintableOrTabByPattern(String s) {
+    public static boolean isPrintableOrTabByPattern(final String s) {
         Matcher m = PRINTABLE_OR_TAB_PATTERN.matcher(s);
         return m.find();
     }

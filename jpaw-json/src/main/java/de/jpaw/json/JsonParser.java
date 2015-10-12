@@ -59,7 +59,7 @@ public class JsonParser {
             // cannot have a keyword character following
             char c = s.charAt(i);
             if (CharTestsASCII.isJavascriptIdChar(c))
-                throw new JsonException(JsonException.JSON_SYNTAX, i);
+                throw new JsonException(JsonException.JSON_BAD_IDENTIFIER, i);
         }
         skipSpaces();
         return true;
@@ -89,18 +89,88 @@ public class JsonParser {
         skipSpaces();
         return sb.toString();
     }
+
+// table based implementation: less jumps, but may need additional memory access and therefore be slower
+//    private static final byte [] HEX_VALUES = {
+//         0,  1,  2,  3,  4,  5,  6,  7,   8,  9, -1, -1, -1, -1, -1, -1,
+//        -1, -1, -1, -1, -1, -1, -1, -1,  -1, -1, -1, -1, -1, -1, -1, -1,
+//        -1, 10, 11, 12, 13, 14, 15, -1,  -1, -1, -1, -1, -1, -1, -1, -1,
+//        -1, -1, -1, -1, -1, -1, -1, -1,  -1, -1, -1, -1, -1, -1, -1, -1,
+//        -1, 10, 11, 12, 13, 14, 15, -1,  -1, -1, -1, -1, -1, -1, -1, -1,
+//        -1, -1, -1, -1, -1, -1, -1, -1,  -1, -1, -1, -1, -1, -1, -1, -1
+//    };
+//    
+//    // return the value of the next hex digit
+//    private int nextHex() throws JsonException {
+//        char c = peekNeededChar();
+//        ++i;
+//        if (c < '0' || c > 'f')
+//            throw new JsonException(JsonException.JSON_BAD_ESCAPE, i);
+//        int digit = HEX_VALUES[c - '0']; 
+//        if (digit < 0)
+//            throw new JsonException(JsonException.JSON_BAD_ESCAPE, i);
+//        return digit;
+//    }
+    
+    // return the value of the next hex digit
+    private int nextHex() throws JsonException {
+        char c = peekNeededChar();
+        ++i;
+        if (c >= '0' && c <= 'f') {
+            if (c <= '9')
+                return c - '0';
+            if (c >= 'a')
+                return c - 'a' + 10;
+            if (c >= 'A' && c <= 'F')
+                return c - 'A' + 10;
+        }
+        throw new JsonException(JsonException.JSON_BAD_ESCAPE, i);
+    }
     
     // parse a string which contains a generic string
     private String parseStringSub() throws JsonException {
         requireNext('"');
         StringBuilder sb = new StringBuilder(40);
-        char c = s.charAt(i);
-        while (c != '\"') {
-            sb.append(c);           // TODO: unescape!
-            ++i;
-            c = peekNeededChar();
-        }
+        char c = peekNeededChar();
         ++i;
+        while (c != '\"') {
+            if (c == '\\') {
+                // unescape!
+                c = peekNeededChar();
+                ++i;
+                switch (c) {
+                case 'b':
+                    c = '\b';
+                    break;
+                case 'r':
+                    c = '\r';
+                    break;
+                case 'f':
+                    c = '\f';
+                    break;
+                case 'n':
+                    c = '\n';
+                    break;
+                case 't':
+                    c = '\t';
+                    break;
+                case 'u':       // Unicode escape
+                    // need 4 more characters
+                    if (i + 4 > len)
+                        throw new JsonException(JsonException.JSON_BAD_ESCAPE, i);
+                    int cc = nextHex() << 24;
+                    cc |= nextHex() << 16;
+                    cc |= nextHex() << 8;
+                    cc |= nextHex();
+                    c = (char)cc;
+                    break;
+                default:        // use c 1:1
+                }
+            }
+            sb.append(c);
+            c = peekNeededChar();
+            ++i;
+        }
         skipSpaces();
         return sb.toString();
     }

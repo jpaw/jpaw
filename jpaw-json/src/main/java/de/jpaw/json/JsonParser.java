@@ -9,11 +9,11 @@ import de.jpaw.util.CharTestsASCII;
 
 public class JsonParser {
     private final boolean useFloat;
-    private final String s;
+    private final CharSequence s;
     private final int len;
     private int i;
     
-    public JsonParser(String s, boolean useFloat) {
+    public JsonParser(CharSequence s, boolean useFloat) {
         this.s = s;
         this.useFloat = useFloat;
         len = s == null ? 0 : s.length();
@@ -38,10 +38,20 @@ public class JsonParser {
         
     }
     
+    // return true if the next characters in the input sequence match txt
+    protected boolean nextStartsWith(String txt) {
+        final int len1 = txt.length();
+        if (i + len1 > len)
+            return false;           // too short
+        for (int j = 0; j < len1; ++j)
+            if (s.charAt(i + j) != txt.charAt(j))
+                return false;
+        return true;
+    }
     
     // check if the next token is the one expected, then advance and return true, else false
     private boolean peek(String txt) throws JsonException {
-        if (!s.startsWith(txt, i))
+        if (!nextStartsWith(txt))
             return false;
         i += txt.length();
         // check
@@ -208,7 +218,7 @@ public class JsonParser {
             return null;    // shortcut
         skipSpaces();
         char c = peekNeededChar();
-        if (c == 'n' && s.startsWith("null", i)) {
+        if (c == 'n' && nextStartsWith("null")) {
             mustEnd();
             return null;
         }

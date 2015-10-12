@@ -7,9 +7,9 @@ import java.util.Map;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import de.jpaw.json.ExtendedJsonEscaperForAppendables;
+import de.jpaw.json.BaseJsonComposer;
+import de.jpaw.json.JsonEscaper;
 import de.jpaw.json.JsonParser;
-import de.jpaw.util.JsonEscaper;
 
 public class TestJsonParser {
     
@@ -54,7 +54,7 @@ public class TestJsonParser {
     @Test
     public void testOutputMap() throws Exception {
         StringBuilder sb = new StringBuilder();
-        JsonEscaper out = new ExtendedJsonEscaperForAppendables(sb);
+        JsonEscaper out = new BaseJsonComposer(sb);
         out.outputJsonObject(createMap());
         // difficult to check the output as the ordering of the fields is not defined.
         // {"submap":{},"what":true,"why":"bla","hello":42,"none":null}
@@ -62,7 +62,7 @@ public class TestJsonParser {
         System.out.println(sb.toString());
         
         sb.setLength(0);
-        out = new ExtendedJsonEscaperForAppendables(sb, false, false, true);
+        out = new BaseJsonComposer(sb, false, false);
         out.outputJsonObject(createMap());
         // difficult to check the output as the ordering of the fields is not defined.
         // {"submap":{},"what":true,"why":"bla","hello":42}

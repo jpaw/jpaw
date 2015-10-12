@@ -1,4 +1,4 @@
-package de.jpaw.util;
+package de.jpaw.json;
 
 import java.io.IOException;
 import java.util.List;

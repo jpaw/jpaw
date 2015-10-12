@@ -1,4 +1,4 @@
-package de.jpaw.json;
+package de.jpaw.jsonext;
 
 import java.io.IOException;
 
@@ -16,9 +16,9 @@ import de.jpaw.enums.AbstractStringEnumSet;
 import de.jpaw.enums.AbstractStringXEnumSet;
 import de.jpaw.enums.EnumSetMarker;
 import de.jpaw.enums.TokenizableEnum;
-import de.jpaw.util.DefaultJsonEscaperForAppendables;
+import de.jpaw.json.BaseJsonComposer;
 
-public class ExtendedJsonEscaperForAppendables extends DefaultJsonEscaperForAppendables {
+public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
 
     // if instantInMillis is true, Instants will be written as integral values in milliseconds, otherwise as second + optional fractional parts
     // see DATE_TIMESTAMPS_AS_NANOSECONDS in https://github.com/FasterXML/jackson-datatype-jsr310 for similar setting 

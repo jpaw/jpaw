@@ -12,7 +12,7 @@
     <artifactId>jpaw-json</artifactId>
     <packaging>jar</packaging>
 
-    <description>JSON serializer and parser</description>
+    <description>JSON extended serializer (adds enums and Joda time types)</description>
 
     <dependencies>
         <dependency>

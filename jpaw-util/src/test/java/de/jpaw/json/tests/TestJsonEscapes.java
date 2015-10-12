@@ -3,9 +3,9 @@ package de.jpaw.json.tests;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import de.jpaw.json.ExtendedJsonEscaperForAppendables;
+import de.jpaw.json.BaseJsonComposer;
+import de.jpaw.json.JsonEscaper;
 import de.jpaw.json.JsonParser;
-import de.jpaw.util.JsonEscaper;
 
 public class TestJsonEscapes {
     
@@ -15,7 +15,7 @@ public class TestJsonEscapes {
         String output = "\"hello \\\"world\\\"\\r\\n  \\u0001 ctrl-A \\\\\"";
         
         StringBuilder sb = new StringBuilder();
-        JsonEscaper out = new ExtendedJsonEscaperForAppendables(sb);
+        JsonEscaper out = new BaseJsonComposer(sb);
         out.outputUnicodeWithControls(input);
         Assert.assertEquals(sb.toString(), output);
         

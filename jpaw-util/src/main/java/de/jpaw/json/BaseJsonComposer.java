@@ -1,11 +1,15 @@
-package de.jpaw.util;
+package de.jpaw.json;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class DefaultJsonEscaperForAppendables implements JsonEscaper {
+import de.jpaw.util.Base64;
+import de.jpaw.util.ByteArray;
+import de.jpaw.util.ByteBuilder;
+
+public class BaseJsonComposer implements JsonEscaper {
     public static final int ESCAPE_TAB_SIZE = 128;      // the number of sequences defined in the tab
     public static final char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
     public static String[] jsonEscapes = new String[ESCAPE_TAB_SIZE];
@@ -30,13 +34,13 @@ public class DefaultJsonEscaperForAppendables implements JsonEscaper {
     protected final boolean writeNulls;
     protected final boolean escapeNonASCII;
 
-    public DefaultJsonEscaperForAppendables(Appendable appendable) {
+    public BaseJsonComposer(Appendable appendable) {
         this.appendable     = appendable;
         this.writeNulls     = true;
         this.escapeNonASCII = false;
     }
 
-    public DefaultJsonEscaperForAppendables(Appendable appendable, boolean writeNulls, boolean escapeNonASCII) {
+    public BaseJsonComposer(Appendable appendable, boolean writeNulls, boolean escapeNonASCII) {
         this.appendable     = appendable;
         this.writeNulls     = writeNulls;
         this.escapeNonASCII = escapeNonASCII;       // escape all non-ASCII-chars (required for sockJS)

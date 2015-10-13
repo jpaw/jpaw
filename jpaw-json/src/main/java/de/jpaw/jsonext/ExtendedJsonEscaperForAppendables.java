@@ -26,7 +26,7 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
     
     public ExtendedJsonEscaperForAppendables(Appendable appendable) {
         super(appendable);      // default: writeNulls = true, escapeNonAscii = false
-        instantInMillis = true;
+        instantInMillis = false;
     }
 
     public ExtendedJsonEscaperForAppendables(Appendable appendable, boolean writeNulls, boolean escapeNonASCII, boolean instantInMillis) {

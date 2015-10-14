@@ -45,7 +45,7 @@ public class CharTestsASCII {
     // 0 = lowercase
     // 1 = uppercase
     // 2 = digit
-    // 3 = other identifier in Javascript
+    // 3 = other identifier in Javascript (before ES 5, later a much wider set of characters was allowed)
     // 9 = anything else
     // index ranges from 0x20 to 0x7f
     private static final byte CHAR_TYPE [] = {
@@ -222,9 +222,10 @@ public class CharTestsASCII {
         
         if (len == 0 || isAsciiDigit(s.charAt(0)))
             return false;
-        for (int i = 0; i < len; ++i)
-            if (!isJavascriptIdChar(s.charAt(i)))
-                return false;
+        // the remaining checks are no longer valid for ES 5ff
+//        for (int i = 0; i < len; ++i)
+//            if (!isJavascriptIdChar(s.charAt(i)))
+//                return false;
         return true;
     }
 

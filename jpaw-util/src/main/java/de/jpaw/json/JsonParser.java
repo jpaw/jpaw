@@ -1,7 +1,9 @@
 package de.jpaw.json;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.jpaw.json.JsonException;
@@ -75,19 +77,26 @@ public class JsonParser {
     
     // parse a string which contains an ID
     private String parseId() throws JsonException {
-        requireNext('"');
-        StringBuilder sb = new StringBuilder(40);
-        char c = s.charAt(i);
-        while (CharTestsASCII.isJavascriptIdChar(c)) {
-            sb.append(c);
-            ++i;
-            c = peekNeededChar();
-        }
-        if (c != '\"' || sb.length() == 0)
-            throw new JsonException(JsonException.JSON_SYNTAX, i);
-        ++i;
-        skipSpaces();
-        return sb.toString();
+//        requireNext('"');
+//        StringBuilder sb = new StringBuilder(40);
+//        char c = s.charAt(i);
+////        // cannot start with a digit
+////        if (CharTestsASCII.isAsciiDigit(c))
+////            throw new JsonException(JsonException.JSON_BAD_IDENTIFIER, i);
+//        while (CharTestsASCII.isJavascriptIdChar(c)) {
+//            sb.append(c);
+//            ++i;
+//            c = peekNeededChar();
+//        }
+//        if (c != '\"' || sb.length() == 0)
+//            throw new JsonException(JsonException.JSON_BAD_IDENTIFIER, i);
+//        ++i;
+//        skipSpaces();
+//        return sb.toString();
+        String s = parseStringSub();
+        if (s.length() == 0 || CharTestsASCII.isAsciiDigit(s.charAt(0)))
+            throw new JsonException(JsonException.JSON_BAD_IDENTIFIER, i);
+        return s;
     }
 
 // table based implementation: less jumps, but may need additional memory access and therefore be slower
@@ -198,6 +207,8 @@ public class JsonParser {
             break;
         case '{':
             return parseMapSub();
+        case '[':
+            return parseListSub();
         case '\"':
             return parseStringSub();
         }
@@ -248,6 +259,26 @@ public class JsonParser {
             }
         }
         throw new JsonException(JsonException.JSON_SYNTAX, i);
+    }
+    
+    private List<Object> parseListSub()  throws JsonException {
+        final List<Object> list = new ArrayList<Object>();
+        ++i;
+        skipSpaces();
+        
+        boolean needComma = false;
+        // add elements until "]" is found
+        char c = peekNeededChar();
+        while (c != ']') {
+            if (needComma)
+                requireNext(',');
+            list.add(parseElementSub());
+            c = peekNeededChar();
+            needComma = true;
+        }
+        ++i;
+        skipSpaces();
+        return list;
     }
     
     // the current char definitely is '{'. Parse a non-null Map.

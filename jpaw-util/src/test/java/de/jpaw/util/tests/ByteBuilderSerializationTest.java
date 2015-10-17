@@ -172,7 +172,7 @@ public class ByteBuilderSerializationTest {
         int data = 0;
         for (int i = 0; i < 23; ++i) {
             e.bb.writeChar(data);
-            e.dos.write(data);
+            e.dos.writeShort(data);
             data = 5 * data + 1;
         }
         e.compare("Char");

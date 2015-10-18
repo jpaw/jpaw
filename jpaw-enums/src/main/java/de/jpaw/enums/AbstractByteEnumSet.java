@@ -7,7 +7,7 @@ import java.util.Set;
 
 /** An alternate implementation of EnumSet, but with the ability to obtain the resulting bitmap, for either transfer or storing in a database.
  * The underlying object is a byte, therefore the maximum number of enum tokens is 7 (as we don't want negative values). */
-public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractCollection<E> implements Set<E>, Serializable {
+public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractCollection<E> implements Set<E>, Serializable, EnumSetMarker {
     private static final long serialVersionUID = 34398390989170000L + 7;
     private static final byte BIT = 1;
     public static final int MAX_TOKENS = 7;
@@ -42,6 +42,33 @@ public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractCol
 
     public byte getBitmap() {
         return bitmap;
+    }
+
+    /** Constructs a String with one digit / letter representing a bit position. */
+    public String asStringMap() {
+        final StringBuilder sb = new StringBuilder(MAX_TOKENS);
+        byte rotmap = bitmap;
+        for (int i = 0; i < MAX_TOKENS; ++i) {
+            if ((rotmap & BIT) != 0)
+                sb.append(STANDARD_TOKENS.charAt(i));
+            rotmap >>= 1;
+        }
+        return sb.toString();
+    }
+
+    /** Constructs a bitmap from a standard string map. */
+    public static byte fromStringMap(String s) {
+        byte work = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+            int pos = STANDARD_TOKENS.indexOf(c);
+            if (pos >= 0 && pos < MAX_TOKENS) {
+                work |= BIT << pos;
+            } else {
+                throw new IllegalArgumentException("Invalid enum set character: " + Character.valueOf(c));
+            }
+        }
+        return work;
     }
 
     /** Creates a bitmap from an array of arbitrary enums. */

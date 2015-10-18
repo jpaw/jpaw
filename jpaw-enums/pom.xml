@@ -5,43 +5,22 @@
     <parent>
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-base</artifactId>
-        <version>1.2.11</version>
+        <version>1.2.12</version>
         <relativePath>../jpaw-base/pom.xml</relativePath>
     </parent>
 
     <artifactId>jpaw-enums</artifactId>
     <packaging>jar</packaging>
 
-    <description>Definition and implementation of some basic classes, extracted from BONAPARTE core</description>
-<!-- 
+    <description>Definition and implementation of some basic classes for enums / tokenizable enums, and enum sets, extracted from BONAPARTE core</description>
+ 
     <dependencies>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>${jodatime.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>${testng.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
- -->
+
 </project>

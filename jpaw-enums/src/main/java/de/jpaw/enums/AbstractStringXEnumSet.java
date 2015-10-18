@@ -10,7 +10,7 @@ import java.util.TreeSet;
  * The class is not thread safe. Implementations which intend to perform parallel modification must use external locking mechanisms.
  * Further requirements of this implementation:
  * All tokens must be of length 1. */
-public abstract class AbstractStringXEnumSet<E extends AbstractXEnumBase<E>> extends AbstractCollection<E> implements Set<E>, Serializable {
+public abstract class AbstractStringXEnumSet<E extends AbstractXEnumBase<E>> extends AbstractCollection<E> implements Set<E>, Serializable, EnumSetMarker {
     private static final long serialVersionUID = 34398390989170000L + 98;
     private String bitmap;
 

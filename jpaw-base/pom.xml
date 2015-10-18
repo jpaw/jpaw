@@ -4,12 +4,12 @@
     <parent>
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-se-parent</artifactId>
-        <version>1.0.6</version>
+        <version>1.0.7</version>
         <relativePath/>
     </parent>
 
     <artifactId>jpaw-base</artifactId>
-    <version>1.2.11</version>
+    <version>1.2.12</version>
     <packaging>pom</packaging>
 
     <description>Common configuration settings for all jpaw basic / utility projects</description>
@@ -21,6 +21,16 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${compiler.plugin.version}</version>
+                    <configuration>
+                        <source>1.6</source>
+                        <target>1.6</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
@@ -95,6 +105,7 @@
         <module>../jpaw-bom/pom.xml</module>
         <module>../jpaw-enums/pom.xml</module>
         <module>../jpaw-util/pom.xml</module>
+        <module>../jpaw-json/pom.xml</module>
         <module>../jpaw-socket/pom.xml</module>
         <module>../jpaw-cmdline/pom.xml</module>
         <module>../jpaw-batch/pom.xml</module>

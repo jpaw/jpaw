@@ -373,6 +373,14 @@ public final class ByteArray implements Externalizable, Cloneable {
     public void appendToRaw(ByteBuilder b) {
         b.append(buffer, offset, length);
     }
+    
+    /** Returns the contents of this ByteArray as a base64 encoded string.
+     * @since 1.2.12 */ 
+    public String asBase64() {
+        ByteBuilder tmp = new ByteBuilder(0, null);
+        Base64.encodeToByte(tmp, buffer, offset, length);
+        return tmp.toString();
+    }
 
     // returns the String representation of the visible bytes portion
     @Override

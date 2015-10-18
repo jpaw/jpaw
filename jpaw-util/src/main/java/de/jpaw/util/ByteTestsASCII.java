@@ -47,7 +47,7 @@ public class ByteTestsASCII {
      * @return <code>true</code> if the parameter represents a printable ASCII
      *         character, <code>false</code> otherwise.
      */
-    public static boolean isAsciiPrintable(byte c) {
+    public static boolean isAsciiPrintable(final byte c) {
         return c >= 0x20 && c <= 0x7e;
     }
 
@@ -62,7 +62,7 @@ public class ByteTestsASCII {
      * @return <code>true</code> if the parameter represents a printable ASCII
      *         character, <code>false</code> otherwise.
      */
-    public static boolean isAsciiPrintableOrTab(byte c) {
+    public static boolean isAsciiPrintableOrTab(final byte c) {
         return (c >= 0x20 && c <= 0x7e) || (c == '\t');
     }
 
@@ -76,7 +76,7 @@ public class ByteTestsASCII {
      * @return <code>true</code> if the parameter represents an upper case ASCII
      *         letter, <code>false</code> otherwise.
      */
-    public static boolean isAsciiUpperCase(byte c) {
+    public static boolean isAsciiUpperCase(final byte c) {
         return c >= 'A' && c <= 'Z';
     }
 
@@ -90,7 +90,7 @@ public class ByteTestsASCII {
      * @return <code>true</code> if the parameter represents an lower case ASCII
      *         letter, <code>false</code> otherwise.
      */
-    public static boolean isAsciiLowerCase(byte c) {
+    public static boolean isAsciiLowerCase(final byte c) {
         return c >= 'a' && c <= 'z';
     }
 
@@ -103,7 +103,7 @@ public class ByteTestsASCII {
      * @return <code>true</code> if the parameter represents a digit,
      *         <code>false</code> otherwise.
      */
-    public static boolean isAsciiDigit(byte c) {
+    public static boolean isAsciiDigit(final byte c) {
         return c >= '0' && c <= '9';
     }
 

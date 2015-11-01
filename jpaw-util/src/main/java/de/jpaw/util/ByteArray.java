@@ -15,6 +15,8 @@
   */
 package de.jpaw.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
 import java.io.Externalizable;
 import java.io.IOException;
@@ -82,6 +84,13 @@ public final class ByteArray implements Externalizable, Cloneable {
             offset = 0;
             length = buffer.length;
         }
+    }
+
+    /** Constructs a ByteArray from a ByteArrayOutputStream, which has just been contructed by some previous process. 
+     * @throws IOException */
+    public static ByteArray fromByteArrayOutputStream(ByteArrayOutputStream baos) throws IOException {
+        baos.flush();
+        return new ByteArray(baos.toByteArray(), true);
     }
 
     /** Constructs a ByteArray from the provided DataInput, with a predefined length. */
@@ -213,6 +222,11 @@ public final class ByteArray implements Externalizable, Cloneable {
         if (pos < 0 || pos >= length)
             throw new IllegalArgumentException();
         return buffer[offset + pos];
+    }
+    
+    /** Provides the contents of this ByteArray to some InputStream. */
+    public ByteArrayInputStream asByteArrayInputStream() {
+        return new ByteArrayInputStream(buffer, offset, length());
     }
 
     // return a defensive copy of the contents

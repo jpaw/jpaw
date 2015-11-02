@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /** An instance of an XEnum. */
 
-public abstract class AbstractXEnumBase<E extends AbstractXEnumBase<E>> implements XEnum<E>, Comparable<E>, Serializable, EnumSetMarker {
+public abstract class AbstractXEnumBase<E extends AbstractXEnumBase<E>> implements XEnum<E>, Comparable<E>, Serializable {
     private static final long serialVersionUID = 6954125049968610802L;
     private final Enum<?> _enum;
     private final int _ordinal;

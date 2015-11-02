@@ -14,6 +14,7 @@ import de.jpaw.enums.AbstractLongEnumSet;
 import de.jpaw.enums.AbstractShortEnumSet;
 import de.jpaw.enums.AbstractStringEnumSet;
 import de.jpaw.enums.AbstractStringXEnumSet;
+import de.jpaw.enums.AbstractXEnumBase;
 import de.jpaw.enums.EnumSetMarker;
 import de.jpaw.enums.TokenizableEnum;
 import de.jpaw.json.BaseJsonComposer;
@@ -51,10 +52,14 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
         if (obj instanceof Enum) {
             // distinguish Tokenizable
             if (obj instanceof TokenizableEnum) {
-                outputUnicodeNoControls(((TokenizableEnum)obj).getToken()); // this includes Xenum
+                outputUnicodeNoControls(((TokenizableEnum)obj).getToken());
             } else {
                 outputNumber(((Enum<?>)obj).ordinal());
             }
+            return;
+        }
+        if (obj instanceof AbstractXEnumBase<?>) {
+            outputUnicodeNoControls(((TokenizableEnum)obj).getToken());
             return;
         }
         if (obj instanceof EnumSetMarker) {

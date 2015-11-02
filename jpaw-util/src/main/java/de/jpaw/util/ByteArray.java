@@ -18,11 +18,12 @@ package de.jpaw.util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.io.DataOutput;
+import java.io.OutputStream;
 
 
 /**
@@ -91,6 +92,11 @@ public final class ByteArray implements Externalizable, Cloneable {
     public static ByteArray fromByteArrayOutputStream(ByteArrayOutputStream baos) throws IOException {
         baos.flush();
         return new ByteArray(baos.toByteArray(), true);
+    }
+    
+    /** Writes the contents of this ByteArray to an OutputStream. */
+    public void toOutputStream(OutputStream os) throws IOException {
+        os.write(buffer, offset, length);
     }
 
     /** Constructs a ByteArray from the provided DataInput, with a predefined length. */

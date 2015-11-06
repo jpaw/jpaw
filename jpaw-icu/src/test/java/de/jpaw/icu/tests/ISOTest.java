@@ -65,6 +65,15 @@ public class ISOTest {
     }
 
     @Test
+    public void testJavaCurrenciesWithMoreDecimals() throws Exception {
+        List<CurrencyData> all = JavaCurrencyDataProvider.instance.getAll();
+        for (CurrencyData cd: all) {
+            if (cd.getDefaultFractionDigits() > 2)
+                System.out.println(cd.getCurrencyCode() + " has " + cd.getDefaultFractionDigits() + " decimals (" + cd.getDisplayName() + ")");
+        }
+    }
+
+    @Test
     public void testICUCurrencies() throws Exception {
         List<CurrencyData> all = ICUCurrencyDataProvider.instance.getAll();
         System.out.println("I got " + all.size() + " currencies from ICU");

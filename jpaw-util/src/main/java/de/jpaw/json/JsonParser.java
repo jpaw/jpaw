@@ -329,4 +329,20 @@ public class JsonParser {
         mustEnd();
         return map;
     }
+    
+    public List<Object> parseArray() throws JsonException {
+        if (s == null)
+            return null;    // shortcut
+        skipSpaces();
+        char c = peekNeededChar();
+        if (c == 'n' && nextStartsWith("null")) {
+            mustEnd();
+            return null;
+        }
+        if (c != '[')
+            throw new JsonException(JsonException.JSON_SYNTAX, i);
+        List<Object> l = parseListSub();
+        mustEnd();
+        return l;
+    }
 }

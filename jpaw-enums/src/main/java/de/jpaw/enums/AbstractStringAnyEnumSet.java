@@ -2,6 +2,7 @@ package de.jpaw.enums;
 
 import java.io.Serializable;
 import java.util.AbstractCollection;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -27,11 +28,39 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
     // not required for String type, but defined for consistency
     abstract protected int getMaxOrdinal();
 
+    public static final boolean isSorted(String s) {
+        final int n = s.length();
+        if (n >= 2) {
+            char c = s.charAt(0);
+            for (int i = 1; i < n; ++i) {
+                char d = s.charAt(i);
+                if (c >= d)
+                    return false;
+                c = d;
+            }
+        }
+        return true;
+    }
+    
+    public static final String sortTokens(String s) {
+        if (s.length() < 2)
+            return s;
+        char[] charArray = s.toCharArray();
+        Arrays.sort(charArray);
+        return new String(charArray);
+    }
+    
     protected AbstractStringAnyEnumSet(String bitmap) {
-        this.bitmap = bitmap;
+        this.bitmap = isSorted(bitmap) ? bitmap : sortTokens(bitmap);
     }
 
 
+    // verifies that the bitmap contains characters in the correct sequence
+    public void validate() {
+        if (!isSorted(bitmap))
+            throw new RuntimeException("Unsorted EnumSet: " + bitmap);
+    }
+    
     public String getBitmap() {
         return bitmap;
     }
@@ -133,7 +162,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass())
             return false;
-        return bitmap == ((AbstractStringAnyEnumSet<?>)o).getBitmap();
+        return bitmap.equals(((AbstractStringAnyEnumSet<?>)o).getBitmap());
     }
 
 
@@ -162,7 +191,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
             // loops while both sets have characters to merge
             // the result is added either c or d
             final char c = bitmap.charAt(i);
-            final char d = bitmap.charAt(j);
+            final char d = that.charAt(j);
             if (c < d) {
                 buff.append(c);
                 ++i;
@@ -200,7 +229,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
         final int m = that.length();
         if (m == 0) {
             bitmap = that;                  // will be empty as well now
-            return; // no op
+            return;
         }
         
         // real merge, no shortcut possible. Use a linear time algorithm. We know both bitmaps are sorted.
@@ -211,7 +240,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
             // loops while both sets have characters to merge
             // the result is added either c or d
             final char c = bitmap.charAt(i);
-            final char d = bitmap.charAt(j);
+            final char d = that.charAt(j);
             if (c < d) {
                 ++i;        // remove token, not in that
             } else {
@@ -240,7 +269,6 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
         }
         final int n = bitmap.length();
         if (n == 0) {
-            bitmap = that;
             return; // no op
         }
         // real merge, no shortcut possible. Use a linear time algorithm. We know both bitmaps are sorted.
@@ -251,7 +279,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
             // loops while both sets have characters to merge
             // the result is added either c or d
             final char c = bitmap.charAt(i);
-            final char d = bitmap.charAt(j);
+            final char d = that.charAt(j);
             if (c < d) {
                 buff.append(c);
                 ++i;

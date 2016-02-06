@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
 
+// test cases for the set operations see project bonaparte-core-test, class TestStringEnumSetOperations and TestStringXEnumSetOperations
 public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> implements Set<E>, Serializable, EnumSetMarker {
     private static final long serialVersionUID = 3439839139170000L + 94;
     private String bitmap;
@@ -294,6 +295,58 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
         if (i < n) {
             // append the rest of this
             buff.append(bitmap.substring(i));
+        }
+        bitmap = buff.toString();
+    }
+
+    /** flips the bits of another bitmap in this one (xor). */
+    public void flip(AbstractStringAnyEnumSet<E> that) {
+        flip(that.bitmap);
+    }
+    
+    /** flips the bits of another bitmap in this one (xor). (String parameter) */
+    public void flip(String that) {
+        final int m = that.length();
+        if (m == 0)
+            return;
+        final int n = bitmap.length();
+        if (n == 0) {
+            bitmap = that;
+            return;
+        }
+        // the empty set is returned only if both are identical
+        if (bitmap.equals(that)) {
+            bitmap = EMPTY;
+            return;
+        }
+        // real compare, no shortcut possible. Use a linear time algorithm. We know both bitmaps are sorted.
+        StringBuilder buff = new StringBuilder(n + m); // worst case length
+        int i = 0;
+        int j = 0;
+        while (i < n && j < m) {
+            // loops while both sets have characters to merge
+            // the result is added either c or d
+            final char c = bitmap.charAt(i);
+            final char d = that.charAt(j);
+            if (c < d) {
+                buff.append(c);
+                ++i;
+            } else {
+                ++j;
+                if (c == d) {
+                    // common char, skip both!
+                    ++i;
+                } else {
+                    buff.append(d);
+                }
+            }
+        }
+        if (i < n) {
+            // append the rest of this
+            buff.append(bitmap.substring(i));
+        } else if (j < m) {
+            // append the rest of that
+            buff.append(that.substring(j));
         }
         bitmap = buff.toString();
     }

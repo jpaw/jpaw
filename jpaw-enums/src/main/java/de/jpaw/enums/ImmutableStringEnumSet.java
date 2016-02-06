@@ -2,7 +2,7 @@ package de.jpaw.enums;
 
 import java.io.Serializable;
 
-// test cases for the set operations see project bonaparte-core-test, class TestStringEnumSetOperations and TestStringXEnumSetOperations
+// test cases for the set operations see project bonaparte-core-test, class TestImmutableStringEnumSetOperations
 
 /** A class which provides String represented alphanumeric enum sets, such as XEnumSet or EnumSetAlpha.
  * This class does not implement the Set<E> interface, because that contradicts immutability.
@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 public final class ImmutableStringEnumSet implements Serializable {
     private static final long serialVersionUID = 3439122139170012L;
-    private String bitmap;
+    private final String bitmap;
     public static final ImmutableStringEnumSet EMPTY = new ImmutableStringEnumSet("");
 
     /** Factory: Construct an enum set from a String bitmap. for empty or null, always the same instance is returned. */
@@ -49,7 +49,10 @@ public final class ImmutableStringEnumSet implements Serializable {
         return new ImmutableStringEnumSet(AbstractStringAnyEnumSet.bitmapOf(enums));
     }
     
-    
+    public String getBitmap() {
+        return bitmap;
+    }
+
     public boolean contains(final TokenizableEnum myEnum) {
         return bitmap.indexOf(enumToken(myEnum).charAt(0)) >= 0;
     }
@@ -122,8 +125,11 @@ public final class ImmutableStringEnumSet implements Serializable {
         }
         final int n = bitmap.length();
         if (n == 0) {
-            return this;
+            return that;
         }
+        if (bitmap.equals(thatmap)) // shortcut: special case, avoids creation of a new instance
+            return this;
+        
         // real merge, no shortcut possible. Use a linear time algorithm. We know both bitmaps are sorted.
         StringBuilder buff = new StringBuilder(n + m); // worst case length
         int i = 0;
@@ -166,6 +172,8 @@ public final class ImmutableStringEnumSet implements Serializable {
         if (m == 0) {
             return that;
         }
+        if (bitmap.equals(thatmap)) // shortcut: special case, avoids creation of a new instance
+            return this;
         
         // real merge, no shortcut possible. Use a linear time algorithm. We know both bitmaps are sorted.
         StringBuilder buff = new StringBuilder(n); // worst case length: cannot be longer than before
@@ -200,6 +208,8 @@ public final class ImmutableStringEnumSet implements Serializable {
         if (m == 0 || n == 0) {
             return this;
         }
+        if (bitmap.equals(thatmap))     // just a shortcut here, and not the only case when EMPTY is returned 
+            return EMPTY;
         // real merge, no shortcut possible. Use a linear time algorithm. We know both bitmaps are sorted.
         StringBuilder buff = new StringBuilder(n); // worst case length
         int i = 0;

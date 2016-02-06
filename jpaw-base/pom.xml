@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>jpaw-base</artifactId>
-    <version>1.5.1</version>
+    <version>1.5.2</version>
     <packaging>pom</packaging>
 
     <description>Common configuration settings for all jpaw basic / utility projects</description>

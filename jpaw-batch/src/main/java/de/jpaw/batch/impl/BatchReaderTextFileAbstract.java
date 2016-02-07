@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
@@ -15,7 +14,7 @@ import com.martiansoftware.jsap.JSAPResult;
  *
  */
 abstract public class BatchReaderTextFileAbstract extends BatchReaderFile {
-    private Charset encoding = StandardCharsets.UTF_8;
+    private Charset encoding = BatchCharsetUtil.CHARSET_UTF8;
     private BufferedReader bufferedReader = null;  // the buffered and decoded input.
     private int recordCounter = 0;                  // used to count so we can do max records at most
 

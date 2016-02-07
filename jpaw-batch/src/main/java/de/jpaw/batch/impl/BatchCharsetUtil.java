@@ -1,7 +1,6 @@
 package de.jpaw.batch.impl;
 
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -11,6 +10,7 @@ import com.google.common.base.Joiner;
 
 public class BatchCharsetUtil {
     private static final Logger LOG = LoggerFactory.getLogger(BatchCharsetUtil.class);
+    public static final Charset CHARSET_UTF8 = Charset.forName("UTF-8");    // default character set is available on all platforms
 
     public static Charset charsetFromStringWithHelp(String charset) {
         if (charset != null) {
@@ -33,6 +33,6 @@ public class BatchCharsetUtil {
                 System.exit(1);
             }
         }
-        return StandardCharsets.UTF_8;
+        return CHARSET_UTF8;
     }
 }

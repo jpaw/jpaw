@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 import com.martiansoftware.jsap.FlaggedOption;
 import com.martiansoftware.jsap.JSAP;
@@ -15,7 +14,7 @@ import com.martiansoftware.jsap.JSAPResult;
  *
  */
 abstract public class BatchWriterTextFileAbstract extends BatchWriterFile {
-    protected Charset encoding = StandardCharsets.UTF_8;
+    protected Charset encoding = BatchCharsetUtil.CHARSET_UTF8;
     protected BufferedWriter bufferedWriter = null;
     private final String header;
     private final String footer;

@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 
 /**
@@ -40,6 +41,7 @@ import java.io.OutputStream;
 
 public final class ByteArray implements Externalizable, Cloneable {
     private static final long serialVersionUID = 2782729564297256974L;
+    public static final Charset CHARSET_UTF8 = Charset.forName("UTF-8");    // default character set is available on all platforms
     private static final int MAGIC_LENGTH_INDICATING_32_BIT_SIZE = 247;  // if a single byte length of this value is written in the
     // serialized form, it indicates a full four byte length must be read instead. Not used 0 or 255 due to their frequent use.
 
@@ -49,16 +51,14 @@ public final class ByteArray implements Externalizable, Cloneable {
     private ByteArray extraFieldJustRequiredForDeserialization = null;  // transient temporary field
 
     static private final byte[] ZERO_JAVA_BYTE_ARRAY = new byte [0];
-    static public final ByteArray ZERO_BYTE_ARRAY = new ByteArray();
+    static public final ByteArray ZERO_BYTE_ARRAY = new ByteArray(ZERO_JAVA_BYTE_ARRAY);
 
-    /** Constructs an empty ByteArray. Prefer access to the static member ZERO_BYTE_ARRAY to reduce GC. */
+    /** No-arg constructor required for Serializable interface. */
     @Deprecated
     public ByteArray() {
-        buffer = ZERO_JAVA_BYTE_ARRAY;
-        offset = 0;
-        length = 0;
+        this(ZERO_JAVA_BYTE_ARRAY);
     }
-
+        
     /** Constructs a ByteArray from a source byte [], which is defensively copied. */
     public ByteArray(byte [] source) {
         if (source == null || source.length == 0) {
@@ -106,6 +106,35 @@ public final class ByteArray implements Externalizable, Cloneable {
         byte [] tmp = new byte[len];
         in.readFully(tmp);
         return new ByteArray(tmp, true);
+    }
+
+    /** Constructs a ByteArray from the provided ByteBuilder. */
+    public static ByteArray fromByteBuilder(ByteBuilder in) {
+        if (in == null || in.length() == 0)
+            return ZERO_BYTE_ARRAY;
+        return new ByteArray(in.getCurrentBuffer(), 0, in.length());
+    }
+
+    /** Constructs a ByteArray from the provided String, using the UTF8 character set. */
+    public static ByteArray fromString(String in) {
+        return fromString(in, CHARSET_UTF8);
+    }
+
+    /** Constructs a ByteArray from the provided String, using the specified character set. */
+    public static ByteArray fromString(String in, Charset cs) {
+        if (in == null || in.length() == 0)
+            return ZERO_BYTE_ARRAY;
+        return new ByteArray(in.getBytes(cs), true);    // we know these bytes are never changed, so no extra copy required
+    }
+    
+    /** returns the byte array as a string. Unlike toString(), which uses the JVM default character set, this method always uses UTF-8. */
+    public String asString() {
+        return asString(CHARSET_UTF8);
+    }
+
+    /** returns the byte array as a string, using a specified character set. */
+    public String asString(Charset cs) {
+        return new String(buffer, offset, length, cs);
     }
 
     /** construct a ByteArray from a source byte [], with offset and length. source may not be null. */
@@ -308,6 +337,12 @@ public final class ByteArray implements Externalizable, Cloneable {
     public void writeToDataOutput(DataOutput out) throws IOException {
         out.write(buffer, offset, length);
     }
+    
+    public String hexdump(int startAt, int maxlength) {
+        if (length <= startAt)
+            return "";      // no data to dump
+        return ByteUtil.dump(buffer, offset + startAt, (maxlength > 0 && maxlength < length) ? maxlength : length);
+    }
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {
@@ -391,7 +426,7 @@ public final class ByteArray implements Externalizable, Cloneable {
         Base64.encodeToByte(b, buffer, offset, length);
     }
     public void appendToRaw(ByteBuilder b) {
-        b.append(buffer, offset, length);
+        b.write(buffer, offset, length);
     }
     
     /** Returns the contents of this ByteArray as a base64 encoded string.
@@ -405,6 +440,6 @@ public final class ByteArray implements Externalizable, Cloneable {
     // returns the String representation of the visible bytes portion
     @Override
     public String toString() {
-        return getBytes().toString();
+        return new String(buffer, offset, length);
     }
 }

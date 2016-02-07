@@ -440,6 +440,6 @@ public final class ByteArray implements Externalizable, Cloneable {
     // returns the String representation of the visible bytes portion
     @Override
     public String toString() {
-        return getBytes().toString();
+        return new String(buffer, offset, length);
     }
 }

@@ -41,7 +41,7 @@ import java.nio.charset.Charset;
 
 public final class ByteArray implements Externalizable, Cloneable {
     private static final long serialVersionUID = 2782729564297256974L;
-    private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");    // default character set is available on all platforms
+    public static final Charset CHARSET_UTF8 = Charset.forName("UTF-8");    // default character set is available on all platforms
     private static final int MAGIC_LENGTH_INDICATING_32_BIT_SIZE = 247;  // if a single byte length of this value is written in the
     // serialized form, it indicates a full four byte length must be read instead. Not used 0 or 255 due to their frequent use.
 
@@ -117,7 +117,7 @@ public final class ByteArray implements Externalizable, Cloneable {
 
     /** Constructs a ByteArray from the provided String, using the UTF8 character set. */
     public static ByteArray fromString(String in) {
-        return fromString(in, DEFAULT_CHARSET);
+        return fromString(in, CHARSET_UTF8);
     }
 
     /** Constructs a ByteArray from the provided String, using the specified character set. */
@@ -129,7 +129,7 @@ public final class ByteArray implements Externalizable, Cloneable {
     
     /** returns the byte array as a string. Unlike toString(), which uses the JVM default character set, this method always uses UTF-8. */
     public String asString() {
-        return asString(DEFAULT_CHARSET);
+        return asString(CHARSET_UTF8);
     }
 
     /** returns the byte array as a string, using a specified character set. */

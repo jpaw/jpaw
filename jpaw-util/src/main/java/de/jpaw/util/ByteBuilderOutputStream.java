@@ -28,7 +28,7 @@ import java.nio.charset.Charset;
  *
  */
 public class ByteBuilderOutputStream extends OutputStream {
-    private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");    // StandardCharsets.UTF_8 is Java 7 or more
+    private static final Charset DEFAULT_CHARSET = ByteArray.CHARSET_UTF8;
 	private final ByteBuilder buff;
 	
 	public ByteBuilderOutputStream(int initialSize) {

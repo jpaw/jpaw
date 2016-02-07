@@ -12,6 +12,7 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 
+import de.jpaw.util.ByteArray;
 import de.jpaw.util.Cesu8Encoder;
 
 //java -jar target/jpaw-benchmarks.jar -i 5 -f 5 -wf 3 -wi 3 ".*StringConversion.*"
@@ -30,7 +31,7 @@ import de.jpaw.util.Cesu8Encoder;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class StringConversion {
-    public Charset utf8Charset = Charset.forName("UTF-8");                       // StandardCharsets.UTF8 not yet available in Java 6...
+    public Charset utf8Charset = ByteArray.CHARSET_UTF8;
     public String utf8Name = "UTF-8";
     public String sampleText = "ksjdhf ssjkdfh sdf sdjkf sdfkjÄ skjfsÜ skdfs kdfhßsdfksjdfhsk € dfhsdklfj";
     public byte [] sampleByteArray = null;

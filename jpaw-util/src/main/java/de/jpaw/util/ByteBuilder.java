@@ -33,7 +33,6 @@ import java.nio.charset.Charset;
 public class ByteBuilder implements DataOutput {
     // static variables
     private static final int DEFAULT_INITIAL_CAPACITY = 8128;                   // tunable constant
-    private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");    // default character set is available on all platforms
     private static final byte [] DEFAULT_EMPTY_BUFFER = new byte [0];
     // per instance variables
     private Charset charset;
@@ -47,7 +46,7 @@ public class ByteBuilder implements DataOutput {
         buffer = size > 0 ? new byte[size] : DEFAULT_EMPTY_BUFFER;
         currentAllocSize = size;
         currentLength = 0;
-        charset = DEFAULT_CHARSET;
+        charset = ByteArray.CHARSET_UTF8;
     }
 
     public ByteBuilder() {  // default constructor

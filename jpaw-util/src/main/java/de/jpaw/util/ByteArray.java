@@ -49,15 +49,7 @@ public final class ByteArray implements Externalizable, Cloneable {
     private ByteArray extraFieldJustRequiredForDeserialization = null;  // transient temporary field
 
     static private final byte[] ZERO_JAVA_BYTE_ARRAY = new byte [0];
-    static public final ByteArray ZERO_BYTE_ARRAY = new ByteArray();
-
-    /** Constructs an empty ByteArray. Prefer access to the static member ZERO_BYTE_ARRAY to reduce GC. */
-    @Deprecated
-    public ByteArray() {
-        buffer = ZERO_JAVA_BYTE_ARRAY;
-        offset = 0;
-        length = 0;
-    }
+    static public final ByteArray ZERO_BYTE_ARRAY = new ByteArray(ZERO_JAVA_BYTE_ARRAY);
 
     /** Constructs a ByteArray from a source byte [], which is defensively copied. */
     public ByteArray(byte [] source) {
@@ -106,6 +98,13 @@ public final class ByteArray implements Externalizable, Cloneable {
         byte [] tmp = new byte[len];
         in.readFully(tmp);
         return new ByteArray(tmp, true);
+    }
+
+    /** Constructs a ByteArray from the provided ByteBuilder. */
+    public static ByteArray fromByteBuilder(ByteBuilder in) {
+        if (in == null || in.length() == 0)
+            return ZERO_BYTE_ARRAY;
+        return new ByteArray(in.getCurrentBuffer(), 0, in.length());
     }
 
     /** construct a ByteArray from a source byte [], with offset and length. source may not be null. */
@@ -391,7 +390,7 @@ public final class ByteArray implements Externalizable, Cloneable {
         Base64.encodeToByte(b, buffer, offset, length);
     }
     public void appendToRaw(ByteBuilder b) {
-        b.append(buffer, offset, length);
+        b.write(buffer, offset, length);
     }
     
     /** Returns the contents of this ByteArray as a base64 encoded string.

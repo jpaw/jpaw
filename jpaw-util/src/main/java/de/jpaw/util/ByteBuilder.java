@@ -15,6 +15,7 @@
   */
 package de.jpaw.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.UTFDataFormatException;
@@ -171,6 +172,11 @@ public class ByteBuilder implements DataOutput {
         return new String(buffer, 0, currentLength, charset);
     }
     
+    /** Provides the contents of this ByteArray to some InputStream. */
+    public ByteArrayInputStream asByteArrayInputStream() {
+        return new ByteArrayInputStream(buffer, 0, currentLength);
+    }
+
     
     ///////////////////////////////////////////////////
     //

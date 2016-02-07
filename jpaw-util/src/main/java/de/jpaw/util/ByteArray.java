@@ -337,6 +337,12 @@ public final class ByteArray implements Externalizable, Cloneable {
     public void writeToDataOutput(DataOutput out) throws IOException {
         out.write(buffer, offset, length);
     }
+    
+    public String hexdump(int startAt, int maxlength) {
+        if (length <= startAt)
+            return "";      // no data to dump
+        return ByteUtil.dump(buffer, offset + startAt, (maxlength > 0 && maxlength < length) ? maxlength : length);
+    }
 
     @Override
     public void writeExternal(ObjectOutput out) throws IOException {

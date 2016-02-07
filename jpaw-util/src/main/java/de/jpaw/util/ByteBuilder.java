@@ -18,6 +18,7 @@ package de.jpaw.util;
 import java.io.ByteArrayInputStream;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UTFDataFormatException;
 import java.nio.charset.Charset;
 
@@ -174,6 +175,34 @@ public class ByteBuilder implements DataOutput {
     /** Provides the contents of this ByteArray to some InputStream. */
     public ByteArrayInputStream asByteArrayInputStream() {
         return new ByteArrayInputStream(buffer, 0, currentLength);
+    }
+
+    /** read bytes from an input stream, up to maxBytes (or all which exist, if maxBytes = 0).
+     * Returns the number of bytes read. */
+    public int readFromInputStream(final InputStream is, final int maxBytes) throws IOException {
+        final int BUFFER_SIZE = 4096;
+        int totalBytes = 0;
+        final byte [] tmpBuffer = new byte [BUFFER_SIZE];
+        
+        while (maxBytes == 0 || totalBytes < maxBytes) {
+            int maxNow = maxBytes == 0 ? BUFFER_SIZE : maxBytes - totalBytes;
+            if (maxNow > BUFFER_SIZE)
+                maxNow = BUFFER_SIZE;
+            int morebytes = is.read(tmpBuffer, 0, maxNow);
+            if (morebytes > 0) {
+                totalBytes += morebytes;
+                write(tmpBuffer, 0, morebytes);
+            } else {
+                break;
+            }
+        }
+        return totalBytes;
+    }
+
+    public String hexdump(int startAt, int maxlength) {
+        if (currentLength <= startAt)
+            return "";      // no data to dump
+        return ByteUtil.dump(buffer, startAt, (maxlength > 0 && maxlength < currentLength) ? maxlength : currentLength);
     }
 
     

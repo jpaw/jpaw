@@ -52,7 +52,8 @@ public final class ByteArray implements Externalizable, Cloneable {
     static public final ByteArray ZERO_BYTE_ARRAY = new ByteArray(ZERO_JAVA_BYTE_ARRAY);
 
     /** No-arg constructor required for Serializable interface. */
-    protected ByteArray() {
+    @Deprecated
+    public ByteArray() {
         this(ZERO_JAVA_BYTE_ARRAY);
     }
         

@@ -116,6 +116,7 @@ public final class BonaCurrency implements Serializable {
      * As an initial strategy, the banker's rounding (aka Gaussian rounding / twopenny rounding) for all elements is performed.
      * If the scaled sum matches, that result is returned.
      * Otherwise, elements are picked for a different rounding strategy in order of increasing relative error.
+     * Elements whch have not been rounded will not be adjusted.
      *
      * @param unscaledAmounts
      * @return scaled values
@@ -150,9 +151,17 @@ public final class BonaCurrency implements Serializable {
             isEligible[i] = unscaledAmounts[i].compareTo(scaledAmounts[i]) == (i > 0 ? compareSign : -compareSign);
             if (isEligible[i]) {
                 // relative error is <= 1 by definition: if unscaled <= 0.5: diff = unscaled, else unscaled > 0.5 and therefore > diff
+//                relativeError[i] =
+//                    Math.abs(unscaledAmounts[i].subtract(scaledAmounts[i]).doubleValue()) /
+//                    Math.abs(unscaledAmounts[i].doubleValue());
+                // new weight method:
+                // component 1: prefer small corrections, i.e. prefer to adjust x.6 to x.0 rather than x.9 to x.0 (min absolute adjustment)
+                // component 2: prefer small relative changes, i.e. prefer to adjust x.6 to x.0 to y.6 to y.0 if x > y
+                // component 1 is more important than component 2 => weighted calculation uses the square of component 1 and a linear weight of component 2 (using the reciprocal)
+                // square of component 1 is in range [0.25, 1)
                 relativeError[i] =
-                    Math.abs(unscaledAmounts[i].subtract(scaledAmounts[i]).doubleValue()) /
-                    Math.abs(unscaledAmounts[i].doubleValue());
+                        Math.abs(singleAdjustment.subtract(unscaledAmounts[i].subtract(scaledAmounts[i])).doubleValue()) /
+                        Math.abs(unscaledAmounts[i].doubleValue());
                 ++numberEligible;
             } else {
                 relativeError[i] = 0.0;  // just to avoid errorneous access
@@ -162,10 +171,10 @@ public final class BonaCurrency implements Serializable {
         assert numberEligible >= numberToAdjust : "Did not find enough adjustable elements";
         while (numberToAdjust > 0) {
             // find a remaining eligible element with the smallest relativeError
-            double minError = 2.0;  // anything > 1.0 shold do
+            double minError = 0.0;   // not yet defined
             int smallestIndex = -1;
             for (int i = 0; i < n; ++i) {
-                if (isEligible[i] && relativeError[i] < minError) {
+                if (isEligible[i] && (smallestIndex < 0 || relativeError[i] < minError)) {
                     minError = relativeError[i];
                     smallestIndex = i;
                 }

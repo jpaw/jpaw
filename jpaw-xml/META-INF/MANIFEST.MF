@@ -9,4 +9,4 @@ Require-Bundle: jpaw.util
 Export-Package: de.jpaw.xml.jaxb,
  de.jpaw.xml.jaxb.scaledFp
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6 
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

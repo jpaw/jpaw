@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
 
     <description>Definition and implementation of some basic classes for enums / tokenizable enums, and enum sets, extracted from BONAPARTE core</description>
- 
+
     <dependencies>
         <dependency>
             <groupId>org.testng</groupId>

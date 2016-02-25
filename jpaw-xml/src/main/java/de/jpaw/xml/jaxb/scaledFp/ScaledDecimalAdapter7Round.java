@@ -4,7 +4,7 @@ import de.jpaw.xml.jaxb.AbstractScaledDecimalAdapter;
 
 public class ScaledDecimalAdapter7Round extends AbstractScaledDecimalAdapter {
 
-	public ScaledDecimalAdapter7Round() {
-		super(7, true);
-	}
+    public ScaledDecimalAdapter7Round() {
+        super(7, true);
+    }
 }

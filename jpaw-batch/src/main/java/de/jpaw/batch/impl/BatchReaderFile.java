@@ -39,7 +39,7 @@ abstract public class BatchReaderFile implements Contributor {
     public int getMaxRecords() {
         return maxRecords;
     }
-    
+
     @Override
     public void addCommandlineParameters(JSAP params) throws Exception {
         params.registerParameter(new FlaggedOption("in", JSAP.STRING_PARSER, null, JSAP.NOT_REQUIRED, 'i', "in", "input filename (extensions .gz and .zip are understood)"));

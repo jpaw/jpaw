@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class DeepCopy {
-    
+
     // This method is intended for use of Json objects, i.e. it makes assumptions that elements are either Set, List, Map or immutable components.
     // arrays of primitives are currently not supported
     public static <T> T deepCopy(T obj) {
@@ -33,7 +33,7 @@ public class DeepCopy {
                 newL.put(e.getKey(), deepCopy(e.getValue()));
             return (T)newL;
         }
-        
+
         return obj;
     }
 }

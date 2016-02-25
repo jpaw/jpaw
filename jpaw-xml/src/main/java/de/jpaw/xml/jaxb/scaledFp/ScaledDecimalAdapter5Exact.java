@@ -4,7 +4,7 @@ import de.jpaw.xml.jaxb.AbstractScaledDecimalAdapter;
 
 public class ScaledDecimalAdapter5Exact extends AbstractScaledDecimalAdapter {
 
-	public ScaledDecimalAdapter5Exact() {
-		super(5, false);
-	}
+    public ScaledDecimalAdapter5Exact() {
+        super(5, false);
+    }
 }

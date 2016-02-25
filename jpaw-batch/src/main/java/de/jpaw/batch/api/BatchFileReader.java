@@ -1,7 +1,7 @@
 package de.jpaw.batch.api;
 
 
-/** API of file (or stream) based inputs */ 
+/** API of file (or stream) based inputs */
 public interface BatchFileReader<E> extends BatchReader<E> {
 
     String getFilename();       // provides the source filename

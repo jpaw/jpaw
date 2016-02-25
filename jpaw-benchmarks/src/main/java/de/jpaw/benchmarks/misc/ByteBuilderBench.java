@@ -39,7 +39,7 @@ public class ByteBuilderBench {
     public static int offset = 17;
     public static ByteBuilder bb = new ByteBuilder(4 * NUM, null);
     public static ByteArrayOutputStream baos = new ByteArrayOutputStream(4 * NUM);
-    public static DataOutputStream dos = new DataOutputStream(baos); 
+    public static DataOutputStream dos = new DataOutputStream(baos);
 
     @Benchmark
     public void intBb(Blackhole bh) {
@@ -58,7 +58,7 @@ public class ByteBuilderBench {
             bb.writeByte(i + o);
         bh.consume(bb.getCurrentBuffer());
     }
-    
+
     @Benchmark
     public void intDos(Blackhole bh) throws IOException {
         baos.reset();

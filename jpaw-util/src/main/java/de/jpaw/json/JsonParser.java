@@ -14,32 +14,32 @@ public class JsonParser {
     private final CharSequence s;
     private final int len;
     private int i;
-    
+
     public JsonParser(CharSequence s, boolean useFloat) {
         this.s = s;
         this.useFloat = useFloat;
         len = s == null ? 0 : s.length();
         i = 0;
     }
-    
+
     private void skipSpaces() {
         while (i < len && Character.isWhitespace(s.charAt(i)))
             ++i;
     }
-    
+
     private char peekNeededChar() throws JsonException {
         if (i >= len)
             throw new JsonException(JsonException.JSON_PREMATURE_END, i);
         return s.charAt(i);
     }
-    
+
     private void mustEnd() throws JsonException {
         skipSpaces();
         if (i < len)
             throw new JsonException(JsonException.JSON_GARBAGE_AT_END, i);
-        
+
     }
-    
+
     // return true if the next characters in the input sequence match txt
     protected boolean nextStartsWith(String txt) {
         final int len1 = txt.length();
@@ -50,7 +50,7 @@ public class JsonParser {
                 return false;
         return true;
     }
-    
+
     // check if the next token is the one expected, then advance and return true, else false
     private boolean peek(String txt) throws JsonException {
         if (!nextStartsWith(txt))
@@ -66,7 +66,7 @@ public class JsonParser {
         skipSpaces();
         return true;
     }
-    
+
     private void requireNext(char wanted) throws JsonException {
         skipSpaces();
         char c = peekNeededChar();
@@ -74,7 +74,7 @@ public class JsonParser {
             throw new JsonException(JsonException.JSON_SYNTAX, i);
         ++i;
     }
-    
+
     // parse a string which contains an ID
     private String parseId() throws JsonException {
 //        requireNext('"');
@@ -108,19 +108,19 @@ public class JsonParser {
 //        -1, 10, 11, 12, 13, 14, 15, -1,  -1, -1, -1, -1, -1, -1, -1, -1,
 //        -1, -1, -1, -1, -1, -1, -1, -1,  -1, -1, -1, -1, -1, -1, -1, -1
 //    };
-//    
+//
 //    // return the value of the next hex digit
 //    private int nextHex() throws JsonException {
 //        char c = peekNeededChar();
 //        ++i;
 //        if (c < '0' || c > 'f')
 //            throw new JsonException(JsonException.JSON_BAD_ESCAPE, i);
-//        int digit = HEX_VALUES[c - '0']; 
+//        int digit = HEX_VALUES[c - '0'];
 //        if (digit < 0)
 //            throw new JsonException(JsonException.JSON_BAD_ESCAPE, i);
 //        return digit;
 //    }
-    
+
     // return the value of the next hex digit
     private int nextHex() throws JsonException {
         char c = peekNeededChar();
@@ -135,7 +135,7 @@ public class JsonParser {
         }
         throw new JsonException(JsonException.JSON_BAD_ESCAPE, i);
     }
-    
+
     // parse a string which contains a generic string
     private String parseStringSub() throws JsonException {
         requireNext('"');
@@ -183,7 +183,7 @@ public class JsonParser {
         skipSpaces();
         return sb.toString();
     }
-    
+
     // s is not null
     // parse an object starting a the current pos
     private Object parseElementSub() throws JsonException {
@@ -260,12 +260,12 @@ public class JsonParser {
         }
         throw new JsonException(JsonException.JSON_SYNTAX, i);
     }
-    
+
     private List<Object> parseListSub()  throws JsonException {
         final List<Object> list = new ArrayList<Object>();
         ++i;
         skipSpaces();
-        
+
         boolean needComma = false;
         // add elements until "]" is found
         char c = peekNeededChar();
@@ -280,13 +280,13 @@ public class JsonParser {
         skipSpaces();
         return list;
     }
-    
+
     // the current char definitely is '{'. Parse a non-null Map.
     private Map<String, Object> parseMapSub() throws JsonException {
         final Map<String, Object> map = new HashMap<String, Object>();
         ++i;
         skipSpaces();
-        
+
         boolean needComma = false;
         // loop through key / value pairs
         char c = peekNeededChar();
@@ -305,7 +305,7 @@ public class JsonParser {
         skipSpaces();
         return map;
     }
-    
+
     public Object parseElement() throws JsonException {
         if (s == null)
             return null;    // shortcut
@@ -313,7 +313,7 @@ public class JsonParser {
         mustEnd();
         return obj;
     }
-    
+
     public Map<String, Object> parseObject() throws JsonException {
         if (s == null)
             return null;    // shortcut
@@ -329,7 +329,7 @@ public class JsonParser {
         mustEnd();
         return map;
     }
-    
+
     public List<Object> parseArray() throws JsonException {
         if (s == null)
             return null;    // shortcut

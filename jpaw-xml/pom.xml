@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
 
     <description>BONAPARTE JAXB XML bindings/adapters</description>
-    
+
     <dependencies>
         <dependency>
             <groupId>de.jpaw</groupId>

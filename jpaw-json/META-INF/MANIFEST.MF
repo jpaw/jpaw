@@ -7,4 +7,4 @@ Bundle-Version: 1.5.5.qualifier
 Bundle-Vendor: Michael Bischoff
 Export-Package: de.jpaw.jsonext
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6 
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

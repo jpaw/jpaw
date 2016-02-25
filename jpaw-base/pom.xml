@@ -17,7 +17,7 @@
     <properties>
         <poi.version>3.13</poi.version>                 <!-- http://poi.apache.org/ UPTODATE 2014-12-21 -->
     </properties>
-    
+
     <build>
         <pluginManagement>
             <plugins>
@@ -62,7 +62,7 @@
                     <configuration>
                         <!-- cannot use target/lib because we depend on additional 4rd party libraries (lz4), which are not in this project -->
                         <argLine>-Djava.library.path=${user.home}/lib</argLine>
-                    
+
                         <!-- This does not work:
                         <systemProperties>
                             <property>

@@ -14,7 +14,7 @@
 
     <description>Testcases for the money library, using xtend for smaller code</description>
     <url>http://www.jpaw.de/projects/bonaparte/index.html</url>
-    
+
     <build>
         <plugins>
             <plugin>

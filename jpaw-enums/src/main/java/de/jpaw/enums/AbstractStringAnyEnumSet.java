@@ -42,7 +42,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
         }
         return true;
     }
-    
+
     public static final String sortTokens(String s) {
         if (s.length() < 2)
             return s;
@@ -50,7 +50,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
         Arrays.sort(charArray);
         return new String(charArray);
     }
-    
+
     protected AbstractStringAnyEnumSet(String bitmap) {
         this.bitmap = isSorted(bitmap) ? bitmap : sortTokens(bitmap);
     }
@@ -61,7 +61,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
         if (!isSorted(bitmap))
             throw new RuntimeException("Unsorted EnumSet: " + bitmap);
     }
-    
+
     public String getBitmap() {
         return bitmap;
     }
@@ -171,7 +171,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
     public void unifyWith(AbstractStringAnyEnumSet<E> that) {
         unifyWith(that.bitmap);
     }
-    
+
     /** Merges (boolean OR) another bitmap into this one. (String parameter) */
     public void unifyWith(String that) {
         verify$Not$Frozen();                // check if modification is allowed
@@ -232,7 +232,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
             bitmap = that;                  // will be empty as well now
             return;
         }
-        
+
         // real merge, no shortcut possible. Use a linear time algorithm. We know both bitmaps are sorted.
         StringBuilder buff = new StringBuilder(n); // worst case length: cannot be longer than before
         int i = 0;
@@ -260,7 +260,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
     public void exclude(AbstractStringAnyEnumSet<E> that) {
         exclude(that.bitmap);
     }
-    
+
     /** Subtracts another bitmap from this one. (String parameter) */
     public void exclude(String that) {
         verify$Not$Frozen();                // check if modification is allowed
@@ -303,7 +303,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
     public void flip(AbstractStringAnyEnumSet<E> that) {
         flip(that.bitmap);
     }
-    
+
     /** flips the bits of another bitmap in this one (xor). (String parameter) */
     public void flip(String that) {
         final int m = that.length();

@@ -22,7 +22,7 @@ abstract public class BatchWriterTextFileAbstract extends BatchWriterFile {
     public String getEncoding() {
         return encoding.name();
     }
-    
+
     public BatchWriterTextFileAbstract(String header, String footer) {
         this.header = header;
         this.footer = footer;

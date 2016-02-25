@@ -14,7 +14,7 @@
 
     <description>Better implementation of the Java EnumSet, as active Annotation in order to work around Java's type erasure</description>
     <url>http://www.jpaw.de/projects/bonaparte/index.html</url>
-    
+
     <build>
         <plugins>
             <plugin>

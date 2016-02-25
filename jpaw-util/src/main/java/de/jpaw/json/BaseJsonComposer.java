@@ -29,7 +29,7 @@ public class BaseJsonComposer implements JsonEscaper {
                 jsonEscapes[i] = "\\u00" + HEX_CHARS[i/16] + HEX_CHARS[i & 15];
         }
     }
-    
+
     protected final Appendable appendable;
     protected final boolean writeNulls;
     protected final boolean escapeNonASCII;

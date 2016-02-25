@@ -21,7 +21,7 @@ public abstract class AbstractScaledDecimalAdapter extends XmlAdapter<String, Bi
 
     @Override
     public BigDecimal unmarshal(String value) throws Exception {
-    	BigDecimal decimal = new BigDecimal(value);
+        BigDecimal decimal = new BigDecimal(value);
         if (decimal.signum() == 0)
             return BigDecimal.ZERO;
 
@@ -30,6 +30,6 @@ public abstract class AbstractScaledDecimalAdapter extends XmlAdapter<String, Bi
 
     @Override
     public String marshal(BigDecimal value) throws Exception {
-    	return scaleAndRound(value).toPlainString();
+        return scaleAndRound(value).toPlainString();
     }
 }

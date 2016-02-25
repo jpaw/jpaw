@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 import de.jpaw.util.ByteArray;
 
 public class ByteArrayTest {
-    
+
     @Test
     public void testByteArrayToOutputStream() throws Exception {
         final String hello = "Hello, world!";

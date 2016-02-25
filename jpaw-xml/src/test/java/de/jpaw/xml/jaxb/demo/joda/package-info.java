@@ -23,4 +23,3 @@ import de.jpaw.xml.jaxb.DateTimeAdapter;
 import de.jpaw.xml.jaxb.LocalDateAdapter;
 import de.jpaw.xml.jaxb.LocalTimeAdapter;
 import de.jpaw.xml.jaxb.LocalDateTimeAdapter;
-

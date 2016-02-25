@@ -58,7 +58,7 @@ public final class ByteArray implements Externalizable, Cloneable {
     public ByteArray() {
         this(ZERO_JAVA_BYTE_ARRAY);
     }
-        
+
     /** Constructs a ByteArray from a source byte [], which is defensively copied. */
     public ByteArray(byte [] source) {
         if (source == null || source.length == 0) {
@@ -87,13 +87,13 @@ public final class ByteArray implements Externalizable, Cloneable {
         }
     }
 
-    /** Constructs a ByteArray from a ByteArrayOutputStream, which has just been contructed by some previous process. 
+    /** Constructs a ByteArray from a ByteArrayOutputStream, which has just been contructed by some previous process.
      * @throws IOException */
     public static ByteArray fromByteArrayOutputStream(ByteArrayOutputStream baos) throws IOException {
         baos.flush();
         return new ByteArray(baos.toByteArray(), true);
     }
-    
+
     /** Writes the contents of this ByteArray to an OutputStream. */
     public void toOutputStream(OutputStream os) throws IOException {
         os.write(buffer, offset, length);
@@ -126,7 +126,7 @@ public final class ByteArray implements Externalizable, Cloneable {
             return ZERO_BYTE_ARRAY;
         return new ByteArray(in.getBytes(cs), true);    // we know these bytes are never changed, so no extra copy required
     }
-    
+
     /** returns the byte array as a string. Unlike toString(), which uses the JVM default character set, this method always uses UTF-8. */
     public String asString() {
         return asString(CHARSET_UTF8);
@@ -258,7 +258,7 @@ public final class ByteArray implements Externalizable, Cloneable {
             throw new IllegalArgumentException();
         return buffer[offset + pos];
     }
-    
+
     /** Provides the contents of this ByteArray to some InputStream. */
     public ByteArrayInputStream asByteArrayInputStream() {
         return new ByteArrayInputStream(buffer, offset, length());
@@ -337,7 +337,7 @@ public final class ByteArray implements Externalizable, Cloneable {
     public void writeToDataOutput(DataOutput out) throws IOException {
         out.write(buffer, offset, length);
     }
-    
+
     public String hexdump(int startAt, int maxlength) {
         if (length <= startAt)
             return "";      // no data to dump
@@ -428,9 +428,9 @@ public final class ByteArray implements Externalizable, Cloneable {
     public void appendToRaw(ByteBuilder b) {
         b.write(buffer, offset, length);
     }
-    
+
     /** Returns the contents of this ByteArray as a base64 encoded string.
-     * @since 1.2.12 */ 
+     * @since 1.2.12 */
     public String asBase64() {
         ByteBuilder tmp = new ByteBuilder(0, null);
         Base64.encodeToByte(tmp, buffer, offset, length);

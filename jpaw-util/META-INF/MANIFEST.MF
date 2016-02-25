@@ -10,4 +10,4 @@ Export-Package: de.jpaw.api,
  de.jpaw.json,
  de.jpaw.util
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6 
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

@@ -22,9 +22,9 @@ import de.jpaw.json.BaseJsonComposer;
 public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
 
     // if instantInMillis is true, Instants will be written as integral values in milliseconds, otherwise as second + optional fractional parts
-    // see DATE_TIMESTAMPS_AS_NANOSECONDS in https://github.com/FasterXML/jackson-datatype-jsr310 for similar setting 
+    // see DATE_TIMESTAMPS_AS_NANOSECONDS in https://github.com/FasterXML/jackson-datatype-jsr310 for similar setting
     protected final boolean instantInMillis;
-    
+
     public ExtendedJsonEscaperForAppendables(Appendable appendable) {
         super(appendable);      // default: writeNulls = true, escapeNonAscii = false
         instantInMillis = false;
@@ -34,7 +34,7 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
         super(appendable, writeNulls, escapeNonASCII);
         this.instantInMillis = instantInMillis;
     }
-    
+
     private String toDay(int [] values) {
         return String.format("%04d-%02d-%02d", values[0], values[1], values[2]);
     }
@@ -48,7 +48,7 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
 
     @Override
     public void outputJsonElement(Object obj) throws IOException {
-        // add Joda-Time types and enum types 
+        // add Joda-Time types and enum types
         if (obj instanceof Enum) {
             // distinguish Tokenizable
             if (obj instanceof TokenizableEnum) {

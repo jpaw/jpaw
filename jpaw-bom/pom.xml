@@ -14,12 +14,12 @@
     <description>JPAW bill of materials</description>
 
     <!-- Define my own version as a convenience for users. Possibly not required. -->
-<!-- 
+<!--
     <properties>
         <jpaw.version>1.5.5-SNAPSHOT</jpaw.version>
     </properties>
  -->
- 
+
     <dependencyManagement>
         <dependencies>
             <dependency>

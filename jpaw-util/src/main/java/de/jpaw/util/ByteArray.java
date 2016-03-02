@@ -21,6 +21,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.Externalizable;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.OutputStream;
@@ -106,6 +107,15 @@ public final class ByteArray implements Externalizable, Cloneable {
         byte [] tmp = new byte[len];
         in.readFully(tmp);
         return new ByteArray(tmp, true);
+    }
+
+    /** read bytes from an input stream, up to maxBytes (or all which exist, if maxBytes = 0). */
+    public static ByteArray fromInputStream(final InputStream is, final int maxBytes) throws IOException {
+        ByteBuilder tmp = maxBytes > 0 ? new ByteBuilder(maxBytes, CHARSET_UTF8) : new ByteBuilder();
+        tmp.readFromInputStream(is, maxBytes);
+        if (tmp.length() == 0)
+            return ZERO_BYTE_ARRAY;
+        return new ByteArray(tmp.getCurrentBuffer(), 0, tmp.length());
     }
 
     /** Constructs a ByteArray from the provided ByteBuilder. */

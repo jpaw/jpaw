@@ -30,15 +30,15 @@ public class BatchReaderPoi implements Contributor, BatchFileReader<String> {
     protected int firstCol = 1;
     protected int lastCol = 0;      // if 0: export until an empty field has been encountered
     protected int whileCol = 0;      // if 0: export until an empty field has been encountered
-    
+
     protected Workbook xls = null;
     protected Sheet sheet = null;
-    
+
     @Override
     public String getFilename() {
         return filename;
     }
-    
+
     @Override
     public int getSkip() {
         return skip;
@@ -77,7 +77,7 @@ public class BatchReaderPoi implements Contributor, BatchFileReader<String> {
         firstCol   = params.getInt("first");
         lastCol    = params.getInt("last");
         whileCol   = params.getInt("while");
-        
+
         if (filename.endsWith(".xls")) {
             xls = new HSSFWorkbook(new FileInputStream(filename));
         } else if (filename.endsWith(".xlsx")) {
@@ -86,7 +86,7 @@ public class BatchReaderPoi implements Contributor, BatchFileReader<String> {
             LOGGER.error("input file name {} must end with either .xls or .xlsx", filename);
             System.exit(1);
         }
-        
+
         if (sheetName == null) {
             sheet = xls.getSheetAt(0);
         } else {
@@ -123,23 +123,23 @@ public class BatchReaderPoi implements Contributor, BatchFileReader<String> {
             return "";
         }
     }
-    
+
     @Override
     public void produceTo(BatchMainCallback<? super String> whereToPut) throws Exception {
         StringBuffer buff = new StringBuffer(4000);
         int lineNo = skip - 1;  // first row has index 0
         for (;;) {
             buff.setLength(0);
-            
+
             // get row, stop if not present
             Row row = sheet.getRow(++lineNo);
             if (row == null)
                 break;
-            
+
             // break criteria if indicator column is empty
             if (whileCol > 0 && row.getCell(whileCol - 1, Row.RETURN_BLANK_AS_NULL) == null)
                 break;   // end of data
-            
+
             int last = lastCol == 0 ? row.getLastCellNum() : lastCol;
             buff.append(asString(row.getCell(firstCol - 1, Row.RETURN_BLANK_AS_NULL)));
             for (int i = firstCol; i < last; ++i) {

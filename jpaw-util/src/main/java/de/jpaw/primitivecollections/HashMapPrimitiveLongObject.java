@@ -6,14 +6,14 @@ import de.jpaw.util.IntegralLimits;
 
 /** An implementation of a hash map with primitive keys.
  * Similar to implementations in HPPC and MapDB.
- * 
+ *
  * This implementation is a slimmed down version of the one used on MapDB 1.0.6 (all iterator code has been removed), which had its origins in Apache Harmony.
- * 
+ *
  * This class is not thread-safe.
  *
  */
 public class HashMapPrimitiveLongObject<V> {
-    
+
     static private class Entry<V> {
         final long key;
         V value;
@@ -37,12 +37,12 @@ public class HashMapPrimitiveLongObject<V> {
     public int size() {
         return elementCount;
     }
-    
+
     /*
      * The internal data structure to hold Entries
      */
     private Entry<V>[] elementData;
-    
+
     /*
      * maximum ratio of (stored elements)/(storage size) which does not lead to
      * rehash
@@ -153,7 +153,7 @@ public class HashMapPrimitiveLongObject<V> {
         }
         return m;
     }
-    
+
 
     public static int longHash(final long key) {
         int h = (int)(key ^ (key >>> 32));
@@ -195,7 +195,7 @@ public class HashMapPrimitiveLongObject<V> {
         elementData[index] = entry;
         return entry;
     }
-    
+
     void rehash(int capacity) {
         int length = capacity < DEFAULT_SIZE ? DEFAULT_SIZE : capacity << 1;
 

@@ -64,4 +64,3 @@ public interface JsonEscaper {
      */
     public void outputJsonArray(List<?> l) throws IOException;
 }
-

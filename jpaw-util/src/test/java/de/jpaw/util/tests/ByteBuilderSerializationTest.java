@@ -10,12 +10,12 @@ import de.jpaw.util.ByteBuilder;
 
 // various tests to compare ByteBuilder with DataOutput as implemented by ByteOutputStream
 public class ByteBuilderSerializationTest {
-    
+
     private static class Engine {
         final ByteBuilder bb = new ByteBuilder();
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final DataOutputStream dos = new DataOutputStream(baos);
-        
+
         // compare the serialized forms of both methods
         void compare(String msg) throws Exception {
             byte [] data_bb = bb.getBytes();
@@ -24,7 +24,7 @@ public class ByteBuilderSerializationTest {
             Assert.assertEquals(data_bb, data_dos);
         }
     }
-    
+
     // construct a string of some characters of all possible UTF lengths
     private String getString() {
         int i = 0;
@@ -39,7 +39,7 @@ public class ByteBuilderSerializationTest {
         }
         return new String(raw, 0, i);
     }
-    
+
     @Test
     public void testStrings() throws Exception {
         System.out.println("Test string has " + getString().length() + " characters");
@@ -72,8 +72,8 @@ public class ByteBuilderSerializationTest {
         e.compare("UTF");
     }
 
-    
-    
+
+
     // construct a string of some characters of all possible UTF lengths
     private byte [] getByteArray() {
         int i = 0;
@@ -86,7 +86,7 @@ public class ByteBuilderSerializationTest {
         }
         return raw;
     }
-    
+
     @Test
     public void testByteArray() throws Exception {
         byte [] test = getByteArray();
@@ -95,7 +95,7 @@ public class ByteBuilderSerializationTest {
         e.dos.write(test);
         e.compare("ByteArray full");
     }
-    
+
     @Test
     public void testByteArrayPart() throws Exception {
         byte [] test = getByteArray();
@@ -104,7 +104,7 @@ public class ByteBuilderSerializationTest {
         e.dos.write(test, 3, 23);
         e.compare("ByteArray part");
     }
-    
+
     @Test
     public void test1() throws Exception {
         Engine e = new Engine();
@@ -116,7 +116,7 @@ public class ByteBuilderSerializationTest {
         }
         e.compare("1");
     }
-    
+
     @Test
     public void testByte() throws Exception {
         Engine e = new Engine();

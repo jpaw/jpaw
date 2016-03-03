@@ -67,7 +67,7 @@ public class CharTestsASCII {
         0, 0, 0, 0, 0, 1, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0
     };
-    
+
     /**
      * The constructor is defined as private, in order to prevent that anyone
      * instantiates this class, which is not meaningful, because it contains
@@ -219,7 +219,7 @@ public class CharTestsASCII {
      */
     public static boolean isJavascriptId(final String s) {
         final int len = s.length();
-        
+
         if (len == 0 || isAsciiDigit(s.charAt(0)))
             return false;
         // the remaining checks are no longer valid for ES 5ff

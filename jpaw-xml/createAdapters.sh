@@ -4,10 +4,10 @@
 rounding=false
 for rnd in Exact Round; do
 
-	# create Long adapters
-	for digits in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18; do
-		classname=ScaledLongAdapter$digits$rnd
-		cat > src/main/java/de/jpaw/xml/jaxb/scaledFp/$classname.java << EOF
+    # create Long adapters
+    for digits in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18; do
+        classname=ScaledLongAdapter$digits$rnd
+        cat > src/main/java/de/jpaw/xml/jaxb/scaledFp/$classname.java << EOF
 package de.jpaw.xml.jaxb.scaledFp;
 
 import de.jpaw.xml.jaxb.AbstractScaledLongAdapter;
@@ -20,12 +20,12 @@ public class $classname extends AbstractScaledLongAdapter {
     }
 }
 EOF
-	done
+    done
 
-	# create Int adapters
-	for digits in 1 2 3 4 5 6 7 8 9; do
-		classname=ScaledIntegerAdapter$digits$rnd
-		cat > src/main/java/de/jpaw/xml/jaxb/scaledFp/$classname.java << EOF
+    # create Int adapters
+    for digits in 1 2 3 4 5 6 7 8 9; do
+        classname=ScaledIntegerAdapter$digits$rnd
+        cat > src/main/java/de/jpaw/xml/jaxb/scaledFp/$classname.java << EOF
 package de.jpaw.xml.jaxb.scaledFp;
 
 import de.jpaw.xml.jaxb.AbstractScaledIntegerAdapter;
@@ -38,12 +38,12 @@ public class $classname extends AbstractScaledIntegerAdapter {
     }
 }
 EOF
-	done
+    done
 
-	# create Short adapters
-	for digits in 1 2 3 4; do
-		classname=ScaledShortAdapter$digits$rnd
-		cat > src/main/java/de/jpaw/xml/jaxb/scaledFp/$classname.java << EOF
+    # create Short adapters
+    for digits in 1 2 3 4; do
+        classname=ScaledShortAdapter$digits$rnd
+        cat > src/main/java/de/jpaw/xml/jaxb/scaledFp/$classname.java << EOF
 package de.jpaw.xml.jaxb.scaledFp;
 
 import de.jpaw.xml.jaxb.AbstractScaledShortAdapter;
@@ -56,12 +56,12 @@ public class $classname extends AbstractScaledShortAdapter {
     }
 }
 EOF
-	done
+    done
 
-	# create Byte adapters
-	for digits in 1 2; do
-		classname=ScaledByteAdapter$digits$rnd
-		cat > src/main/java/de/jpaw/xml/jaxb/scaledFp/$classname.java << EOF
+    # create Byte adapters
+    for digits in 1 2; do
+        classname=ScaledByteAdapter$digits$rnd
+        cat > src/main/java/de/jpaw/xml/jaxb/scaledFp/$classname.java << EOF
 package de.jpaw.xml.jaxb.scaledFp;
 
 import de.jpaw.xml.jaxb.AbstractScaledByteAdapter;
@@ -74,8 +74,7 @@ public class $classname extends AbstractScaledByteAdapter {
     }
 }
 EOF
-	done
-	# second iteration with rounding
-	rounding=true
+    done
+    # second iteration with rounding
+    rounding=true
 done
-

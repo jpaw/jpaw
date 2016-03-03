@@ -23,33 +23,33 @@ import java.nio.charset.Charset;
  * Java unfortunately has designed OutputStream as abstract class rather than an interface.
  * Furthermore, the OutputStream methods throw IOExceptions, which cannot happen when writing
  * into memory.
- * 
+ *
  * @author mbi
  *
  */
 public class ByteBuilderOutputStream extends OutputStream {
     private static final Charset DEFAULT_CHARSET = ByteArray.CHARSET_UTF8;
-	private final ByteBuilder buff;
-	
-	public ByteBuilderOutputStream(int initialSize) {
-		buff = new ByteBuilder(initialSize, DEFAULT_CHARSET);
-	}
-	
-	public ByteBuilderOutputStream(ByteBuilder buff) {
-		this.buff = buff;
-	}
+    private final ByteBuilder buff;
 
-	@Override
-	public void write(int b) throws IOException {
-		buff.append((byte)b);
-	}
-	
-	@Override
-	public void write(byte [] b, int offset, int len) throws IOException {
-		buff.write(b, offset, len);
-	}
-	
-	public ByteArray asByteArray() {
-		return new ByteArray(buff.getCurrentBuffer(), 0, buff.length());
-	}
+    public ByteBuilderOutputStream(int initialSize) {
+        buff = new ByteBuilder(initialSize, DEFAULT_CHARSET);
+    }
+
+    public ByteBuilderOutputStream(ByteBuilder buff) {
+        this.buff = buff;
+    }
+
+    @Override
+    public void write(int b) throws IOException {
+        buff.append((byte)b);
+    }
+
+    @Override
+    public void write(byte [] b, int offset, int len) throws IOException {
+        buff.write(b, offset, len);
+    }
+
+    public ByteArray asByteArray() {
+        return new ByteArray(buff.getCurrentBuffer(), 0, buff.length());
+    }
 }

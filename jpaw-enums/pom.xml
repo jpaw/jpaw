@@ -5,7 +5,7 @@
     <parent>
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-base</artifactId>
-        <version>1.5.4</version>
+        <version>1.5.5</version>
         <relativePath>../jpaw-base/pom.xml</relativePath>
     </parent>
 
@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
 
     <description>Definition and implementation of some basic classes for enums / tokenizable enums, and enum sets, extracted from BONAPARTE core</description>
- 
+
     <dependencies>
         <dependency>
             <groupId>org.testng</groupId>

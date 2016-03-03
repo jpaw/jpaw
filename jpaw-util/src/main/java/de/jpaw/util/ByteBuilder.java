@@ -59,7 +59,7 @@ public class ByteBuilder implements DataOutput {
             this.charset = charset;
     }
 
-    
+
     public Charset getCharset() {
         return charset;
     }
@@ -67,7 +67,7 @@ public class ByteBuilder implements DataOutput {
     public void setCharset(Charset charset) {
         this.charset = charset;
     }
-    
+
     /** Extend the buffer because we ran out of space. */
     private void createMoreSpace(final int minimumRequired) {
         // allocate the space
@@ -171,7 +171,7 @@ public class ByteBuilder implements DataOutput {
     public String toString() {
         return new String(buffer, 0, currentLength, charset);
     }
-    
+
     /** Provides the contents of this ByteArray to some InputStream. */
     public ByteArrayInputStream asByteArrayInputStream() {
         return new ByteArrayInputStream(buffer, 0, currentLength);
@@ -183,7 +183,7 @@ public class ByteBuilder implements DataOutput {
         final int BUFFER_SIZE = 4096;
         int totalBytes = 0;
         final byte [] tmpBuffer = new byte [BUFFER_SIZE];
-        
+
         while (maxBytes == 0 || totalBytes < maxBytes) {
             int maxNow = maxBytes == 0 ? BUFFER_SIZE : maxBytes - totalBytes;
             if (maxNow > BUFFER_SIZE)
@@ -205,7 +205,7 @@ public class ByteBuilder implements DataOutput {
         return ByteUtil.dump(buffer, startAt, (maxlength > 0 && maxlength < currentLength) ? maxlength : currentLength);
     }
 
-    
+
     ///////////////////////////////////////////////////
     //
     // methods from the DataOutput interface
@@ -213,7 +213,7 @@ public class ByteBuilder implements DataOutput {
     // and does not allow to specify the Exception type as generics parameter
     //
     ///////////////////////////////////////////////////
-    
+
     // append another byte array
     @Deprecated
     public void append(byte [] array) {
@@ -265,7 +265,7 @@ public class ByteBuilder implements DataOutput {
             createMoreSpace(1);
         buffer[currentLength++] = (byte)b;
     }
-    
+
     /** Append a short to the buffer. High endian. */
     @Deprecated
     public void append(short n) {

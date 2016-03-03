@@ -3,12 +3,12 @@ package de.jpaw.util;
 import java.lang.reflect.Field;
 
 public class LibraryPathUtil {
-    
+
     // workaround caching required. See http://blog.cedarsoft.com/2010/11/setting-java-library-path-programmatically/
     public static void setSystemLibraryPath(String path) {
         System.out.println("Setting library path to " + path);
         System.setProperty( "java.library.path", path);
-    
+
         Field fieldSysPath;
         try {
             fieldSysPath = ClassLoader.class.getDeclaredField( "sys_paths" );
@@ -24,7 +24,7 @@ public class LibraryPathUtil {
             throw new RuntimeException(e);
         }
     }
-    
+
     public static void setDefaultSystemLibraryPath() {
         String path = System.getProperty("user.home") + "/lib";
         setSystemLibraryPath(path);

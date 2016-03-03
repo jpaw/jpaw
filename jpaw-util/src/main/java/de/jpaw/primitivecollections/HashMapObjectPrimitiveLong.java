@@ -6,7 +6,7 @@ import de.jpaw.util.IntegralLimits;
 
 /** reverse HashMap to return a primitive long (key) for an Object type key. */
 public class HashMapObjectPrimitiveLong<K> {
-    
+
     private static class Entry<K> {
         final K key;
         long value;
@@ -16,7 +16,7 @@ public class HashMapObjectPrimitiveLong<K> {
             this.key = key;
         }
     }
-    
+
     private int elementCount;                           // current count of entries
     private static final int DEFAULT_SIZE = 16;         // initial size for the default constructor
 
@@ -30,7 +30,7 @@ public class HashMapObjectPrimitiveLong<K> {
     public int size() {
         return elementCount;
     }
-    
+
     /*
      * The internal data structure to hold Entries
      */
@@ -179,7 +179,7 @@ public class HashMapObjectPrimitiveLong<K> {
         elementData[index] = entry;
         return entry;
     }
-    
+
     private void rehash(int capacity) {
         int length = capacity < DEFAULT_SIZE ? DEFAULT_SIZE : capacity << 1;
 

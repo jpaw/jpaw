@@ -12,7 +12,7 @@ import de.jpaw.json.JsonEscaper;
 import de.jpaw.json.JsonParser;
 
 public class TestJsonParser {
-    
+
     @Test
     public void testParseNumObject() throws Exception {
         Assert.assertEquals(new JsonParser("-65656565", true).parseElement(), Integer.valueOf(-65656565));
@@ -20,13 +20,13 @@ public class TestJsonParser {
         Assert.assertEquals(new JsonParser("3.14", false).parseElement(), new BigDecimal("3.14"));
         Assert.assertEquals(new JsonParser("3.14", true).parseElement(), Double.valueOf(3.14));
     }
-    
+
     @Test
     public void testParseStringObject() throws Exception {
         Assert.assertEquals(new JsonParser("\"hello\"", true).parseElement(), "hello");
         Assert.assertNull  (new JsonParser("null",      true).parseElement());
     }
-    
+
     @Test
     public void testParseBooleanObject() throws Exception {
         Assert.assertEquals(new JsonParser("true",  true).parseElement(), Boolean.TRUE);
@@ -42,7 +42,7 @@ public class TestJsonParser {
         map.put("submap", new HashMap<String, Object>());
         return map;
     }
-    
+
     @Test
     public void testParseMap() throws Exception {
         String in = "  { \"what\"   : true, \"why\":\"bla\"   , \"hello\":  +42 , \"none\": null , \"submap\": {} } ";
@@ -50,7 +50,7 @@ public class TestJsonParser {
         System.out.println(in);
         Assert.assertEquals(new JsonParser(in, false).parseObject(), createMap());
     }
-    
+
     @Test
     public void testOutputMap() throws Exception {
         StringBuilder sb = new StringBuilder();
@@ -60,7 +60,7 @@ public class TestJsonParser {
         // {"submap":{},"what":true,"why":"bla","hello":42,"none":null}
         Assert.assertEquals(sb.length(), 60);       // the length should be constant
         System.out.println(sb.toString());
-        
+
         sb.setLength(0);
         out = new BaseJsonComposer(sb, false, false);
         out.outputJsonObject(createMap());

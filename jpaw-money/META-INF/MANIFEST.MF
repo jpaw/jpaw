@@ -3,10 +3,10 @@ Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Bundle-ManifestVersion: 2
 Bundle-Name: jpaw money libraries
 Bundle-SymbolicName: jpaw.money
-Bundle-Version: 1.5.4
+Bundle-Version: 1.5.5
 Bundle-Vendor: Michael Bischoff
 Require-Bundle: jpaw.util
 Export-Package: de.jpaw.algebra,
  de.jpaw.money
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6 
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

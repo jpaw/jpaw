@@ -102,16 +102,16 @@ public final class ImmutableStringEnumSet implements Serializable {
         final char c = enumToken(myEnum).charAt(0);
         final int i = bitmap.indexOf(c);
         if (i < 0)
-            return this;
+            return this;                // token is not part of set => result is identical to this
         final int l = bitmap.length();
         if (l == 1)
-            return EMPTY;  // must be the same then
+            return EMPTY;               // token is part of set and set has a single element only => must be the same then, result is empty
         // true subtract
         if (i == 0)
-            return new ImmutableStringEnumSet(bitmap.substring(1));
+            return new ImmutableStringEnumSet(bitmap.substring(1));     // special case: remove first!
         if (i == l - 1)
-            return new ImmutableStringEnumSet(bitmap.substring(0, l-1));
-        return new ImmutableStringEnumSet(bitmap.substring(0, i-1) + bitmap.substring(i+1));
+            return new ImmutableStringEnumSet(bitmap.substring(0, i));  // special case: remove last!
+        return new ImmutableStringEnumSet(bitmap.substring(0, i) + bitmap.substring(i+1));    // remove something in between
     }
 
     // set operations: and (intersect), or (union), minus (without)

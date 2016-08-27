@@ -2,11 +2,11 @@ package de.jpaw.jsonext;
 
 import java.io.IOException;
 
-import org.joda.time.Instant;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
-import org.joda.time.ReadablePartial;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.Temporal;
 
 import de.jpaw.enums.AbstractByteEnumSet;
 import de.jpaw.enums.AbstractIntEnumSet;
@@ -80,19 +80,19 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
             }
             return;
         }
-        if (obj instanceof Instant) {
-            long millis = ((Instant)obj).getMillis();
-            if (instantInMillis) {
-                appendable.append(Long.toString(millis));
-            } else {
-                appendable.append(Long.toString(millis / 1000));
-                millis %= 1000;
-                if (millis > 0)
-                    appendable.append(String.format(".%03d", millis));
+        if (obj instanceof Temporal) {
+            if (obj instanceof Instant) {
+                Instant inst = (Instant)obj;
+                int millis = inst.getNano() / 1000000;
+                if (instantInMillis) {
+                    appendable.append(Long.toString(millis + 1000L * inst.getEpochSecond()));
+                } else {
+                    appendable.append(Long.toString(inst.getEpochSecond()));
+                    if (millis > 0)
+                        appendable.append(String.format(".%03d", millis));
+                }
+                return;
             }
-            return;
-        }
-        if (obj instanceof ReadablePartial) {
             if (obj instanceof LocalDate) {
                 int [] values = ((LocalDate)obj).getValues();   // 3 values: year, month, day
                 outputAscii(toDay(values));

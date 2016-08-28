@@ -20,6 +20,7 @@ import de.jpaw.enums.TokenizableEnum;
 import de.jpaw.json.BaseJsonComposer;
 
 public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
+    public static String TIMEZONE_SUFFIX_FOR_LOCAL = "";  // set to "Z" if desired, but see http://javarevisited.blogspot.com/2015/03/20-examples-of-date-and-time-api-from-Java8.html
 
     // if instantInMillis is true, Instants will be written as integral values in milliseconds, otherwise as second + optional fractional parts
     // see DATE_TIMESTAMPS_AS_NANOSECONDS in https://github.com/FasterXML/jackson-datatype-jsr310 for similar setting
@@ -37,7 +38,7 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
 
     private String toTimeOfDay(int hour, int minute, int second, int millis) {
         final String fracs = (millis == 0) ? "" : String.format(".%03d", millis);
-        return String.format("%02d:%02d:%02d%s", hour, minute, second, fracs);
+        return String.format("%02d:%02d:%02d%s%s", hour, minute, second, fracs, TIMEZONE_SUFFIX_FOR_LOCAL);
     }
 
     @Override
@@ -103,10 +104,10 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
                 int millis = ld.getNano() / 1000000;
                 outputAscii(String.format("%04d-%02d-%02dT%s", ld.getYear(), ld.getMonth(), ld.getDayOfMonth(),
                         toTimeOfDay(ld.getHour(), ld.getMinute(), ld.getSecond(), millis)
-                ));       // no appended "Z" any more - that would be ZonedDateTime. See http://javarevisited.blogspot.com/2015/03/20-examples-of-date-and-time-api-from-Java8.html
+                ));
                 return;
             }
-            throw new RuntimeException("Cannot transform joda readable partial of type " + obj.getClass().getSimpleName() + " to JSON");
+            throw new RuntimeException("Cannot transform java Temporal of type " + obj.getClass().getSimpleName() + " to JSON");
         }
         super.outputJsonElement(obj);
     }

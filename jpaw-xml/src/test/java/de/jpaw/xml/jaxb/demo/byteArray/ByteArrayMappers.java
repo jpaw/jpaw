@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 import de.jpaw.util.ByteArray;
 import de.jpaw.xml.jaxb.ByteArrayAdapter;
 
@@ -19,5 +19,4 @@ public class ByteArrayMappers {
     @XmlJavaTypeAdapter(ByteArrayAdapter.class)
     public ByteArray array2;
     public LocalDate localDate;
-
 }

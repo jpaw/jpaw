@@ -6,3 +6,7 @@ This files lists the changes, starting after revision 1.2.0:
 1.2.2:
 - bugfix: the hasNext() was not working correctly in the Iterator of EnumSet<String> and XenumSet.
 
+
+1.6.0:
+- switch to Java 8 baseline, replace joda time by java 8 time
+- use existing library for java 8 xml adapters for datetime (https://github.com/migesok/jaxb-java-time-adapters)

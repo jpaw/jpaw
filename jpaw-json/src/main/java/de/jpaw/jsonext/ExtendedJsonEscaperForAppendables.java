@@ -35,15 +35,9 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
         this.instantInMillis = instantInMillis;
     }
 
-    private String toDay(int [] values) {
-        return String.format("%04d-%02d-%02d", values[0], values[1], values[2]);
-    }
-
-    private String toTimeOfDay(int millis) {
-        int tmpValue = millis / 60000; // minutes and hours
-        int frac = millis % 1000;
-        String fracs = (frac == 0) ? "" : String.format(".%03d", frac);
-        return String.format("%02d:%02d:%02d%s", tmpValue / 60, tmpValue % 60, millis / 1000, fracs);
+    private String toTimeOfDay(int hour, int minute, int second, int millis) {
+        final String fracs = (millis == 0) ? "" : String.format(".%03d", millis);
+        return String.format("%02d:%02d:%02d%s", hour, minute, second, fracs);
     }
 
     @Override
@@ -94,17 +88,22 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
                 return;
             }
             if (obj instanceof LocalDate) {
-                int [] values = ((LocalDate)obj).getValues();   // 3 values: year, month, day
-                outputAscii(toDay(values));
+                LocalDate ld = (LocalDate)obj;
+                outputAscii(String.format("%04d-%02d-%02d", ld.getYear(), ld.getMonth(), ld.getDayOfMonth())); 
                 return;
             }
             if (obj instanceof LocalTime) {
-                outputAscii(toTimeOfDay(((LocalTime)obj).getMillisOfDay()));
+                LocalTime ld = (LocalTime)obj;
+                int millis = ld.getNano() / 1000000;
+                outputAscii(toTimeOfDay(ld.getHour(), ld.getMinute(), ld.getSecond(), millis));
                 return;
             }
             if (obj instanceof LocalDateTime) {
-                int [] values = ((LocalDateTime)obj).getValues();   // 4 values: year, month, day, millis
-                outputAscii(toDay(values) + "T" + toTimeOfDay(values[3]) + "Z");
+                LocalDateTime ld = (LocalDateTime)obj;
+                int millis = ld.getNano() / 1000000;
+                outputAscii(String.format("%04d-%02d-%02dT%s", ld.getYear(), ld.getMonth(), ld.getDayOfMonth(),
+                        toTimeOfDay(ld.getHour(), ld.getMinute(), ld.getSecond(), millis)
+                ));       // no appended "Z" any more - that would be ZonedDateTime. See http://javarevisited.blogspot.com/2015/03/20-examples-of-date-and-time-api-from-Java8.html
                 return;
             }
             throw new RuntimeException("Cannot transform joda readable partial of type " + obj.getClass().getSimpleName() + " to JSON");

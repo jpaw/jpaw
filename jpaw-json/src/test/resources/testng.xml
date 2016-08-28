@@ -1,0 +1,5 @@
+<suite name="Parsers">
+    <parameter name="file" value="rap"/>
+    <test name="RAP example">
+    </test>
+</suite>

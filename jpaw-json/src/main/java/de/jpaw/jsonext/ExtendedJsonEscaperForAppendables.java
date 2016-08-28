@@ -90,7 +90,7 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
             }
             if (obj instanceof LocalDate) {
                 LocalDate ld = (LocalDate)obj;
-                outputAscii(String.format("%04d-%02d-%02d", ld.getYear(), ld.getMonth(), ld.getDayOfMonth())); 
+                outputAscii(String.format("%04d-%02d-%02d", ld.getYear(), ld.getMonthValue(), ld.getDayOfMonth())); 
                 return;
             }
             if (obj instanceof LocalTime) {
@@ -102,7 +102,7 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
             if (obj instanceof LocalDateTime) {
                 LocalDateTime ld = (LocalDateTime)obj;
                 int millis = ld.getNano() / 1000000;
-                outputAscii(String.format("%04d-%02d-%02dT%s", ld.getYear(), ld.getMonth(), ld.getDayOfMonth(),
+                outputAscii(String.format("%04d-%02d-%02dT%s", ld.getYear(), ld.getMonthValue(), ld.getDayOfMonth(),
                         toTimeOfDay(ld.getHour(), ld.getMinute(), ld.getSecond(), millis)
                 ));
                 return;

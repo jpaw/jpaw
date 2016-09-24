@@ -1,11 +1,13 @@
 package de.jpaw.enumsets.tests
 
 import de.jpaw.enums.AbstractIntEnumSet
-import de.jpaw.enumsets.SetOfEnum
-import org.testng.annotations.Test
 import de.jpaw.enums.AbstractLongEnumSet
 import de.jpaw.enums.AbstractStringEnumSet
-import static extension org.testng.Assert.*
+import de.jpaw.enums.EnumSetMarker
+import de.jpaw.enumsets.SetOfEnum
+import org.testng.annotations.Test
+
+import static org.testng.Assert.*
 
 enum Weekday {
     MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
@@ -21,13 +23,22 @@ enum Weekday {
 //}
 
 @SetOfEnum
-class SetOfWeekdays extends AbstractIntEnumSet<Weekday> {}
+class SetOfWeekdays extends AbstractIntEnumSet<Weekday> {
+    override public EnumSetMarker ret$MutableClone(boolean deepCopy, boolean unfreezeCollections) { return null; }
+    override public EnumSetMarker ret$FrozenClone() { return null; }
+}
 
 @SetOfEnum
-class LongSetOfWeekdays extends AbstractLongEnumSet<Weekday> {}
+class LongSetOfWeekdays extends AbstractLongEnumSet<Weekday> {
+    override public EnumSetMarker ret$MutableClone(boolean deepCopy, boolean unfreezeCollections) { return null; }
+    override public EnumSetMarker ret$FrozenClone() { return null; }
+}
 
 @SetOfEnum
-class StringSetOfWeekdays extends AbstractStringEnumSet<WeekdayAlpha> {}
+class StringSetOfWeekdays extends AbstractStringEnumSet<WeekdayAlpha> {
+    override public EnumSetMarker ret$MutableClone(boolean deepCopy, boolean unfreezeCollections) { return null; }
+    override public EnumSetMarker ret$FrozenClone() { return null; }
+}
 
 
 class SetOfEnumsTest {

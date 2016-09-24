@@ -16,6 +16,7 @@ public abstract class AbstractShortEnumSet<E extends Enum<E>> extends AbstractCo
     // allow to make the set immutable
     private transient boolean _was$Frozen = false;      // current state of this instance
 
+    @Override
     public final boolean was$Frozen() {
         return _was$Frozen;
     }
@@ -23,6 +24,7 @@ public abstract class AbstractShortEnumSet<E extends Enum<E>> extends AbstractCo
         if (_was$Frozen)
             throw new RuntimeException("Setter called for frozen instance of class " + getClass().getName());
     }
+    @Override
     public void freeze() {
         _was$Frozen = true;
     }

@@ -55,6 +55,16 @@ public class TestEnumSetConversion {
         public Iterator<ByteTestEnum> iterator() {
             throw new UnsupportedOperationException();
         }
+
+        @Override
+        public EnumSetMarker ret$MutableClone(boolean deepCopy, boolean unfreezeCollections) {
+            return null;
+        }
+
+        @Override
+        public EnumSetMarker ret$FrozenClone() {
+            return null;
+        }
     }
 
     private static class ShortTestEnumset extends AbstractShortEnumSet<ShortTestEnum> {
@@ -72,6 +82,16 @@ public class TestEnumSetConversion {
         @Override
         public Iterator<ShortTestEnum> iterator() {
             throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public EnumSetMarker ret$MutableClone(boolean deepCopy, boolean unfreezeCollections) {
+            return null;
+        }
+
+        @Override
+        public EnumSetMarker ret$FrozenClone() {
+            return null;
         }
     }
 
@@ -91,6 +111,16 @@ public class TestEnumSetConversion {
         public Iterator<IntTestEnum> iterator() {
             throw new UnsupportedOperationException();
         }
+
+        @Override
+        public EnumSetMarker ret$MutableClone(boolean deepCopy, boolean unfreezeCollections) {
+            return null;
+        }
+
+        @Override
+        public EnumSetMarker ret$FrozenClone() {
+            return null;
+        }
     }
 
     private static class LongTestEnumset extends AbstractLongEnumSet<LongTestEnum> {
@@ -108,6 +138,16 @@ public class TestEnumSetConversion {
         @Override
         public Iterator<LongTestEnum> iterator() {
             throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public EnumSetMarker ret$MutableClone(boolean deepCopy, boolean unfreezeCollections) {
+            return null;
+        }
+
+        @Override
+        public EnumSetMarker ret$FrozenClone() {
+            return null;
         }
     }
 

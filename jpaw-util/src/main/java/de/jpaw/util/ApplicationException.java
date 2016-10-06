@@ -31,7 +31,7 @@ import java.util.Map;
  *
  */
 
-public class ApplicationException extends Exception {
+public class ApplicationException extends RuntimeException {
     private static final long serialVersionUID = 1122421467960337766L;
 
 

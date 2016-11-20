@@ -1,6 +1,7 @@
 package de.jpaw.enums;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -127,9 +128,8 @@ public class XEnumFactory<E extends AbstractXEnumBase<E>> {
         return tokenToXEnum.size();
     }
 
-    /** Returns a copy of the list of values, as in enm.values(). */
-    @SuppressWarnings("unchecked")
-    public E [] values() {
-        return (E[])tokenToXEnum.values().toArray();  // cast should not be required...
+    /** Returns a copy of the list of values. */
+    public List<E> valuesAsList() {
+        return Collections.unmodifiableList(new ArrayList<E>(tokenToXEnum.values()));  // cast should not be required...
     }
 }

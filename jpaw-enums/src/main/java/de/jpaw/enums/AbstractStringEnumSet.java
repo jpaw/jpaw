@@ -1,6 +1,6 @@
 package de.jpaw.enums;
 
-import java.io.Serializable;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * The class is not thread safe. Implementations which intend to perform parallel modification must use external locking mechanisms.
  * Further requirements of this implementation:
  * All tokens must be of length 1. */
-public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends AbstractStringAnyEnumSet<E> implements Serializable {
+public abstract class AbstractStringEnumSet<E extends Enum<E> & TokenizableEnum> extends AbstractStringAnyEnumSet<E> implements GenericEnumSetMarker<E> {
     private static final long serialVersionUID = 34398390989170000L + 99;
 
     protected AbstractStringEnumSet() {
@@ -22,6 +22,16 @@ public abstract class AbstractStringEnumSet<E extends TokenizableEnum> extends A
     @Override
     public boolean add(E e) {
         return addEnum(e);
+    }
+
+    /** Let this instance have the same contents as that. */
+    @Override
+    public void assign(Collection<E> that) {
+        clear();
+        if (that != null) {
+            for (E o : that)
+                add(o);
+        }
     }
 
     /** Iterator which returns the elements of the set in order of tokens sorted ascending. */

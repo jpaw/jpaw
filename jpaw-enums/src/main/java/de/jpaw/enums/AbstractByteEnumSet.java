@@ -1,33 +1,14 @@
 package de.jpaw.enums;
 
-import java.io.Serializable;
-import java.util.AbstractCollection;
 import java.util.Iterator;
-import java.util.Set;
 
 /** An alternate implementation of EnumSet, but with the ability to obtain the resulting bitmap, for either transfer or storing in a database.
  * The underlying object is a byte, therefore the maximum number of enum tokens is 7 (as we don't want negative values). */
-public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractCollection<E> implements Set<E>, Serializable, EnumSetMarker {
+public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractFreezableEnumSet<E> {
     private static final long serialVersionUID = 34398390989170000L + 7;
     private static final byte BIT = 1;
     public static final int MAX_TOKENS = 7;
     private byte bitmap;
-
-    // allow to make the set immutable
-    private transient boolean _was$Frozen = false;      // current state of this instance
-
-    @Override
-    public final boolean was$Frozen() {
-        return _was$Frozen;
-    }
-    protected final void verify$Not$Frozen() {
-        if (_was$Frozen)
-            throw new RuntimeException("Setter called for frozen instance of class " + getClass().getName());
-    }
-    @Override
-    public void freeze() {
-        _was$Frozen = true;
-    }
 
     /** This method returns the number of instances (max Ordinal + 1), the name is misleading!!!!
      * This definition has been made to avoid a negative return code in the case of empty enums. */

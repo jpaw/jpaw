@@ -4,12 +4,12 @@
     <parent>
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-se-parent</artifactId>
-        <version>1.1.2</version>
+        <version>1.1.3</version>
         <relativePath/>
     </parent>
 
     <artifactId>jpaw-base</artifactId>
-    <version>1.5.11</version>
+    <version>1.5.12</version>
     <packaging>pom</packaging>
 
     <description>Common configuration settings for all jpaw basic / utility projects</description>
@@ -17,6 +17,10 @@
     <properties>
         <poi.version>3.14</poi.version>                 <!-- http://poi.apache.org/ UPTODATE 2016-05-01 -->
     </properties>
+
+    <scm>
+        <connection>scm:git:https://github.com/jpaw/jpaw.git</connection>
+    </scm>
 
     <build>
         <pluginManagement>
@@ -88,6 +92,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

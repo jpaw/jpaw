@@ -78,8 +78,9 @@ public final class BonaMoney implements Serializable, AbelianGroup<BonaMoney> {
         }
         // Plausibility checks. Throw an exception if anything looks weird, better than trying to find rounding problems later.
         if (amount == null) {
-            if (components.length == 0)
-                throw new MonetaryException(MonetaryException.UNDEFINED_AMOUNTS);
+            // length == 0 is checked before
+//            if (components.length == 0)
+//                throw new MonetaryException(MonetaryException.UNDEFINED_AMOUNTS);
             // set gross to sum
             amount = sum;
         } else {

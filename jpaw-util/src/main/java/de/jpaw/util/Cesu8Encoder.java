@@ -8,7 +8,7 @@ public class Cesu8Encoder {
         final int len = s.length();
         for (int i = 0; i < len; ++i) {
             final char c = s.charAt(i);
-            bytesNeeded += c < 2048 ? (c < 128 ? 1 : 2) : (c < 65536 ? 3 : 4);
+            bytesNeeded += c < 2048 ? (c < 128 ? 1 : 2) : 3;
         }
         final byte [] buff = new byte [bytesNeeded];
         int j = -1;
@@ -22,12 +22,7 @@ public class Cesu8Encoder {
                     buff[++j] = (byte)(0x80 + (c & 0x3f));
                 }
             } else {
-                if (c < 65536) {
-                    buff[++j] = (byte) (0xe0 + (c >> 12));
-                } else {
-                    buff[++j] = (byte) (0xf0 + (c >> 18));
-                    buff[++j] = (byte) (0x80 + ((c >> 12) & 0x3f));
-                }
+                buff[++j] = (byte) (0xe0 + (c >> 12));
                 buff[++j] = (byte) (0x80 + ((c >> 6) & 0x3f));
                 buff[++j] = (byte) (0x80 + (c & 0x3f));
             }
@@ -49,12 +44,7 @@ public class Cesu8Encoder {
                     buff[++j] = (byte)(0x80 + (c & 0x3f));
                 }
             } else {
-                if (c < 65536) {
-                    buff[++j] = (byte) (0xe0 + (c >> 12));
-                } else {
-                    buff[++j] = (byte) (0xf0 + (c >> 18));
-                    buff[++j] = (byte) (0x80 + ((c >> 12) & 0x3f));
-                }
+                buff[++j] = (byte) (0xe0 + (c >> 12));
                 buff[++j] = (byte) (0x80 + ((c >> 6) & 0x3f));
                 buff[++j] = (byte) (0x80 + (c & 0x3f));
             }
@@ -68,7 +58,7 @@ public class Cesu8Encoder {
         final int len = src.length;
         for (int i = 0; i < len; ++i) {
             final char c = src[i];
-            bytesNeeded += c < 2048 ? (c < 128 ? 1 : 2) : (c < 65536 ? 3 : 4);
+            bytesNeeded += c < 2048 ? (c < 128 ? 1 : 2) : 3;
         }
         final byte [] buff = new byte [bytesNeeded];
         int j = -1;
@@ -82,12 +72,7 @@ public class Cesu8Encoder {
                     buff[++j] = (byte)(0x80 + (c & 0x3f));
                 }
             } else {
-                if (c < 65536) {
-                    buff[++j] = (byte) (0xe0 + (c >> 12));
-                } else {
-                    buff[++j] = (byte) (0xf0 + (c >> 18));
-                    buff[++j] = (byte) (0x80 + ((c >> 12) & 0x3f));
-                }
+                buff[++j] = (byte) (0xe0 + (c >> 12));
                 buff[++j] = (byte) (0x80 + ((c >> 6) & 0x3f));
                 buff[++j] = (byte) (0x80 + (c & 0x3f));
             }

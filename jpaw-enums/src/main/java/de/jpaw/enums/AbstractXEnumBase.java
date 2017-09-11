@@ -67,21 +67,23 @@ public abstract class AbstractXEnumBase<E extends AbstractXEnumBase<E>> implemen
         return _factory;
     }
 
-    // special hashCode implementation which is compatible with the underlying enum's implementation
+    /** Special hashCode implementation which is compatible with the underlying enum's implementation. */
     @Override
     public int hashCode() {
         return _enum.hashCode();
     }
-    // special equals implementation which is compatible with the underlying enum's implementation
-    // it is not symmetric for the special case of comparing xenum with enum
+
+    /** xenum equals delegates to the underlying enum identity. */
     @Override
     public boolean equals(Object _o) {
         if (_o == null)
             return false;
-        if (_o instanceof Enum) {
-            return this._enum.equals(_o);       // special case, comparing an xenum to an enum.
-        }
-        // must be xenums, or the comparion os false
-        return this.getClass() == _o.getClass() && this == _o;  // both have a singleton instance per value
+//        if (_o instanceof Enum) {
+//            return this._enum.equals(_o);       // special case, comparing an xenum to an enum. => disabled with 1.5.20 because it violates the equals() symmetry requirement
+//        }
+        // must be xenums, or the comparison is false
+        if (!(_o instanceof AbstractXEnumBase))
+            return false;
+        return _enum == ((AbstractXEnumBase<?>)_o)._enum;
     }
 }

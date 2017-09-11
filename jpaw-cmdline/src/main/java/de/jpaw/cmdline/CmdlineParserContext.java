@@ -36,7 +36,6 @@ public class CmdlineParserContext {
     private static final Logger LOG = LoggerFactory.getLogger(CmdlineParserContext.class);
     private static volatile CmdlineParserContext lastContext = null;
 
-    private final Integer lock = 636238237;
     private final SimpleJSAP ctx;
     private JSAPResult result = null;
 
@@ -74,7 +73,7 @@ public class CmdlineParserContext {
 
     public CmdlineParserContext addFlaggedOption(String longOption, StringParser parser, String defaultValue, boolean isRequired,
             char shortOption, String help) {
-        synchronized (lock) {
+        synchronized (this) {
             ParserAttribs p = options.get(longOption);
             if (p == null) {
                 if (shortOption != JSAP.NO_SHORTFLAG) {
@@ -113,7 +112,7 @@ public class CmdlineParserContext {
     }
 
     public CmdlineParserContext addSwitch(String longOption, char shortOption, String help) {
-        synchronized (lock) {
+        synchronized (this) {
             ParserAttribs p = options.get(longOption);
             if (p == null) {
                 if (shortOption != JSAP.NO_SHORTFLAG) {

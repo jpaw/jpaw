@@ -6,5 +6,5 @@ This runs the annotation processor.
 
 Invocation is done via
 
-java -Djava.library.path=$HOME/lib -jar target/fixedpoint-benchmarks.jar -i 3 -f 3 -wf 1 -wi 3
+java -Djava.library.path=$HOME/lib -jar target/jpaw-benchmarks.jar -i 3 -f 3 -wf 1 -wi 3
 (settings may vary)

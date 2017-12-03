@@ -51,32 +51,4 @@ public class Cesu8Encoder {
         }
         return Arrays.copyOf(buff, j+1);    // create an array of appropriate length
     }
-    /** Same method as first, but stealing the array. */
-    public static byte [] encodeToCesu8WithUnsafe(final String s) {
-        int bytesNeeded = 0;
-        final char [] src = UnsafeUtil.getStringBuffer(s);
-        final int len = src.length;
-        for (int i = 0; i < len; ++i) {
-            final char c = src[i];
-            bytesNeeded += c < 2048 ? (c < 128 ? 1 : 2) : 3;
-        }
-        final byte [] buff = new byte [bytesNeeded];
-        int j = -1;
-        for (int i = 0; i < len; ++i) {
-            final char c = src[i];
-            if (c < 2048) {
-                if (c < 128) {
-                    buff[++j] = (byte)c;
-                } else {
-                    buff[++j] = (byte)(0xc0 + (c >> 6));
-                    buff[++j] = (byte)(0x80 + (c & 0x3f));
-                }
-            } else {
-                buff[++j] = (byte) (0xe0 + (c >> 12));
-                buff[++j] = (byte) (0x80 + ((c >> 6) & 0x3f));
-                buff[++j] = (byte) (0x80 + (c & 0x3f));
-            }
-        }
-        return buff;
-    }
 }

@@ -69,12 +69,4 @@ public class StringShortConversion {
     public byte [] encodeCesu2() {
         return Cesu8Encoder.encodeToCesu8Copy(sampleText);
     }
-    @Benchmark
-    public byte [] encodeCesuWithUnsafe() {
-        return Cesu8Encoder.encodeToCesu8WithUnsafe(sampleText);
-    }
-//    @Benchmark
-//    public byte [] encodeCesuDirect() {
-//        return Cesu8DirectEncoder.encodeToCesu8(sampleText);
-//    }
 }

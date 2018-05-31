@@ -24,27 +24,27 @@ enum Weekday {
 
 @SetOfEnum
 class SetOfWeekdays extends AbstractIntEnumSet<Weekday> {
-    override public EnumSetMarker ret$MutableClone(boolean deepCopy, boolean unfreezeCollections) { return null; }
-    override public EnumSetMarker ret$FrozenClone() { return null; }
+    override EnumSetMarker ret$MutableClone(boolean deepCopy, boolean unfreezeCollections) { return null; }
+    override EnumSetMarker ret$FrozenClone() { return null; }
 }
 
 @SetOfEnum
 class LongSetOfWeekdays extends AbstractLongEnumSet<Weekday> {
-    override public EnumSetMarker ret$MutableClone(boolean deepCopy, boolean unfreezeCollections) { return null; }
-    override public EnumSetMarker ret$FrozenClone() { return null; }
+    override EnumSetMarker ret$MutableClone(boolean deepCopy, boolean unfreezeCollections) { return null; }
+    override EnumSetMarker ret$FrozenClone() { return null; }
 }
 
 @SetOfEnum
 class StringSetOfWeekdays extends AbstractStringEnumSet<WeekdayAlpha> {
-    override public EnumSetMarker ret$MutableClone(boolean deepCopy, boolean unfreezeCollections) { return null; }
-    override public EnumSetMarker ret$FrozenClone() { return null; }
+    override EnumSetMarker ret$MutableClone(boolean deepCopy, boolean unfreezeCollections) { return null; }
+    override EnumSetMarker ret$FrozenClone() { return null; }
 }
 
 
 class SetOfEnumsTest {
 
     @Test
-    def public void testSetOfEnums() {
+    def void testSetOfEnums() {
         val mySet = SetOfWeekdays.of(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY)
 
         for (d : mySet)
@@ -53,7 +53,7 @@ class SetOfEnumsTest {
     }
 
     @Test
-    def public void testLongSetOfEnums() {
+    def void testLongSetOfEnums() {
         val mySet = LongSetOfWeekdays.of(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY)
 
         for (d : mySet)
@@ -62,7 +62,7 @@ class SetOfEnumsTest {
     }
 
     @Test
-    def public void testStringSetOfEnums() {
+    def void testStringSetOfEnums() {
         val mySet = StringSetOfWeekdays.of(WeekdayAlpha.MONDAY, WeekdayAlpha.WEDNESDAY, WeekdayAlpha.FRIDAY)
 
         for (d : mySet)
@@ -72,7 +72,7 @@ class SetOfEnumsTest {
 
 
     @Test
-    def public void testLongComplement() {
+    def void testLongComplement() {
         val mySet = LongSetOfWeekdays.of(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY)
 
         mySet.complement
@@ -86,7 +86,7 @@ class SetOfEnumsTest {
 
 
     @Test
-    def public void testLongXor() {
+    def void testLongXor() {
         val flipsInTheMorning = LongSetOfWeekdays.of(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY)
         val flipsInTheEvening = LongSetOfWeekdays.of(Weekday.SUNDAY, Weekday.FRIDAY, Weekday.SATURDAY)
 
@@ -100,7 +100,7 @@ class SetOfEnumsTest {
     }
 
     @Test
-    def public void testXor() {
+    def void testXor() {
         val flipsInTheMorning = SetOfWeekdays.of(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY)
         val flipsInTheEvening = SetOfWeekdays.of(Weekday.SUNDAY, Weekday.FRIDAY, Weekday.SATURDAY)
 

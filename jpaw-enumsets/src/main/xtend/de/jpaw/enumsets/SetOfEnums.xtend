@@ -94,7 +94,7 @@ class SetOfEnumProcessor extends AbstractClassProcessor {
                 super(bitmap);
             ''']
         ]
-        cls.addMethod("of") [
+        cls.addMethod("ofTokens") [
             visibility = Visibility::PUBLIC
             returnType = cls.newTypeReference
             addParameter("args", newArrayTypeReference(enumType))

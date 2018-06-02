@@ -45,7 +45,7 @@ public final class ImmutableStringEnumSet implements Serializable {
         bitmap = enumToken(myEnum);
     }
 
-    public static ImmutableStringEnumSet of(TokenizableEnum ... enums) {
+    public static ImmutableStringEnumSet ofTokens(TokenizableEnum ... enums) {
         return new ImmutableStringEnumSet(AbstractStringAnyEnumSet.bitmapOf(enums));
     }
 

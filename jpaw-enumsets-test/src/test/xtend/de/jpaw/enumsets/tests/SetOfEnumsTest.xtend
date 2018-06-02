@@ -45,7 +45,7 @@ class SetOfEnumsTest {
 
     @Test
     def void testSetOfEnums() {
-        val mySet = SetOfWeekdays.of(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY)
+        val mySet = SetOfWeekdays.ofTokens(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY)
 
         for (d : mySet)
             println('''«d.name» is in the set''')
@@ -54,7 +54,7 @@ class SetOfEnumsTest {
 
     @Test
     def void testLongSetOfEnums() {
-        val mySet = LongSetOfWeekdays.of(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY)
+        val mySet = LongSetOfWeekdays.ofTokens(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY)
 
         for (d : mySet)
             println('''«d.name» is in the set''')
@@ -63,7 +63,7 @@ class SetOfEnumsTest {
 
     @Test
     def void testStringSetOfEnums() {
-        val mySet = StringSetOfWeekdays.of(WeekdayAlpha.MONDAY, WeekdayAlpha.WEDNESDAY, WeekdayAlpha.FRIDAY)
+        val mySet = StringSetOfWeekdays.ofTokens(WeekdayAlpha.MONDAY, WeekdayAlpha.WEDNESDAY, WeekdayAlpha.FRIDAY)
 
         for (d : mySet)
             println('''«d.name» is in the set''')
@@ -73,7 +73,7 @@ class SetOfEnumsTest {
 
     @Test
     def void testLongComplement() {
-        val mySet = LongSetOfWeekdays.of(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY)
+        val mySet = LongSetOfWeekdays.ofTokens(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY)
 
         mySet.complement
 
@@ -87,8 +87,8 @@ class SetOfEnumsTest {
 
     @Test
     def void testLongXor() {
-        val flipsInTheMorning = LongSetOfWeekdays.of(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY)
-        val flipsInTheEvening = LongSetOfWeekdays.of(Weekday.SUNDAY, Weekday.FRIDAY, Weekday.SATURDAY)
+        val flipsInTheMorning = LongSetOfWeekdays.ofTokens(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY)
+        val flipsInTheEvening = LongSetOfWeekdays.ofTokens(Weekday.SUNDAY, Weekday.FRIDAY, Weekday.SATURDAY)
 
         val changeMidnightToMidnight = new LongSetOfWeekdays();
         changeMidnightToMidnight.exactlyOneOf(flipsInTheMorning)
@@ -96,13 +96,13 @@ class SetOfEnumsTest {
 
         assertEquals(changeMidnightToMidnight.size, 4)
 
-        assertEquals(changeMidnightToMidnight, LongSetOfWeekdays.of(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.SUNDAY, Weekday.SATURDAY))
+        assertEquals(changeMidnightToMidnight, LongSetOfWeekdays.ofTokens(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.SUNDAY, Weekday.SATURDAY))
     }
 
     @Test
     def void testXor() {
-        val flipsInTheMorning = SetOfWeekdays.of(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY)
-        val flipsInTheEvening = SetOfWeekdays.of(Weekday.SUNDAY, Weekday.FRIDAY, Weekday.SATURDAY)
+        val flipsInTheMorning = SetOfWeekdays.ofTokens(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.FRIDAY)
+        val flipsInTheEvening = SetOfWeekdays.ofTokens(Weekday.SUNDAY, Weekday.FRIDAY, Weekday.SATURDAY)
 
         val changeMidnightToMidnight = new SetOfWeekdays();
         changeMidnightToMidnight.exactlyOneOf(flipsInTheMorning)
@@ -110,7 +110,7 @@ class SetOfEnumsTest {
 
         assertEquals(changeMidnightToMidnight.size, 4)
 
-        assertEquals(changeMidnightToMidnight, SetOfWeekdays.of(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.SUNDAY, Weekday.SATURDAY))
+        assertEquals(changeMidnightToMidnight, SetOfWeekdays.ofTokens(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.SUNDAY, Weekday.SATURDAY))
     }
 
 }

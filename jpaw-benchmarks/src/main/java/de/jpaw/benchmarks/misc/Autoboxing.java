@@ -28,7 +28,7 @@ import org.openjdk.jmh.annotations.State;
 public class Autoboxing {
     private static final int NUM = 1000;
 
-    public static int [] a;
+    public int [] a;
 
     @Setup
     public void init() {

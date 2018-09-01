@@ -6,6 +6,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -137,14 +138,14 @@ public class BatchReaderPoi implements Contributor, BatchFileReader<String> {
                 break;
 
             // break criteria if indicator column is empty
-            if (whileCol > 0 && row.getCell(whileCol - 1, Row.RETURN_BLANK_AS_NULL) == null)
+            if (whileCol > 0 && row.getCell(whileCol - 1, MissingCellPolicy.RETURN_BLANK_AS_NULL) == null)
                 break;   // end of data
 
             int last = lastCol == 0 ? row.getLastCellNum() : lastCol;
-            buff.append(asString(row.getCell(firstCol - 1, Row.RETURN_BLANK_AS_NULL)));
+            buff.append(asString(row.getCell(firstCol - 1, MissingCellPolicy.RETURN_BLANK_AS_NULL)));
             for (int i = firstCol; i < last; ++i) {
                 buff.append(delimiter);
-                buff.append(asString(row.getCell(i, Row.RETURN_BLANK_AS_NULL)));
+                buff.append(asString(row.getCell(i, MissingCellPolicy.RETURN_BLANK_AS_NULL)));
             }
             buff.append('\n');
             whereToPut.accept(buff.toString());

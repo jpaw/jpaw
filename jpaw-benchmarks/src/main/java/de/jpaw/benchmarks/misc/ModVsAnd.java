@@ -31,9 +31,9 @@ import org.openjdk.jmh.infra.Blackhole;
 public class ModVsAnd {
     private static final int NUM = 1000;
 
-    public static int [] a;
-    public static int [] b;
-    public static int [] c;
+    public int [] a;
+    public int [] b;
+    public int [] c;
 
 
     @Setup

@@ -1,6 +1,6 @@
 package de.jpaw.batch.integrationtests;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import de.jpaw.batch.endpoints.BatchReaderRepeater;
 import de.jpaw.batch.endpoints.BatchWriterDevNull;

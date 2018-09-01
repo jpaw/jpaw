@@ -5,7 +5,7 @@ import java.util.Arrays;
 import de.jpaw.util.Base64;
 import de.jpaw.util.ByteBuilder;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 public class Base64Test {
 

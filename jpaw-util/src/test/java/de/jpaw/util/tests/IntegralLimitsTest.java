@@ -1,6 +1,7 @@
 package de.jpaw.util.tests;
 
-import org.testng.annotations.Test;
+
+import org.junit.Test;
 
 import de.jpaw.util.IntegralLimits;
 

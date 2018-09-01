@@ -2,8 +2,8 @@ package de.jpaw.util.tests;
 
 import java.io.UnsupportedEncodingException;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 import de.jpaw.util.Cesu8Encoder;
 
@@ -16,7 +16,7 @@ public class UTF8EncoderTest {
             String testString = "A" + Character.valueOf((char)i) + "O";
             byte [] fromString = testString.getBytes("UTF-8");
             byte [] myOwn = Cesu8Encoder.encodeToCesu8(testString);
-            Assert.assertEquals(fromString, myOwn, "for index " + i);
+            Assert.assertArrayEquals("for index " + i, fromString, myOwn);
         }
     }
 

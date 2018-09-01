@@ -5,7 +5,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.testng.annotations.Test;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import de.jpaw.batch.endpoints.BatchReaderRepeater;
 import de.jpaw.batch.endpoints.BatchReaderXmlFile;
@@ -16,6 +18,7 @@ import de.jpaw.batch.impl.BatchExecutorUnthreaded;
 import de.jpaw.batch.processors.BatchProcessorFactoryIdentity;
 import de.jpaw.batch.processors.BatchProcessorFactoryToXml;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestXmlWriter {
     static private final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     static private final String HEADER = XML_HEADER + "<Data>\n";
@@ -64,7 +67,7 @@ public class TestXmlWriter {
     }
 
 
-    @Test(dependsOnMethods={"testXmlInWriter"})
+    @Test
     public void testXmlReader() throws Exception {
         String [] cmdline = { "-i", "/tmp/data1.xml.gz" };
         JAXBContext context = JAXBContext.newInstance(DummyClass.class);

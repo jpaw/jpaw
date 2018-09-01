@@ -3,7 +3,7 @@ package de.jpaw.icu.tests;
 import java.util.List;
 import java.util.Locale;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import com.ibm.icu.util.ULocale;
 

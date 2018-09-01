@@ -1,23 +1,33 @@
 package de.jpaw.util.tests;
 
-import org.testng.Assert;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
+
+import java.util.Arrays;
+import java.util.Collection;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
 
 import de.jpaw.api.iso.CountryKeyConverter;
 import de.jpaw.api.iso.CurrencyKeyConverter;
 import de.jpaw.api.iso.LanguageKeyConverter;
 import de.jpaw.api.iso.impl.JavaCurrencyDataProvider;
 
+@RunWith(Parameterized.class)
 public class KeyConverterTest {
-
-    @DataProvider(name = "booleans")
-    public Object[][] createData() {
-        return new Object[][] { { Boolean.FALSE }, { Boolean.TRUE }, };
+    @Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][] { { Boolean.FALSE }, { Boolean.TRUE } });
     }
 
-    @Test(dataProvider = "booleans")
-    public void testA2ToInt(boolean initCache) throws Exception {
+    @Parameter
+    public boolean initCache;
+
+    @Test
+    public void testA2ToInt() throws Exception {
         if (initCache)
             CountryKeyConverter.populateCache();
         Assert.assertEquals(CountryKeyConverter.countryCodeA2ToInt("DE"), 5);
@@ -25,8 +35,8 @@ public class KeyConverterTest {
         Assert.assertEquals(CountryKeyConverter.countryCodeA2ToInt("XX"), 1);
     }
 
-    @Test(dataProvider = "booleans")
-    public void testIntToA2(boolean initCache) throws Exception {
+    @Test
+    public void testIntToA2() throws Exception {
         if (initCache)
             CountryKeyConverter.populateCache();
         Assert.assertEquals(CountryKeyConverter.intToCountryCodeA2(5), "DE");
@@ -34,8 +44,8 @@ public class KeyConverterTest {
         Assert.assertEquals(CountryKeyConverter.intToCountryCodeA2(1), "XX");
     }
 
-    @Test(dataProvider = "booleans")
-    public void testA3ToInt(boolean initCache) throws Exception {
+    @Test
+    public void testA3ToInt() throws Exception {
         if (initCache)
             CurrencyKeyConverter.populateCache(JavaCurrencyDataProvider.instance);
         Assert.assertEquals(CurrencyKeyConverter.currencyCodeA3ToInt("USD"), 2);
@@ -43,8 +53,8 @@ public class KeyConverterTest {
         Assert.assertEquals(CurrencyKeyConverter.currencyCodeA3ToInt("XXX"), 1);
     }
 
-    @Test(dataProvider = "booleans")
-    public void testIntToA3(boolean initCache) throws Exception {
+    @Test
+    public void testIntToA3() throws Exception {
         if (initCache)
             CurrencyKeyConverter.populateCache(JavaCurrencyDataProvider.instance);
         Assert.assertEquals(CurrencyKeyConverter.intToCurrencyCodeA3(2), "USD");
@@ -52,8 +62,8 @@ public class KeyConverterTest {
         Assert.assertEquals(CurrencyKeyConverter.intToCurrencyCodeA3(1), "XXX");
     }
 
-    @Test(dataProvider = "booleans")
-    public void testLangToInt(boolean initCache) throws Exception {
+    @Test
+    public void testLangToInt() throws Exception {
         if (initCache)
             LanguageKeyConverter.populateCache();
         Assert.assertEquals(LanguageKeyConverter.languageCodeToInt("es"), 2);               // frequent
@@ -61,8 +71,8 @@ public class KeyConverterTest {
         Assert.assertEquals(LanguageKeyConverter.languageCodeToInt("xx"), 1);               // default, smallest value
     }
 
-    @Test(dataProvider = "booleans")
-    public void testIntToLang(boolean initCache) throws Exception {
+    @Test
+    public void testIntToLang() throws Exception {
         if (initCache)
             LanguageKeyConverter.populateCache();
         Assert.assertEquals(LanguageKeyConverter.intToLanguageCode(2), "es");

@@ -1,7 +1,7 @@
 package de.jpaw.util.tests;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 import de.jpaw.util.CharTestsASCII;
 

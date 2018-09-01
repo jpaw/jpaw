@@ -1,6 +1,6 @@
 package de.jpaw.batch.integrationtests;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import de.jpaw.batch.examples.BatchTextFileCopyMT;
 import de.jpaw.batch.examples.BatchTextFileCopyST;

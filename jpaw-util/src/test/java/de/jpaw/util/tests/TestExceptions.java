@@ -2,7 +2,7 @@ package de.jpaw.util.tests;
 
 import java.io.IOException;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import de.jpaw.util.ExceptionUtil;
 
@@ -17,9 +17,9 @@ public class TestExceptions {
             throw new RuntimeException("intermediate cause", e);
         }
     }
-    
+
     @Test
-    void exTest() {
+    public void exTest() {
         try {
             f2();
         } catch (Exception e) {

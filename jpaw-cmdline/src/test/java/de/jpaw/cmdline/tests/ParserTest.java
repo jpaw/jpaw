@@ -1,7 +1,7 @@
 package de.jpaw.cmdline.tests;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 import com.martiansoftware.jsap.JSAP;
 
@@ -19,8 +19,8 @@ public class ParserTest {
 
         ctx.parse("-v");
 
-        Assert.assertEquals(ctx.getBoolean("verbose"), true);
-        Assert.assertEquals(ctx.getString("in-encoding"), "utf-47");
+        Assert.assertEquals(true, ctx.getBoolean("verbose"));
+        Assert.assertEquals("utf-47", ctx.getString("in-encoding"));
     }
 
 }

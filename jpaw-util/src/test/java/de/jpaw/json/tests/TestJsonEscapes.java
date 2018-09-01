@@ -1,7 +1,7 @@
 package de.jpaw.json.tests;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 import de.jpaw.json.BaseJsonComposer;
 import de.jpaw.json.JsonEscaper;
@@ -17,10 +17,10 @@ public class TestJsonEscapes {
         StringBuilder sb = new StringBuilder();
         JsonEscaper out = new BaseJsonComposer(sb);
         out.outputUnicodeWithControls(input);
-        Assert.assertEquals(sb.toString(), output);
+        Assert.assertEquals(output, sb.toString());
 
         JsonParser jp = new JsonParser(output, false);
         Object r = jp.parseElement();
-        Assert.assertEquals(r, input);
+        Assert.assertEquals(input, r);
     }
 }

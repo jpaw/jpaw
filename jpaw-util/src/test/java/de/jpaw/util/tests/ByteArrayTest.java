@@ -2,8 +2,8 @@ package de.jpaw.util.tests;
 
 import java.io.ByteArrayOutputStream;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 import de.jpaw.util.ByteArray;
 
@@ -17,7 +17,7 @@ public class ByteArrayTest {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ba.toOutputStream(baos);
         baos.flush();
-        Assert.assertEquals(data, ba.getBytes());
-        Assert.assertEquals(data, baos.toByteArray());
+        Assert.assertArrayEquals(data, ba.getBytes());
+        Assert.assertArrayEquals(data, baos.toByteArray());
     }
 }

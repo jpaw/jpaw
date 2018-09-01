@@ -5,9 +5,9 @@ import de.jpaw.enums.AbstractLongEnumSet
 import de.jpaw.enums.AbstractStringEnumSet
 import de.jpaw.enums.EnumSetMarker
 import de.jpaw.enumsets.SetOfEnum
-import org.testng.annotations.Test
+import org.junit.Test
 
-import static org.testng.Assert.*
+import static org.junit.Assert.*
 
 enum Weekday {
     MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY

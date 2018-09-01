@@ -3,8 +3,8 @@ package de.jpaw.money.tests;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 import de.jpaw.money.BonaCurrency;
 

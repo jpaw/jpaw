@@ -3,7 +3,7 @@ package de.jpaw.util.tests;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import de.jpaw.util.MapIterator;
 

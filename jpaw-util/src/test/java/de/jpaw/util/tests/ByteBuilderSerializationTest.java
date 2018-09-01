@@ -3,8 +3,8 @@ package de.jpaw.util.tests;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.Assert;
+import org.junit.Test;
 
 import de.jpaw.util.ByteBuilder;
 
@@ -21,7 +21,7 @@ public class ByteBuilderSerializationTest {
             byte [] data_bb = bb.getBytes();
             byte [] data_dos = baos.toByteArray();
             System.out.println("Length for test " + msg + " is " + data_bb.length + " bytes (should be " + data_dos.length + " bytes)");
-            Assert.assertEquals(data_bb, data_dos);
+            Assert.assertArrayEquals(data_bb, data_dos);
         }
     }
 

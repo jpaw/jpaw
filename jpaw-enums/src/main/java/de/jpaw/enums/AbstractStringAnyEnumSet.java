@@ -92,7 +92,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
 
     @Override
     public boolean contains(Object o) {
-        if (o == null || !(o instanceof Enum))
+        if (o == null || !(o instanceof TokenizableEnum))
             return false;
         return contains(((TokenizableEnum)o).getToken());
     }

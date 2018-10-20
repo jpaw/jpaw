@@ -23,6 +23,13 @@ public abstract class AbstractStringXEnumSet<E extends AbstractXEnumBase<E>> ext
         return addEnum(e);
     }
 
+    @Override
+    public boolean contains(Object o) {
+        if (o != null && o instanceof AbstractXEnumBase)
+            return contains(((AbstractXEnumBase)o).getToken());
+        return super.contains(o);
+    }
+
 
     /** Iterator which returns the elements of the set in order of tokens sorted ascending. */
     static protected class SetOfXEnumsIterator<E extends AbstractXEnumBase<E>> implements Iterator<E> {

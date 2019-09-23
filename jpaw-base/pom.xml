@@ -16,6 +16,7 @@
 
     <properties>
         <poi.version>3.17</poi.version>
+        <hdrHistogram.version>2.1.11</hdrHistogram.version>
     </properties>
     <scm>
         <connection>scm:git:https://github.com/jpaw/jpaw.git</connection>
@@ -123,6 +124,10 @@
         <module>../jpaw-enumsets/pom.xml</module>
         <module>../jpaw-enumsets-test/pom.xml</module>
         <module>../jpaw-benchmarks/pom.xml</module>
+        <module>../jpaw8-xtend/pom.xml</module>
+        <module>../jpaw8-core/pom.xml</module>
+        <module>../jpaw8-batch/pom.xml</module>
+        <module>../jpaw8-benchmarks/pom.xml</module>
     </modules>
 
 </project>

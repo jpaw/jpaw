@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Main-Class: org.openjdk.jmh.Main
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+Built-By: cobol
+Build-Jdk: 2.0.0_05

@@ -3,7 +3,7 @@ Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Bundle-ManifestVersion: 2
 Bundle-Name: jpaw8 utility libraries
 Bundle-SymbolicName: jpaw8.core
-Bundle-Version: 2.0.0
+Bundle-Version: 2.1.0
 Bundle-Vendor: Michael Bischoff
 Export-Package: de.jpaw8.function
 Bundle-ActivationPolicy: lazy

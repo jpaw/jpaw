@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import de.jpaw.json.JsonException;
 import de.jpaw.util.CharTestsASCII;
@@ -70,8 +71,10 @@ public class JsonParser {
     private void requireNext(char wanted) throws JsonException {
         skipSpaces();
         char c = peekNeededChar();
-        if (c != wanted)
-            throw new JsonException(JsonException.JSON_SYNTAX, i);
+        if (c != wanted) {
+            throw new JsonException(JsonException.JSON_SYNTAX, "Expected character '" + wanted + "' at pos " + i
+                    + ", but found '" + c + "'");
+        }
         ++i;
     }
 
@@ -314,28 +317,38 @@ public class JsonParser {
         return obj;
     }
 
-    public Map<String, Object> parseObject() throws JsonException {
-        if (s == null)
-            return null;    // shortcut
+    /** Parses a single object and returns it as a map (subroutine). */
+    public Map<String, Object> parseObjectSub() throws JsonException {
         skipSpaces();
         char c = peekNeededChar();
         if (c == 'n' && nextStartsWith("null")) {
-            mustEnd();
+            i += 4;
+            skipSpaces();
             return null;
         }
         if (c != '{')
             throw new JsonException(JsonException.JSON_SYNTAX, i);
         Map<String, Object> map = parseMapSub();
+        return map;
+    }
+
+    /** Parses a single object and returns it as a map. */
+    public Map<String, Object> parseObject() throws JsonException {
+        if (s == null)
+            return null;    // shortcut
+        Map<String, Object> map = parseObjectSub();
         mustEnd();
         return map;
     }
 
+    /** Parses a list of elements and returns it as a list. */
     public List<Object> parseArray() throws JsonException {
         if (s == null)
             return null;    // shortcut
         skipSpaces();
         char c = peekNeededChar();
         if (c == 'n' && nextStartsWith("null")) {
+            i += 4;
             mustEnd();
             return null;
         }
@@ -344,5 +357,49 @@ public class JsonParser {
         List<Object> l = parseListSub();
         mustEnd();
         return l;
+    }
+
+    /** Expect either a list of objects, or a single object, or null. Emits all parsed objects via the provided consumer. */ 
+    public void parseObjectOrListOfObjects(Consumer<Map<String, Object>> sink) throws JsonException {
+        if (s == null)
+            return;    // shortcut (nothing is emitted)
+        skipSpaces();
+        if (i >= len) {
+            // empty string: do not emit anything
+            return;
+        }
+        char c = peekNeededChar();
+        if (c != '[') {
+            // must be a single object or null
+            Map<String, Object> map = parseObjectSub();
+            sink.accept(map);  // emit single object
+            mustEnd();
+            return;
+        }
+        ++i;
+        skipSpaces();
+        c = peekNeededChar();
+        if (c == ']') {
+        	// empty list
+            ++i;
+            mustEnd();
+            return;
+        }
+        // parse a list of objects
+        for (;;) {
+            Map<String, Object> map = parseObjectSub();
+            sink.accept(map);  // emit parsed object (list element)
+            // now expect a comma or end of list
+            c = peekNeededChar();
+            if (c == ']') {
+                ++i;
+                mustEnd();
+                return;
+            }
+            if (c != ',') {
+                throw new JsonException(JsonException.JSON_SYNTAX, "Expected character ',' or ']' at pos " + i);
+            }
+            ++i;  // skip ','
+        }
     }
 }

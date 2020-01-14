@@ -19,6 +19,11 @@ import de.jpaw.enums.EnumSetMarker;
 import de.jpaw.enums.TokenizableEnum;
 import de.jpaw.json.BaseJsonComposer;
 
+/**
+ * A specialized JSON escaper which uses specific formats for certain types,
+ * and provides convenient hooks for customization.
+ *
+ */
 public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
 
     // if instantInMillis is true, Instants will be written as integral values in milliseconds, otherwise as second + optional fractional parts
@@ -35,26 +40,87 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
         this.instantInMillis = instantInMillis;
     }
 
-    private String toDay(int [] values) {
+    protected String toDay(int [] values) {
         return String.format("%04d-%02d-%02d", values[0], values[1], values[2]);
     }
 
-    private String toTimeOfDay(int millis) {
+    protected String toTimeOfDay(int millis) {
         int tmpValue = millis / 60000; // minutes and hours
         int frac = millis % 1000;
         String fracs = (frac == 0) ? "" : String.format(".%03d", frac);
         return String.format("%02d:%02d:%02d%s", tmpValue / 60, tmpValue % 60, millis / 1000, fracs);
     }
 
+    // provided as a hook to allow overriding
+    protected void outputEnumSet(Object obj) throws IOException {
+        if (obj instanceof AbstractStringEnumSet<?>) {
+            outputUnicodeNoControls(((AbstractStringEnumSet<?>)obj).getBitmap());
+        } else if (obj instanceof AbstractStringXEnumSet<?>) {
+            outputUnicodeNoControls(((AbstractStringXEnumSet<?>)obj).getBitmap());
+        } else if (obj instanceof AbstractIntEnumSet<?>) {
+            appendable.append(Integer.toString(((AbstractIntEnumSet<?>)obj).getBitmap()));
+        } else if (obj instanceof AbstractLongEnumSet<?>) {
+            appendable.append(Long.toString(((AbstractLongEnumSet<?>)obj).getBitmap()));
+        } else if (obj instanceof AbstractByteEnumSet<?>) {
+            appendable.append(Byte.toString(((AbstractByteEnumSet<?>)obj).getBitmap()));
+        } else if (obj instanceof AbstractShortEnumSet<?>) {
+            appendable.append(Short.toString(((AbstractShortEnumSet<?>)obj).getBitmap()));
+        } else {
+            throw new RuntimeException("Cannot transform enum set of type " + obj.getClass().getSimpleName() + " to JSON");
+        }
+    }
+
+    // provided as a hook to allow overriding
+    protected void outputTokenizableEnum(TokenizableEnum obj) throws IOException {
+        outputUnicodeNoControls(obj.getToken());
+    }
+
+    // provided as a hook to allow overriding
+    protected void outputNonTokenizableEnum(Enum<?> obj) throws IOException {
+        outputNumber(obj.ordinal());
+    }
+
+    // provided as a hook to allow overriding
+    protected void outputInstant(Instant obj) throws IOException {
+        long millis = ((Instant)obj).getMillis();
+        if (instantInMillis) {
+            appendable.append(Long.toString(millis));
+        } else {
+            appendable.append(Long.toString(millis / 1000));
+            millis %= 1000;
+            if (millis > 0)
+                appendable.append(String.format(".%03d", millis));
+        }
+    }
+
+    // provided as a hook to allow overriding
+    protected void outputTemporal(Object obj) throws IOException {
+        if (obj instanceof LocalDate) {
+            int [] values = ((LocalDate)obj).getValues();   // 3 values: year, month, day
+            outputAscii(toDay(values));
+            return;
+        }
+        if (obj instanceof LocalTime) {
+            outputAscii(toTimeOfDay(((LocalTime)obj).getMillisOfDay()));
+            return;
+        }
+        if (obj instanceof LocalDateTime) {
+            int [] values = ((LocalDateTime)obj).getValues();   // 4 values: year, month, day, millis
+            outputAscii(toDay(values) + "T" + toTimeOfDay(values[3]) + "Z");
+            return;
+        }
+        throw new RuntimeException("Cannot transform joda readable partial of type " + obj.getClass().getSimpleName() + " to JSON");
+    }
+
     @Override
     public void outputJsonElement(Object obj) throws IOException {
-        // add Joda-Time types and enum types
+        // add Joda-Time types and enum / enumset types
         if (obj instanceof Enum) {
             // distinguish Tokenizable
             if (obj instanceof TokenizableEnum) {
-                outputUnicodeNoControls(((TokenizableEnum)obj).getToken());
+                outputTokenizableEnum((TokenizableEnum)obj);
             } else {
-                outputNumber(((Enum<?>)obj).ordinal());
+                outputNonTokenizableEnum((Enum<?>)obj);
             }
             return;
         }
@@ -63,51 +129,16 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
             return;
         }
         if (obj instanceof EnumSetMarker) {
-            if (obj instanceof AbstractStringEnumSet<?>) {
-                outputUnicodeNoControls(((AbstractStringEnumSet<?>)obj).getBitmap());
-            } else if (obj instanceof AbstractStringXEnumSet<?>) {
-                outputUnicodeNoControls(((AbstractStringXEnumSet<?>)obj).getBitmap());
-            } else if (obj instanceof AbstractIntEnumSet<?>) {
-                appendable.append(Integer.toString(((AbstractIntEnumSet<?>)obj).getBitmap()));
-            } else if (obj instanceof AbstractLongEnumSet<?>) {
-                appendable.append(Long.toString(((AbstractLongEnumSet<?>)obj).getBitmap()));
-            } else if (obj instanceof AbstractByteEnumSet<?>) {
-                appendable.append(Byte.toString(((AbstractByteEnumSet<?>)obj).getBitmap()));
-            } else if (obj instanceof AbstractShortEnumSet<?>) {
-                appendable.append(Short.toString(((AbstractShortEnumSet<?>)obj).getBitmap()));
-            } else {
-                throw new RuntimeException("Cannot transform enum set of type " + obj.getClass().getSimpleName() + " to JSON");
-            }
+            outputEnumSet(obj);
             return;
         }
         if (obj instanceof Instant) {
-            long millis = ((Instant)obj).getMillis();
-            if (instantInMillis) {
-                appendable.append(Long.toString(millis));
-            } else {
-                appendable.append(Long.toString(millis / 1000));
-                millis %= 1000;
-                if (millis > 0)
-                    appendable.append(String.format(".%03d", millis));
-            }
+            outputInstant((Instant)obj);
             return;
         }
         if (obj instanceof ReadablePartial) {
-            if (obj instanceof LocalDate) {
-                int [] values = ((LocalDate)obj).getValues();   // 3 values: year, month, day
-                outputAscii(toDay(values));
-                return;
-            }
-            if (obj instanceof LocalTime) {
-                outputAscii(toTimeOfDay(((LocalTime)obj).getMillisOfDay()));
-                return;
-            }
-            if (obj instanceof LocalDateTime) {
-                int [] values = ((LocalDateTime)obj).getValues();   // 4 values: year, month, day, millis
-                outputAscii(toDay(values) + "T" + toTimeOfDay(values[3]) + "Z");
-                return;
-            }
-            throw new RuntimeException("Cannot transform joda readable partial of type " + obj.getClass().getSimpleName() + " to JSON");
+            outputTemporal(obj);
+            return;
         }
         super.outputJsonElement(obj);
     }

@@ -103,9 +103,9 @@ public class BatchReaderPoi implements Contributor, BatchFileReader<String> {
         if (cell == null)
             return "";
         switch (cell.getCellType()) {
-        case Cell.CELL_TYPE_STRING:
+        case STRING:
             return cell.getRichStringCellValue().getString();
-        case Cell.CELL_TYPE_NUMERIC:
+        case NUMERIC:
             if (DateUtil.isCellDateFormatted(cell)) {
                 return cell.getDateCellValue().toString();
             } else {
@@ -116,9 +116,9 @@ public class BatchReaderPoi implements Contributor, BatchFileReader<String> {
                 }
                 return Double.toString(d);
             }
-        case Cell.CELL_TYPE_BOOLEAN:
+        case BOOLEAN:
             return Boolean.toString(cell.getBooleanCellValue());
-        case Cell.CELL_TYPE_FORMULA:
+        case FORMULA:
             return cell.getCellFormula();
         default:
             return "";

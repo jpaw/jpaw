@@ -4,19 +4,19 @@
     <parent>
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-se-parent</artifactId>
-        <version>1.6.1</version>
+        <version>1.7.0</version>
         <relativePath/>
     </parent>
 
     <artifactId>jpaw-base</artifactId>
-    <version>2.1.1</version>
+    <version>2.2.0</version>
     <packaging>pom</packaging>
 
     <description>Common configuration settings for all jpaw basic / utility projects</description>
 
     <properties>
-        <poi.version>3.17</poi.version>
-        <hdrHistogram.version>2.1.11</hdrHistogram.version>
+        <poi.version>4.1.2</poi.version>
+        <hdrHistogram.version>2.1.12</hdrHistogram.version>
     </properties>
     <scm>
         <connection>scm:git:https://github.com/jpaw/jpaw.git</connection>

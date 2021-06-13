@@ -6,7 +6,7 @@
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-base</artifactId>
         <version>2.3.0</version>
-        <relativePath>../jpaw-base/pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>jpaw-xml</artifactId>
@@ -31,4 +31,20 @@
             <version>${jaxb.version}</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Automatic-Module-Name>de.jpaw.jpaw.xml</Automatic-Module-Name>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

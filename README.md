@@ -18,6 +18,3 @@ In addition, this repository serves as a parent pom / bom, defining some revisio
 
 This project uses maven3 as a build tool.
 
-Build the projects using the parent pom, which sits in jpaw-base:
-
-    (cd jpaw-base && mvn clean install)

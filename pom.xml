@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-se-parent</artifactId>
-        <version>1.7.1</version>
+        <version>1.8.0</version>
         <relativePath/>
     </parent>
 
@@ -13,9 +13,12 @@
     <packaging>pom</packaging>
 
     <description>Common configuration settings for all jpaw basic / utility projects</description>
+    <!-- Note: in order to compile with Java16, you currently have to specify - -illegal-access=permit as MAVEN_OPTS
+         (see https://www.eclipse.org/forums/index.php/t/1107994/) for the projects jpaw-money-test and jpaw-enumsets.
+      -->
 
     <properties>
-        <poi.version>4.1.2</poi.version>
+        <poi.version>5.0.0</poi.version>
         <hdrHistogram.version>2.1.12</hdrHistogram.version>
     </properties>
     <scm>
@@ -106,28 +109,28 @@
     </reporting>
 
     <modules>
-        <module>../jpaw-bom/pom.xml</module>
-        <module>../jpaw-enums/pom.xml</module>
-        <module>../jpaw-util/pom.xml</module>
-        <module>../jpaw-json/pom.xml</module>
-        <module>../jpaw-socket/pom.xml</module>
-        <module>../jpaw-cmdline/pom.xml</module>
-        <module>../jpaw-batch/pom.xml</module>
-        <module>../jpaw-batch-lmax/pom.xml</module>
-        <module>../jpaw-batch-poi/pom.xml</module>
-        <module>../jpaw-batch-xls2csv/pom.xml</module>
-        <module>../jpaw-money/pom.xml</module>
-        <module>../jpaw-money-test/pom.xml</module>
-        <module>../jpaw-xml/pom.xml</module>
-        <module>../jpaw-icu/pom.xml</module>
-        <module>../jpaw-xenum-init/pom.xml</module>
-        <module>../jpaw-enumsets/pom.xml</module>
-        <module>../jpaw-enumsets-test/pom.xml</module>
-        <module>../jpaw-benchmarks/pom.xml</module>
-        <module>../jpaw8-xtend/pom.xml</module>
-        <module>../jpaw8-core/pom.xml</module>
-        <module>../jpaw8-batch/pom.xml</module>
-        <module>../jpaw8-benchmarks/pom.xml</module>
+        <module>jpaw-bom/pom.xml</module>
+        <module>jpaw-enums/pom.xml</module>
+        <module>jpaw-util/pom.xml</module>
+        <module>jpaw-json/pom.xml</module>
+        <module>jpaw-socket/pom.xml</module>
+        <module>jpaw-cmdline/pom.xml</module>
+        <module>jpaw-batch/pom.xml</module>
+        <module>jpaw-batch-lmax/pom.xml</module>
+        <module>jpaw-batch-poi/pom.xml</module>
+        <module>jpaw-batch-xls2csv/pom.xml</module>
+        <module>jpaw-money/pom.xml</module>
+        <module>jpaw-money-test/pom.xml</module>
+        <module>jpaw-xml/pom.xml</module>
+        <module>jpaw-icu/pom.xml</module>
+        <module>jpaw-xenum-init/pom.xml</module>
+        <module>jpaw-enumsets/pom.xml</module>
+        <module>jpaw-enumsets-test/pom.xml</module>
+        <module>jpaw-benchmarks/pom.xml</module>
+        <module>jpaw8-xtend/pom.xml</module>
+        <module>jpaw8-core/pom.xml</module>
+        <module>jpaw8-batch/pom.xml</module>
+        <module>jpaw8-benchmarks/pom.xml</module>
     </modules>
 
 </project>

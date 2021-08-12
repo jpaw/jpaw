@@ -1,6 +1,6 @@
 package de.jpaw.xml.jaxb;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import org.joda.time.Instant;
 
 public class InstantAdapter

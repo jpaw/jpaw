@@ -3,7 +3,7 @@ Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Bundle-ManifestVersion: 2
 Bundle-Name: jpaw command line parser utility
 Bundle-SymbolicName: jpaw.cmdline
-Bundle-Version: 2.5.0
+Bundle-Version: 2.5.1
 Bundle-Vendor: Michael Bischoff
 Export-Package: de.jpaw.cmdline
 Bundle-ActivationPolicy: lazy

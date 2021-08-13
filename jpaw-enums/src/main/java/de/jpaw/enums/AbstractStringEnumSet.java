@@ -2,7 +2,6 @@ package de.jpaw.enums;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
 
 /** An alternate implementation of EnumSet, which stores the contained elements as a component inside Strings.
  * The class is not thread safe. Implementations which intend to perform parallel modification must use external locking mechanisms.
@@ -37,16 +36,22 @@ public abstract class AbstractStringEnumSet<E extends Enum<E> & TokenizableEnum>
     /** Iterator which returns the elements of the set in order of tokens sorted ascending. */
     static protected class SetOfEnumsIterator<E extends TokenizableEnum> implements Iterator<E> {
         private final String bitmap;
+        // static private final ConcurrentHashMap<String, TokenizableEnum> lookupTable = new ConcurrentHashMap<String, TokenizableEnum>();
+        private final E [] values;
         private int index = 0;
-        static private final ConcurrentHashMap<String, TokenizableEnum> lookupTable = new ConcurrentHashMap<String, TokenizableEnum>();
 
         public SetOfEnumsIterator(E [] values, String bitmap) {
             this.bitmap = bitmap;
-            if (lookupTable.size() < values.length) {
-                // hashmap not up to date. fill it. Possible duplicate fills are accepted, they perform logically correct, with just a small performance overhead
-                for (E z : values)
-                    lookupTable.putIfAbsent(z.getToken(), z);
+            this.values = values;
+        }
+
+        private E getValue(String token) {
+            for (E e: values) {
+                if (token.equals(e.getToken())) {
+                    return e;
+                }
             }
+            return null;
         }
 
         @Override
@@ -59,9 +64,7 @@ public abstract class AbstractStringEnumSet<E extends Enum<E> & TokenizableEnum>
             if (bitmap.length() <= index)
                 return null;                // shortcut
             ++index;
-            @SuppressWarnings("unchecked")
-            E data = (E) lookupTable.get(bitmap.substring(index-1, index));   // GC overhead due to new String. But a Character would be as well...
-            return data;
+            return getValue(bitmap.substring(index-1, index));   // GC overhead due to new String. But a Character would be as well...
         }
 
         @Override

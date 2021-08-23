@@ -1,19 +1,17 @@
 package de.jpaw.xml.jaxb;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
-public class LocalDateAdapter
-    extends XmlAdapter<String, LocalDate>{
+public class LocalDateAdapter  extends XmlAdapter<String, LocalDate> {
 
     @Override
     public LocalDate unmarshal(String v) throws Exception {
-        return new LocalDate(v);
+        return LocalDate.parse(v);
     }
 
     @Override
     public String marshal(LocalDate v) throws Exception {
         return v.toString();
     }
-
 }

@@ -15,10 +15,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency>
-        <dependency>
             <groupId>de.jpaw</groupId>
             <artifactId>jpaw-util</artifactId>
             <version>${project.version}</version>

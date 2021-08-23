@@ -5,14 +5,12 @@ package de.jpaw.xml.jaxb.demo.joda;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @XmlRootElement
 @XmlType(propOrder={
-   "dateTime",
    "dateMidnight",
    "localDate",
    "localTime",
@@ -20,18 +18,9 @@ import org.joda.time.LocalTime;
 
 public class JodaTimeMappers {
 
-    private DateTime dateTime;
     private LocalDate localDate;
     private LocalTime localTime;
     private LocalDateTime localDateTime;
-
-    public DateTime getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(DateTime dateTime) {
-        this.dateTime = dateTime;
-    }
 
     public LocalDate getLocalDate() {
         return localDate;
@@ -56,5 +45,4 @@ public class JodaTimeMappers {
     public void setLocalDateTime(LocalDateTime localDateTime) {
         this.localDateTime = localDateTime;
     }
-
 }

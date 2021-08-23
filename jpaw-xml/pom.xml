@@ -19,10 +19,6 @@
             <artifactId>jpaw-util</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency>
         <!-- java 11 required dependency -->
         <dependency>
             <groupId>jakarta.xml.bind</groupId>

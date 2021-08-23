@@ -2,11 +2,10 @@ package de.jpaw.jsonext;
 
 import java.io.IOException;
 
-import org.joda.time.Instant;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
-import org.joda.time.ReadablePartial;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import de.jpaw.enums.AbstractByteEnumSet;
 import de.jpaw.enums.AbstractIntEnumSet;
@@ -25,6 +24,7 @@ import de.jpaw.json.BaseJsonComposer;
  *
  */
 public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
+    public static String TIMEZONE_SUFFIX_FOR_LOCAL = "";  // set to "Z" if desired, but see http://javarevisited.blogspot.com/2015/03/20-examples-of-date-and-time-api-from-Java8.html
 
     // if instantInMillis is true, Instants will be written as integral values in milliseconds, otherwise as second + optional fractional parts
     // see DATE_TIMESTAMPS_AS_NANOSECONDS in https://github.com/FasterXML/jackson-datatype-jsr310 for similar setting
@@ -44,11 +44,9 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
         return String.format("%04d-%02d-%02d", values[0], values[1], values[2]);
     }
 
-    protected String toTimeOfDay(int millis) {
-        int tmpValue = millis / 60000; // minutes and hours
-        int frac = millis % 1000;
-        String fracs = (frac == 0) ? "" : String.format(".%03d", frac);
-        return String.format("%02d:%02d:%02d%s", tmpValue / 60, tmpValue % 60, millis / 1000, fracs);
+    protected String toTimeOfDay(int hour, int minute, int second, int millis) {
+            final String fracs = (millis == 0) ? "" : String.format(".%03d", millis);
+            return String.format("%02d:%02d:%02d%s%s", hour, minute, second, fracs, TIMEZONE_SUFFIX_FOR_LOCAL);
     }
 
     // provided as a hook to allow overriding
@@ -82,7 +80,7 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
 
     // provided as a hook to allow overriding
     protected void outputInstant(Instant obj) throws IOException {
-        long millis = ((Instant)obj).getMillis();
+        long millis = ((Instant)obj).getNano() / 1000000L;
         if (instantInMillis) {
             appendable.append(Long.toString(millis));
         } else {
@@ -91,25 +89,6 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
             if (millis > 0)
                 appendable.append(String.format(".%03d", millis));
         }
-    }
-
-    // provided as a hook to allow overriding
-    protected void outputTemporal(Object obj) throws IOException {
-        if (obj instanceof LocalDate) {
-            int [] values = ((LocalDate)obj).getValues();   // 3 values: year, month, day
-            outputAscii(toDay(values));
-            return;
-        }
-        if (obj instanceof LocalTime) {
-            outputAscii(toTimeOfDay(((LocalTime)obj).getMillisOfDay()));
-            return;
-        }
-        if (obj instanceof LocalDateTime) {
-            int [] values = ((LocalDateTime)obj).getValues();   // 4 values: year, month, day, millis
-            outputAscii(toDay(values) + "T" + toTimeOfDay(values[3]) + "Z");
-            return;
-        }
-        throw new RuntimeException("Cannot transform joda readable partial of type " + obj.getClass().getSimpleName() + " to JSON");
     }
 
     @Override
@@ -136,10 +115,26 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
             outputInstant((Instant)obj);
             return;
         }
-        if (obj instanceof ReadablePartial) {
-            outputTemporal(obj);
+        if (obj instanceof LocalDate) {
+            LocalDate ld = (LocalDate)obj;
+            outputAscii(String.format("%04d-%02d-%02d", ld.getYear(), ld.getMonthValue(), ld.getDayOfMonth())); 
             return;
         }
+        if (obj instanceof LocalTime) {
+            LocalTime ld = (LocalTime)obj;
+            int millis = ld.getNano() / 1000000;
+            outputAscii(toTimeOfDay(ld.getHour(), ld.getMinute(), ld.getSecond(), millis));
+            return;
+        }
+        if (obj instanceof LocalDateTime) {
+            LocalDateTime ld = (LocalDateTime)obj;
+            int millis = ld.getNano() / 1000000;
+            outputAscii(String.format("%04d-%02d-%02dT%s", ld.getYear(), ld.getMonthValue(), ld.getDayOfMonth(),
+                    toTimeOfDay(ld.getHour(), ld.getMinute(), ld.getSecond(), millis)
+            ));
+            return;
+        }
+
         super.outputJsonElement(obj);
     }
 }

@@ -1,7 +1,7 @@
 package de.jpaw8.batch.consumers;
 
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.Marshaller;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 
 import de.jpaw.cmdline.CmdlineParserContext;
 import de.jpaw8.batch.consumers.impl.BatchWriterTextFileAbstract;

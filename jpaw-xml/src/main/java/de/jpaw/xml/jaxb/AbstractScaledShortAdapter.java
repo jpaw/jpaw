@@ -3,7 +3,7 @@ package de.jpaw.xml.jaxb;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 public abstract class AbstractScaledShortAdapter extends XmlAdapter<BigDecimal, Short> {
     private static final Short ZERO = Short.valueOf((short) 0);

@@ -1,6 +1,6 @@
 package de.jpaw.xml.jaxb;
 
-import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 import org.joda.time.DateTime;
 
 public class DateTimeAdapter extends XmlAdapter<String, DateTime> {

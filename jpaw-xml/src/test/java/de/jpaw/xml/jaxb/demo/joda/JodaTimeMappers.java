@@ -2,8 +2,8 @@ package de.jpaw.xml.jaxb.demo.joda;
 
 // courtesy of http://blog.bdoughan.com/2011/05/jaxb-and-joda-time-dates-and-times.html
 
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;

@@ -2,7 +2,7 @@ package de.jpaw8.batch.marshaller;
 
 import java.util.function.Function;
 
-import jakarta.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBContext;
 
 import de.jpaw8.batch.api.BatchMarshaller;
 import de.jpaw8.batch.functions.Object2Xml;

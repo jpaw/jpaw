@@ -1,5 +1,5 @@
 package de.jpaw.xml.jaxb;
-import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import de.jpaw.util.ByteArray;
 

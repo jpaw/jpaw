@@ -1,7 +1,7 @@
 package de.jpaw.xml.jaxb.demo.byteArray;
 
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.Marshaller;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 
 import org.joda.time.LocalDate;
 import de.jpaw.util.ByteArray;

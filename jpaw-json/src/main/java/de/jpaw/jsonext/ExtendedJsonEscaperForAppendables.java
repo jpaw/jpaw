@@ -40,10 +40,6 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
         this.instantInMillis = instantInMillis;
     }
 
-    protected String toDay(int [] values) {
-        return String.format("%04d-%02d-%02d", values[0], values[1], values[2]);
-    }
-
     protected String toTimeOfDay(int hour, int minute, int second, int millis) {
             final String fracs = (millis == 0) ? "" : String.format(".%03d", millis);
             return String.format("%02d:%02d:%02d%s%s", hour, minute, second, fracs, TIMEZONE_SUFFIX_FOR_LOCAL);
@@ -80,12 +76,12 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
 
     // provided as a hook to allow overriding
     protected void outputInstant(Instant obj) throws IOException {
-        long millis = ((Instant)obj).getNano() / 1000000L;
+    	long seconds = obj.getEpochSecond();
+        int millis = obj.getNano() / 1000000;
         if (instantInMillis) {
-            appendable.append(Long.toString(millis));
+            appendable.append(Long.toString(1000L * seconds + millis));
         } else {
-            appendable.append(Long.toString(millis / 1000));
-            millis %= 1000;
+            appendable.append(Long.toString(seconds));
             if (millis > 0)
                 appendable.append(String.format(".%03d", millis));
         }

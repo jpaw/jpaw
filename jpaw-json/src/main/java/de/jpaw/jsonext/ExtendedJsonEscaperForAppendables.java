@@ -25,6 +25,7 @@ import de.jpaw.json.BaseJsonComposer;
  */
 public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
     public static String TIMEZONE_SUFFIX_FOR_LOCAL = "";  // set to "Z" if desired, but see http://javarevisited.blogspot.com/2015/03/20-examples-of-date-and-time-api-from-Java8.html
+    private static final char [] DIGITS = { '0', '1', '2','3', '4', '5', '6', '7', '8', '9' };
 
     // if instantInMillis is true, Instants will be written as integral values in milliseconds, otherwise as second + optional fractional parts
     // see DATE_TIMESTAMPS_AS_NANOSECONDS in https://github.com/FasterXML/jackson-datatype-jsr310 for similar setting
@@ -40,9 +41,40 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
         this.instantInMillis = instantInMillis;
     }
 
-    protected String toTimeOfDay(int hour, int minute, int second, int millis) {
-            final String fracs = (millis == 0) ? "" : String.format(".%03d", millis);
-            return String.format("%02d:%02d:%02d%s%s", hour, minute, second, fracs, TIMEZONE_SUFFIX_FOR_LOCAL);
+    // zero-GC implementation of appendable.append(String.format("%02d", n));
+    protected void append2Digits(int n) throws IOException {
+        appendable.append(DIGITS[(n / 10) % 10]);
+        appendable.append(DIGITS[n % 10]);
+    }
+
+    // zero-GC implementation of appendable.append(String.format(".%03d", millis));
+    protected void appendMilliseconds(int millis) throws IOException {
+        appendable.append('.');
+        appendable.append(DIGITS[millis / 100]);
+        append2Digits(millis);
+    }
+
+    // zero-GC implementation of appendable.append(String.format("%04d-%02d-%02d", ld.getYear(), ld.getMonthValue(), ld.getDayOfMonth());
+    protected void appendLocalDate(LocalDate ld) throws IOException {
+        append2Digits(ld.getYear() / 100);
+        append2Digits(ld.getYear());
+        appendable.append('-');
+        append2Digits(ld.getMonthValue());
+        appendable.append('-');
+        append2Digits(ld.getDayOfMonth());
+    }
+
+    // zero-GC implementation of appendable.append(String.format("%02d:%02d:%02d%s", lt.getHour(), lt.getMinute(), lt.getSecond(), millis);
+    protected void appendLocalTime(LocalTime lt) throws IOException {
+        append2Digits(lt.getHour());
+        appendable.append(':');
+        append2Digits(lt.getMinute());
+        appendable.append(':');
+        append2Digits(lt.getSecond());
+        final int millis = lt.getNano() / 1000000;
+        if (millis != 0) {
+            appendMilliseconds(millis);
+        }
     }
 
     // provided as a hook to allow overriding
@@ -76,14 +108,15 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
 
     // provided as a hook to allow overriding
     protected void outputInstant(Instant obj) throws IOException {
-    	long seconds = obj.getEpochSecond();
+        long seconds = obj.getEpochSecond();
         int millis = obj.getNano() / 1000000;
         if (instantInMillis) {
             appendable.append(Long.toString(1000L * seconds + millis));
         } else {
             appendable.append(Long.toString(seconds));
-            if (millis > 0)
-                appendable.append(String.format(".%03d", millis));
+            if (millis > 0) {
+                appendMilliseconds(millis);
+            }
         }
     }
 
@@ -112,22 +145,25 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
             return;
         }
         if (obj instanceof LocalDate) {
-            LocalDate ld = (LocalDate)obj;
-            outputAscii(String.format("%04d-%02d-%02d", ld.getYear(), ld.getMonthValue(), ld.getDayOfMonth())); 
+            appendable.append('"');
+            appendLocalDate((LocalDate)obj);
+            appendable.append('"');
             return;
         }
         if (obj instanceof LocalTime) {
-            LocalTime ld = (LocalTime)obj;
-            int millis = ld.getNano() / 1000000;
-            outputAscii(toTimeOfDay(ld.getHour(), ld.getMinute(), ld.getSecond(), millis));
+            appendable.append('"');
+            appendLocalTime((LocalTime)obj);
+            appendable.append('"');
             return;
         }
         if (obj instanceof LocalDateTime) {
-            LocalDateTime ld = (LocalDateTime)obj;
-            int millis = ld.getNano() / 1000000;
-            outputAscii(String.format("%04d-%02d-%02dT%s", ld.getYear(), ld.getMonthValue(), ld.getDayOfMonth(),
-                    toTimeOfDay(ld.getHour(), ld.getMinute(), ld.getSecond(), millis)
-            ));
+            final LocalDateTime ldt = (LocalDateTime)obj;
+            appendable.append('"');
+            appendLocalDate(ldt.toLocalDate());
+            appendable.append('T');
+            appendLocalTime(ldt.toLocalTime());
+            appendable.append(TIMEZONE_SUFFIX_FOR_LOCAL);
+            appendable.append('"');
             return;
         }
 

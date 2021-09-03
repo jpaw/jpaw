@@ -256,7 +256,7 @@ public class JsonParser {
                     c = s.charAt(i);
                 } while (CharTestsASCII.isJavascriptNumberChar(c));
                 skipSpaces();
-                return useFloat ? new Double(sb.toString()) : new BigDecimal(sb.toString());
+                return useFloat ? Double.parseDouble(sb.toString()) : new BigDecimal(sb.toString());
             } catch (NumberFormatException e) {
                 throw new JsonException(JsonException.JSON_BAD_NUMBER, i);
             }

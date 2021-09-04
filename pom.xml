@@ -112,8 +112,10 @@
         <module>jpaw-bom/pom.xml</module>
         <module>jpaw-enums/pom.xml</module>
         <module>jpaw-fixedpoint-core/pom.xml</module>
-        <module>jpaw-fixedpoint-money/pom.xml</module>
         <module>jpaw-util/pom.xml</module>
+        <module>jpaw-fixedpoint-money/pom.xml</module>
+        <module>jpaw-fixedpoint-money-test/pom.xml</module>
+        <module>jpaw-fixedpoint-benchmarks/pom.xml</module>
         <module>jpaw-json/pom.xml</module>
         <module>jpaw-socket/pom.xml</module>
         <module>jpaw-cmdline/pom.xml</module>

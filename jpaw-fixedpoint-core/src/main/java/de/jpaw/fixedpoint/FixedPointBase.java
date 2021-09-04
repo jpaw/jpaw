@@ -76,7 +76,13 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
 
     /** Checks that the number is within 18 digits of magnitude. */
     public boolean isWithin18Digits() {
-    	return -999_999_999_999_999_999L <= mantissa && mantissa <= 999_999_999_999_999_999L;
+        return -999_999_999_999_999_999L <= mantissa && mantissa <= 999_999_999_999_999_999L;
+    }
+
+    /** Checks that the number is within 18 digits of magnitude. */
+    public boolean isWithinDigits(int numberOfDigits) {
+        final long oneMore = powersOfTen[numberOfDigits]; 
+        return -oneMore < mantissa && mantissa < oneMore;
     }
 
     /** Returns true if to instances of the same subclass will always have the same number of decimals. */
@@ -153,12 +159,10 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             if (decimalDigitsFound == 0) {   // the "1." case => same as integral case
                 return integralPart;
             }
-            // a subsequent Long.parse would allow an additional '+' or '-' as the first character of the fractional part, so we have to check that upfront
-            // Java 1.8 supports parseUnsignedLong, which we do not use here for backwards compatibility
             String fraction = src.substring(indexOfDecimalPoint + 1);
             if (fraction.charAt(0) == '-' || fraction.charAt(0) == '+')
                 throw new NumberFormatException("Extra sign found at start of fractional digits");
-            long fractionalPart = Long.parseLong(fraction);
+            long fractionalPart = Long.parseLong(fraction);  // parseUnsignedLong still allows a leading plus sign
             // apply the sign to the fractional part. checking integralPart won't work here, because that may be "-0"
             if (src.charAt(0) == '-')
                 fractionalPart = -fractionalPart;
@@ -743,33 +747,33 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         return scaledAmounts;
     }
 
-	@Override
-	public int intValue() {
-		return (int)(mantissa / getUnitAsLong());
-	}
+    @Override
+    public int intValue() {
+        return (int)(mantissa / getUnitAsLong());
+    }
 
-	@Override
-	public long longValue() {
-		return mantissa / getUnitAsLong();
-	}
+    @Override
+    public long longValue() {
+        return mantissa / getUnitAsLong();
+    }
 
-	@Override
-	public float floatValue() {
-		return (float)((double)mantissa / getScaleAsDouble());
-	}
+    @Override
+    public float floatValue() {
+        return (float)((double)mantissa / getScaleAsDouble());
+    }
 
-	@Override
-	public double doubleValue() {
-		return (double)mantissa / getScaleAsDouble();
-	}
+    @Override
+    public double doubleValue() {
+        return (double)mantissa / getScaleAsDouble();
+    }
 
-	public BigDecimal toBigDecimal() {
-		if (mantissa == 0) {
-			return BigDecimal.ZERO;
-		} else if (mantissa == 1L) {
-			return BigDecimal.ONE;
-		} else {
-			return BigDecimal.valueOf(mantissa, getScale());
-		}
-	}
+    public BigDecimal toBigDecimal() {
+        if (mantissa == 0) {
+            return BigDecimal.ZERO;
+        } else if (mantissa == 1L) {
+            return BigDecimal.ONE;
+        } else {
+            return BigDecimal.valueOf(mantissa, getScale());
+        }
+    }
 }

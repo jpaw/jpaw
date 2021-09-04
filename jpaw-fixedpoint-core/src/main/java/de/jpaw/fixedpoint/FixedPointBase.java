@@ -16,8 +16,7 @@ import de.jpaw.fixedpoint.types.VariableUnits;
  * @author Michael Bischoff
  *
  */
-public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extends Number implements Serializable, Comparable<FixedPointBase<?>>
-    {
+public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extends Number implements Serializable, Comparable<FixedPointBase<?>> {
     private static final long serialVersionUID = 8834214052987561284L;
     protected final static long [] powersOfTen = {  // What's missing here is something like C's "const" for the contents of the array. Let's hope for Java 9, 10 or whatever...
             1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000,
@@ -46,10 +45,16 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
      * This implementation returns cached instances for 0 and 1. Otherwise, in case this has the same mantissa, this is returned. */
     public abstract CLASS newInstanceOf(long mantissa);
 
-    /** Returns a fixed point value object which has a different number of decimals. Most implementations have a fixed scale and will not support this. */
-    public CLASS newInstanceOf(long mantissa, int scale) {
-        throw new ArithmeticException("Creating instances of different scale not supported for " + getClass().getCanonicalName());
+    public static long mantissaFor(long integralValue, int scale) {
+        return integralValue * powersOfTen[scale];
     }
+    public static long mantissaFor(double value, int scale) {
+        return Math.round(value * powersOfTen[scale]);
+    }
+//    /** Returns a fixed point value object which has a different number of decimals. Most implementations have a fixed scale and will not support this. */
+//    public CLASS newInstanceOf(long mantissa, int scale) {
+//        throw new ArithmeticException("Creating instances of different scale not supported for " + getClass().getCanonicalName());
+//    }
 
     /** Get the number of decimals. */
     public abstract int getScale();
@@ -88,6 +93,24 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     /** Returns true if to instances of the same subclass will always have the same number of decimals. */
     public boolean isFixedScale() {
         return true;  // default implementations: most subtypes do.
+    }
+
+    /** Returns true if this is an integral number. */
+    public boolean isIntegralValue() {
+        long scale = powersOfTen[getScale()];
+        return mantissa % scale == 0;
+    }
+
+    /** Returns the integral part of the number. */
+    public long floor() {
+        long scale = powersOfTen[getScale()];
+        return mantissa / scale;
+    }
+
+    public long fraction() {
+        long scale = powersOfTen[getScale()];
+        long integralDigits = mantissa / scale;
+        return Math.abs(mantissa - integralDigits * scale);
     }
 
     /** Appends a separately provided mantissa in a human readable form to the provided StringBuilder, based on settings of a reference number (this).
@@ -177,6 +200,10 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
                 return integralPart + fractionalPart / powersOfTen[-fractionalDigitsDiff];
             }
         }
+    }
+
+    static public final long mantissaFor(String src, int targetScale) {
+        return parseMantissa(src, targetScale);
     }
 
     @Override

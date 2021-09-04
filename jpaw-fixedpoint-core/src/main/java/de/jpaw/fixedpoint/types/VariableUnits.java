@@ -131,12 +131,6 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
     }
 
     @Override
-    public VariableUnits newInstanceOf(long mantissa, int scale) {
-        return valueOf(mantissa, scale);  // scaleCheck done by valueOf()
-    }
-
-
-    @Override
     public int getScale() {
         return scale;
     }

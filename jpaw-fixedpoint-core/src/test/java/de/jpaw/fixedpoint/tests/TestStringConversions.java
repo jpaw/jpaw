@@ -1,7 +1,7 @@
 package de.jpaw.fixedpoint.tests;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import de.jpaw.fixedpoint.FixedPointBase;
 import de.jpaw.fixedpoint.types.Hundreds;
@@ -10,7 +10,6 @@ import de.jpaw.fixedpoint.types.Units;
 import de.jpaw.fixedpoint.types.VariableUnits;
 
 
-@Test
 public class TestStringConversions {
     static private class TestCase {
         public TestCase(String stringRep, FixedPointBase<?> data) {
@@ -37,11 +36,12 @@ public class TestStringConversions {
         new TestCase("-19.99", new Hundreds(-1999))
     };
 
+    @Test
     public void testToString() throws Exception {
 
         for (int i = 0; i < testCasesToString.length; ++i) {
             TestCase t = testCasesToString[i];
-            Assert.assertEquals(t.data.toString(), t.stringRep);
+            Assertions.assertEquals(t.stringRep, t.data.toString());
         }
     }
 
@@ -60,12 +60,13 @@ public class TestStringConversions {
         new TestCase("-3.14000000000000000", MilliUnits.valueOf(-3.14))
     };
 
+    @Test
     public void testParse() throws Exception {
 
         for (int i = 0; i < testCasesParse.length; ++i) {
             TestCase t = testCasesParse[i];
             if (t.data != null) {
-                Assert.assertEquals(MilliUnits.valueOf(t.stringRep), t.data);
+                Assertions.assertEquals(MilliUnits.valueOf(t.stringRep), t.data);
             } else {
                 try {
                     MilliUnits.valueOf(t.stringRep);
@@ -78,8 +79,9 @@ public class TestStringConversions {
     }
 
 
+    @Test
     public void testVariableConversions() throws Exception {
-        Assert.assertEquals(VariableUnits.valueOf("19.80").getScale(), 2);
-        Assert.assertEquals(VariableUnits.valueOf("-19.80").getScale(), 2);
+        Assertions.assertEquals(2, VariableUnits.valueOf("19.80").getScale());
+        Assertions.assertEquals(2, VariableUnits.valueOf("-19.80").getScale());
     }
 }

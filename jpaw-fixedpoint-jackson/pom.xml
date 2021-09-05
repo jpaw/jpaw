@@ -26,5 +26,36 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
+
+        <!-- JUnit Test -->
+        <dependency>
+           <groupId>org.junit.jupiter</groupId>
+           <artifactId>junit-jupiter-api</artifactId>
+           <scope>test</scope>
+        </dependency>
     </dependencies>
+    
+    <build>
+        <plugins>
+            <!-- maven surefire -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <user.timezone>UTC</user.timezone>
+                    </systemPropertyVariables>
+                    <!-- Disable h2 web console during tests (opening the port may cause problems in CI environments due to parallel runs) -->
+                    <argLine>-Dt9t.in-memory.h2.web=false</argLine>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-engine</artifactId>
+                        <version>5.7.2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
 </project>

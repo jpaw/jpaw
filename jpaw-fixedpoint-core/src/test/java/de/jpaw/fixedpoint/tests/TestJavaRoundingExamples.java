@@ -2,15 +2,14 @@ package de.jpaw.fixedpoint.tests;
 
 import java.math.RoundingMode;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import de.jpaw.fixedpoint.FixedPointBase;
 import de.jpaw.fixedpoint.FixedPointNative;
 
 // test the the examples listed in the Javadoc: http://docs.oracle.com/javase/7/docs/api/java/math/RoundingMode.html
 
-@Test
 public class TestJavaRoundingExamples {
     private static final long EXCEPTION = 99999;
     private static RoundingMode [] modes = { null,
@@ -31,6 +30,7 @@ public class TestJavaRoundingExamples {
         test00, test01, test02, test03, test04, test05, test06, test07, test08, test09
     };
 
+    @Test
     public void testNativeRounding() throws Exception {
         for (int testcase = 0; testcase < tests.length; ++testcase) {
             long [] test = tests[testcase];
@@ -38,7 +38,7 @@ public class TestJavaRoundingExamples {
             for (int i = 1; i < modes.length; ++i) {
                 if (test[i] != EXCEPTION) {
                     long result = FixedPointNative.multiply_and_scale(test[0], 1, 1, modes[i]);
-                    Assert.assertEquals(result, test[i],
+                    Assertions.assertEquals(test[i], result,
                             "Test " + testcase + ", mode " + modes[i].name());
                 } else {
                     try {
@@ -52,6 +52,7 @@ public class TestJavaRoundingExamples {
         }
     }
 
+    @Test
     public void testJavaRounding() throws Exception {
         for (int testcase = 0; testcase < tests.length; ++testcase) {
             long [] test = tests[testcase];
@@ -59,7 +60,7 @@ public class TestJavaRoundingExamples {
             for (int i = 1; i < modes.length; ++i) {
                 if (test[i] != EXCEPTION) {
                     long result = FixedPointBase.divide_longs(test[0], 10, modes[i]);
-                    Assert.assertEquals(result, test[i],
+                    Assertions.assertEquals(test[i], result,
                             "Test " + testcase + ", mode " + modes[i].name());
                 } else {
                     try {

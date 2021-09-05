@@ -22,7 +22,7 @@ import de.jpaw.fixedpoint.types.MilliUnits;
 
 //Benchmarks to evaluate fixed point arithmetic vs. BigDecimal
 
-//java -Djava.library.path=$HOME/lib -jar target/fixedpoint-benchmarks.jar -i 3 -f 3 -wf 1 -wi 3 ".*FPMult.*"
+//java -Djava.library.path=$HOME/lib -jar target/jpaw-fixedpoint-benchmarks.jar -i 3 -f 3 -wf 1 -wi 3 ".*FPMult.*"
 
 //# Run complete. Total time: 00:03:02
 //
@@ -47,6 +47,17 @@ import de.jpaw.fixedpoint.types.MilliUnits;
 //d.j.f.b.FPMult.roundFast                   avgt        9  17.073        0.300  ns/op
 //d.j.f.b.FPMult.roundNot                    avgt        9   4.915        0.420  ns/op
 //d.j.f.b.FPMult.roundSlow                   avgt        9  18.219        0.318  ns/op
+
+// JDK 11 results:
+//Benchmark                        Mode  Cnt   Score   Error  Units
+//FPMult.countLeadingBits          avgt    9   2.705 ± 0.002  ns/op   30% worse
+//FPMult.multFPintMult             avgt    9   5.528 ± 0.066  ns/op   25% worse
+//FPMult.multFPsubNoScale          avgt    9   4.422 ± 0.013  ns/op   OK
+//FPMult.multFPsubWithScale        avgt    9  19.184 ± 0.037  ns/op   OK
+//FPMult.multFPsubWithScaleWithBD  avgt    9  69.993 ± 1.167  ns/op   25% better
+//FPMult.roundFast                 avgt    9  14.640 ± 0.155  ns/op   15% better
+//FPMult.roundNot                  avgt    9   5.693 ± 0.022  ns/op   15% slower
+//FPMult.roundSlow                 avgt    9  15.516 ± 0.125  ns/op   10% better
 
 @State(value = Scope.Thread)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)

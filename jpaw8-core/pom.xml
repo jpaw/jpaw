@@ -13,13 +13,4 @@
 
     <description>Some extensions to the Java functional APIs</description>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>${testng.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
 </project>

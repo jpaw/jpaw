@@ -14,10 +14,11 @@
     <description>Definition and implementation of some basic classes for enums / tokenizable enums, and enum sets, extracted from BONAPARTE core</description>
 
     <dependencies>
+        <!-- JUnit Test -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
+           <groupId>org.junit.jupiter</groupId>
+           <artifactId>junit-jupiter-api</artifactId>
+           <scope>test</scope>
         </dependency>
     </dependencies>
 

@@ -6,8 +6,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import de.jpaw8.batch.api.BatchProcessorFactory;
 import de.jpaw8.batch.api.BatchWriter;
@@ -76,28 +76,28 @@ public class SingleRequest {
     public void testCounterSimple() throws Exception {
         Counter a = new Counter();
         new BatchReaderRange(1L, 2000L).forEach(a).run();
-        Assert.assertEquals(a.num, 2000);
+        Assertions.assertEquals(2000, a.num);
     }
 
     @Test
     public void testCounterMap() throws Exception {
         Counter a = new Counter();
         new BatchReaderRange(1L, 2000L).map(l -> l * l).forEach(a).run();
-        Assert.assertEquals(a.num, 2000);
+        Assertions.assertEquals(2000, a.num);
     }
 
     @Test
     public void testCounterFilter() throws Exception {
         Counter a = new Counter();
         new BatchReaderRange(1L, 2000L).filter(l -> (l & 1) == 0L).forEach(a).run();
-        Assert.assertEquals(a.num, 1000);
+        Assertions.assertEquals(1000, a.num);
     }
 
     @Test
     public void testCounter() throws Exception {
         Counter a = new Counter();
         new BatchReaderRange(1L, 2000L).filter(l -> (l & 1) == 0L).map(l -> l * l).forEach(a).run();
-        Assert.assertEquals(a.num, 1000);
+        Assertions.assertEquals(1000, a.num);
     }
 
     @Test
@@ -105,7 +105,7 @@ public class SingleRequest {
         Adder a = new Adder();
         new BatchReaderRange(1L, 100L).filter(l -> (l & 1) == 0L).map(l -> l * l).forEach(a).run();
 //        Batch sequence = new BatchRange(1L, 100L).filter(l -> (l & 1) == 0L).map(l -> { System.out.println("Got " + l); return l * l; }).forEach(a);
-        Assert.assertEquals(a.sum, 171700);
+        Assertions.assertEquals(171700, a.sum);
     }
 
     @Test
@@ -113,7 +113,7 @@ public class SingleRequest {
         Adder a = new Adder();
         new BatchReaderRange(1L, 100L).newThread().filter(l -> (l & 1) == 0L).map(l -> l * l).forEach(a).run();
 //        Batch sequence = new BatchRange(1L, 100L).filter(l -> (l & 1) == 0L).map(l -> { System.out.println("Got " + l); return l * l; }).forEach(a);
-        Assert.assertEquals(a.sum, 171700);
+        Assertions.assertEquals(171700, a.sum);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class SingleRequest {
         Date start = new Date();
         new BatchReaderRange(1L, 10L).filter(d).filter(d).forEach(a).run();
         Date end = new Date();
-        Assert.assertEquals(a.num, 10);
+        Assertions.assertEquals(10, a.num);
         System.out.println("Took " + (end.getTime() - start.getTime()) + " ms");
     }
 
@@ -134,7 +134,7 @@ public class SingleRequest {
         Date start = new Date();
         new BatchReaderRange(1L, 10L).filter(d).newThread().filter(d).forEach(a).run();
         Date end = new Date();
-        Assert.assertEquals(a.num, 10);
+        Assertions.assertEquals(10, a.num);
         System.out.println("Took " + (end.getTime() - start.getTime()) + " ms");
     }
 
@@ -145,7 +145,7 @@ public class SingleRequest {
 //        Date start = new Date();
 //        new BatchReaderRange(1L, 12L).parallel(4).filter(d).forEach(a).run();
 //        Date end = new Date();
-//        Assert.assertEquals(a.num.get(), 12);
+//        Assertions.assertEquals(a.num.get(), 12);
 //        System.out.println("Took " + (end.getTime() - start.getTime()) + " ms");
 //    }
     @Test
@@ -155,7 +155,7 @@ public class SingleRequest {
         Date start = new Date();
         new BatchReaderRange(1L, 12L).intfilter(d).intfilter(d).intfilter(d).forEach(a).run();
         Date end = new Date();
-        Assert.assertEquals(a.num, 12);
+        Assertions.assertEquals(12, a.num);
         System.out.println("Took " + (end.getTime() - start.getTime()) + " ms");
     }
     // expect 7 seconds: 12 * 0.5 per stage = 6 seconds, + 2 * 0.5 for pipeline fill / drain
@@ -166,7 +166,7 @@ public class SingleRequest {
         Date start = new Date();
         new BatchReaderRange(1L, 12L).intfilter(d).newThread().intfilter(d).newThread().intfilter(d).forEach(a).run();
         Date end = new Date();
-        Assert.assertEquals(a.num, 12);
+        Assertions.assertEquals(12, a.num);
         System.out.println("Took " + (end.getTime() - start.getTime()) + " ms");
     }
 
@@ -178,7 +178,7 @@ public class SingleRequest {
         Date start = new Date();
         new BatchReaderRange(1L, 12L).intfilter(d).intfilter(d).forEach(new BatchWriterConsumer<Object>(a).intfilteredFrom(d)).run();
         Date end = new Date();
-        Assert.assertEquals(a.num, 12);
+        Assertions.assertEquals(12, a.num);
         System.out.println("Took " + (end.getTime() - start.getTime()) + " ms");
     }
 
@@ -190,7 +190,7 @@ public class SingleRequest {
         Date start = new Date();
         new BatchReaderRange(1L, 12L).intfilter(d).newThread().intfilter(d).forEach(new BatchWriterConsumer<Object>(a).intfilteredFrom(d).newThread()).run();
         Date end = new Date();
-        Assert.assertEquals(a.num, 12);
+        Assertions.assertEquals(12, a.num);
         System.out.println("Took " + (end.getTime() - start.getTime()) + " ms");
     }
 
@@ -204,7 +204,7 @@ public class SingleRequest {
         Date start = new Date();
         new BatchReaderRange(1L, 12L).parallel(4, 16, new BatchWriterFactoryByIdentity<Object>(consumer2)).run();
         Date end = new Date();
-        Assert.assertEquals(ctr.num.get(), 12);
+        Assertions.assertEquals(12, ctr.num.get());
         System.out.println("Took " + (end.getTime() - start.getTime()) + " ms");
     }
     // the same, but with ArrayBlockingQueue (expect 1.5 seconds: 12 / 4 * 0.5
@@ -217,7 +217,7 @@ public class SingleRequest {
         Date start = new Date();
         new Batches<Long>(new BatchReaderNewThreadsViaQueue<Long>(new BatchReaderRange(1L, 12L), 16, 4), new BatchWriterFactoryByIdentity<Object>(consumer2)).run();
         Date end = new Date();
-        Assert.assertEquals(ctr.num.get(), 12);
+        Assertions.assertEquals(12, ctr.num.get());
         System.out.println("Took " + (end.getTime() - start.getTime()) + " ms");
     }
 
@@ -232,7 +232,7 @@ public class SingleRequest {
         new BatchReaderRange(1L, 12L).parallel(4, 16, new Collector<Long>(consumer)).run();
 
         Date end = new Date();
-        Assert.assertEquals(ctr.num.get(), 12);
+        Assertions.assertEquals(12, ctr.num.get());
         System.out.println("Took " + (end.getTime() - start.getTime()) + " ms");
     }
 
@@ -247,7 +247,7 @@ public class SingleRequest {
         new BatchReaderRange(1L, 12L).parallel(4, 16, new Collector<Long>(consumer).mappedFrom(justADelay)).run();
 
         Date end = new Date();
-        Assert.assertEquals(ctr.num.get(), 12);
+        Assertions.assertEquals(12, ctr.num.get());
         System.out.println("Took " + (end.getTime() - start.getTime()) + " ms");
     }
 

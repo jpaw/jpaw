@@ -2,8 +2,8 @@ package de.jpaw.enums.tests;
 
 import java.util.Iterator;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import de.jpaw.enums.AbstractByteEnumSet;
 import de.jpaw.enums.AbstractIntEnumSet;
@@ -158,9 +158,9 @@ public class TestEnumSetConversion {
             // create an enum for the bitmap i, convert it to string and back
             ByteTestEnumset set = new ByteTestEnumset(i);
             String chars = set.asStringMap();
-            Assert.assertEquals(set.size(), chars.length());
+            Assertions.assertEquals(set.size(), chars.length());
             byte bitmap = ByteTestEnumset.fromStringMap(chars);
-            Assert.assertEquals(i, bitmap);
+            Assertions.assertEquals(i, bitmap);
 
             i = (byte) (i * 3 + 1);      // next value: 0, 1, 4, 13, 40, 121, 364, ...
         }
@@ -173,9 +173,9 @@ public class TestEnumSetConversion {
             // create an enum for the bitmap i, convert it to string and back
             ShortTestEnumset set = new ShortTestEnumset(i);
             String chars = set.asStringMap();
-            Assert.assertEquals(set.size(), chars.length());
+            Assertions.assertEquals(set.size(), chars.length());
             short bitmap = ShortTestEnumset.fromStringMap(chars);
-            Assert.assertEquals(i, bitmap);
+            Assertions.assertEquals(i, bitmap);
 
             i = (short) (i * 3 + 1);      // next value: 0, 1, 4, 13, 40, 121, 364, ...
         }
@@ -188,9 +188,9 @@ public class TestEnumSetConversion {
             // create an enum for the bitmap i, convert it to string and back
             IntTestEnumset set = new IntTestEnumset(i);
             String chars = set.asStringMap();
-            Assert.assertEquals(set.size(), chars.length());
+            Assertions.assertEquals(set.size(), chars.length());
             int bitmap = IntTestEnumset.fromStringMap(chars);
-            Assert.assertEquals(i, bitmap);
+            Assertions.assertEquals(i, bitmap);
 
             i = i * 3 + 1;      // next value: 0, 1, 4, 13, 40, 121, 364, ...
         }
@@ -203,9 +203,9 @@ public class TestEnumSetConversion {
             // create an enum for the bitmap i, convert it to string and back
             LongTestEnumset set = new LongTestEnumset(i);
             String chars = set.asStringMap();
-            Assert.assertEquals(set.size(), chars.length());
+            Assertions.assertEquals(set.size(), chars.length());
             long bitmap = LongTestEnumset.fromStringMap(chars);
-            Assert.assertEquals(i, bitmap);
+            Assertions.assertEquals(i, bitmap);
 
             i = i * 3 + 1;      // next value: 0, 1, 4, 13, 40, 121, 364, ...
         }

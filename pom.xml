@@ -57,8 +57,12 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${surefire.plugin.version}</version>
                     <configuration>
+                        <systemPropertyVariables>
+                            <user.timezone>UTC</user.timezone>
+                        </systemPropertyVariables>
                         <!-- cannot use target/lib because we depend on additional 4rd party libraries (lz4), which are not in this project -->
-                        <argLine>-Djava.library.path=${user.home}/lib</argLine>
+                        <!-- Disable h2 web console during tests (opening the port may cause problems in CI environments due to parallel runs) -->
+                        <argLine>-Djava.library.path=${user.home}/lib -Dt9t.in-memory.h2.web=false</argLine>
 
                         <!-- This does not work:
                         <systemProperties>
@@ -68,7 +72,14 @@
                             </property>
                         </systemProperties>
                         -->
-                        </configuration>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.junit.jupiter</groupId>
+                            <artifactId>junit-jupiter-engine</artifactId>
+                            <version>5.7.2</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
             </plugins>
         </pluginManagement>

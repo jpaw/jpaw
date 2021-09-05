@@ -8,7 +8,7 @@ import static extension de.jpaw.fixedpoint.money.FPAmountOperators.*
 import static extension de.jpaw.fixedpoint.money.FPCurrencyExtensions.*
 
 /** Syntactic sugar for the FPAmount class when used from xtend */
-public class MoneyDemo {
+class MoneyDemo {
     def static void main(String [] args) {
 
         val net = 120.Euro

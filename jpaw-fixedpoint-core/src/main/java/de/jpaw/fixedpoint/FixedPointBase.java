@@ -206,6 +206,29 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         return parseMantissa(src, targetScale);
     }
 
+    static public final long mantissaFor(long currentMantissa, int currentScale, int desiredScale, boolean allowRounding) {
+    	if (currentMantissa == 0L) {
+    		return currentMantissa;
+    	}
+        final int toMultiplyWithExponent = desiredScale - currentScale;
+        if (toMultiplyWithExponent >= 0) {
+        	if (toMultiplyWithExponent > 18) {
+                throw new ArithmeticException("Overflow");
+        	}
+            return currentMantissa * powersOfTen[toMultiplyWithExponent];
+        } else {
+            if (!allowRounding) {
+                if (toMultiplyWithExponent < -18 || currentMantissa % powersOfTen[toMultiplyWithExponent] != 0L) {
+                    throw new ArithmeticException("Rounding required but not allowed");
+                }
+            }
+            if (toMultiplyWithExponent < -18) {
+            	return 0L; // underflow
+            }
+            return currentMantissa / powersOfTen[toMultiplyWithExponent];
+        }
+    }
+
     @Override
     public int hashCode() {
         return getScale() + 19 * (int)(mantissa ^ mantissa >>> 32);

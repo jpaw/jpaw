@@ -63,10 +63,17 @@ public class NanoUnits extends FixedPointBase<NanoUnits> {
         return  NanoUnits.of(divide_longs(that.getMantissa(), powersOfTen[-scaleDiff], rounding));
     }
 
-    // This is certainly not be the most efficient implementation, as it involves the construction of up to 2 new BigDecimals
-    // TODO: replace it by a zero GC version
     public static NanoUnits of(BigDecimal number) {
-        return of(number.setScale(DECIMALS, RoundingMode.UNNECESSARY).scaleByPowerOfTen(DECIMALS).longValue());
+        final int scaleOfBigDecimal = number.scale();
+        if (scaleOfBigDecimal <= 0) {
+            // the value of the BigDecimal is integral
+            final long valueOfBigDecimal = number.longValue();
+            return of(valueOfBigDecimal * powersOfTen[-scaleOfBigDecimal]);
+        }
+        // This is certainly not be the most efficient implementation, as it involves the construction of up to 2 new BigDecimals
+        // TODO: replace it by a zero GC version
+        // blame JDK, there is not even a current method to determine if a BigDecimal is integral despite a scale > 0, nor to get its mantissa without creating additional objects  
+        return of(number.setScale(DECIMALS, RoundingMode.UNNECESSARY).unscaledValue().longValue());
     }
 
     @Override

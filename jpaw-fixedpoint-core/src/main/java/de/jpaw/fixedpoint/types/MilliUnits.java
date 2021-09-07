@@ -72,7 +72,7 @@ public class MilliUnits extends FixedPointBase<MilliUnits> {
         }
         // This is certainly not be the most efficient implementation, as it involves the construction of up to 2 new BigDecimals
         // TODO: replace it by a zero GC version
-        // blame JDK, there is not even a current method to determine if a BigDecimal is integral despite a scale > 0, nor to get its mantissa without creating additional objects  
+        // blame JDK, there is not even a current method to determine if a BigDecimal is integral despite a scale > 0, nor to get its mantissa without creating additional objects
         return of(number.setScale(DECIMALS, RoundingMode.UNNECESSARY).unscaledValue().longValue());
     }
 

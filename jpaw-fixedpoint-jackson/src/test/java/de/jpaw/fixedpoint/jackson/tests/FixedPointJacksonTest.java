@@ -15,8 +15,8 @@ public class FixedPointJacksonTest {
         public MicroUnits num;
         public MilliUnits num2;
     }
-    
-    static final String DATA_AS_JSON = "{\"bool\":true,\"num\":3.140000,\"num2\":-3.140}"; 
+
+    static final String DATA_AS_JSON = "{\"bool\":true,\"num\":3.140000,\"num2\":-3.140}";
 
     private ObjectMapper createMapper() {
         final ObjectMapper om = new ObjectMapper();
@@ -40,7 +40,7 @@ public class FixedPointJacksonTest {
 
     @Test
     public void runDeserialization() throws Exception {
-        
+
         final ObjectMapper om = createMapper();
         final JsonTest dstData = om.readValue(DATA_AS_JSON, JsonTest.class);
 

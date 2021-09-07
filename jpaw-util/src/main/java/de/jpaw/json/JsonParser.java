@@ -359,7 +359,7 @@ public class JsonParser {
         return l;
     }
 
-    /** Expect either a list of objects, or a single object, or null. Emits all parsed objects via the provided consumer. */ 
+    /** Expect either a list of objects, or a single object, or null. Emits all parsed objects via the provided consumer. */
     public void parseObjectOrListOfObjects(Consumer<Map<String, Object>> sink) throws JsonException {
         if (s == null)
             return;    // shortcut (nothing is emitted)
@@ -380,7 +380,7 @@ public class JsonParser {
         skipSpaces();
         c = peekNeededChar();
         if (c == ']') {
-        	// empty list
+            // empty list
             ++i;
             mustEnd();
             return;

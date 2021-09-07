@@ -12,11 +12,11 @@ public class TestJsonListParser {
     static class EmitChecker implements Consumer<Map<String, Object>> {
         private final int [] expected;
         private int index = 0;
-        
+
         private EmitChecker(int [] expected) {
             this.expected = expected;
         }
-        
+
         @Override
         public void accept(Map<String, Object> map) {
             if (index >= expected.length)
@@ -27,7 +27,7 @@ public class TestJsonListParser {
                 Assert.assertEquals("Number of parsed elements", expected[index], map.size());
             ++index;
         }
-        
+
         public void ensureAllUsed() {
             Assert.assertEquals("Expected more elements emitted", expected.length, index);
         }
@@ -39,7 +39,7 @@ public class TestJsonListParser {
         p.parseObjectOrListOfObjects(checker);
         checker.ensureAllUsed();
     }
-    
+
     @Test
     public void testEmptyFile() throws Exception {
         testRunner("");

@@ -9,9 +9,9 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import de.jpaw.fixedpoint.FixedPointBase;
 
 public class FixedPointJacksonSerializer<CLASS extends FixedPointBase<CLASS>> extends StdSerializer<CLASS> {
-	private static final long serialVersionUID = -194246924592207968L;
+    private static final long serialVersionUID = -194246924592207968L;
 
-	public FixedPointJacksonSerializer() {
+    public FixedPointJacksonSerializer() {
         this(null);
     }
 

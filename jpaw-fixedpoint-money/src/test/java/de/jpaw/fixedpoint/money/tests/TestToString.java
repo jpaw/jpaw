@@ -9,7 +9,7 @@ import de.jpaw.fixedpoint.money.FPCurrency;
 
 public class TestToString {
 
-	@Test
+    @Test
     public void testToString() throws Exception {
         FPCurrency Euro = new FPCurrency(JavaCurrencyDataProvider.instance.get("EUR"));
 

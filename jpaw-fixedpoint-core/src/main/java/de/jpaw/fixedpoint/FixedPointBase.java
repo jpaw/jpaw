@@ -86,7 +86,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
 
     /** Checks that the number is within 18 digits of magnitude. */
     public boolean isWithinDigits(int numberOfDigits) {
-        final long oneMore = powersOfTen[numberOfDigits]; 
+        final long oneMore = powersOfTen[numberOfDigits];
         return -oneMore < mantissa && mantissa < oneMore;
     }
 
@@ -207,14 +207,14 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     }
 
     static public final long mantissaFor(long currentMantissa, int currentScale, int desiredScale, boolean allowRounding) {
-    	if (currentMantissa == 0L) {
-    		return currentMantissa;
-    	}
+        if (currentMantissa == 0L) {
+            return currentMantissa;
+        }
         final int toMultiplyWithExponent = desiredScale - currentScale;
         if (toMultiplyWithExponent >= 0) {
-        	if (toMultiplyWithExponent > 18) {
+            if (toMultiplyWithExponent > 18) {
                 throw new ArithmeticException("Overflow");
-        	}
+            }
             return currentMantissa * powersOfTen[toMultiplyWithExponent];
         } else {
             if (!allowRounding) {
@@ -223,7 +223,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
                 }
             }
             if (toMultiplyWithExponent < -18) {
-            	return 0L; // underflow
+                return 0L; // underflow
             }
             return currentMantissa / powersOfTen[toMultiplyWithExponent];
         }

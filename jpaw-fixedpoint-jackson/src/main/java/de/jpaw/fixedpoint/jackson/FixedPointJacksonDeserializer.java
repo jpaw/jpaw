@@ -13,7 +13,7 @@ import de.jpaw.fixedpoint.FixedPointFactory;
 
 public class FixedPointJacksonDeserializer<CLASS extends FixedPointBase<CLASS>> extends StdDeserializer<CLASS> {
     private static final long serialVersionUID = -194246924592207982L;
-    
+
     final private FixedPointFactory<CLASS> factory;
 
     public FixedPointJacksonDeserializer(FixedPointFactory<CLASS> factory) {

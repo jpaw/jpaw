@@ -48,7 +48,7 @@ public class Tenths extends FixedPointBase<Tenths> {
 
     /** Returns a re-typed instance of that. Loosing precision is not supported. */
     public static Tenths of(FixedPointBase<?> that) {
-        int scaleDiff = DECIMALS - that.getScale();
+        int scaleDiff = DECIMALS - that.scale();
         if (scaleDiff >= 0)
             return Tenths.of(that.getMantissa() * powersOfTen[scaleDiff]);
         throw new ArithmeticException("Retyping with reduction of scale requires specfication of a rounding mode");
@@ -56,7 +56,7 @@ public class Tenths extends FixedPointBase<Tenths> {
 
     /** Returns a re-typed instance of that. */
     public static Tenths of(FixedPointBase<?> that, RoundingMode rounding) {
-        int scaleDiff = DECIMALS - that.getScale();
+        int scaleDiff = DECIMALS - that.scale();
         if (scaleDiff >= 0)
             return Tenths.of(that.getMantissa() * powersOfTen[scaleDiff]);
         // rescale
@@ -82,7 +82,7 @@ public class Tenths extends FixedPointBase<Tenths> {
     }
 
     @Override
-    public int getScale() {
+    public int scale() {
         return DECIMALS;
     }
 

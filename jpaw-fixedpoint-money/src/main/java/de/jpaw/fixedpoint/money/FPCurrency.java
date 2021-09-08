@@ -46,7 +46,7 @@ public final class FPCurrency implements Serializable {
 
     /** Constructs a new currency, for the same ISO code, but with default precision. May return the same object. */
     public FPCurrency withDefaultPrecision() {
-        if (currency.getDefaultFractionDigits() == zero.getScale())
+        if (currency.getDefaultFractionDigits() == zero.scale())
             return this;
         return stdPrecisionOf(currency);
     }
@@ -90,9 +90,9 @@ public final class FPCurrency implements Serializable {
     public String toString() {
         if (asString == null) {
             // build a hashed string
-            asString = (zero.getScale() == currency.getDefaultFractionDigits())
+            asString = (zero.scale() == currency.getDefaultFractionDigits())
                     ? currency.getCurrencyCode()
-                    : currency.getCurrencyCode() + ":" + zero.getScale();
+                    : currency.getCurrencyCode() + ":" + zero.scale();
         }
         return asString;
     }
@@ -114,7 +114,7 @@ public final class FPCurrency implements Serializable {
     }
 
     public int getDecimals() {
-        return zero.getScale();
+        return zero.scale();
     }
 
     @Override

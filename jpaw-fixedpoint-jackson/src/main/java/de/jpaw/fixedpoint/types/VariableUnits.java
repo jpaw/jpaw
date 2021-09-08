@@ -70,12 +70,12 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
 
     /** Returns a re-typed instance of that. Loosing precision is not supported. */
     public static VariableUnits of(FixedPointBase<?> that) {
-        return ZEROs[that.getScale()].newInstanceOf(that.getMantissa());
+        return ZEROs[that.scale()].newInstanceOf(that.getMantissa());
     }
 
     /** Returns a re-typed instance of that. SAME AS THE PREVIOUS METHOD, provided for symmetry. */
     public static VariableUnits of(FixedPointBase<?> that, RoundingMode rounding) {
-        return ZEROs[that.getScale()].newInstanceOf(that.getMantissa());
+        return ZEROs[that.scale()].newInstanceOf(that.getMantissa());
     }
 
     // This is certainly not be the most efficient implementation, as it involves the construction of up to 2 new BigDecimals
@@ -131,7 +131,7 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
     }
 
     @Override
-    public int getScale() {
+    public int scale() {
         return scale;
     }
 
@@ -164,11 +164,11 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
     public static VariableUnits sumOf(List<? extends FixedPointBase<?>> components, boolean addOne) {
         int maxScale = 0;
         for (FixedPointBase<?> e : components)
-            if (e.getScale() > maxScale)
-                maxScale = e.getScale();
+            if (e.scale() > maxScale)
+                maxScale = e.scale();
         long sum = addOne ? powersOfTen[maxScale] : 0;
         for (FixedPointBase<?> e : components)
-            sum += e.getMantissa() * powersOfTen[maxScale - e.getScale()];
+            sum += e.getMantissa() * powersOfTen[maxScale - e.scale()];
         return VariableUnits.of(sum, maxScale);
     }
 

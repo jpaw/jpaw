@@ -81,7 +81,7 @@ public class TestStringConversions {
 
     @Test
     public void testVariableConversions() throws Exception {
-        Assertions.assertEquals(2, VariableUnits.valueOf("19.80").getScale());
-        Assertions.assertEquals(2, VariableUnits.valueOf("-19.80").getScale());
+        Assertions.assertEquals(2, VariableUnits.valueOf("19.80").scale());
+        Assertions.assertEquals(2, VariableUnits.valueOf("-19.80").scale());
     }
 }

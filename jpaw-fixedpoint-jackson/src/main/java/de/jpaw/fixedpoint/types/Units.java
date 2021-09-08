@@ -47,17 +47,17 @@ public class Units extends FixedPointBase<Units> {
 
     /** Returns a re-typed instance of that. Loosing precision is not supported. */
     public static Units of(FixedPointBase<?> that) {
-        if (that.getScale() == 0)
+        if (that.scale() == 0)
             return Units.of(that.getMantissa());
         throw new ArithmeticException("Retyping with reduction of scale requires specfication of a rounding mode");
     }
 
     /** Returns a re-typed instance of that. */
     public static Units of(FixedPointBase<?> that, RoundingMode rounding) {
-        if (that.getScale() == 0)
+        if (that.scale() == 0)
             return Units.of(that.getMantissa());
         // rescale
-        return  Units.of(divide_longs(that.getMantissa(), powersOfTen[that.getScale()], rounding));
+        return  Units.of(divide_longs(that.getMantissa(), powersOfTen[that.scale()], rounding));
     }
 
     // This is certainly not be the most efficient implementation, as it involves the construction of up to 2 new BigDecimals
@@ -79,7 +79,7 @@ public class Units extends FixedPointBase<Units> {
     }
 
     @Override
-    public int getScale() {
+    public int scale() {
         return DECIMALS;
     }
 

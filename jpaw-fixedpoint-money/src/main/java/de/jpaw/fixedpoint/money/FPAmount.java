@@ -222,7 +222,7 @@ public class FPAmount implements Serializable {
         netAndTaxes[0] = gross;
         int i = 0;
         for (FixedPointBase<?> t : taxes) {
-            long ta = FixedPointNative.multiply_and_scale(gross, t.getMantissa(), t.getScale(), RoundingMode.HALF_EVEN);
+            long ta = FixedPointNative.multiply_and_scale(gross, t.getMantissa(), t.scale(), RoundingMode.HALF_EVEN);
             newGross += ta;
             netAndTaxes[++i] = ta;
         }
@@ -239,7 +239,7 @@ public class FPAmount implements Serializable {
         // compute the total tax factor
         VariableUnits totalTaxPercentage = VariableUnits.sumOf(taxes, true);
         long totalMantissa = totalTaxPercentage.getMantissa();
-        int totalScale = totalTaxPercentage.getScale();
+        int totalScale = totalTaxPercentage.scale();
         // allocate a list for net and all tax amounts
         long [] netAndTaxes = new long [taxes.size() + 1];
         netAndTaxes[0] = FixedPointNative.scale_and_divide(gross, totalScale, totalMantissa, RoundingMode.HALF_EVEN);
@@ -247,7 +247,7 @@ public class FPAmount implements Serializable {
         int i = 0;
         for (FixedPointBase<?> t : taxes) {
             // ta = gross * t / (1+total)   we calc both in scale of total
-            long mantissaT = t.getMantissa() * FixedPointBase.getPowerOfTen(totalScale - t.getScale());
+            long mantissaT = t.getMantissa() * FixedPointBase.getPowerOfTen(totalScale - t.scale());
             long ta = FixedPointNative.mult_div(gross, mantissaT, totalMantissa, RoundingMode.HALF_EVEN);
             newGross += ta;
             netAndTaxes[++i] = ta;
@@ -270,7 +270,7 @@ public class FPAmount implements Serializable {
         if (factor.isZero())
             return this.zero();
         // work...
-        int factorScale = factor.getScale();
+        int factorScale = factor.scale();
         long factorMantissa = factor.getMantissa();
         long [] sum = EMPTY_ARRAY;
         long newGross = factorScale == 0 ? (gross * factorMantissa)
@@ -296,7 +296,7 @@ public class FPAmount implements Serializable {
     /** Multiply an Amount by a scalar factor and convert it to a new currency. */
     public FPAmount convert(FixedPointBase<?> factor, FPCurrency newCurrency) {
         // no shortcuts here...
-        int factorScale = factor.getScale() - newCurrency.getDecimals() + currency.getDecimals();
+        int factorScale = factor.scale() - newCurrency.getDecimals() + currency.getDecimals();
         long factorMantissa = factor.getMantissa();
         long [] sum = EMPTY_ARRAY;
         long newGross = factorScale <= 0 ? (gross * factorMantissa * FixedPointBase.getPowerOfTen(-factorScale))

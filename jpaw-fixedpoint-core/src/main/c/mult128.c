@@ -18,7 +18,7 @@
  * multiplies two 64 bit integers, and scales the result.
  */
 JNIEXPORT jlong JNICALL Java_de_jpaw_fixedpoint_FixedPointNative_multdiv128(JNIEnv *env, jclass cls, jlong a, jlong b, jlong c, jint rounding) {
-    long long result = (long) a * (long) b;
+    __int128 result = (long) a * (long) b;
     jlong tmp = (jlong) (result / c);
     jlong mod = (jlong) (result % c);
     // printf("a=%ld, b=%ld, c=%ld, rounding=%d, tmp=%ld, mod is %ld\n", a, b, c, rounding, (long)tmp, (long)mod);

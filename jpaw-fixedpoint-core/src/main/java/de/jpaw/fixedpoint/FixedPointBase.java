@@ -35,7 +35,8 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         return powersOfTen[scale];
     }
 
-    private final long mantissa;
+    private transient String asString = null; // due to efforts to return this for arithmetic operations whereever possible, it is likely that the same number will be printed multiple times, and due to Java object alignments, it does not increase the size of the object
+    private final long mantissa;    // the significant digits
 
     protected FixedPointBase(long mantissa) {
         this.mantissa = mantissa;
@@ -148,14 +149,18 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
      * */
     @Override
     public String toString() {
-        if (scale() == 0) {
-            return Long.toString(mantissa);
-        } else {
-            // we need 21 characters at max (19 digits plus optional sign, plus decimal point), so allocate it with sufficient initial size to avoid realloc
-            StringBuilder sb = new StringBuilder(22);
-            append(sb, mantissa);
-            return sb.toString();
+        if (asString == null) {
+            // not yet computed
+            if (scale() == 0) {
+                asString = Long.toString(mantissa);
+            } else {
+                // we need 21 characters at max (19 digits plus optional sign, plus decimal point), so allocate it with sufficient initial size to avoid realloc
+                StringBuilder sb = new StringBuilder(22);
+                append(sb, mantissa);
+                asString = sb.toString();
+            }
         }
+        return asString;
     }
 
     /** Parses a string for a maximum number of decimal digits. Extra digits will be ignored as long as they are 0, but
@@ -680,6 +685,9 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     }
     /** Subtracts two fixed point numbers of exactly same type. For variable scale subtypes, the scale of the sum is the bigger of the operand scales. */
     public CLASS subtract(CLASS that) {
+        if (that.getMantissa() == 0L) {
+            return getMyself();
+        }
         // first checks, if we can void adding the numbers and return either operand.
         int diff = this.scale() - that.scale();
         if (diff >= 0)
@@ -826,4 +834,22 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             return BigDecimal.valueOf(mantissa, scale());
         }
     }
-}
+    
+    public CLASS scaleByPowerOfTen(int power) {
+        if (power == 0 || mantissa == 0L) {
+            return getMyself();
+        } else if (power < 0) {
+            if (power < -18) {
+                return getZero();
+            } else {
+                return getZero().newInstanceOf(mantissa / powersOfTen[power]);
+            }
+        } else {
+            if (power > 18) {
+                throw new ArithmeticException("Overflow");
+            } else {
+                return getZero().newInstanceOf(mantissa * powersOfTen[power]);
+            }
+        }
+    }
+ }

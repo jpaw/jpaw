@@ -23,16 +23,16 @@ public class TestStringConversions {
 
     static private TestCase [] testCasesToString = {
         new TestCase("1", Units.valueOf(1)),
-        new TestCase("-1.000", MilliUnits.valueOf(-1)),
+        new TestCase("-1", MilliUnits.valueOf(-1)),
         new TestCase("3.14", Hundreds.valueOf(3.14)),           // also tests double to Hundreds
         new TestCase("3.14", Hundreds.valueOf(3.13888)),        // also tests double to Hundreds
         new TestCase("3.14", Hundreds.valueOf(3.14159)),        // also tests double to Hundreds
         new TestCase("-3.14", Hundreds.valueOf(-3.14)),         // also tests double to Hundreds
         new TestCase("-3.14", Hundreds.valueOf(-3.13888)),      // also tests double to Hundreds
         new TestCase("-3.14", Hundreds.valueOf(-3.14159)),      // also tests double to Hundreds
-        new TestCase("19.80", new Hundreds(1980)),
+        new TestCase("19.8", new Hundreds(1980)),
         new TestCase("19.99", new Hundreds(1999)),
-        new TestCase("-19.80", new Hundreds(-1980)),
+        new TestCase("-19.8", new Hundreds(-1980)),
         new TestCase("-19.99", new Hundreds(-1999))
     };
 

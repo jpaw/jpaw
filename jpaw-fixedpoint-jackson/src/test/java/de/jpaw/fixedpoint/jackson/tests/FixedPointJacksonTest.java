@@ -16,7 +16,7 @@ public class FixedPointJacksonTest {
         public MilliUnits num2;
     }
 
-    static final String DATA_AS_JSON = "{\"bool\":true,\"num\":3.140000,\"num2\":-3.140}";
+    static final String DATA_AS_JSON = "{\"bool\":true,\"num\":3.14,\"num2\":-3.14}";
 
     private ObjectMapper createMapper() {
         final ObjectMapper om = new ObjectMapper();

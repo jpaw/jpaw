@@ -18,6 +18,11 @@ import de.jpaw.fixedpoint.types.VariableUnits;
  */
 public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extends Number implements Serializable, Comparable<FixedPointBase<?>> {
     private static final long serialVersionUID = 8834214052987561284L;
+
+    private static final char[] DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+    private final static int [] intPowersOfTen = {  // What's missing here is something like C's "const" for the contents of the array. Let's hope for Java 9, 10 or whatever...
+            1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000
+    };
     protected final static long [] powersOfTen = {  // What's missing here is something like C's "const" for the contents of the array. Let's hope for Java 9, 10 or whatever...
             1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000,
             10000000000L,
@@ -114,6 +119,24 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         return Math.abs(mantissa - integralDigits * scale);
     }
 
+    // only called for digits != 0 && scale > 0
+    private void appendFraction(StringBuilder sb, int scale, int digits) {
+        do {
+            int nextPower = intPowersOfTen[--scale];
+            int nextDigit = digits / nextPower;
+            sb.append(DIGITS[nextDigit]);
+            digits -= nextDigit * nextPower;
+        } while (digits != 0);  // replace condition by 'scale > 0' to get full length of fractional digits
+    }
+    private void appendFraction(StringBuilder sb, int scale, long digits) {
+        do {
+            long nextPower = powersOfTen[--scale];
+            long nextDigit = digits / nextPower;
+            sb.append(DIGITS[(int) nextDigit]);
+            digits -= nextDigit * nextPower;
+        } while (digits != 0L);  // replace condition by 'scale > 0' to get full length of fractional digits
+    }
+
     /** Appends a separately provided mantissa in a human readable form to the provided StringBuilder, based on settings of a reference number (this).
      * Method is also used by external classes. */
     public void append(StringBuilder sb, long mantissa) {
@@ -121,23 +144,23 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         // return BigDecimal.valueOf(mantissa, scale()).toPlainString();
         // version with double not considered due to precision loss (mantissa of a double is just 15 digits, we want 18)
         if (scale() == 0) {
-            sb.append(Long.toString(mantissa));
+            sb.append(mantissa);
         } else {
             // separate the digits in a way that the fractional ones are not negative
             long scale = powersOfTen[scale()];
             long integralDigits = mantissa / scale;
             long decimalDigits = Math.abs(mantissa - integralDigits * scale);
             sb.append(integralDigits);
-            sb.append('.');
-            String decimals = Long.toString(decimalDigits);
-            int paddingCharsRequired = scale() - decimals.length();
-            if (paddingCharsRequired > 0) {
-                // need padding.
-                do {
-                    sb.append('0');
-                } while (--paddingCharsRequired > 0);
+            // conditional append of fractional part
+            if (decimalDigits != 0L) {
+                sb.append('.');
+                if (decimalDigits <= 999_999_999) {
+                    // max 9 digits: do it with integers, to avoid costly 6 bit divisions
+                    appendFraction(sb, scale(), (int)decimalDigits);
+                } else {
+                    appendFraction(sb, scale(), decimalDigits);
+                }
             }
-            sb.append(decimals);
         }
     }
 

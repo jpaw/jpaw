@@ -16,6 +16,6 @@ public class TestToString {
         FPAmount x = new FPAmount(Euro, 1999, 1680, 319);
 
         System.out.println(x);
-        Assertions.assertEquals("19.99 EUR [16.80, 3.19]", x.toString());
+        Assertions.assertEquals("19.99 EUR [16.8, 3.19]", x.toString());
     }
 }

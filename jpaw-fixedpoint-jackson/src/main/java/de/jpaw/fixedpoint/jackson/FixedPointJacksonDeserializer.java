@@ -33,7 +33,8 @@ public class FixedPointJacksonDeserializer<CLASS extends FixedPointBase<CLASS>> 
         case VALUE_NUMBER_INT:
             return factory.valueOf(p.getLongValue());
         case VALUE_NUMBER_FLOAT:
-            return factory.valueOf(p.getDecimalValue());  // not ideal, since it constructs a temporary BigDecimal. Can we access the source string directly?
+            // return factory.valueOf(p.getDecimalValue());  // not ideal, since it constructs a temporary BigDecimal. Can we access the source string directly?
+            return factory.valueOf(p.getText());  // construct fixed point class directly from input string
         default:
             ctxt.reportInputMismatch(factory.instanceClass(), "FixedPointParser: Invalid token " + whatIsThere);
             return null; // does not occur due to exception

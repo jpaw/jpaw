@@ -434,7 +434,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
 
     /** Multiplies a fixed point number by an integral factor. The scale (and type) of the product is the same as the one of this. */
     public CLASS multiply(int factor) {
-        return newInstanceOf(mantissa * factor);  // newInstanceOf optimizes the cases of factors 0 and 1 
+        return newInstanceOf(mantissa * factor);  // newInstanceOf optimizes the cases of factors 0 and 1
     }
     /** Xtend syntax sugar. multiply maps to the multiply method. */
     public CLASS operator_multiply(int factor) {
@@ -612,7 +612,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         }
         return negateResult ? -productAbsolute : productAbsolute;
     }
-    
+
     private static long roundMantissa(long in, long powerOfTen, RoundingMode roundingMode) {
         final long quot = in / powerOfTen;
         final long remainder = in % powerOfTen;
@@ -652,6 +652,25 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             break;
         }
         return quot; // dead code, but Eclipse wants it!
+    }
+
+    public CLASS round(int desiredScale, RoundingMode rounding) {
+        int power = scale() - desiredScale;
+        if (power <= 0 || mantissa == 0L) {
+            // already by design
+            return getMyself();
+        }
+        final long div = powersOfTen[power];
+        final long newMantissa;
+        if (mantissa < 0L) {
+            newMantissa = -roundMantissa(-mantissa, div, ROUNDING_MODE_MAPPING.get(rounding)) * div;
+        } else {
+            newMantissa = roundMantissa(mantissa, div, rounding) * div;
+        }
+        if (newMantissa == mantissa) {
+            return getMyself();
+        }
+        return newInstanceOf(newMantissa);
     }
 
     /** Divide a / b and round according to specification. Does not need JNI, because we stay in range of a long here. */
@@ -932,13 +951,13 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     public BigDecimal toBigDecimal() {
         if (mantissa == 0) {
             return BigDecimal.ZERO;
-        } else if (mantissa == 1L) {
+        } else if (mantissa == getUnit().mantissa) {
             return BigDecimal.ONE;
         } else {
             return BigDecimal.valueOf(mantissa, scale());
         }
     }
-    
+
     public CLASS scaleByPowerOfTen(int power) {
         if (power == 0 || mantissa == 0L) {
             return getMyself();
@@ -946,13 +965,13 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             if (power < -18) {
                 return getZero();
             } else {
-                return getZero().newInstanceOf(mantissa / powersOfTen[power]);
+                return newInstanceOf(mantissa / powersOfTen[power]);
             }
         } else {
             if (power > 18) {
                 throw new ArithmeticException("Overflow");
             } else {
-                return getZero().newInstanceOf(mantissa * powersOfTen[power]);
+                return newInstanceOf(mantissa * powersOfTen[power]);
             }
         }
     }

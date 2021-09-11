@@ -159,7 +159,7 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
     public boolean isFixedScale() {
         return false;  // this implementations carries the scale per instance
     }
-    
+
     /** Adds two fixed point numbers of exactly same type. For variable scale subtypes, the scale of the sum is the bigger of the operand scales. */
     @Override
     public VariableUnits add(VariableUnits that) {

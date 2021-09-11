@@ -3,6 +3,7 @@ package de.jpaw.fixedpoint;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.EnumMap;
 
 import de.jpaw.fixedpoint.types.VariableUnits;
 
@@ -18,6 +19,19 @@ import de.jpaw.fixedpoint.types.VariableUnits;
  */
 public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extends Number implements Serializable, Comparable<FixedPointBase<?>> {
     private static final long serialVersionUID = 8834214052987561284L;
+
+    /** Map to convert rounding mode for negated numbers. */
+    private static final EnumMap<RoundingMode,RoundingMode> ROUNDING_MODE_MAPPING = new EnumMap<>(RoundingMode.class);
+    static {
+        ROUNDING_MODE_MAPPING.put(RoundingMode.UNNECESSARY, RoundingMode.UNNECESSARY);
+        ROUNDING_MODE_MAPPING.put(RoundingMode.FLOOR,     RoundingMode.UP);
+        ROUNDING_MODE_MAPPING.put(RoundingMode.CEILING,   RoundingMode.DOWN);
+        ROUNDING_MODE_MAPPING.put(RoundingMode.UP,        RoundingMode.UP);  // always away from zero
+        ROUNDING_MODE_MAPPING.put(RoundingMode.DOWN,      RoundingMode.DOWN);
+        ROUNDING_MODE_MAPPING.put(RoundingMode.HALF_UP,   RoundingMode.HALF_UP);
+        ROUNDING_MODE_MAPPING.put(RoundingMode.HALF_DOWN, RoundingMode.HALF_DOWN);
+        ROUNDING_MODE_MAPPING.put(RoundingMode.HALF_EVEN, RoundingMode.HALF_EVEN);
+    }
 
     private static final char[] DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
     private final static int [] intPowersOfTen = {  // What's missing here is something like C's "const" for the contents of the array. Let's hope for Java 9, 10 or whatever...
@@ -334,7 +348,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
      * Special care is taken in this implementation to work around any kind of integral overflows. */
     @Override
     public int compareTo(FixedPointBase<?> that) {
-    	// first, tackle the case of same scale, which reduces to integer comparison. This is done first, because it should be the most common case
+        // first, tackle the case of same scale, which reduces to integer comparison. This is done first, because it should be the most common case
         final int scaleDiff = this.scale() - that.scale();
         if (scaleDiff == 0) {
             // simple: compare the mantissas
@@ -420,7 +434,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
 
     /** Multiplies a fixed point number by an integral factor. The scale (and type) of the product is the same as the one of this. */
     public CLASS multiply(int factor) {
-        return newInstanceOf(mantissa * factor);
+        return newInstanceOf(mantissa * factor);  // newInstanceOf optimizes the cases of factors 0 and 1 
     }
     /** Xtend syntax sugar. multiply maps to the multiply method. */
     public CLASS operator_multiply(int factor) {
@@ -560,16 +574,84 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         return scaledProduct.scaleByPowerOfTen(targetScale).unscaledValue().longValue();
     }
 
-    /** Use of native code for scaling and rounding, if required. */
+    /**
+     * Use of native code for scaling and rounding, if required.
+     * Private method, currently exposed for benchmarking purposes (to avoid effect of GC).
+     * */
     public long mantissa_of_multiplication(FixedPointBase<?> that, int targetScale, RoundingMode rounding) {
         int digitsToScale = scale() + that.scale() - targetScale;
-        long mantissaA = this.mantissa;
-        long mantissaB = that.mantissa;
-        if (digitsToScale <= 0) {
-            // easy, no rounding
-            return mantissaA * mantissaB * powersOfTen[-digitsToScale];
+        // This method is called for nonzero operands only. Now test for sign to reduce to unsigned operation. No worries about LONG_MIN overflow because we support up to 18 digits only for the largest mantissa
+        boolean negateResult = false;
+        final long mantissaA;
+        final long mantissaB;
+        if (mantissa < 0L) {
+            negateResult = true;
+            mantissaA = -this.mantissa;
+        } else {
+            mantissaA = this.mantissa;
         }
-        return FixedPointNative.multiply_and_scale(mantissaA, mantissaB, digitsToScale, rounding);
+        if (that.mantissa < 0L) {
+            negateResult = !negateResult;
+            mantissaB = -that.mantissa;
+        } else {
+            mantissaB = that.mantissa;
+        }
+        final long productAbsolute;
+        if (digitsToScale <= 0) {
+            // easy, no rounding (but maybe overflow! TODO: check for it!
+            productAbsolute = mantissaA * mantissaB * powersOfTen[-digitsToScale];
+        } else {
+            // invoke the computation. If we have changed the sign, adjust the requested rounding mode accordingly.
+            // check if we can do it with a long
+            if (((mantissaA | mantissaB) & 0xffffffff80000000L) == 0L) {
+                // both have 31 bits only
+                productAbsolute = roundMantissa(mantissaA * mantissaB, powersOfTen[digitsToScale], negateResult ? ROUNDING_MODE_MAPPING.get(rounding) : rounding);
+            } else {
+                productAbsolute = FixedPointNative.multiply_and_scale(mantissaA, mantissaB, digitsToScale, negateResult ? ROUNDING_MODE_MAPPING.get(rounding) : rounding);
+            }
+        }
+        return negateResult ? -productAbsolute : productAbsolute;
+    }
+    
+    private static long roundMantissa(long in, long powerOfTen, RoundingMode roundingMode) {
+        final long quot = in / powerOfTen;
+        final long remainder = in % powerOfTen;
+        if (remainder == 0L) {
+            return quot;
+        }
+        switch (roundingMode) {
+        case UP:              // round towards bigger absolute value
+        case CEILING:         // round towards bigger numerical value
+            return quot + 1L;
+        case DOWN:            // round towards smaller absolute value
+        case FLOOR:           // round towards smaller numerical value
+            return quot;
+        case HALF_DOWN:
+            if (2 * remainder > powerOfTen)
+                return quot + 1L;
+            else
+                return quot;
+        case HALF_EVEN:
+            long dec = 2 * remainder - powerOfTen;
+            if (dec > 0) {
+                return quot + 1L;
+            } else if (dec < 0) {
+                return quot;
+            } else {
+                // exactly in the middle
+                return (quot & 1L) == 0L ? quot + 1L : quot;
+            }
+        case HALF_UP:
+            if (2 * remainder >= powerOfTen)
+                return quot + 1L;
+            else
+                return quot;
+        case UNNECESSARY:
+            throw new ArithmeticException("Rounding required but forbidden by roundingMode parameter");
+        default:
+            break;
+        }
+        return quot; // dead code, but Eclipse wants it!
     }
 
     /** Divide a / b and round according to specification. Does not need JNI, because we stay in range of a long here. */
@@ -690,10 +772,10 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
 
     /** Adds two fixed point numbers of exactly same type. For variable scale subtypes, the scale of the sum is the bigger of the operand scales. */
     public CLASS add(CLASS that) {
-    	if (that.mantissa == 0L)
-    		return getMyself();
-    	if (this.mantissa == 0L)
-    		return that;
+        if (that.mantissa == 0L)
+            return getMyself();
+        if (this.mantissa == 0L)
+            return that;
         return this.newInstanceOf(this.mantissa + that.mantissa);
     }
 

@@ -107,8 +107,9 @@ public class FPAmount implements Serializable {
     /** Prints the fixed point amount in form "gross currency [list of net / taxes]", where the list of components is optional. */
     @Override
     public String toString() {
+    	final int targetScale = currency.getZero().scale(); 
         StringBuilder sb = new StringBuilder(100);
-        currency.getZero().append(sb, gross);       // prints the gross amount formatted as required by the currency
+        FixedPointBase.append(sb, gross, targetScale);       // prints the gross amount formatted as required by the currency
         sb.append(' ');
         sb.append(currency);
         if (amounts.length > 0) {
@@ -120,7 +121,7 @@ public class FPAmount implements Serializable {
                     sb.append(',');
                     sb.append(' ');
                 }
-                currency.getZero().append(sb, amounts[i]);
+                FixedPointBase.append(sb, amounts[i], targetScale);
             }
             sb.append(']');
         }

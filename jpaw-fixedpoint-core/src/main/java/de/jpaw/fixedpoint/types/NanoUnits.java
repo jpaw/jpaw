@@ -83,7 +83,7 @@ public class NanoUnits extends FixedPointBase<NanoUnits> {
             return ZERO;
         if (mantissa == UNIT_MANTISSA)
             return ONE;
-        if (mantissa == getMantissa())
+        if (mantissa == this.mantissa)
             return this;
         return new NanoUnits(mantissa);
     }
@@ -115,7 +115,7 @@ public class NanoUnits extends FixedPointBase<NanoUnits> {
 
     // provide code for the bonaparte adapters, to avoid separate adapter classes
     public long marshal() {
-        return getMantissa();
+        return mantissa;
     }
 
     public static NanoUnits unmarshal(Long mantissa) {

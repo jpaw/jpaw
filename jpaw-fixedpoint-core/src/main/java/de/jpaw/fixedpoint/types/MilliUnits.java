@@ -83,7 +83,7 @@ public class MilliUnits extends FixedPointBase<MilliUnits> {
             return ZERO;
         if (mantissa == UNIT_MANTISSA)
             return ONE;
-        if (mantissa == getMantissa())
+        if (mantissa == this.mantissa)
             return this;
         return new MilliUnits(mantissa);
     }
@@ -115,7 +115,7 @@ public class MilliUnits extends FixedPointBase<MilliUnits> {
 
     // provide code for the bonaparte adapters, to avoid separate adapter classes
     public long marshal() {
-        return getMantissa();
+        return mantissa;
     }
 
     public static MilliUnits unmarshal(Long mantissa) {

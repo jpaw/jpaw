@@ -125,7 +125,7 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
             return ZEROs[scale];
         if (mantissa == powersOfTen[scale])
             return ONEs[scale];
-        if (mantissa == getMantissa())
+        if (mantissa == mantissa)
             return this;
         return new VariableUnits(mantissa, scale);
     }
@@ -159,6 +159,31 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
     public boolean isFixedScale() {
         return false;  // this implementations carries the scale per instance
     }
+    
+    /** Adds two fixed point numbers of exactly same type. For variable scale subtypes, the scale of the sum is the bigger of the operand scales. */
+    @Override
+    public VariableUnits add(VariableUnits that) {
+        int diff = this.scale() - that.scale();
+        if (diff >= 0)
+            return this.newInstanceOf(this.mantissa + powersOfTen[diff] * that.mantissa);
+        else
+            return that.newInstanceOf(that.mantissa + powersOfTen[-diff] * this.mantissa);
+    }
+
+    /** Subtracts two fixed point numbers of exactly same type. For variable scale subtypes, the scale of the sum is the bigger of the operand scales. */
+    @Override
+    public VariableUnits subtract(VariableUnits that) {
+        if (that.mantissa == 0L) {
+            return getMyself();
+        }
+        // first checks, if we can void adding the numbers and return either operand.
+        int diff = this.scale() - that.scale();
+        if (diff >= 0)
+            return this.newInstanceOf(this.mantissa - powersOfTen[diff] * that.mantissa);
+        else
+            return that.newInstanceOf(-that.mantissa + powersOfTen[-diff] * this.mantissa);
+    }
+
 
     /** Create a new VariableUnits instance as the sum of the provided generic FixedPoint numbers. */
     public static VariableUnits sumOf(List<? extends FixedPointBase<?>> components, boolean addOne) {

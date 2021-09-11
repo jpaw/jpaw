@@ -41,7 +41,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     }
 
     private transient String asString = null; // due to efforts to return this for arithmetic operations whereever possible, it is likely that the same number will be printed multiple times, and due to Java object alignments, it does not increase the size of the object
-    private final long mantissa;    // the significant digits
+    protected final long mantissa;    // the significant digits
 
     protected FixedPointBase(long mantissa) {
         this.mantissa = mantissa;
@@ -71,8 +71,11 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     /** Get the number 1 in the same scale. */
     public abstract CLASS getUnit();
 
-    /** Get a reference to myself (essentially "this", but avoids a type cast. */
-    public abstract CLASS getMyself();
+    /**
+     * Get a reference to myself (essentially "this", but avoids a type cast. This is a workaround, required because the compiler currently does not acknowledge that this class is abstract.
+     * Invocation is only done from this class, but it must be protected because the derived classed have to override it.
+     * */
+    protected abstract CLASS getMyself();
 
     /** Get the value representing the number 1. */
     public abstract long getUnitAsLong();
@@ -120,7 +123,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     }
 
     // only called for digits != 0 && scale > 0
-    private void appendFraction(StringBuilder sb, int scale, int digits) {
+    private static void appendFraction(StringBuilder sb, int scale, int digits) {
         do {
             int nextPower = intPowersOfTen[--scale];
             int nextDigit = digits / nextPower;
@@ -128,7 +131,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             digits -= nextDigit * nextPower;
         } while (digits != 0);  // replace condition by 'scale > 0' to get full length of fractional digits
     }
-    private void appendFraction(StringBuilder sb, int scale, long digits) {
+    private static void appendFraction(StringBuilder sb, int scale, long digits) {
         do {
             long nextPower = powersOfTen[--scale];
             long nextDigit = digits / nextPower;
@@ -139,26 +142,26 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
 
     /** Appends a separately provided mantissa in a human readable form to the provided StringBuilder, based on settings of a reference number (this).
      * Method is also used by external classes. */
-    public void append(StringBuilder sb, long mantissa) {
+    public static void append(StringBuilder sb, long mantissa, int scale) {
         // straightforward implementation discarded due to too much GC overhead (construction of a temporary BigDecimal)
         // return BigDecimal.valueOf(mantissa, scale()).toPlainString();
         // version with double not considered due to precision loss (mantissa of a double is just 15 digits, we want 18)
-        if (scale() == 0) {
+        if (scale == 0) {
             sb.append(mantissa);
         } else {
             // separate the digits in a way that the fractional ones are not negative
-            long scale = powersOfTen[scale()];
-            long integralDigits = mantissa / scale;
-            long decimalDigits = Math.abs(mantissa - integralDigits * scale);
+            long ten2scale = powersOfTen[scale];
+            long integralDigits = mantissa / ten2scale;
+            long decimalDigits = Math.abs(mantissa - integralDigits * ten2scale);
             sb.append(integralDigits);
             // conditional append of fractional part
             if (decimalDigits != 0L) {
                 sb.append('.');
                 if (decimalDigits <= 999_999_999) {
                     // max 9 digits: do it with integers, to avoid costly 6 bit divisions
-                    appendFraction(sb, scale(), (int)decimalDigits);
+                    appendFraction(sb, scale, (int)decimalDigits);
                 } else {
-                    appendFraction(sb, scale(), decimalDigits);
+                    appendFraction(sb, scale, decimalDigits);
                 }
             }
         }
@@ -179,7 +182,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             } else {
                 // we need 21 characters at max (19 digits plus optional sign, plus decimal point), so allocate it with sufficient initial size to avoid realloc
                 StringBuilder sb = new StringBuilder(22);
-                append(sb, mantissa);
+                append(sb, mantissa, scale());
                 asString = sb.toString();
             }
         }
@@ -331,7 +334,16 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
      * Special care is taken in this implementation to work around any kind of integral overflows. */
     @Override
     public int compareTo(FixedPointBase<?> that) {
-        // first check is on signum only, to avoid incorrect responses due to integral overflow (MIN_VALUE must be < than MAX_VALUE)
+    	// first, tackle the case of same scale, which reduces to integer comparison. This is done first, because it should be the most common case
+        final int scaleDiff = this.scale() - that.scale();
+        if (scaleDiff == 0) {
+            // simple: compare the mantissas
+            if (this.mantissa == that.mantissa)
+                return 0;
+            return this.mantissa < that.mantissa ? -1 : 1;
+        }
+
+        // next check is on signum only, to avoid incorrect responses due to integral overflow (MIN_VALUE must be < than MAX_VALUE)
         final int signumThis = Long.signum(this.mantissa);
         final int signumThat = Long.signum(that.mantissa);
         if (signumThis != signumThat) {
@@ -342,13 +354,6 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             return 0; // both are 0
         // here, both are either negative or positive
         // medium difficulty: they have the same scale
-        int scaleDiff = this.scale() - that.scale();
-        if (scaleDiff == 0) {
-            // simple: compare the mantissas
-            if (this.mantissa == that.mantissa)
-                return 0;
-            return this.mantissa < that.mantissa ? -1 : 1;
-        }
         // both operands have the same sign, but differ in scaling. Scale down first, and only if the numbers then are the same, scale up
         if (scaleDiff < 0) {
             long diff = mantissa - that.mantissa / powersOfTen[-scaleDiff];
@@ -669,8 +674,6 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     }
 
 
-
-
     /** Adds two fixed point numbers. The scale (and type) of the sum is the bigger of the operand scales. */
     public FixedPointBase<?> gadd(FixedPointBase<?> that) {
         // first checks, if we can void adding the numbers and return either operand.
@@ -684,13 +687,14 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         else
             return that.newInstanceOf(that.mantissa + powersOfTen[-diff] * this.mantissa);
     }
+
     /** Adds two fixed point numbers of exactly same type. For variable scale subtypes, the scale of the sum is the bigger of the operand scales. */
     public CLASS add(CLASS that) {
-        int diff = this.scale() - that.scale();
-        if (diff >= 0)
-            return this.newInstanceOf(this.mantissa + powersOfTen[diff] * that.getMantissa());
-        else
-            return that.newInstanceOf(that.getMantissa() + powersOfTen[-diff] * this.mantissa);
+    	if (that.mantissa == 0L)
+    		return getMyself();
+    	if (this.mantissa == 0L)
+    		return that;
+        return this.newInstanceOf(this.mantissa + that.mantissa);
     }
 
     /** Subtracts two fixed point numbers. The scale (and type) of the sum is the bigger of the operand scales. */
@@ -708,15 +712,10 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     }
     /** Subtracts two fixed point numbers of exactly same type. For variable scale subtypes, the scale of the sum is the bigger of the operand scales. */
     public CLASS subtract(CLASS that) {
-        if (that.getMantissa() == 0L) {
+        if (that.mantissa == 0L) {
             return getMyself();
         }
-        // first checks, if we can void adding the numbers and return either operand.
-        int diff = this.scale() - that.scale();
-        if (diff >= 0)
-            return this.newInstanceOf(this.mantissa - powersOfTen[diff] * that.getMantissa());
-        else
-            return that.newInstanceOf(-that.getMantissa() + powersOfTen[-diff] * this.mantissa);
+        return this.newInstanceOf(this.mantissa - that.mantissa);
     }
 
     /** Divides a number by an integer. */

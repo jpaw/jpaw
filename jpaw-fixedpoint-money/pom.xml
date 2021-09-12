@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-base</artifactId>
-        <version>2.7.1</version>
+        <version>2.7.2</version>
     </parent>
 
     <artifactId>jpaw-fixedpoint-money</artifactId>

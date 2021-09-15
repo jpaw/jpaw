@@ -793,6 +793,34 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             return this.negate();       // x * -1 = -x
         return newInstanceOf(FixedPointNative.scale_and_divide(mantissa, that.scale(), that.mantissa, rounding));
     }
+
+    /** Divides a fixed point number by an another one, rounding to decimals digits. The type of the result is the same than that of the left operand. */
+    public CLASS divideAndRound(FixedPointBase<?> that, int desiredDecimals, RoundingMode rounding) {
+        if (desiredDecimals > scale() || desiredDecimals < 0) {
+            // cannot round to more than what we have
+            LOGGER.error("Requested division with rounding to {} decimals for target data type {}", this.getClass().getSimpleName());
+            throw new ArithmeticException("Requested number of digits for rounding not supported by data type");
+        }
+        if (mantissa == 0)
+            return getZero();           // x * 0 = 0 * x = 0
+        if (that.isOne())
+            return round(desiredDecimals, rounding); // x * 1 = x
+        if (that.isMinusOne())
+            return this.negate().round(desiredDecimals, rounding);       // x * -1 = -x
+
+        int digitsToRound = scale() - desiredDecimals;
+        if (digitsToRound <= that.scale()) {
+            // we can implement the rounding by reduction of the scale factor, and later multiplication
+            return newInstanceOf(FixedPointNative.scale_and_divide(mantissa, that.scale() - digitsToRound, that.mantissa, rounding) * powersOfTen[digitsToRound]);
+        } else {
+            // no multiplication at all, rather round
+            final long tempMantissa = FixedPointNative.scale_and_divide(mantissa, 0, that.mantissa, rounding) * powersOfTen[that.scale()];
+            // still needs rounding by digitsToRound - that.scale() digits. FIXME: This is double rounding!
+            LOGGER.warn("Double rounding for scales {} / {], desired {}", scale(), that.scale(), desiredDecimals);
+            return newInstanceOf(tempMantissa).round(desiredDecimals, rounding);
+        }
+    }
+
     /** Xtend syntax sugar. multiply maps to the multiply method. */
     public CLASS operator_divide(FixedPointBase<?> that) {
         return divide(that, RoundingMode.HALF_EVEN);

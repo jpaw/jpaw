@@ -72,4 +72,29 @@ public class TestRounding {
             }
         }
     }
+
+    @Test
+    public void testDivideAndRounding() throws Exception {
+        MicroUnits mpi = MicroUnits.valueOf(Math.PI);
+        BigDecimal bdpi = BigDecimal.valueOf(Math.PI).setScale(6, RoundingMode.HALF_EVEN);
+        assertSame(mpi, bdpi, "Original value of PI");
+
+        MicroUnits me = MicroUnits.valueOf(Math.E);
+        BigDecimal bde = BigDecimal.valueOf(Math.E).setScale(6, RoundingMode.HALF_EVEN);
+        assertSame(me, bde, "Original value of E");
+
+        for (int i = 6; i >= 0; --i) {
+            // multiply pi by e, rounded to x digits
+            for (RoundingMode rm : RoundingMode.values()) {
+                if (rm != RoundingMode.UNNECESSARY) {
+                    MicroUnits quot1 = mpi.divideAndRound(me, i, rm);
+                    MicroUnits quot2 = me.divideAndRound(mpi, i, rm);
+                    BigDecimal trueQuot1 = bdpi.divide(bde, i, rm);
+                    BigDecimal trueQuot2 = bde.divide(bdpi, i, rm);
+                    assertSame(quot1, trueQuot1, "PI / E rounded to " + i + " digits");
+                    assertSame(quot2, trueQuot2, "E / PI rounded to " + i + " digits");
+                }
+            }
+        }
+    }
 }

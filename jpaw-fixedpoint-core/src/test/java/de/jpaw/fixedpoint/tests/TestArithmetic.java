@@ -31,5 +31,5 @@ public class TestArithmetic {
         Assertions.assertEquals(true, pi4.hasMaxScale(5), "Check for 5 decimals");
         Assertions.assertEquals(true, pi4.hasMaxScale(6), "Check for 6 decimals");
         Assertions.assertEquals(true, pi4.hasMaxScale(9), "Check for 9 decimals");
-    }        
+    }
 }

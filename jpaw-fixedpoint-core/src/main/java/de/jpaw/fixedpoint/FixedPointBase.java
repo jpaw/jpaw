@@ -780,9 +780,9 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         // no tests for second operand equal to one here, due to possible rounding effects
         return newInstanceOf(mantissa_of_multiplication(that, desiredDecimals, rounding) * powersOfTen[scale() - desiredDecimals]);
     }
-    
-    
-    
+
+
+
     /** Divides a fixed point number by an another one. The type / scale of the result is the same than that of the left operand. */
     public CLASS divide(FixedPointBase<?> that, RoundingMode rounding) {
         if (mantissa == 0)

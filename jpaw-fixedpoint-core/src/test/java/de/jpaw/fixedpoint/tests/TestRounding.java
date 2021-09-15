@@ -39,7 +39,7 @@ public class TestRounding {
         }
     }
 
-    // assert that the fixed point number and the BigDecimal have the same value  
+    // assert that the fixed point number and the BigDecimal have the same value
     void assertSame(MicroUnits m, BigDecimal bd, String where) {
         BigDecimal actual = m.toBigDecimal();
         boolean result = bd.compareTo(actual) == 0;
@@ -48,7 +48,7 @@ public class TestRounding {
         }
         Assertions.assertTrue(result, where);
     }
-    
+
     @Test
     public void testMultiplyAndRounding() throws Exception {
         MicroUnits mpi = MicroUnits.valueOf(Math.PI);
@@ -63,7 +63,7 @@ public class TestRounding {
             // multiply pi by e, rounded to x digits
             for (RoundingMode rm : RoundingMode.values()) {
                 if (rm != RoundingMode.UNNECESSARY) {
-                    MicroUnits prod1 = mpi.multiplyAndRound(me, i, rm); 
+                    MicroUnits prod1 = mpi.multiplyAndRound(me, i, rm);
                     MicroUnits prod2 = me.multiplyAndRound(mpi, i, rm);
                     BigDecimal trueProd = bdpi.multiply(bde).setScale(i, rm);
                     assertSame(prod1, trueProd, "PI * E rounded to " + i + " digits");

@@ -999,4 +999,16 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             }
         }
     }
- }
+
+    /** Checks if a given value could be scaled to a different number of digits. */
+    public boolean hasMaxScale(int digits) {
+        if (digits < 0) {
+            throw new ArithmeticException("Checks for negative max scale not supported");
+        }
+        if (digits >= scale()) {
+            return true;
+        }
+        int digitsToScrap = scale() - digits;
+        return mantissa % powersOfTen[digitsToScrap] == 0L;
+    }
+}

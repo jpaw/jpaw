@@ -68,8 +68,13 @@
         </profile>
     </profiles>
 
-    <!-- no dependencies are needed, currently, except for testing -->
+    <!-- no dependencies are needed, currently, except for testing and logging -->
     <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
         <!-- JUnit Test -->
         <dependency>
            <groupId>org.junit.jupiter</groupId>

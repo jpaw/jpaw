@@ -1,6 +1,7 @@
 package de.jpaw.fixedpoint.tests;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 
 import org.junit.jupiter.api.Assertions;
@@ -47,5 +48,29 @@ public class TestRounding {
             System.out.println("Mismatch for " + where + ": expected " + bd + ", but got " + m);
         }
         Assertions.assertTrue(result, where);
+    }
+    
+    @Test
+    public void testMultiplyAndRounding() throws Exception {
+        MicroUnits mpi = MicroUnits.valueOf(Math.PI);
+        BigDecimal bdpi = BigDecimal.valueOf(Math.PI).setScale(6, RoundingMode.HALF_EVEN);
+        assertSame(mpi, bdpi, "Original value of PI");
+
+        MicroUnits me = MicroUnits.valueOf(Math.E);
+        BigDecimal bde = BigDecimal.valueOf(Math.E).setScale(6, RoundingMode.HALF_EVEN);
+        assertSame(me, bde, "Original value of E");
+
+        for (int i = 6; i >= 0; --i) {
+            // multiply pi by e, rounded to x digits
+            for (RoundingMode rm : RoundingMode.values()) {
+                if (rm != RoundingMode.UNNECESSARY) {
+                    MicroUnits prod1 = mpi.multiplyAndRound(me, i, rm); 
+                    MicroUnits prod2 = me.multiplyAndRound(mpi, i, rm);
+                    BigDecimal trueProd = bdpi.multiply(bde).setScale(i, rm);
+                    assertSame(prod1, trueProd, "PI * E rounded to " + i + " digits");
+                    assertSame(prod2, trueProd, "E * PI rounded to " + i + " digits");
+                }
+            }
+        }
     }
 }

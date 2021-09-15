@@ -5,6 +5,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.EnumMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.jpaw.fixedpoint.types.VariableUnits;
 
 /**
@@ -19,6 +22,7 @@ import de.jpaw.fixedpoint.types.VariableUnits;
  */
 public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extends Number implements Serializable, Comparable<FixedPointBase<?>> {
     private static final long serialVersionUID = 8834214052987561284L;
+    private static final Logger LOGGER = LoggerFactory.getLogger(FixedPointBase.class);
 
     /** Map to convert rounding mode for negated numbers. */
     private static final EnumMap<RoundingMode,RoundingMode> ROUNDING_MODE_MAPPING = new EnumMap<>(RoundingMode.class);
@@ -754,11 +758,31 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             return this.negate();       // x * -1 = -x
         return newInstanceOf(mantissa_of_multiplication(that, this.scale(), rounding));
     }
+
     /** Xtend syntax sugar. multiply maps to the multiply method. */
     public CLASS operator_multiply(FixedPointBase<?> that) {
         return multiply(that, RoundingMode.HALF_EVEN);
     }
 
+    /**
+     * Multiplies a fixed point number by an another one. The type of the result is the same than that of the left operand.
+     * The scale of the result is also the same as of the left operand, but the result is rounded to fewer digits.
+     * This must be performed directly after multiplication, because a two step rounding could return different results:
+     * 0.445 => round(2) = 0.45, => round(1) = 0.5, while 0.445 => round(1) = 0.4 */
+    public CLASS multiplyAndRound(FixedPointBase<?> that, int desiredDecimals, RoundingMode rounding) {
+        if (desiredDecimals > scale() || desiredDecimals < 0) {
+            // cannot round to more than what we have
+            LOGGER.error("Requested rounding to {} decimals for target data type {}", this.getClass().getSimpleName());
+            throw new ArithmeticException("Requested number of digits for rounding not supported by data type");
+        }
+        if (mantissa == 0 || that.mantissa == 0)
+            return getZero();           // x * 0 = 0 * x = 0
+        // no tests for second operand equal to one here, due to possible rounding effects
+        return newInstanceOf(mantissa_of_multiplication(that, desiredDecimals, rounding) * powersOfTen[scale() - desiredDecimals]);
+    }
+    
+    
+    
     /** Divides a fixed point number by an another one. The type / scale of the result is the same than that of the left operand. */
     public CLASS divide(FixedPointBase<?> that, RoundingMode rounding) {
         if (mantissa == 0)

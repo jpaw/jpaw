@@ -27,18 +27,30 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
     public static String TIMEZONE_SUFFIX_FOR_LOCAL = "";  // set to "Z" if desired, but see http://javarevisited.blogspot.com/2015/03/20-examples-of-date-and-time-api-from-Java8.html
     private static final char [] DIGITS = { '0', '1', '2','3', '4', '5', '6', '7', '8', '9' };
 
+    public static boolean defaultInstantInMillis = false;  // if false: the unit is a second
+    public static boolean defaultOutputFractionalSeconds = true;  // if false: always truncate time to full seconds
+
     // if instantInMillis is true, Instants will be written as integral values in milliseconds, otherwise as second + optional fractional parts
     // see DATE_TIMESTAMPS_AS_NANOSECONDS in https://github.com/FasterXML/jackson-datatype-jsr310 for similar setting
     protected final boolean instantInMillis;
+    protected final boolean outputFractionalSeconds;
 
     public ExtendedJsonEscaperForAppendables(Appendable appendable) {
         super(appendable);      // default: writeNulls = true, escapeNonAscii = false
-        instantInMillis = false;
+        instantInMillis = defaultInstantInMillis;
+        outputFractionalSeconds = defaultOutputFractionalSeconds;
     }
 
     public ExtendedJsonEscaperForAppendables(Appendable appendable, boolean writeNulls, boolean escapeNonASCII, boolean instantInMillis) {
         super(appendable, writeNulls, escapeNonASCII);
         this.instantInMillis = instantInMillis;
+        outputFractionalSeconds = defaultOutputFractionalSeconds;
+    }
+
+    public ExtendedJsonEscaperForAppendables(Appendable appendable, boolean writeNulls, boolean escapeNonASCII, boolean instantInMillis, boolean outputFractionalSeconds) {
+        super(appendable, writeNulls, escapeNonASCII);
+        this.instantInMillis = instantInMillis;
+        this.outputFractionalSeconds = outputFractionalSeconds;
     }
 
     // zero-GC implementation of appendable.append(String.format("%02d", n));
@@ -71,9 +83,12 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
         append2Digits(lt.getMinute());
         appendable.append(':');
         append2Digits(lt.getSecond());
-        final int millis = lt.getNano() / 1000000;
-        if (millis != 0) {
-            appendMilliseconds(millis);
+
+        if (outputFractionalSeconds) {
+            final int millis = lt.getNano() / 1000000;
+            if (millis != 0) {
+                appendMilliseconds(millis);
+            }
         }
     }
 
@@ -114,8 +129,10 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
             appendable.append(Long.toString(1000L * seconds + millis));
         } else {
             appendable.append(Long.toString(seconds));
-            if (millis > 0) {
-                appendMilliseconds(millis);
+            if (outputFractionalSeconds) {
+                if (millis > 0) {
+                    appendMilliseconds(millis);
+                }
             }
         }
     }

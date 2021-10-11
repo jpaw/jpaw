@@ -337,6 +337,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     }
 
     /** Returns the number scaled by 0.01, by playing with the scale (if possible). */
+    @Deprecated
     public VariableUnits percent() {
         switch (scale()) {
         case 18:
@@ -611,6 +612,14 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
                 // both have 31 bits only
                 productAbsolute = roundMantissa(mantissaA * mantissaB, powersOfTen[digitsToScale], negateResult ? ROUNDING_MODE_MAPPING.get(rounding) : rounding);
             } else {
+                if (Math.multiplyHigh(mantissaA, mantissaB) == 0) {
+                    // another chance to do it within a single multiplication - this covers additional asymmetric operands
+                    final long prodTmp = mantissaA * mantissaB;
+                    if (prodTmp >= 0) {
+                        return negateResult ? -prodTmp : prodTmp;
+                    }
+                    // else fall through and do the complex one
+                }
                 productAbsolute = FixedPointNative.multiply_and_scale(mantissaA, mantissaB, digitsToScale, negateResult ? ROUNDING_MODE_MAPPING.get(rounding) : rounding);
             }
         }

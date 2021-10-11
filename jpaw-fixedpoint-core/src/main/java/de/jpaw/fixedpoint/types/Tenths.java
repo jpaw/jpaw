@@ -19,18 +19,6 @@ public class Tenths extends FixedPointBase<Tenths> {
         super(mantissa);
     }
 
-    // use valueOf factory method, which returns existing objects for 0 and 1
-    @Deprecated
-    public Tenths(double value) {
-        super(Math.round(value * UNIT_SCALE));
-    }
-
-    // use parse factory method, which returns existing objects for 0 and 1
-    @Deprecated
-    public Tenths(String value) {
-        super(parseMantissa(value, DECIMALS));
-    }
-
     /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
     public static Tenths parse(String value) {
         return ZERO.newInstanceOf(parseMantissa(value, DECIMALS));

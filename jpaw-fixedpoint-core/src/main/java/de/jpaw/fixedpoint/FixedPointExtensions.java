@@ -109,7 +109,7 @@ public class FixedPointExtensions {
     }
 
     static public VariableUnits ofScale(long a, int scale) {
-        return new VariableUnits(a, scale);
+        return VariableUnits.valueOf(a, scale);
     }
 
     static public FixedPointBase<?> gsum(Iterable<FixedPointBase<?>> iterable) {

@@ -106,17 +106,16 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
         return ZEROs[newScale].newInstanceOf(parseMantissa(value, newScale));
     }
 
-
-    public VariableUnits(long mantissa, int scale) {
+    private VariableUnits(long mantissa, int scale) {
         super(mantissa);
         this.scale = scaleCheck(scale);
     }
 
-    public VariableUnits(String value) {
-        super(parseMantissa(value, scaleCheck(parseTargetScale(value))));
-        scale = parseTargetScale(value);    // redundant computation of scale required due to Java's initialization requirements?
+    public static VariableUnits parse(String value) {
+        final int _scale = parseTargetScale(value);
+        final long _mantissa = parseMantissa(value, scaleCheck(_scale));
+        return valueOf(_mantissa, _scale);
     }
-
 
     @Override
     public VariableUnits newInstanceOf(long mantissa) {
@@ -125,7 +124,7 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
             return ZEROs[scale];
         if (mantissa == powersOfTen[scale])
             return ONEs[scale];
-        if (mantissa == mantissa)
+        if (mantissa == this.mantissa)
             return this;
         return new VariableUnits(mantissa, scale);
     }

@@ -125,6 +125,7 @@
         <module>jpaw-fixedpoint-core/pom.xml</module>
         <module>jpaw-fixedpoint-jackson/pom.xml</module>
         <module>jpaw-util/pom.xml</module>
+        <module>jpaw-annotations/pom.xml</module>
         <module>jpaw-fixedpoint-money/pom.xml</module>
         <module>jpaw-fixedpoint-money-test/pom.xml</module>
         <module>jpaw-fixedpoint-benchmarks/pom.xml</module>

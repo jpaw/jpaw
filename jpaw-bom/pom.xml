@@ -23,6 +23,11 @@
         <dependencies>
             <dependency>
                 <groupId>de.jpaw</groupId>
+                <artifactId>jpaw-annotations</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.jpaw</groupId>
                 <artifactId>jpaw-enums</artifactId>
                 <version>${project.version}</version>
             </dependency>

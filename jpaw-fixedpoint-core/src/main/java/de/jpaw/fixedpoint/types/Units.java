@@ -6,23 +6,34 @@ import java.math.RoundingMode;
 import de.jpaw.fixedpoint.FixedPointBase;
 
 public class Units extends FixedPointBase<Units> {
-    private static final long serialVersionUID = -3073254135663195283L;
+    private static final long serialVersionUID = -466464673376366000L;
     public static final int DECIMALS = 0;
-    public static final long UNIT_MANTISSA = 1;
-    public static final double UNIT_SCALE_AS_DOUBLE_FACTOR = 1.0;  // multiplication is much faster than division
+    public static final long UNIT_MANTISSA = 1L;
+    public static final double UNIT_SCALE = UNIT_MANTISSA;       // cast to double at class initialization time
+    public static final double UNIT_SCALE_AS_DOUBLE_FACTOR = 1.0 / UNIT_MANTISSA;  // multiplication is much faster than division
     public static final Units ZERO = new Units(0);
     public static final Units ONE = new Units(UNIT_MANTISSA);
 
-    public Units(long mantissa) {
+    // external callers use valueOf factory method, which returns existing objects for 0 and 1. This constructor is used by the factory methods
+    private Units(long mantissa) {
         super(mantissa);
     }
 
+    // use valueOf factory method, which returns existing objects for 0 and 1
+    @Deprecated
     public Units(double value) {
         super(Math.round(value));
     }
 
+    // use parse factory method, which returns existing objects for 0 and 1
+    @Deprecated
     public Units(String value) {
         super(parseMantissa(value, DECIMALS));
+    }
+
+    /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
+    public static Units parse(String value) {
+        return ZERO.newInstanceOf(parseMantissa(value, DECIMALS));
     }
 
     /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
@@ -47,23 +58,32 @@ public class Units extends FixedPointBase<Units> {
 
     /** Returns a re-typed instance of that. Loosing precision is not supported. */
     public static Units of(FixedPointBase<?> that) {
-        if (that.scale() == 0)
-            return Units.of(that.getMantissa());
+        int scaleDiff = DECIMALS - that.scale();
+        if (scaleDiff >= 0)
+            return Units.of(that.getMantissa() * powersOfTen[scaleDiff]);
         throw new ArithmeticException("Retyping with reduction of scale requires specfication of a rounding mode");
     }
 
     /** Returns a re-typed instance of that. */
     public static Units of(FixedPointBase<?> that, RoundingMode rounding) {
-        if (that.scale() == 0)
-            return Units.of(that.getMantissa());
+        int scaleDiff = DECIMALS - that.scale();
+        if (scaleDiff >= 0)
+            return Units.of(that.getMantissa() * powersOfTen[scaleDiff]);
         // rescale
-        return  Units.of(divide_longs(that.getMantissa(), powersOfTen[that.scale()], rounding));
+        return  Units.of(divide_longs(that.getMantissa(), powersOfTen[-scaleDiff], rounding));
     }
 
-    // This is certainly not be the most efficient implementation, as it involves the construction of up to 2 new BigDecimals
-    // TODO: replace it by a zero GC version
     public static Units of(BigDecimal number) {
-        return of(number.setScale(DECIMALS, RoundingMode.UNNECESSARY).longValue());
+        final int scaleOfBigDecimal = number.scale();
+        if (scaleOfBigDecimal <= 0) {
+            // the value of the BigDecimal is integral
+            final long valueOfBigDecimal = number.longValue();
+            return of(valueOfBigDecimal * powersOfTen[-scaleOfBigDecimal]);
+        }
+        // This is certainly not the most efficient implementation, as it involves the construction of up to one new BigDecimal and a BigInteger
+        // TODO: replace it by a zero GC version
+        // blame JDK, there is not even a current method to determine if a BigDecimal is integral despite a scale > 0, nor to get its mantissa without creating additional objects
+        return of(number.setScale(DECIMALS, RoundingMode.UNNECESSARY).unscaledValue().longValue());
     }
 
     @Override
@@ -73,7 +93,7 @@ public class Units extends FixedPointBase<Units> {
             return ZERO;
         if (mantissa == UNIT_MANTISSA)
             return ONE;
-        if (mantissa == getMantissa())
+        if (mantissa == this.mantissa)
             return this;
         return new Units(mantissa);
     }
@@ -105,7 +125,7 @@ public class Units extends FixedPointBase<Units> {
 
     // provide code for the bonaparte adapters, to avoid separate adapter classes
     public long marshal() {
-        return getMantissa();
+        return mantissa;
     }
 
     public static Units unmarshal(Long mantissa) {

@@ -14,16 +14,26 @@ public class Hundreds extends FixedPointBase<Hundreds> {
     public static final Hundreds ZERO = new Hundreds(0);
     public static final Hundreds ONE = new Hundreds(UNIT_MANTISSA);
 
-    public Hundreds(long mantissa) {
+    // external callers use valueOf factory method, which returns existing objects for 0 and 1. This constructor is used by the factory methods
+    private Hundreds(long mantissa) {
         super(mantissa);
     }
 
+    // use valueOf factory method, which returns existing objects for 0 and 1
+    @Deprecated
     public Hundreds(double value) {
         super(Math.round(value * UNIT_SCALE));
     }
 
+    // use parse factory method, which returns existing objects for 0 and 1
+    @Deprecated
     public Hundreds(String value) {
         super(parseMantissa(value, DECIMALS));
+    }
+
+    /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
+    public static Hundreds parse(String value) {
+        return ZERO.newInstanceOf(parseMantissa(value, DECIMALS));
     }
 
     /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
@@ -63,10 +73,17 @@ public class Hundreds extends FixedPointBase<Hundreds> {
         return  Hundreds.of(divide_longs(that.getMantissa(), powersOfTen[-scaleDiff], rounding));
     }
 
-    // This is certainly not be the most efficient implementation, as it involves the construction of up to 2 new BigDecimals
-    // TODO: replace it by a zero GC version
     public static Hundreds of(BigDecimal number) {
-        return of(number.setScale(DECIMALS, RoundingMode.UNNECESSARY).scaleByPowerOfTen(DECIMALS).longValue());
+        final int scaleOfBigDecimal = number.scale();
+        if (scaleOfBigDecimal <= 0) {
+            // the value of the BigDecimal is integral
+            final long valueOfBigDecimal = number.longValue();
+            return of(valueOfBigDecimal * powersOfTen[-scaleOfBigDecimal]);
+        }
+        // This is certainly not the most efficient implementation, as it involves the construction of up to one new BigDecimal and a BigInteger
+        // TODO: replace it by a zero GC version
+        // blame JDK, there is not even a current method to determine if a BigDecimal is integral despite a scale > 0, nor to get its mantissa without creating additional objects
+        return of(number.setScale(DECIMALS, RoundingMode.UNNECESSARY).unscaledValue().longValue());
     }
 
     @Override
@@ -76,7 +93,7 @@ public class Hundreds extends FixedPointBase<Hundreds> {
             return ZERO;
         if (mantissa == UNIT_MANTISSA)
             return ONE;
-        if (mantissa == getMantissa())
+        if (mantissa == this.mantissa)
             return this;
         return new Hundreds(mantissa);
     }
@@ -108,7 +125,7 @@ public class Hundreds extends FixedPointBase<Hundreds> {
 
     // provide code for the bonaparte adapters, to avoid separate adapter classes
     public long marshal() {
-        return getMantissa();
+        return mantissa;
     }
 
     public static Hundreds unmarshal(Long mantissa) {

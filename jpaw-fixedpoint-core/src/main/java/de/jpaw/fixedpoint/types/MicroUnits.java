@@ -8,15 +8,14 @@ import de.jpaw.fixedpoint.FixedPointBase;
 public class MicroUnits extends FixedPointBase<MicroUnits> {
     private static final long serialVersionUID = -466464673376366006L;
     public static final int DECIMALS = 6;
-    public static final long UNIT_MANTISSA = 1000000L;
-    public static final double UNIT_SCALE = UNIT_MANTISSA;       // casted to double at class initialisation time
+    public static final long UNIT_MANTISSA = 1_000_000L;
+    public static final double UNIT_SCALE = UNIT_MANTISSA;       // cast to double at class initialization time
     public static final double UNIT_SCALE_AS_DOUBLE_FACTOR = 1.0 / UNIT_MANTISSA;  // multiplication is much faster than division
     public static final MicroUnits ZERO = new MicroUnits(0);
     public static final MicroUnits ONE = new MicroUnits(UNIT_MANTISSA);
 
-    // use valueOf factory method, which returns existing objects for 0 and 1
-    @Deprecated
-    public MicroUnits(long mantissa) {
+    // external callers use valueOf factory method, which returns existing objects for 0 and 1. This constructor is used by the factory methods
+    private MicroUnits(long mantissa) {
         super(mantissa);
     }
 
@@ -26,8 +25,15 @@ public class MicroUnits extends FixedPointBase<MicroUnits> {
         super(Math.round(value * UNIT_SCALE));
     }
 
+    // use parse factory method, which returns existing objects for 0 and 1
+    @Deprecated
     public MicroUnits(String value) {
         super(parseMantissa(value, DECIMALS));
+    }
+
+    /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
+    public static MicroUnits parse(String value) {
+        return ZERO.newInstanceOf(parseMantissa(value, DECIMALS));
     }
 
     /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
@@ -74,7 +80,7 @@ public class MicroUnits extends FixedPointBase<MicroUnits> {
             final long valueOfBigDecimal = number.longValue();
             return of(valueOfBigDecimal * powersOfTen[-scaleOfBigDecimal]);
         }
-        // This is certainly not be the most efficient implementation, as it involves the construction of up to 2 new BigDecimals
+        // This is certainly not the most efficient implementation, as it involves the construction of up to one new BigDecimal and a BigInteger
         // TODO: replace it by a zero GC version
         // blame JDK, there is not even a current method to determine if a BigDecimal is integral despite a scale > 0, nor to get its mantissa without creating additional objects
         return of(number.setScale(DECIMALS, RoundingMode.UNNECESSARY).unscaledValue().longValue());

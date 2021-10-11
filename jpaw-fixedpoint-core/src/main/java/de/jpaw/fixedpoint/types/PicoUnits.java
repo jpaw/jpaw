@@ -8,22 +8,32 @@ import de.jpaw.fixedpoint.FixedPointBase;
 public class PicoUnits extends FixedPointBase<PicoUnits> {
     private static final long serialVersionUID = -4664646733763660012L;
     public static final int DECIMALS = 12;
-    public static final long UNIT_MANTISSA = 1000000000000L;
-    public static final double UNIT_SCALE = UNIT_MANTISSA;       // casted to double at class initialisation time
+    public static final long UNIT_MANTISSA = 1_000_000_000_000L;
+    public static final double UNIT_SCALE = UNIT_MANTISSA;       // cast to double at class initialization time
     public static final double UNIT_SCALE_AS_DOUBLE_FACTOR = 1.0 / UNIT_MANTISSA;  // multiplication is much faster than division
     public static final PicoUnits ZERO = new PicoUnits(0);
     public static final PicoUnits ONE = new PicoUnits(UNIT_MANTISSA);
 
-    public PicoUnits(long mantissa) {
+    // external callers use valueOf factory method, which returns existing objects for 0 and 1. This constructor is used by the factory methods
+    private PicoUnits(long mantissa) {
         super(mantissa);
     }
 
+    // use valueOf factory method, which returns existing objects for 0 and 1
+    @Deprecated
     public PicoUnits(double value) {
         super(Math.round(value * UNIT_SCALE));
     }
 
+    // use parse factory method, which returns existing objects for 0 and 1
+    @Deprecated
     public PicoUnits(String value) {
         super(parseMantissa(value, DECIMALS));
+    }
+
+    /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
+    public static PicoUnits parse(String value) {
+        return ZERO.newInstanceOf(parseMantissa(value, DECIMALS));
     }
 
     /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
@@ -63,10 +73,17 @@ public class PicoUnits extends FixedPointBase<PicoUnits> {
         return  PicoUnits.of(divide_longs(that.getMantissa(), powersOfTen[-scaleDiff], rounding));
     }
 
-    // This is certainly not be the most efficient implementation, as it involves the construction of up to 2 new BigDecimals
-    // TODO: replace it by a zero GC version
     public static PicoUnits of(BigDecimal number) {
-        return of(number.setScale(DECIMALS, RoundingMode.UNNECESSARY).scaleByPowerOfTen(DECIMALS).longValue());
+        final int scaleOfBigDecimal = number.scale();
+        if (scaleOfBigDecimal <= 0) {
+            // the value of the BigDecimal is integral
+            final long valueOfBigDecimal = number.longValue();
+            return of(valueOfBigDecimal * powersOfTen[-scaleOfBigDecimal]);
+        }
+        // This is certainly not the most efficient implementation, as it involves the construction of up to one new BigDecimal and a BigInteger
+        // TODO: replace it by a zero GC version
+        // blame JDK, there is not even a current method to determine if a BigDecimal is integral despite a scale > 0, nor to get its mantissa without creating additional objects
+        return of(number.setScale(DECIMALS, RoundingMode.UNNECESSARY).unscaledValue().longValue());
     }
 
     @Override
@@ -76,7 +93,7 @@ public class PicoUnits extends FixedPointBase<PicoUnits> {
             return ZERO;
         if (mantissa == UNIT_MANTISSA)
             return ONE;
-        if (mantissa == getMantissa())
+        if (mantissa == this.mantissa)
             return this;
         return new PicoUnits(mantissa);
     }
@@ -108,7 +125,7 @@ public class PicoUnits extends FixedPointBase<PicoUnits> {
 
     // provide code for the bonaparte adapters, to avoid separate adapter classes
     public long marshal() {
-        return getMantissa();
+        return mantissa;
     }
 
     public static PicoUnits unmarshal(Long mantissa) {

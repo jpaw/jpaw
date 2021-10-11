@@ -821,6 +821,11 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         }
     }
 
+    /** Divide two fixed point numbers of same type, returning the rounded down integral quotient. */
+    public long divideToIntegralValue(CLASS divisor) {
+        return this.mantissa / divisor.mantissa;
+    }
+
     /** Xtend syntax sugar. multiply maps to the multiply method. */
     public CLASS operator_divide(FixedPointBase<?> that) {
         return divide(that, RoundingMode.HALF_EVEN);

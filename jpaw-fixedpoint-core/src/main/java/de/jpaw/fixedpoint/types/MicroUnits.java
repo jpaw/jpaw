@@ -14,10 +14,14 @@ public class MicroUnits extends FixedPointBase<MicroUnits> {
     public static final MicroUnits ZERO = new MicroUnits(0);
     public static final MicroUnits ONE = new MicroUnits(UNIT_MANTISSA);
 
+    // use valueOf factory method, which returns existing objects for 0 and 1
+    @Deprecated
     public MicroUnits(long mantissa) {
         super(mantissa);
     }
 
+    // use valueOf factory method, which returns existing objects for 0 and 1
+    @Deprecated
     public MicroUnits(double value) {
         super(Math.round(value * UNIT_SCALE));
     }

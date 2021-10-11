@@ -1,4 +1,4 @@
-package de.jpaw8.xtend;
+package de.jpaw.xtend;
 
 import java.util.Collection;
 import java.util.function.ToIntFunction;

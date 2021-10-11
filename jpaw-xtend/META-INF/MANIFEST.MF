@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Bundle-ManifestVersion: 2
-Bundle-Name: jpaw8 utility libraries
-Bundle-SymbolicName: jpaw8.core
+Bundle-Name: jpaw xtend library addons
+Bundle-SymbolicName: jpaw.xtend
 Bundle-Version: 2.7.3
 Bundle-Vendor: Michael Bischoff
-Export-Package: de.jpaw8.function
+Export-Package: de.jpaw.xtend
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

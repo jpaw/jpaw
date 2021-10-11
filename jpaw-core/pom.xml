@@ -8,9 +8,9 @@
         <version>2.7.3</version>
     </parent>
 
-    <artifactId>jpaw8-xtend</artifactId>
+    <artifactId>jpaw-core</artifactId>
     <packaging>jar</packaging>
 
-    <description>extension for existing classes</description>
+    <description>Some extensions to the Java functional APIs</description>
 
 </project>

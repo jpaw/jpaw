@@ -1,4 +1,4 @@
-package de.jpaw8.function;
+package de.jpaw.function;
 
 import java.util.Objects;
 import java.util.function.IntPredicate;

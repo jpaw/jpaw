@@ -129,12 +129,12 @@
             </dependency>
             <dependency>
                 <groupId>de.jpaw</groupId>
-                <artifactId>jpaw8-xtend</artifactId>
+                <artifactId>jpaw-xtend</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>de.jpaw</groupId>
-                <artifactId>jpaw8-core</artifactId>
+                <artifactId>jpaw-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

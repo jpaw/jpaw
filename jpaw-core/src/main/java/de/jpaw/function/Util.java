@@ -1,4 +1,4 @@
-package de.jpaw8.function;
+package de.jpaw.function;
 
 import java.util.function.Consumer;
 import java.util.function.ObjIntConsumer;

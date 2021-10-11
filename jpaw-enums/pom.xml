@@ -5,7 +5,7 @@
     <parent>
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-base</artifactId>
-        <version>2.7.3</version>
+        <version>2.7.4</version>
     </parent>
 
     <artifactId>jpaw-enums</artifactId>

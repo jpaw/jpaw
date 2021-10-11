@@ -145,7 +145,6 @@
         <module>jpaw-enumsets-test/pom.xml</module>
         <module>jpaw-benchmarks/pom.xml</module>
         <module>jpaw-xtend/pom.xml</module>
-        <module>jpaw-core/pom.xml</module>
         <module>jpaw8-batch/pom.xml</module>
         <module>jpaw8-benchmarks/pom.xml</module>
     </modules>

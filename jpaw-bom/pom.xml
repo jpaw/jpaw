@@ -134,11 +134,6 @@
             </dependency>
             <dependency>
                 <groupId>de.jpaw</groupId>
-                <artifactId>jpaw-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>de.jpaw</groupId>
                 <artifactId>jpaw8-batch</artifactId>
                 <version>${project.version}</version>
             </dependency>

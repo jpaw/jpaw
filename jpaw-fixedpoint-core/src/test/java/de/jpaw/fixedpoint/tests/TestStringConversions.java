@@ -30,10 +30,11 @@ public class TestStringConversions {
         new TestCase("-3.14", Hundreds.valueOf(-3.14)),         // also tests double to Hundreds
         new TestCase("-3.14", Hundreds.valueOf(-3.13888)),      // also tests double to Hundreds
         new TestCase("-3.14", Hundreds.valueOf(-3.14159)),      // also tests double to Hundreds
-        new TestCase("19.8", new Hundreds(1980)),
-        new TestCase("19.99", new Hundreds(1999)),
-        new TestCase("-19.8", new Hundreds(-1980)),
-        new TestCase("-19.99", new Hundreds(-1999))
+        new TestCase("19.8", Hundreds.of(1980)),
+        new TestCase("19.99", Hundreds.of(1999)),
+        new TestCase("-19.8", Hundreds.of(-1980)),
+        new TestCase("-19.99", Hundreds.of(-1999)),
+        new TestCase("-0.17", Hundreds.of(-17))
     };
 
     @Test

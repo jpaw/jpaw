@@ -24,6 +24,8 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     private static final long serialVersionUID = 8834214052987561284L;
     private static final Logger LOGGER = LoggerFactory.getLogger(FixedPointBase.class);
 
+    public static boolean outputToStringMinimized = true;  // if false, all decimals will be printed
+
     /** Map to convert rounding mode for negated numbers. */
     private static final EnumMap<RoundingMode,RoundingMode> ROUNDING_MODE_MAPPING = new EnumMap<>(RoundingMode.class);
     static {
@@ -141,15 +143,21 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     }
 
     // only called for digits != 0 && scale > 0
-    private static void appendFraction(StringBuilder sb, int scale, int digits) {
+    private static void appendFraction(StringBuilder sb, int scale, int digits, boolean minimized) {
         do {
             int nextPower = intPowersOfTen[--scale];
             int nextDigit = digits / nextPower;
             sb.append(DIGITS[nextDigit]);
             digits -= nextDigit * nextPower;
         } while (digits != 0);  // replace condition by 'scale > 0' to get full length of fractional digits
+        if (!minimized) {
+            while (scale > 0) {
+                sb.append('0');
+                --scale;
+            }
+        }
     }
-    private static void appendFraction(StringBuilder sb, int scale, long digits) {
+    private static void appendFraction(StringBuilder sb, int scale, long digits, boolean minimized) {
         do {
             long nextPower = powersOfTen[--scale];
             long nextDigit = digits / nextPower;
@@ -161,25 +169,33 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     /** Appends a separately provided mantissa in a human readable form to the provided StringBuilder, based on settings of a reference number (this).
      * Method is also used by external classes. */
     public static void append(StringBuilder sb, long mantissa, int scale) {
+        append(sb, mantissa, scale, true);
+    }
+    public static void append(StringBuilder sb, long mantissa, int scale, boolean minimized) {
         // straightforward implementation discarded due to too much GC overhead (construction of a temporary BigDecimal)
         // return BigDecimal.valueOf(mantissa, scale()).toPlainString();
         // version with double not considered due to precision loss (mantissa of a double is just 15 digits, we want 18)
         if (scale == 0) {
             sb.append(mantissa);
         } else {
+            if (mantissa < 0) {
+                // this code is required to ensure output of sign for negative numbers between -1 and 0 (integral portion 0).
+                sb.append('-');
+                mantissa = -mantissa;
+            }
             // separate the digits in a way that the fractional ones are not negative
             long ten2scale = powersOfTen[scale];
             long integralDigits = mantissa / ten2scale;
             long decimalDigits = Math.abs(mantissa - integralDigits * ten2scale);
             sb.append(integralDigits);
             // conditional append of fractional part
-            if (decimalDigits != 0L) {
+            if (!minimized || decimalDigits != 0L) {
                 sb.append('.');
                 if (decimalDigits <= 999_999_999) {
                     // max 9 digits: do it with integers, to avoid costly 6 bit divisions
-                    appendFraction(sb, scale, (int)decimalDigits);
+                    appendFraction(sb, scale, (int)decimalDigits, minimized);
                 } else {
-                    appendFraction(sb, scale, decimalDigits);
+                    appendFraction(sb, scale, decimalDigits, minimized);
                 }
             }
         }
@@ -200,7 +216,22 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             } else {
                 // we need 21 characters at max (19 digits plus optional sign, plus decimal point), so allocate it with sufficient initial size to avoid realloc
                 StringBuilder sb = new StringBuilder(22);
-                append(sb, mantissa, scale());
+                append(sb, mantissa, scale(), outputToStringMinimized);
+                asString = sb.toString();
+            }
+        }
+        return asString;
+    }
+
+    public String toString(boolean minimized) {
+        if (asString == null) {
+            // not yet computed
+            if (scale() == 0) {
+                asString = Long.toString(mantissa);
+            } else {
+                // we need 21 characters at max (19 digits plus optional sign, plus decimal point), so allocate it with sufficient initial size to avoid realloc
+                StringBuilder sb = new StringBuilder(22);
+                append(sb, mantissa, scale(), minimized);
                 asString = sb.toString();
             }
         }

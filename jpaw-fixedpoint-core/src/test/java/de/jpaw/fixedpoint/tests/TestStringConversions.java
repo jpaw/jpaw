@@ -33,7 +33,8 @@ public class TestStringConversions {
         new TestCase("19.8", Hundreds.of(1980)),
         new TestCase("19.99", Hundreds.of(1999)),
         new TestCase("-19.8", Hundreds.of(-1980)),
-        new TestCase("-19.99", Hundreds.of(-1999))
+        new TestCase("-19.99", Hundreds.of(-1999)),
+        new TestCase("-0.17", Hundreds.of(-17))
     };
 
     @Test

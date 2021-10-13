@@ -1,4 +1,4 @@
-package de.jpaw.xml.jaxb.demo.joda;
+package de.jpaw.xml.jaxb.demo.datetime;
 
 // courtesy of http://blog.bdoughan.com/2011/05/jaxb-and-joda-time-dates-and-times.html
 
@@ -16,7 +16,7 @@ import java.time.LocalTime;
    "localTime",
    "localDateTime"})
 
-public class JodaTimeMappers {
+public class JavaTimeMappers {
 
     private LocalDate localDate;
     private LocalTime localTime;

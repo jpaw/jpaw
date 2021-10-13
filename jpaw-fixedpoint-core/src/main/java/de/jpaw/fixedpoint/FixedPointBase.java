@@ -825,28 +825,34 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
 
     /** Divides a fixed point number by an another one. The type / scale of the result is the same than that of the left operand. */
     public CLASS divide(FixedPointBase<?> that, RoundingMode rounding) {
+        if (that.mantissa == 0L) {
+            throw new ArithmeticException("Division by 0");
+        }
         if (mantissa == 0)
-            return getZero();           // x * 0 = 0 * x = 0
+            return getZero();           // 0 / x = 0
         if (that.isOne())
-            return getMyself();         // x * 1 = x
+            return getMyself();         // x / 1 = x
         if (that.isMinusOne())
-            return this.negate();       // x * -1 = -x
+            return this.negate();       // x / -1 = -x
         return newInstanceOf(FixedPointNative.scale_and_divide(mantissa, that.scale(), that.mantissa, rounding));
     }
 
     /** Divides a fixed point number by an another one, rounding to decimals digits. The type of the result is the same than that of the left operand. */
     public CLASS divideAndRound(FixedPointBase<?> that, int desiredDecimals, RoundingMode rounding) {
+        if (that.mantissa == 0L) {
+            throw new ArithmeticException("Division by 0");
+        }
         if (desiredDecimals > scale() || desiredDecimals < 0) {
             // cannot round to more than what we have
             LOGGER.error("Requested division with rounding to {} decimals for target data type {}", this.getClass().getSimpleName());
             throw new ArithmeticException("Requested number of digits for rounding not supported by data type");
         }
         if (mantissa == 0)
-            return getZero();           // x * 0 = 0 * x = 0
+            return getZero();           // 0 / x = 0
         if (that.isOne())
-            return round(desiredDecimals, rounding); // x * 1 = x
+            return round(desiredDecimals, rounding); // x / 1 = x
         if (that.isMinusOne())
-            return this.negate().round(desiredDecimals, rounding);       // x * -1 = -x
+            return this.negate().round(desiredDecimals, rounding);       // x / -1 = -x
 
         int digitsToRound = scale() - desiredDecimals;
         if (digitsToRound <= that.scale()) {
@@ -857,6 +863,34 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             final long tempMantissa = FixedPointNative.scale_and_divide(mantissa, 0, that.mantissa, rounding) * powersOfTen[that.scale()];
             // still needs rounding by digitsToRound - that.scale() digits. FIXME: This is double rounding!
             LOGGER.warn("Double rounding for scales {} / {], desired {}", scale(), that.scale(), desiredDecimals);
+            return newInstanceOf(tempMantissa).round(desiredDecimals, rounding);
+        }
+    }
+
+    /** Divides a fixed point number by an integral one, rounding to decimals digits. The type of the result is the same than that of the left operand. */
+    public CLASS divideAndRound(long that, int desiredDecimals, RoundingMode rounding) {
+        if (that == 0L) {
+            throw new ArithmeticException("Division by 0");
+        }
+        if (desiredDecimals > scale() || desiredDecimals < 0) {
+            // cannot round to more than what we have
+            LOGGER.error("Requested division with rounding to {} decimals for target data type {}", this.getClass().getSimpleName());
+            throw new ArithmeticException("Requested number of digits for rounding not supported by data type");
+        }
+        if (mantissa == 0)
+            return getZero();           // 0 / x = 0
+        if (that == 1L)
+            return round(desiredDecimals, rounding); // x / 1 = x
+
+        int digitsToRound = scale() - desiredDecimals;
+        if (digitsToRound <= 0) {
+            // we can implement the rounding by reduction of the scale factor, and later multiplication
+            return newInstanceOf(FixedPointNative.scale_and_divide(mantissa, - digitsToRound, that, rounding) * powersOfTen[digitsToRound]);
+        } else {
+            // no multiplication at all, rather round
+            final long tempMantissa = FixedPointNative.scale_and_divide(mantissa, 0, that, rounding);
+            // still needs rounding by digitsToRound - that.scale() digits. FIXME: This is double rounding!
+            LOGGER.warn("Double rounding for scales {} / {], desired {}", scale(), 0, desiredDecimals);
             return newInstanceOf(tempMantissa).round(desiredDecimals, rounding);
         }
     }
@@ -916,7 +950,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         return this.newInstanceOf(this.mantissa - that.mantissa);
     }
 
-    /** Divides a number by an integer. */
+    /** Divides a number by an integer, at maximum precision, using RoundingMode.DOWN. */
     public CLASS divide(int divisor) {
         if (divisor == 0)
             throw new ArithmeticException("Division by 0");

@@ -33,7 +33,7 @@ public class FixedPointNative {
     }
 
 
-    /** decimalsScale is in range 1..18 */
+    /** decimalsScale is in range 0..18 */
     public static long multiply_and_scale(long mantissaA, long mantissaB, int decimalsScale, RoundingMode rounding) {
         if (nativeAvailable) {
             return multdiv128(mantissaA, mantissaB, FixedPointBase.powersOfTen[decimalsScale], rounding.ordinal());
@@ -44,8 +44,13 @@ public class FixedPointNative {
         return scaledProduct.longValue();
     }
 
-    /** decimalsScale is in range 1..18 */
+    /** decimalsScale is in range 0..18 */
     public static long scale_and_divide(long mantissa, int decimalsScale, long divisor, RoundingMode rounding) {
+        if (divisor < 0) {
+            // move the sign to the dividend
+            divisor  = -divisor;
+            mantissa = -mantissa;
+        }
         if (nativeAvailable) {
             return multdiv128(mantissa, FixedPointBase.powersOfTen[decimalsScale], divisor, rounding.ordinal());
         }

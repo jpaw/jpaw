@@ -65,7 +65,7 @@ public class FormattersAndParsers {
             int pos = dateTime.indexOf('.');
             if (pos > 0) {
                 // skipping UTC suffix is implied...
-                return LocalDateTime.parse(dateTime.substring(0, pos-1));
+                return LocalDateTime.parse(dateTime.substring(0, pos));
             }
         }
         if (tolerateSuffixUTC) {

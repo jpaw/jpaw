@@ -1096,7 +1096,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             if (power < -18) {
                 return getZero();
             } else {
-                return newInstanceOf(mantissa / powersOfTen[power]);
+                return newInstanceOf(mantissa / powersOfTen[-power]);
             }
         } else {
             if (power > 18) {

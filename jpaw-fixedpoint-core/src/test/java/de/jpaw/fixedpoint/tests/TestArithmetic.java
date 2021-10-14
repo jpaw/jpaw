@@ -1,5 +1,6 @@
 package de.jpaw.fixedpoint.tests;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import org.junit.jupiter.api.Assertions;
@@ -77,5 +78,27 @@ public class TestArithmetic {
         Assertions.assertEquals(true, pi4.hasMaxScale(5), "Check for 5 decimals");
         Assertions.assertEquals(true, pi4.hasMaxScale(6), "Check for 6 decimals");
         Assertions.assertEquals(true, pi4.hasMaxScale(9), "Check for 9 decimals");
+    }
+
+    @Test
+    public void testFloorAndCeilPos() throws Exception {
+       Assertions.assertEquals(MicroUnits.of(3_000_000).floor(), MicroUnits.valueOf(3));
+       Assertions.assertEquals(MicroUnits.of(3_000_000).ceil(),  MicroUnits.valueOf(3));
+       Assertions.assertEquals(MicroUnits.of(3_140_000).floor(), MicroUnits.valueOf(3));
+       Assertions.assertEquals(MicroUnits.of(3_140_000).ceil(),  MicroUnits.valueOf(4));
+    }
+
+    @Test
+    public void testFloorAndCeilNeg() throws Exception {
+       Assertions.assertEquals(MicroUnits.of(-3_000_000).floor(), MicroUnits.valueOf(-3));
+       Assertions.assertEquals(MicroUnits.of(-3_000_000).ceil(),  MicroUnits.valueOf(-3));
+       Assertions.assertEquals(MicroUnits.of(-3_140_000).floor(), MicroUnits.valueOf(-4));
+       Assertions.assertEquals(MicroUnits.of(-3_140_000).ceil(),  MicroUnits.valueOf(-3));
+    }
+
+    @Test
+    public void testLongValue() throws Exception {
+       Assertions.assertEquals(-3L, MicroUnits.of(-3_140_000).longValue());
+       Assertions.assertEquals(-3L, BigDecimal.valueOf(-3.14).longValue());
     }
 }

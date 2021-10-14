@@ -71,16 +71,10 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
      * This implementation returns cached instances for 0 and 1. Otherwise, in case this has the same mantissa, this is returned. */
     public abstract CLASS newInstanceOf(long mantissa);
 
-    public static long mantissaFor(long integralValue, int scale) {
-        return integralValue * powersOfTen[scale];
-    }
+    /** Computes the mantissa for a fixed point number of target scale, for a given double. */
     public static long mantissaFor(double value, int scale) {
         return Math.round(value * powersOfTen[scale]);
     }
-//    /** Returns a fixed point value object which has a different number of decimals. Most implementations have a fixed scale and will not support this. */
-//    public CLASS newInstanceOf(long mantissa, int scale) {
-//        throw new ArithmeticException("Creating instances of different scale not supported for " + getClass().getCanonicalName());
-//    }
 
     /** Get the number of decimals. */
     public abstract int scale();
@@ -130,10 +124,24 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         return mantissa % scale == 0;
     }
 
-    /** Returns the integral part of the number. */
-    public long floor() {
+    /** Returns the integral part of the number, as fixed point data type. If you need it as a long, use the longValue() method (with a possible offset of 1 for negative numbers). */
+    public CLASS floor() {
         long scale = powersOfTen[scale()];
-        return mantissa / scale;
+        long fraction = mantissa % scale;
+        if (fraction == 0) {
+           return getMyself();
+        }
+        return newInstanceOf(mantissa < 0 ? mantissa - fraction - getUnitAsLong() : mantissa - fraction);
+    }
+
+    /** Returns the integral part of the number, as fixed point data type. If you need it as a long, use the longValue() method (with a possible offset of 1 for positive numbers). */
+    public CLASS ceil() {
+        long scale = powersOfTen[scale()];
+        long fraction = mantissa % scale;
+        if (fraction == 0) {
+           return getMyself();
+        }
+        return newInstanceOf(mantissa < 0 ? mantissa - fraction : mantissa - fraction + getUnitAsLong());
     }
 
     public long fraction() {
@@ -286,6 +294,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         return parseMantissa(src, targetScale);
     }
 
+    /** Computes the target mantissa of an existing with currentScale, for a given desired target scale. In case of precision loss, a flag indicates whether that is acceptable. */
     static public final long mantissaFor(long currentMantissa, int currentScale, int desiredScale, boolean allowRounding) {
         if (currentMantissa == 0L) {
             return currentMantissa;
@@ -298,14 +307,14 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             return currentMantissa * powersOfTen[toMultiplyWithExponent];
         } else {
             if (!allowRounding) {
-                if (toMultiplyWithExponent < -18 || currentMantissa % powersOfTen[toMultiplyWithExponent] != 0L) {
+                if (toMultiplyWithExponent < -18 || currentMantissa % powersOfTen[-toMultiplyWithExponent] != 0L) {
                     throw new ArithmeticException("Rounding required but not allowed");
                 }
             }
             if (toMultiplyWithExponent < -18) {
                 return 0L; // underflow
             }
-            return currentMantissa / powersOfTen[toMultiplyWithExponent];
+            return currentMantissa / powersOfTen[-toMultiplyWithExponent];
         }
     }
 
@@ -1079,10 +1088,11 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         return (double)mantissa / getScaleAsDouble();
     }
 
+    /** Converts the fixed point number to a BigDecimal which is either ZERO or ONE (with scale 0), or that the same scale as the class of this indicates. */
     public BigDecimal toBigDecimal() {
         if (mantissa == 0) {
             return BigDecimal.ZERO;
-        } else if (mantissa == getUnit().mantissa) {
+        } else if (mantissa == getUnitAsLong()) {
             return BigDecimal.ONE;
         } else {
             return BigDecimal.valueOf(mantissa, scale());

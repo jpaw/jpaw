@@ -3,7 +3,7 @@ Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Bundle-ManifestVersion: 2
 Bundle-Name: jpaw enums
 Bundle-SymbolicName: jpaw.enums
-Bundle-Version: 2.8.3
+Bundle-Version: 2.8.4
 Bundle-Vendor: Michael Bischoff
 Export-Package: de.jpaw.enums
 Bundle-ActivationPolicy: lazy

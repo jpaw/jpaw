@@ -21,22 +21,27 @@ public class PicoUnits extends FixedPointBase<PicoUnits> {
 
     /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
     public static PicoUnits of(long mantissa) {
-        return ZERO.newInstanceOf(mantissa);
+        // caching checks...
+        if (mantissa == 0)
+            return ZERO;
+        if (mantissa == UNIT_MANTISSA)
+            return ONE;
+        return new PicoUnits(mantissa);
     }
 
     /** Constructs an instance with a specified integral value. See also of(long mantissa), which constructs an instance with a specified mantissa. */
     public static PicoUnits valueOf(long value) {
-        return ZERO.newInstanceOf(value * UNIT_MANTISSA);
+        return of(value * UNIT_MANTISSA);
     }
 
     /** Constructs an instance with a specified value specified via floating point. Take care for rounding issues! */
     public static PicoUnits valueOf(double value) {
-        return ZERO.newInstanceOf(Math.round(value * UNIT_SCALE));
+        return of(Math.round(value * UNIT_SCALE));
     }
 
     /** Constructs an instance with a specified value specified via string representation. */
     public static PicoUnits valueOf(String value) {
-        return ZERO.newInstanceOf(parseMantissa(value, DECIMALS));
+        return of(parseMantissa(value, DECIMALS));
     }
 
     /** Returns a re-typed instance of that. Loosing precision is not supported. */
@@ -60,8 +65,7 @@ public class PicoUnits extends FixedPointBase<PicoUnits> {
         final int scaleOfBigDecimal = number.scale();
         if (scaleOfBigDecimal <= 0) {
             // the value of the BigDecimal is integral
-            final long valueOfBigDecimal = number.longValue();
-            return of(valueOfBigDecimal * powersOfTen[-scaleOfBigDecimal]);
+            return of(number.longValue() * UNIT_MANTISSA);
         }
         // This is certainly not the most efficient implementation, as it involves the construction of up to one new BigDecimal and a BigInteger
         // TODO: replace it by a zero GC version
@@ -71,14 +75,9 @@ public class PicoUnits extends FixedPointBase<PicoUnits> {
 
     @Override
     public PicoUnits newInstanceOf(long mantissa) {
-        // caching checks...
-        if (mantissa == 0)
-            return ZERO;
-        if (mantissa == UNIT_MANTISSA)
-            return ONE;
         if (mantissa == this.mantissa)
             return this;
-        return new PicoUnits(mantissa);
+        return of(mantissa);
     }
 
     @Override
@@ -112,7 +111,7 @@ public class PicoUnits extends FixedPointBase<PicoUnits> {
     }
 
     public static PicoUnits unmarshal(Long mantissa) {
-        return mantissa == null ? null : ZERO.newInstanceOf(mantissa.longValue());
+        return mantissa == null ? null : of(mantissa.longValue());
     }
 
     @Override

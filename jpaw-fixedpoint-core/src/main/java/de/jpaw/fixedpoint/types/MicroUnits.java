@@ -20,11 +20,6 @@ public class MicroUnits extends FixedPointBase<MicroUnits> {
     }
 
     /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
-    public static MicroUnits parse(String value) {
-        return ZERO.newInstanceOf(parseMantissa(value, DECIMALS));
-    }
-
-    /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
     public static MicroUnits of(long mantissa) {
         return ZERO.newInstanceOf(mantissa);
     }

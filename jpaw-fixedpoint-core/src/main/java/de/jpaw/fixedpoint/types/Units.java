@@ -20,11 +20,6 @@ public class Units extends FixedPointBase<Units> {
     }
 
     /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
-    public static Units parse(String value) {
-        return ZERO.newInstanceOf(parseMantissa(value, DECIMALS));
-    }
-
-    /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
     public static Units of(long mantissa) {
         return ZERO.newInstanceOf(mantissa);
     }

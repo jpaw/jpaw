@@ -20,11 +20,6 @@ public class NanoUnits extends FixedPointBase<NanoUnits> {
     }
 
     /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
-    public static NanoUnits parse(String value) {
-        return ZERO.newInstanceOf(parseMantissa(value, DECIMALS));
-    }
-
-    /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
     public static NanoUnits of(long mantissa) {
         return ZERO.newInstanceOf(mantissa);
     }

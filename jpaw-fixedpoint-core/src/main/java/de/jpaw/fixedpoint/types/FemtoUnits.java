@@ -20,11 +20,6 @@ public class FemtoUnits extends FixedPointBase<FemtoUnits> {
     }
 
     /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
-    public static FemtoUnits parse(String value) {
-        return ZERO.newInstanceOf(parseMantissa(value, DECIMALS));
-    }
-
-    /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
     public static FemtoUnits of(long mantissa) {
         return ZERO.newInstanceOf(mantissa);
     }

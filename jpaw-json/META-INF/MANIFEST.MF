@@ -3,7 +3,7 @@ Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Bundle-ManifestVersion: 2
 Bundle-Name: jpaw JSON extended
 Bundle-SymbolicName: jpaw.jsonext
-Bundle-Version: 2.8.4
+Bundle-Version: 2.8.5
 Bundle-Vendor: Michael Bischoff
 Export-Package: de.jpaw.jsonext
 Bundle-ActivationPolicy: lazy

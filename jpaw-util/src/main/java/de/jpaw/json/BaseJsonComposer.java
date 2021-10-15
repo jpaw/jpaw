@@ -10,9 +10,9 @@ import de.jpaw.util.ByteArray;
 import de.jpaw.util.ByteBuilder;
 
 public class BaseJsonComposer implements JsonEscaper {
-    public static final int ESCAPE_TAB_SIZE = 128;      // the number of sequences defined in the tab
-    public static final char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-    public static String[] jsonEscapes = new String[ESCAPE_TAB_SIZE];
+    private static final int ESCAPE_TAB_SIZE = 128;      // the number of sequences defined in the tab
+    private static final char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+    private static String[] jsonEscapes = new String[ESCAPE_TAB_SIZE];
     // initialize the escape sequences
     static {
         // preset special escapes

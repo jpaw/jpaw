@@ -69,7 +69,7 @@ public class ByteUtil {
                 buff.append("...");
                 return buff.toString();
             }
-            buff.append(String.format("%04x: %02x %02x %02x %02x %02x %02x %02x %02x  %02x %02x %02x %02x %02x %02x %02x %02x  %s\n",
+            buff.append(String.format("%04x: %02x %02x %02x %02x %02x %02x %02x %02x  %02x %02x %02x %02x %02x %02x %02x %02x  %s%n",
                             i, a[i + 0], a[i + 1], a[i + 2], a[i + 3],
                             a[i + 4], a[i + 5], a[i + 6], a[i + 7], a[i + 8],
                             a[i + 9], a[i + 10], a[i + 11], a[i + 12],
@@ -77,7 +77,7 @@ public class ByteUtil {
         }
         // now possibly one last partial line...
         if (i < a.length) {
-            buff.append(String.format("%04x: %s%s%s%s%s%s%s%s %s%s%s%s%s%s%s%s %s\n",
+            buff.append(String.format("%04x: %s%s%s%s%s%s%s%s %s%s%s%s%s%s%s%s %s%n",
                     i,
                     hexOrBlank(a, i + 0),
                     hexOrBlank(a, i + 1),

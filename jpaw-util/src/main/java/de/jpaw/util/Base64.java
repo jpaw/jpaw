@@ -11,7 +11,7 @@ import java.util.Arrays;
  *
  * On byte arrays the encoder is about 20% faster than Jakarta Commons Base64 Codec for encode and
  * about 50% faster for decoding large arrays. This implementation is about twice as fast on very small
- * arrays (&lt 30 bytes). If source/destination is a <code>String</code> this
+ * arrays (&lt; 30 bytes). If source/destination is a <code>String</code> this
  * version is about three times as fast due to the fact that the Commons Codec result has to be recoded
  * to a <code>String</code> from <code>byte[]</code>, which is very expensive.<br><br>
  *
@@ -94,7 +94,7 @@ public final class Base64 {
      * @param sArr The bytes to convert. If <code>null</code> or length 0 an empty array will be returned.
      * No line separator will be in breach of RFC 2045 which specifies max 76 per line but will be a
      * little faster.
-     * @returns A BASE64 encoded array. Never <code>null</code>.
+     * return A BASE64 encoded array. Never <code>null</code>.
      */
     public final static void encodeToByte(ByteBuilder target, byte[] sArr, int offset, int length) {
         // Check special case
@@ -141,8 +141,7 @@ public final class Base64 {
     /** Decodes a BASE64 encoded byte array. All illegal characters will be ignored and can handle both arrays with
      * and without line separators.
      * @param sArr The source array. Length 0 will return an empty array. <code>null</code> will throw an exception.
-     * @return The decoded array of bytes. May be of length 0. Will be <code>null</code> if the legal characters
-     * (including '=') isn't divideable by 4. (I.e. definitely corrupted).
+     * return The decoded array of bytes. May be of length 0. Will be <code>null</code> if the legal characters (including '=') isn't divideable by 4. (I.e. definitely corrupted).
      */
     public final static byte[] decode(byte[] sArr, int offset, int sLen) {
 

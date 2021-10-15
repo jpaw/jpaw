@@ -24,6 +24,10 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     private static final long serialVersionUID = 8834214052987561284L;
     private static final Logger LOGGER = LoggerFactory.getLogger(FixedPointBase.class);
 
+    /**
+     * Fixed point types by default suppress any trailing decimal zeros with the <code>toString()</code> method.
+     * Set this to false to get a behavior similar to <code>BigDecimal</code>, always printing the <code>scale</code> number of fractional digits.
+     **/
     public static boolean outputToStringMinimized = true;  // if false, all decimals will be printed
 
     /** Map to convert rounding mode for negated numbers. */
@@ -86,8 +90,8 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     public abstract CLASS getUnit();
 
     /**
-     * Get a reference to myself (essentially "this", but avoids a type cast. This is a workaround, required because the compiler currently does not acknowledge that this class is abstract.
-     * Invocation is only done from this class, but it must be protected because the derived classed have to override it.
+     * Get a reference to myself (essentially "this", but avoids a type cast). This is a workaround, required because the compiler currently does not acknowledge that this class is abstract.
+     * Invocation is only done from this class (only private callers), but it must be protected because the derived classed have to override it.
      * */
     protected abstract CLASS getMyself();
 
@@ -817,7 +821,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
      * Multiplies a fixed point number by an another one. The type of the result is the same than that of the left operand.
      * The scale of the result is also the same as of the left operand, but the result is rounded to fewer digits.
      * This must be performed directly after multiplication, because a two step rounding could return different results:
-     * 0.445 => round(2) = 0.45, => round(1) = 0.5, while 0.445 => round(1) = 0.4 */
+     * for 0.445: round(2) = 0.45, then round(1) = 0.5, while for 0.445: round(1) = 0.4 */
     public CLASS multiplyAndRound(FixedPointBase<?> that, int desiredDecimals, RoundingMode rounding) {
         if (desiredDecimals > scale() || desiredDecimals < 0) {
             // cannot round to more than what we have

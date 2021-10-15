@@ -21,7 +21,7 @@ import de.jpaw8.function.ObjIntPredicate;
  * If processing resulted in an exception, the data component of response will be null.
  * A single thread (or the main thread) will be allocated to writing.
  *
- * This interface loosely corresponds to the Java 8 ObjIntConsumer<F> interface, but allows exceptions.
+ * This interface loosely corresponds to the Java 8 <code>ObjIntConsumer</code> interface, but allows exceptions.
  * Linking is done via the BatchWriterLinked class.
  */
 

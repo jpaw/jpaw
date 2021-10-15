@@ -5,13 +5,17 @@ import java.math.RoundingMode;
 
 import de.jpaw.fixedpoint.FixedPointBase;
 
+/** Instances of this class represent numbers with a fixed precision of 0 decimals, and up to 18 total digits precision. */
 public class Units extends FixedPointBase<Units> {
     private static final long serialVersionUID = -466464673376366000L;
-    public static final int DECIMALS = 0;
-    public static final long UNIT_MANTISSA = 1L;
-    public static final double UNIT_SCALE = UNIT_MANTISSA;       // cast to double at class initialization time
-    public static final double UNIT_SCALE_AS_DOUBLE_FACTOR = 1.0 / UNIT_MANTISSA;  // multiplication is much faster than division
+    private static final int DECIMALS = 0;
+    private static final long UNIT_MANTISSA = 1L;
+    private static final double UNIT_SCALE_AS_DOUBLE_FACTOR = 1.0 / UNIT_MANTISSA;  // multiplication is much faster than division
+
+    /** The representation of the number 0 in this class. This implementation attempts to maintain a single instance of 0 only. */
     public static final Units ZERO = new Units(0);
+
+    /** The representation of the number 1 in this class. This implementation attempts to maintain a single instance of 0 only. */
     public static final Units ONE = new Units(UNIT_MANTISSA);
 
     // external callers use valueOf factory method, which returns existing objects for 0 and 1. This constructor is used by the factory methods
@@ -34,17 +38,17 @@ public class Units extends FixedPointBase<Units> {
         return of(value);
     }
 
-    /** Constructs an instance with a specified value specified via floating point. Take care for rounding issues! */
+    /** Constructs an instance with a value specified via a parameter of type double. */
     public static Units valueOf(double value) {
         return of(Math.round(value));
     }
 
-    /** Constructs an instance with a specified value specified via string representation. */
+    /** Constructs an instance with a value specified via string representation. */
     public static Units valueOf(String value) {
         return of(parseMantissa(value, DECIMALS));
     }
 
-    /** Returns a re-typed instance of that. Loosing precision is not supported. */
+    /** Returns a re-typed instance of another fixed point type. Loosing precision is not supported. */
     public static Units of(FixedPointBase<?> that) {
         int scaleDiff = DECIMALS - that.scale();
         if (scaleDiff >= 0)
@@ -61,6 +65,7 @@ public class Units extends FixedPointBase<Units> {
         return  Units.of(divide_longs(that.getMantissa(), powersOfTen[-scaleDiff], rounding));
     }
 
+    /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>. */
     public static Units of(BigDecimal number) {
         final int scaleOfBigDecimal = number.scale();
         if (scaleOfBigDecimal <= 0) {
@@ -73,6 +78,7 @@ public class Units extends FixedPointBase<Units> {
         return of(number.setScale(DECIMALS, RoundingMode.UNNECESSARY).unscaledValue().longValue());
     }
 
+    /** Returns an instance of this class with a specified mantissa. */
     @Override
     public Units newInstanceOf(long mantissa) {
         if (mantissa == this.mantissa)
@@ -80,11 +86,13 @@ public class Units extends FixedPointBase<Units> {
         return of(mantissa);
     }
 
+    /** Returns the maximum number of fractional digits of an instance of this class. */
     @Override
     public int scale() {
         return DECIMALS;
     }
 
+    /** Returns the instance of this class which represents the number 0. */
     @Override
     public Units getZero() {
         return ZERO;
@@ -101,15 +109,16 @@ public class Units extends FixedPointBase<Units> {
     }
 
     @Override
-    public Units getMyself() {
+    protected Units getMyself() {
         return this;
     }
 
-    // provide code for the bonaparte adapters, to avoid separate adapter classes
+    /** Used by serialization code of the bonaparte adapters, to avoid separate adapter classes. */
     public long marshal() {
         return mantissa;
     }
 
+    /** Used by deserialization code of the bonaparte adapters, to avoid separate adapter classes. */
     public static Units unmarshal(Long mantissa) {
         return mantissa == null ? null : of(mantissa.longValue());
     }

@@ -8,7 +8,7 @@ package de.jpaw.batch.api;
  *
  * The writer should make use of the Contributor interface to obtain parameters like filename and such.
  *
- * This interface loosely corresponds to the Java 8 Consumer<F> interface. accept(F arg) for a BiStream
+ * This interface loosely corresponds to the Java 8 <code>Consumer</code> interface. accept(F arg) for a BiStream
  */
 
 public interface BatchWriter<F> extends Contributor {

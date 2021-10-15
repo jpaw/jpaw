@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 
-/** A mixture of Predicate<E> and IntPredicate, comparable to ObjIntConsumer<E> */
+/** A mixture of <code>Predicate</code> and <code>IntPredicate</code>, comparable to <code>ObjIntConsumer</code> */
 @FunctionalInterface
 public interface ObjIntPredicate<T> {
     public boolean test(T obj, int n);

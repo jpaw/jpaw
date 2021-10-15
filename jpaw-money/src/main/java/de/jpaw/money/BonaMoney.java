@@ -14,7 +14,7 @@ import de.jpaw.algebra.AbelianGroup;
  * Any instance of this class ensures the following properties:
  * The sum of net and tax amounts equal the gross amount.
  * All amounts are of same scale, and therefore can be compared with equals().
- * All amounts are of same sign (all >= 0 or all <= 0)
+ * All amounts are of same sign (all &ge; 0 or all &le; 0)
  * Any rounding is done with appropriate error distribution.
  * @author Michael Bischoff
  *
@@ -117,7 +117,7 @@ public final class BonaMoney implements Serializable, AbelianGroup<BonaMoney> {
 
     /** Multiply with a scalar, possibly with different scaling.
      * Allocate any rounding differences.
-     * Can be used for FX conversion (then factor is the fxRate) and for discounts (in which case rate <> 1.0, but currencies are the same), or for
+     * Can be used for FX conversion (then factor is the fxRate) and for discounts (in which case rate != 1.0, but currencies are the same), or for
      * unit price to final price conversion (in which case factor is the quantity). Finally, factor can be 1.0, but the currencies differ, in which case
      * rounding is desired.
      * @throws MonetaryException if */

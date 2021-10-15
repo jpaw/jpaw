@@ -5,7 +5,7 @@ import java.io.Serializable;
 // test cases for the set operations see project bonaparte-core-test, class TestImmutableStringEnumSetOperations
 
 /** A class which provides String represented alphanumeric enum sets, such as XEnumSet or EnumSetAlpha.
- * This class does not implement the Set<E> interface, because that contradicts immutability.
+ * This class does not implement the Set interface, because that contradicts immutability.
  * This class is not strictly typed, i.e. it can hold bitmaps of different XEnumSets.
  *
  * This class is intended to be used with operator overloading in xtend.

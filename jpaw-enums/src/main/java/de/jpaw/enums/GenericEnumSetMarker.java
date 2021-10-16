@@ -8,5 +8,5 @@ import java.util.Set;
 public interface GenericEnumSetMarker<E extends Enum<E>> extends Set<E>, Serializable, EnumSetMarker {
 
     /** Let this instance have the same contents as that. */
-    public void assign(Collection<E> that);
+    void assign(Collection<E> that);
 }

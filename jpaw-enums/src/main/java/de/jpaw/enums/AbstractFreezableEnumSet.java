@@ -18,17 +18,18 @@ public abstract class AbstractFreezableEnumSet<E extends Enum<E>> extends Abstra
             throw new RuntimeException("Setter called for frozen instance of class " + getClass().getName());
     }
     @Override
-    public void freeze() {
+    public final void freeze() {
         _was$Frozen = true;
     }
 
     /** Let this instance have the same contents as that. */
     @Override
-    public void assign(Collection<E> that) {
+    public final void assign(final Collection<E> that) {
         clear();
         if (that != null) {
-            for (E o : that)
+            for (E o : that) {
                 add(o);
+            }
         }
     }
 }

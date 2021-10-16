@@ -7,23 +7,24 @@ import java.util.Iterator;
 public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractFreezableEnumSet<E> {
     private static final long serialVersionUID = 34398390989170000L + 7;
     private static final byte BIT = 1;
+    /** The maximum number of tokens this enumset can store. */
     public static final int MAX_TOKENS = 7;
     private byte bitmap;
 
     /** This method returns the number of instances (max Ordinal + 1), the name is misleading!!!!
      * This definition has been made to avoid a negative return code in the case of empty enums. */
-    abstract protected int getMaxOrdinal();
+    protected abstract int getMaxOrdinal();
 
     public AbstractByteEnumSet() {
         bitmap = 0;
     }
 
-    public AbstractByteEnumSet(byte bitmap) {
+    public AbstractByteEnumSet(final byte bitmap) {
         this.bitmap = bitmap;
     }
 
 
-    public byte getBitmap() {
+    public final byte getBitmap() {
         return bitmap;
     }
 
@@ -40,7 +41,7 @@ public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractFre
     }
 
     /** Constructs a bitmap from a standard string map. */
-    public static byte fromStringMap(String s) {
+    public static byte fromStringMap(final String s) {
         byte work = 0;
         for (int i = 0; i < s.length(); ++i) {
             char c = s.charAt(i);
@@ -55,25 +56,26 @@ public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractFre
     }
 
     /** Creates a bitmap from an array of arbitrary enums. */
-    public static byte bitmapOf(Enum<?> [] arg) {
+    public static byte bitmapOf(final Enum<?>[] arg) {
         byte val = 0;
-        for (int i = 0; i < arg.length; ++i)
+        for (int i = 0; i < arg.length; ++i) {
             val |= BIT << arg[i].ordinal();
+        }
         return val;
     }
 
     @Override
-    public int size() {
+    public final int size() {
         return Long.bitCount(bitmap);
     }
 
     @Override
-    public boolean isEmpty() {
+    public final boolean isEmpty() {
         return bitmap == 0;
     }
 
     @Override
-    public boolean contains(Object o) {
+    public final boolean contains(final Object o) {
         if (o == null || !(o instanceof Enum))
             return false;
         int q = ((Enum<?>)o).ordinal();
@@ -81,7 +83,7 @@ public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractFre
     }
 
     @Override
-    public boolean add(E e) {
+    public final boolean add(final E e) {
         int q = e.ordinal();   // may throw NPE
         if (q >= MAX_TOKENS || q >= getMaxOrdinal())
             throw new IllegalArgumentException(e.getClass().getCanonicalName() + "." + e.name() + " has ordinal " + e.ordinal());
@@ -94,7 +96,7 @@ public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractFre
     }
 
     @Override
-    public boolean remove(Object o) {
+    public final boolean remove(final Object o) {
         if (o == null || !(o instanceof Enum))      // preliminary check for "not contained"
             return false;
         int q = ((Enum<?>)o).ordinal();
@@ -109,7 +111,7 @@ public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractFre
     }
 
     @Override
-    public void clear() {
+    public final void clear() {
         if (bitmap != 0) {
             verify$Not$Frozen();            // check if modification is allowed
             bitmap = 0;
@@ -117,58 +119,58 @@ public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractFre
     }
 
     @Override
-    public int hashCode() {
+    public final int hashCode() {
         return bitmap;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(final Object o) {
         if (o == null || getClass() != o.getClass())
             return false;
         return bitmap == ((AbstractByteEnumSet<?>)o).getBitmap();
     }
 
     /** Merges (boolean OR) another bitmap into this one. */
-    public void unifyWith(AbstractByteEnumSet<E> that) {
+    public final void unifyWith(final AbstractByteEnumSet<E> that) {
         verify$Not$Frozen();                // check if modification is allowed
         bitmap |= that.bitmap;
     }
 
     /** Merges (boolean AND) another bitmap into this one. */
-    public void intersectWith(AbstractByteEnumSet<E> that) {
+    public final void intersectWith(final AbstractByteEnumSet<E> that) {
         verify$Not$Frozen();                // check if modification is allowed
         bitmap &= that.bitmap;
     }
 
     /** Subtracts another bitmap from this one. */
-    public void exclude(AbstractByteEnumSet<E> that) {
+    public final void exclude(final AbstractByteEnumSet<E> that) {
         verify$Not$Frozen();                // check if modification is allowed
         bitmap &= ~that.bitmap;
     }
 
     /** Merges (XOR) another bitmap into this one. Provided for completeness */
-    public void exactlyOneOf(AbstractByteEnumSet<E> that) {
+    public final void exactlyOneOf(final AbstractByteEnumSet<E> that) {
         verify$Not$Frozen();                // check if modification is allowed
         bitmap ^= that.bitmap;
     }
 
     /** Returns the bitmap of the full set with all elements included. */
-    public byte bitmapFullSet() {
+    public final byte bitmapFullSet() {
         return (byte) ((BIT << getMaxOrdinal()) - BIT);      // Java looses type on binary operations such that a cast is required for byte and byte
     }
 
     /** Negates a set. */
-    public void complement() {
+    public final void complement() {
         verify$Not$Frozen();                // check if modification is allowed
         bitmap = (byte) (~bitmap & bitmapFullSet());      // Java looses type on binary operations such that a cast is required for byte and byte
     }
 
-    static protected class SetOfEnumsIterator<E extends Enum<E>> implements Iterator<E> {
-        private final E [] values;
+    protected static final class SetOfEnumsIterator<E extends Enum<E>> implements Iterator<E> {
+        private final E[] values;
         private byte bitmap;
         private int index;
 
-        public SetOfEnumsIterator(E [] values, byte bitmap) {
+        public SetOfEnumsIterator(final E[] values, final byte bitmap) {
             this.values = values;
             this.bitmap = bitmap;
             this.index = -1;
@@ -184,8 +186,9 @@ public abstract class AbstractByteEnumSet<E extends Enum<E>> extends AbstractFre
             if (bitmap == 0)
                 return null;
             ++index;                                    // index was at previous position. At least increment once
-            while ((bitmap & (BIT << index)) == 0)
+            while ((bitmap & (BIT << index)) == 0) {
                 ++index;
+            }
             bitmap &= ~(BIT << index);
             return values[index];
         }

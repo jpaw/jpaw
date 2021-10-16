@@ -6,8 +6,8 @@ public interface EnumSetMarker {
     public static final String STANDARD_TOKENS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_";
 
     // enumsets are freezable, similar to BonaPortables
-    public boolean was$Frozen();
-    public void freeze();
-    public EnumSetMarker ret$MutableClone(boolean deepCopy, boolean unfreezeCollections);
-    public EnumSetMarker ret$FrozenClone();
+    boolean was$Frozen();
+    void freeze();
+    EnumSetMarker ret$MutableClone(boolean deepCopy, boolean unfreezeCollections);
+    EnumSetMarker ret$FrozenClone();
 }

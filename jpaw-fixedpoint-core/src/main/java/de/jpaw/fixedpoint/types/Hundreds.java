@@ -66,8 +66,15 @@ public class Hundreds extends FixedPointBase<Hundreds> {
         return  Hundreds.of(divide_longs(that.getMantissa(), powersOfTen[-scaleDiff], rounding));
     }
 
-    /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>. */
+    /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>.
+     * Deprecated. Use valueOf() instead. */
+    @Deprecated
     public static Hundreds of(BigDecimal number) {
+        return valueOf(number);
+    }
+
+    /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>. */
+    public static Hundreds valueOf(BigDecimal number) {
         final int scaleOfBigDecimal = number.scale();
         if (scaleOfBigDecimal <= 0) {
             // the value of the BigDecimal is integral

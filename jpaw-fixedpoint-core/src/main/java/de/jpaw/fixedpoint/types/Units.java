@@ -65,12 +65,19 @@ public class Units extends FixedPointBase<Units> {
         return  Units.of(divide_longs(that.getMantissa(), powersOfTen[-scaleDiff], rounding));
     }
 
-    /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>. */
+    /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>.
+     * Deprecated. Use valueOf() instead. */
+    @Deprecated
     public static Units of(BigDecimal number) {
+        return valueOf(number);
+    }
+
+    /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>. */
+    public static Units valueOf(BigDecimal number) {
         final int scaleOfBigDecimal = number.scale();
         if (scaleOfBigDecimal <= 0) {
             // the value of the BigDecimal is integral
-            return of(number.longValue() * UNIT_MANTISSA);
+            return of(number.longValue());
         }
         // This is certainly not the most efficient implementation, as it involves the construction of up to one new BigDecimal and a BigInteger
         // TODO: replace it by a zero GC version

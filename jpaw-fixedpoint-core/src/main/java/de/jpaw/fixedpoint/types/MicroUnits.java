@@ -66,8 +66,15 @@ public class MicroUnits extends FixedPointBase<MicroUnits> {
         return  MicroUnits.of(divide_longs(that.getMantissa(), powersOfTen[-scaleDiff], rounding));
     }
 
-    /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>. */
+    /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>.
+     * Deprecated. Use valueOf() instead. */
+    @Deprecated
     public static MicroUnits of(BigDecimal number) {
+        return valueOf(number);
+    }
+
+    /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>. */
+    public static MicroUnits valueOf(BigDecimal number) {
         final int scaleOfBigDecimal = number.scale();
         if (scaleOfBigDecimal <= 0) {
             // the value of the BigDecimal is integral

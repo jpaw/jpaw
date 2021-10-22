@@ -49,14 +49,14 @@ public interface BatchWriter<E> extends BatchIO {
 
     // map
 
-    default public <F> BatchWriter<F> mappedFrom(Function<F,E> function) {
-        return new BatchWriterMap<F,E>(this, function);
+    default public <F> BatchWriter<F> mappedFrom(Function<F, E> function) {
+        return new BatchWriterMap<F, E>(this, function);
     }
-    default public <F> BatchWriter<F> mappedFrom(ObjIntFunction<F,E> function) {
-        return new BatchWriterMapObjInt<F,E>(this, function);
+    default public <F> BatchWriter<F> mappedFrom(ObjIntFunction<F, E> function) {
+        return new BatchWriterMapObjInt<F, E>(this, function);
     }
-    default public <F> BatchWriter<F> mappedFrom(BatchProcessor<F,E> function) {
-        return new BatchWriterMapForProcessor<F,E>(this, function);
+    default public <F> BatchWriter<F> mappedFrom(BatchProcessor<F, E> function) {
+        return new BatchWriterMapForProcessor<F, E>(this, function);
     }
 
 

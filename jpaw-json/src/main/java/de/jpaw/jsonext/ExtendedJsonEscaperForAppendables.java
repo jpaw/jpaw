@@ -47,7 +47,8 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
         outputFractionalSeconds      = defaultOutputFractionalSeconds;
     }
 
-    public ExtendedJsonEscaperForAppendables(Appendable appendable, boolean writeNulls, boolean escapeNonASCII, boolean instantInMillis, boolean outputFractionalSeconds) {
+    public ExtendedJsonEscaperForAppendables(Appendable appendable, boolean writeNulls, boolean escapeNonASCII, boolean instantInMillis,
+      boolean outputFractionalSeconds) {
         super(appendable, writeNulls, escapeNonASCII);
         this.instantInMillis         = instantInMillis;
         this.outputFractionalSeconds = outputFractionalSeconds;

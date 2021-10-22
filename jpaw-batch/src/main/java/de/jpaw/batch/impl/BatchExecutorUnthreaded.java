@@ -4,8 +4,8 @@ import de.jpaw.batch.api.BatchProcessor;
 import de.jpaw.batch.api.BatchProcessorFactory;
 import de.jpaw.batch.api.BatchWriter;
 
-public class BatchExecutorUnthreaded<E,F> extends BatchMain<E,F> {
-    private BatchProcessor<E,F> localProcessor = null;
+public class BatchExecutorUnthreaded<E, F> extends BatchMain<E, F> {
+    private BatchProcessor<E, F> localProcessor = null;
     private BatchWriter<? super F> localWriter = null;
     private int numRecords = 0;         // number of records read (added to input queue)
     private int numExceptions = 0;      // number of records which resulted in an exception

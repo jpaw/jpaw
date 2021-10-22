@@ -11,7 +11,7 @@ public class InstantAdapter extends XmlAdapter<String, Instant> {
     @Override
     public Instant unmarshal(String v) throws Exception {
         if (addMissingSuffixUTC) {
-            if (v.charAt(v.length()-1) != 'Z') {
+            if (v.charAt(v.length() - 1) != 'Z') {
                 v = v + "Z";
             }
         }

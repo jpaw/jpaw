@@ -15,7 +15,7 @@ import de.jpaw.xml.jaxb.ByteArrayAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ByteArrayMappers {
 
-    public byte [] array1;
+    public byte[] array1;
     @XmlJavaTypeAdapter(ByteArrayAdapter.class)
     public ByteArray array2;
     public LocalDate localDate;

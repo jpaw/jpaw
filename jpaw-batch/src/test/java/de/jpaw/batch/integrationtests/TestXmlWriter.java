@@ -26,11 +26,13 @@ public class TestXmlWriter {
 
     @XmlRootElement
     @XmlAccessorType(XmlAccessType.FIELD)
-    static class DummyClass {
-        String name;
-        int value;
+    private static class DummyClass {
+        private final String name;
+        private final int value;
 
         DummyClass() {
+        	name = null;
+        	value = 0;
         }
         DummyClass(String name, int value) {
             this.name = name;
@@ -41,10 +43,10 @@ public class TestXmlWriter {
     @Test
     public void testXmlInWriter() throws Exception {
         DummyClass data = new DummyClass("hello", 42);
-        String [] cmdline = { "-n", "3", "-o", "/tmp/data1.xml.gz", "--formatted" };
+        String[] cmdline = { "-n", "3", "-o", "/tmp/data1.xml.gz", "--formatted" };
         JAXBContext context = JAXBContext.newInstance(DummyClass.class);
 
-        new BatchExecutorUnthreaded<DummyClass,DummyClass>().run(
+        new BatchExecutorUnthreaded<DummyClass, DummyClass>().run(
                 cmdline,
                 new BatchReaderRepeater<DummyClass>(data),
                 new BatchWriterXmlFile(context, HEADER, FOOTER),
@@ -55,10 +57,10 @@ public class TestXmlWriter {
     @Test
     public void testXmlInProcessor() throws Exception {
         DummyClass data = new DummyClass("hello", 42);
-        String [] cmdline = { "-n", "3", "-o", "/tmp/data2.xml.gz", "--formatted" };
+        String[] cmdline = { "-n", "3", "-o", "/tmp/data2.xml.gz", "--formatted" };
         JAXBContext context = JAXBContext.newInstance(DummyClass.class);
 
-        new BatchExecutorUnthreaded<Object,String>().run(
+        new BatchExecutorUnthreaded<Object, String>().run(
                 cmdline,
                 new BatchReaderRepeater<DummyClass>(data),
                 new BatchWriterTextFile(HEADER, FOOTER),
@@ -69,10 +71,10 @@ public class TestXmlWriter {
 
     @Test
     public void testXmlReader() throws Exception {
-        String [] cmdline = { "-i", "/tmp/data1.xml.gz" };
+        String[] cmdline = { "-i", "/tmp/data1.xml.gz" };
         JAXBContext context = JAXBContext.newInstance(DummyClass.class);
 
-        new BatchExecutorUnthreaded<DummyClass,DummyClass>().run(
+        new BatchExecutorUnthreaded<DummyClass, DummyClass>().run(
                 cmdline,
                 new BatchReaderXmlFile<DummyClass>(context, DummyClass.class),
                 new BatchWriterDevNull<Object>(),

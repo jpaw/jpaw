@@ -32,15 +32,17 @@ public class TestRounding {
                     assertSame(mipi.round(digits, rm), bdmpi.setScale(digits, rm), what + " (negative)");
 
                     // now also try the multiplication
-                    assertSame(mpi.round(digits, rm).multiply(me, rm), bdpi.setScale(digits, rm).multiply(bde).setScale(6, rm), what + " (times e)");
-                    assertSame(mipi.round(digits, rm).multiply(me, rm), bdmpi.setScale(digits, rm).multiply(bde).setScale(6, rm), what + " (times e, negative)");
+                    assertSame(mpi.round(digits, rm).multiply(me, rm), bdpi.setScale(digits, rm).multiply(bde).setScale(6, rm),
+                      what + " (times e)");
+                    assertSame(mipi.round(digits, rm).multiply(me, rm), bdmpi.setScale(digits, rm).multiply(bde).setScale(6, rm),
+                      what + " (times e, negative)");
                 }
             }
         }
     }
 
     // assert that the fixed point number and the BigDecimal have the same value
-    void assertSame(MicroUnits m, BigDecimal bd, String where) {
+    private void assertSame(MicroUnits m, BigDecimal bd, String where) {
         BigDecimal actual = m.toBigDecimal();
         boolean result = bd.compareTo(actual) == 0;
         if (!result) {

@@ -36,8 +36,8 @@ import de.jpaw.util.Escape2Java;
 @BenchmarkMode(Mode.AverageTime)
 public class StringEscapers {
     private static final int N = 280;
-    private static final String [] strings1 = new String[N];
-    private static final String [] strings5 = new String[N];
+    private static final String[] strings1 = new String[N];
+    private static final String[] strings5 = new String[N];
 
     @Setup
     public void doSetup()  {
@@ -56,25 +56,29 @@ public class StringEscapers {
 
     @Benchmark
     public void escape2JavaApache1(Blackhole bh) {
-        for (int i = 0; i < N; ++i)
-            bh.consume(StringEscapeUtils.escapeJava(strings1[i]));
+        for (int i = 0; i < N; ++i) {
+			bh.consume(StringEscapeUtils.escapeJava(strings1[i]));
+		}
     }
 
     @Benchmark
     public void escape2JavaJpaw1(Blackhole bh) {
-        for (int i = 0; i < N; ++i)
-            bh.consume(Escape2Java.escapeString2Java(strings1[i]));
+        for (int i = 0; i < N; ++i) {
+			bh.consume(Escape2Java.escapeString2Java(strings1[i]));
+		}
     }
 
     @Benchmark
     public void escape2JavaApache5(Blackhole bh) {
-        for (int i = 0; i < N; ++i)
-            bh.consume(StringEscapeUtils.escapeJava(strings5[i]));
+        for (int i = 0; i < N; ++i) {
+			bh.consume(StringEscapeUtils.escapeJava(strings5[i]));
+		}
     }
 
     @Benchmark
     public void escape2JavaJpaw5(Blackhole bh) {
-        for (int i = 0; i < N; ++i)
-            bh.consume(Escape2Java.escapeString2Java(strings5[i]));
+        for (int i = 0; i < N; ++i) {
+			bh.consume(Escape2Java.escapeString2Java(strings5[i]));
+		}
     }
 }

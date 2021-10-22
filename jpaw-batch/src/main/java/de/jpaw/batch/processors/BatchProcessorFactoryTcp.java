@@ -21,7 +21,7 @@ import de.jpaw.batch.api.BatchProcessorFactory;
 import de.jpaw.batch.api.BatchProcessorMarshaller;
 import de.jpaw.socket.SessionInfo;
 
-public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X,X> {
+public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X, X> {
     private static final Logger LOG = LoggerFactory.getLogger(BatchProcessorFactoryTcp.class);
     private final BatchProcessorMarshaller<X> marshaller;
     private int bufferSize = 1024 * 1024;
@@ -38,7 +38,8 @@ public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X,X> {
         params.registerParameter(new FlaggedOption("host", JSAP.STRING_PARSER, "localhost", JSAP.NOT_REQUIRED, 'H', "host", "remote host name or IP address"));
         params.registerParameter(new FlaggedOption("port", JSAP.INTEGER_PARSER, "80", JSAP.NOT_REQUIRED, 'P', "port", "server TCP/IP port"));
         params.registerParameter(new Switch("ssl", 'S', "ssl", "use SSL"));
-        params.registerParameter(new FlaggedOption("buffersize", JSAP.INTEGER_PARSER, "1000000", JSAP.NOT_REQUIRED, 'B', "rest-buffer-size", "buffer size for REST requests"));
+        params.registerParameter(new FlaggedOption("buffersize", JSAP.INTEGER_PARSER, "1000000",
+          JSAP.NOT_REQUIRED, 'B', "rest-buffer-size", "buffer size for REST requests"));
     }
 
     @Override
@@ -68,7 +69,7 @@ public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X,X> {
     }
 
     @Override
-    public BatchProcessor<X,X> getProcessor(int threadNo) throws IOException {
+    public BatchProcessor<X, X> getProcessor(int threadNo) throws IOException {
         // connect and then return the new processor
         Socket conn = null;
         if (useSsl) {
@@ -85,13 +86,13 @@ public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X,X> {
         return new BatchProcessorTcp<X>(bufferSize, marshaller, conn);
     }
 
-    private static class BatchProcessorTcp<X> implements BatchProcessor<X,X> {
+    private static final class BatchProcessorTcp<X> implements BatchProcessor<X, X> {
         private final Socket conn;
-        private final byte [] responseBuffer;
+        private final byte[] responseBuffer;
         private final BatchProcessorMarshaller<X> marshaller;
 
         private BatchProcessorTcp(int bufferSize, BatchProcessorMarshaller<X> marshaller, Socket conn) {
-            responseBuffer = new byte [bufferSize];
+            responseBuffer = new byte[bufferSize];
             this.marshaller = marshaller;
             this.conn = conn;
         }
@@ -100,7 +101,7 @@ public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X,X> {
         public X process(int recordNo, X data) throws Exception {
             // get the raw data
             boolean foundDelimiter = false;
-//          byte [] payload = marshaller.marshal(data);
+//          byte[] payload = marshaller.marshal(data);
 //          conn.getOutputStream().write(payload);
             marshaller.marshal(data, conn.getOutputStream());
             int haveBytes = 0;
@@ -109,7 +110,7 @@ public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X,X> {
                 if (numBytes <= 0)
                     break;
                 for (int i = 0; i < numBytes; ++i) {
-                    if (responseBuffer[haveBytes+i] == (byte)0x0a) {
+                    if (responseBuffer[haveBytes + i] == (byte)0x0a) {
                         foundDelimiter = true;
                         break;
                         // fast track: return new ByteArrayParser(responseBuffer, 0, haveBytes+i+1).readRecord();

@@ -8,7 +8,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-public class Xml2Object<T> implements Function <String,T> {
+public class Xml2Object<T> implements Function<String, T> {
     private final JAXBContext context;
     private final boolean threadSafe;       // if not (only sequential use), then the marshaller can be reused, set threadSafe to false then.
     private final Class<T> baseClass;
@@ -22,7 +22,7 @@ public class Xml2Object<T> implements Function <String,T> {
         m = threadSafe ? null : createUnmarshaller();
     }
 
-    private final Unmarshaller createUnmarshaller() {
+    private Unmarshaller createUnmarshaller() {
         Unmarshaller mm;
         try {
             mm = context.createUnmarshaller();

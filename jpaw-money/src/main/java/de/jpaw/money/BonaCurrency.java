@@ -20,23 +20,25 @@ public final class BonaCurrency implements Serializable {
     /** Scaled zeroes holds a cached array of zero with respect to the different scales.
      * This is purely for speed optimization.
      */
-    private static final BigDecimal [] SCALED_ZEROES;       // provides a preinitialized array of a few zeroes
+    private static final BigDecimal[] SCALED_ZEROES;       // provides a preinitialized array of a few zeroes
     static {
-        SCALED_ZEROES = new BigDecimal [BonaCurrency.MAX_DECIMALS + 1];
+        SCALED_ZEROES = new BigDecimal[BonaCurrency.MAX_DECIMALS + 1];
         SCALED_ZEROES[0] = BigDecimal.ZERO;
-        for (int i = 1; i <= MAX_DECIMALS; ++i)
+        for (int i = 1; i <= MAX_DECIMALS; ++i) {
             SCALED_ZEROES[i] = BigDecimal.ZERO.setScale(i);
+        }
     }
 
     /** Smallest unit holds a cached array of the smallest representable unit with respect to the different scales.
      * This is purely for speed optimization.
      */
-    private static final BigDecimal [] SMALLEST_UNITS;       // provides a preinitialized array of a few smallest units
+    private static final BigDecimal[] SMALLEST_UNITS;       // provides a preinitialized array of a few smallest units
     static {
-        SMALLEST_UNITS = new BigDecimal [BonaCurrency.MAX_DECIMALS + 1];
+        SMALLEST_UNITS = new BigDecimal[BonaCurrency.MAX_DECIMALS + 1];
         SMALLEST_UNITS[0] = BigDecimal.ONE;
-        for (int i = 1; i <= MAX_DECIMALS; ++i)
+        for (int i = 1; i <= MAX_DECIMALS; ++i) {
             SMALLEST_UNITS[i] = BigDecimal.valueOf(1L, i);
+        }
     }
 
     /**
@@ -122,9 +124,9 @@ public final class BonaCurrency implements Serializable {
      * @return scaled values
      * @throws MonetaryException
      */
-    public BigDecimal [] roundWithErrorDistribution(BigDecimal [] unscaledAmounts) throws MonetaryException {
+    public BigDecimal[] roundWithErrorDistribution(BigDecimal[] unscaledAmounts) throws MonetaryException {
         int n = unscaledAmounts.length;
-        BigDecimal scaledAmounts [] = new BigDecimal [n];
+        BigDecimal[] scaledAmounts = new BigDecimal[n];
         BigDecimal sum = getZero();
         for (int i = 0; i < n; ++i) {
             scaledAmounts[i] = scale(unscaledAmounts[i], RoundingMode.HALF_EVEN);
@@ -142,8 +144,8 @@ public final class BonaCurrency implements Serializable {
             singleAdjustment = singleAdjustment.negate();
         BigDecimal difference = scaledAmounts[0].subtract(sum);  // this difference is to add to the elements / subtract from the sum
         // System.out.println("compareSign=" + compareSign + ", difference="+difference.toPlainString());
-        boolean [] isEligible = new boolean [n];
-        double [] relativeError = new double [n];
+        boolean[] isEligible = new boolean[n];
+        double[] relativeError = new double[n];
         int numberEligible = 0;
         int numberToAdjust = difference.abs().scaleByPowerOfTen(decimals).intValue();
         assert numberToAdjust > 0 && numberToAdjust < n : "Unexplainable number of elements to adjust";
@@ -157,11 +159,12 @@ public final class BonaCurrency implements Serializable {
                 // new weight method:
                 // component 1: prefer small corrections, i.e. prefer to adjust x.6 to x.0 rather than x.9 to x.0 (min absolute adjustment)
                 // component 2: prefer small relative changes, i.e. prefer to adjust x.6 to x.0 to y.6 to y.0 if x > y
-                // component 1 is more important than component 2 => weighted calculation uses the square of component 1 and a linear weight of component 2 (using the reciprocal)
+                // component 1 is more important than component 2
+                //   => weighted calculation uses the square of component 1 and a linear weight of component 2 (using the reciprocal)
                 // square of component 1 is in range [0.25, 1)
                 relativeError[i] =
-                        Math.abs(singleAdjustment.subtract(unscaledAmounts[i].subtract(scaledAmounts[i])).doubleValue()) /
-                        Math.abs(unscaledAmounts[i].doubleValue());
+                    Math.abs(singleAdjustment.subtract(unscaledAmounts[i].subtract(scaledAmounts[i])).doubleValue())
+                  / Math.abs(unscaledAmounts[i].doubleValue());
                 ++numberEligible;
             } else {
                 relativeError[i] = 0.0;  // just to avoid errorneous access
@@ -179,7 +182,7 @@ public final class BonaCurrency implements Serializable {
                     smallestIndex = i;
                 }
             }
-            assert(smallestIndex >= 0);             // did actually find one
+            assert (smallestIndex >= 0);             // did actually find one
             isEligible[smallestIndex] = false;      // mark it "used"
             if (smallestIndex > 0)
                 scaledAmounts[smallestIndex] = scaledAmounts[smallestIndex].add(singleAdjustment);

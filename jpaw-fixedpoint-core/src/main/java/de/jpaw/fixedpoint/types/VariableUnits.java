@@ -9,7 +9,7 @@ import de.jpaw.fixedpoint.FixedPointBase;
 public class VariableUnits extends FixedPointBase<VariableUnits> {
     private static final long serialVersionUID = 8621674182590849295L;
     private final int scale;
-    private final static VariableUnits [] ZEROs = {
+    private static final VariableUnits[] ZEROs = {
             new VariableUnits(0L, 0),
             new VariableUnits(0L, 1),
             new VariableUnits(0L, 2),
@@ -30,29 +30,29 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
             new VariableUnits(0L, 17),
             new VariableUnits(0L, 18)
     };
-    private final static VariableUnits [] ONEs = {
-            new VariableUnits(powersOfTen[0], 0),
-            new VariableUnits(powersOfTen[1], 1),
-            new VariableUnits(powersOfTen[2], 2),
-            new VariableUnits(powersOfTen[3], 3),
-            new VariableUnits(powersOfTen[4], 4),
-            new VariableUnits(powersOfTen[5], 5),
-            new VariableUnits(powersOfTen[6], 6),
-            new VariableUnits(powersOfTen[7], 7),
-            new VariableUnits(powersOfTen[8], 8),
-            new VariableUnits(powersOfTen[9], 9),
-            new VariableUnits(powersOfTen[10], 10),
-            new VariableUnits(powersOfTen[11], 11),
-            new VariableUnits(powersOfTen[12], 12),
-            new VariableUnits(powersOfTen[13], 13),
-            new VariableUnits(powersOfTen[14], 14),
-            new VariableUnits(powersOfTen[15], 15),
-            new VariableUnits(powersOfTen[16], 16),
-            new VariableUnits(powersOfTen[17], 17),
-            new VariableUnits(powersOfTen[18], 18)
+    private static final VariableUnits[] ONEs = {
+            new VariableUnits(POWERS_OF_TEN[0], 0),
+            new VariableUnits(POWERS_OF_TEN[1], 1),
+            new VariableUnits(POWERS_OF_TEN[2], 2),
+            new VariableUnits(POWERS_OF_TEN[3], 3),
+            new VariableUnits(POWERS_OF_TEN[4], 4),
+            new VariableUnits(POWERS_OF_TEN[5], 5),
+            new VariableUnits(POWERS_OF_TEN[6], 6),
+            new VariableUnits(POWERS_OF_TEN[7], 7),
+            new VariableUnits(POWERS_OF_TEN[8], 8),
+            new VariableUnits(POWERS_OF_TEN[9], 9),
+            new VariableUnits(POWERS_OF_TEN[10], 10),
+            new VariableUnits(POWERS_OF_TEN[11], 11),
+            new VariableUnits(POWERS_OF_TEN[12], 12),
+            new VariableUnits(POWERS_OF_TEN[13], 13),
+            new VariableUnits(POWERS_OF_TEN[14], 14),
+            new VariableUnits(POWERS_OF_TEN[15], 15),
+            new VariableUnits(POWERS_OF_TEN[16], 16),
+            new VariableUnits(POWERS_OF_TEN[17], 17),
+            new VariableUnits(POWERS_OF_TEN[18], 18)
     };
 
-    public final static int scaleCheck(int scale) {
+    public static final int scaleCheck(int scale) {
         if (scale < 0 || scale > 18)
             throw new IllegalArgumentException("Illegal scale " + scale + ", must be in range [0,18]");
         return scale;
@@ -95,7 +95,7 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
         scaleCheck(scale);
         if (mantissa == 0)
             return ZEROs[scale];
-        if (mantissa == powersOfTen[scale])
+        if (mantissa == POWERS_OF_TEN[scale])
             return ONEs[scale];
         return new VariableUnits(mantissa, scale);
     }
@@ -122,7 +122,7 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
         // caching checks...
         if (mantissa == 0)
             return ZEROs[scale];
-        if (mantissa == powersOfTen[scale])
+        if (mantissa == POWERS_OF_TEN[scale])
             return ONEs[scale];
         if (mantissa == this.mantissa)
             return this;
@@ -146,7 +146,7 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
 
     @Override
     public long getUnitAsLong() {
-        return powersOfTen[scale];
+        return POWERS_OF_TEN[scale];
     }
 
     @Override
@@ -164,9 +164,9 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
     public VariableUnits add(VariableUnits that) {
         int diff = this.scale() - that.scale();
         if (diff >= 0)
-            return this.newInstanceOf(this.mantissa + powersOfTen[diff] * that.mantissa);
+            return this.newInstanceOf(this.mantissa + POWERS_OF_TEN[diff] * that.mantissa);
         else
-            return that.newInstanceOf(that.mantissa + powersOfTen[-diff] * this.mantissa);
+            return that.newInstanceOf(that.mantissa + POWERS_OF_TEN[-diff] * this.mantissa);
     }
 
     /** Subtracts two fixed point numbers of exactly same type. For variable scale subtypes, the scale of the sum is the bigger of the operand scales. */
@@ -178,26 +178,28 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
         // first checks, if we can void adding the numbers and return either operand.
         int diff = this.scale() - that.scale();
         if (diff >= 0)
-            return this.newInstanceOf(this.mantissa - powersOfTen[diff] * that.mantissa);
+            return this.newInstanceOf(this.mantissa - POWERS_OF_TEN[diff] * that.mantissa);
         else
-            return that.newInstanceOf(-that.mantissa + powersOfTen[-diff] * this.mantissa);
+            return that.newInstanceOf(-that.mantissa + POWERS_OF_TEN[-diff] * this.mantissa);
     }
 
 
     /** Create a new VariableUnits instance as the sum of the provided generic FixedPoint numbers. */
     public static VariableUnits sumOf(List<? extends FixedPointBase<?>> components, boolean addOne) {
         int maxScale = 0;
-        for (FixedPointBase<?> e : components)
+        for (FixedPointBase<?> e : components) {
             if (e.scale() > maxScale)
                 maxScale = e.scale();
-        long sum = addOne ? powersOfTen[maxScale] : 0;
-        for (FixedPointBase<?> e : components)
-            sum += e.getMantissa() * powersOfTen[maxScale - e.scale()];
+        }
+        long sum = addOne ? POWERS_OF_TEN[maxScale] : 0;
+        for (FixedPointBase<?> e : components) {
+            sum += e.getMantissa() * POWERS_OF_TEN[maxScale - e.scale()];
+        }
         return VariableUnits.of(sum, maxScale);
     }
 
     @Override
     public double getScaleAsDouble() {
-        return 1.0 / (double)powersOfTen[scale];
+        return 1.0 / POWERS_OF_TEN[scale];
     }
 }

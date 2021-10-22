@@ -88,7 +88,7 @@ public class BatchReaderNewThreadsViaQueue<E> extends BatchLinked implements Bat
 
         inputQueue = new ArrayBlockingQueue<DataWithOrdinal<E>>(bufferSize);
         // set up the callables
-        ABQCollector<E> [] handlerTab = new ABQCollector [numThreads];
+        ABQCollector<E>[] handlerTab = new ABQCollector[numThreads];
 
         for (int i = 0; i < numThreads; ++i) {
             ABQCollector<E> task = new ABQCollector<E>(consumerFactory.get(i), inputQueue);

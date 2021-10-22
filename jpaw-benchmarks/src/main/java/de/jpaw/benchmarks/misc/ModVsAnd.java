@@ -31,9 +31,9 @@ import org.openjdk.jmh.infra.Blackhole;
 public class ModVsAnd {
     private static final int NUM = 1000;
 
-    public int [] a;
-    public int [] b;
-    public int [] c;
+    public int[] a;
+    public int[] b;
+    public int[] c;
 
 
     @Setup
@@ -53,32 +53,36 @@ public class ModVsAnd {
     @Benchmark
     public void modulusRand(Blackhole bh) {
         int sum = 0;
-        for (int i = 0; i < NUM; ++i)
-            sum += a[i] % b[i];
+        for (int i = 0; i < NUM; ++i) {
+			sum += a[i] % b[i];
+		}
         bh.consume(sum);
     }
 
     @Benchmark
     public void bitwiseRand(Blackhole bh) {
         int sum = 0;
-        for (int i = 0; i < NUM; ++i)
-            sum += a[i] & b[i];
+        for (int i = 0; i < NUM; ++i) {
+			sum += a[i] & b[i];
+		}
         bh.consume(sum);
     }
 
     @Benchmark
     public void modulusConst(Blackhole bh) {
         int sum = 0;
-        for (int i = 0; i < NUM; ++i)
-            sum += a[i] % c[i];
+        for (int i = 0; i < NUM; ++i) {
+			sum += a[i] % c[i];
+		}
         bh.consume(sum);
     }
 
     @Benchmark
     public void bitwiseConst(Blackhole bh) {
         int sum = 0;
-        for (int i = 0; i < NUM; ++i)
-            sum += a[i] & c[i];
+        for (int i = 0; i < NUM; ++i) {
+			sum += a[i] & c[i];
+		}
         bh.consume(sum);
     }
 }

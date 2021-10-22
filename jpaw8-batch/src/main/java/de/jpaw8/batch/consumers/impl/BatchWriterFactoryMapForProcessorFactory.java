@@ -6,11 +6,11 @@ import de.jpaw8.batch.api.BatchWriter;
 import de.jpaw8.batch.api.BatchWriterFactory;
 import de.jpaw8.batch.factories.BatchLinked;
 
-public class BatchWriterFactoryMapForProcessorFactory<E,R> extends BatchLinked implements BatchWriterFactory<E> {
+public class BatchWriterFactoryMapForProcessorFactory<E, R> extends BatchLinked implements BatchWriterFactory<E> {
     private final BatchWriterFactory<? super R> consumer;
-    private final BatchProcessorFactory<E,R> function;
+    private final BatchProcessorFactory<E, R> function;
 
-    public BatchWriterFactoryMapForProcessorFactory(BatchWriterFactory<? super R> consumer, BatchProcessorFactory<E,R> function) {
+    public BatchWriterFactoryMapForProcessorFactory(BatchWriterFactory<? super R> consumer, BatchProcessorFactory<E, R> function) {
         super(consumer);
         this.consumer = consumer;
         this.function = function;
@@ -35,6 +35,6 @@ public class BatchWriterFactoryMapForProcessorFactory<E,R> extends BatchLinked i
             throw new RuntimeException(e);
         }
         // link these two
-        return new BatchWriterMapForProcessor<E,R>(downstreamConsumerInstance, functionInstance);
+        return new BatchWriterMapForProcessor<E, R>(downstreamConsumerInstance, functionInstance);
     }
 }

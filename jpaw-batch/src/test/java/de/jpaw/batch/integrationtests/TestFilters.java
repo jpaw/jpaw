@@ -14,9 +14,9 @@ public class TestFilters {
 
     @Test
     public void testHardCodedEvenOddFilter() throws Exception {
-        String [] cmdline = { "-n", "3" };
+        String[] cmdline = { "-n", "3" };
 
-        new BatchExecutorUnthreaded<String,String>().run(
+        new BatchExecutorUnthreaded<String, String>().run(
                 cmdline,
                 new HardcodedEvenOddFilter<String>(new BatchReaderRepeater<String>(TESTDATA), true),
                 new BatchWriterDevNull<String>(),
@@ -25,9 +25,9 @@ public class TestFilters {
 
     @Test
     public void testCmdlineEvenOddFilter() throws Exception {
-        String [] cmdline = { "-n", "3" };
+        String[] cmdline = { "-n", "3" };
 
-        new BatchExecutorUnthreaded<String,String>().run(
+        new BatchExecutorUnthreaded<String, String>().run(
                 cmdline,
                 new EvenOddFilter<String>(new BatchReaderRepeater<String>(TESTDATA)),
                 new BatchWriterDevNull<String>(),

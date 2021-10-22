@@ -16,8 +16,8 @@ public final class FPCurrency implements Serializable {
     private static final long serialVersionUID = -626929186120783201L;
 
     /** A cache for frequently used precisions, to avoid GC due to frequently created objects... */
-    private final static ConcurrentHashMap<CurrencyData, FPCurrency> precisionCacheStd = new ConcurrentHashMap<CurrencyData, FPCurrency>(64);
-    private final static ConcurrentHashMap<CurrencyData, FPCurrency> precisionCacheMicros = new ConcurrentHashMap<CurrencyData, FPCurrency>(64);
+    private static final ConcurrentHashMap<CurrencyData, FPCurrency> precisionCacheStd = new ConcurrentHashMap<CurrencyData, FPCurrency>(64);
+    private static final ConcurrentHashMap<CurrencyData, FPCurrency> precisionCacheMicros = new ConcurrentHashMap<CurrencyData, FPCurrency>(64);
 
     /** The currency's feature provider. */
     private final CurrencyData currency;
@@ -127,7 +127,7 @@ public final class FPCurrency implements Serializable {
     public boolean equals(Object that) {
         if (this == that)
             return true;
-        if (that == null ||getClass() != that.getClass())
+        if (that == null || getClass() != that.getClass())
             return false;
         final FPCurrency other = (FPCurrency) that;
         // Equals should be avoided because we don't know the object behind. Just compare the currency codes.

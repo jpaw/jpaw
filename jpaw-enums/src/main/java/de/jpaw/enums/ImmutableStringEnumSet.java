@@ -111,7 +111,7 @@ public final class ImmutableStringEnumSet implements Serializable {
             return new ImmutableStringEnumSet(bitmap.substring(1));     // special case: remove first!
         if (i == l - 1)
             return new ImmutableStringEnumSet(bitmap.substring(0, i));  // special case: remove last!
-        return new ImmutableStringEnumSet(bitmap.substring(0, i) + bitmap.substring(i+1));    // remove something in between
+        return new ImmutableStringEnumSet(bitmap.substring(0, i) + bitmap.substring(i + 1));    // remove something in between
     }
 
     // set operations: and (intersect), or (union), minus (without)

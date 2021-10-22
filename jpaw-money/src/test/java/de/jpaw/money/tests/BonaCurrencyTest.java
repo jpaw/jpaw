@@ -23,13 +23,13 @@ public class BonaCurrencyTest {
         BigDecimal tax2 = gross2.subtract(gross2.divide(vat, 6, RoundingMode.HALF_EVEN));
         BigDecimal taxt = total.subtract(total.divide(vat, 6, RoundingMode.HALF_EVEN));
 
-        BigDecimal [] components = new BigDecimal[4];
+        BigDecimal[] components = new BigDecimal[4];
         components[0] = taxt.setScale(2, RoundingMode.HALF_EVEN);
         components[1] = tax1;
         components[2] = tax2;
         components[3] = components[0].subtract(tax1).subtract(tax2);
 
-        BigDecimal [] scaledComponents = eur.roundWithErrorDistribution(components);
+        BigDecimal[] scaledComponents = eur.roundWithErrorDistribution(components);
         for (int i = 0; i < 4; ++i) {
             System.out.println(components[i].toPlainString() + " is rounded to " + scaledComponents[i].toPlainString());
         }

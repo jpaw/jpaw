@@ -12,13 +12,13 @@ import de.jpaw.batch.api.DataWithOrdinal;
  * F = f(E)
  * and stores the result in the output queue.
  */
-public class BatchExecutorMTWorker<E,F> implements Runnable {
+public class BatchExecutorMTWorker<E, F> implements Runnable {
     private static final Logger LOG = LoggerFactory.getLogger(BatchExecutorMTWorker.class);
 
     private final int threadIndex;
     private final BlockingQueue<DataWithOrdinal<E>> inQueue;
     private final BlockingQueue<DataWithOrdinal<F>> outQueue;
-    private final BatchProcessor<E,F> processor;
+    private final BatchProcessor<E, F> processor;
 
     private int numProcessed = 0;
     private int numExceptions = 0;
@@ -27,7 +27,7 @@ public class BatchExecutorMTWorker<E,F> implements Runnable {
     public BatchExecutorMTWorker(int threadIndex,
             BlockingQueue<DataWithOrdinal<E>> inQueue,
             BlockingQueue<DataWithOrdinal<F>> outQueue,
-            BatchProcessor<E,F> processor) {
+            BatchProcessor<E, F> processor) {
         this.threadIndex = threadIndex;
         this.inQueue = inQueue;
         this.outQueue = outQueue;

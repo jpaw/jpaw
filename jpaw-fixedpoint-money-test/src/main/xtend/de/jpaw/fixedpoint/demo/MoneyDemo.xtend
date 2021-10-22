@@ -9,7 +9,7 @@ import static extension de.jpaw.fixedpoint.money.FPCurrencyExtensions.*
 
 /** Syntactic sugar for the FPAmount class when used from xtend */
 class MoneyDemo {
-    def static void main(String [] args) {
+    def static void main(String[] args) {
 
         val net = 120.Euro
         val tax = #[ 19.percent ]

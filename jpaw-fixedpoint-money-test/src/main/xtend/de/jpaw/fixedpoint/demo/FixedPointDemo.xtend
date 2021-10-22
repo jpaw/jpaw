@@ -6,7 +6,7 @@ import de.jpaw.fixedpoint.types.MilliUnits
 
 /** Syntactic sugar for the BonaMoney class when used from xtend */
 class FixedPointDemo {
-    def static void main(String [] args) {
+    def static void main(String[] args) {
         val myMillis = 130.millis
         val myMicros = 130L.micros
         val myNanos = 12.nanos

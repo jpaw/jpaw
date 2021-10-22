@@ -31,7 +31,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     public static boolean outputToStringMinimized = true;  // if false, all decimals will be printed
 
     /** Map to convert rounding mode for negated numbers. */
-    private static final EnumMap<RoundingMode,RoundingMode> ROUNDING_MODE_MAPPING = new EnumMap<>(RoundingMode.class);
+    private static final EnumMap<RoundingMode, RoundingMode> ROUNDING_MODE_MAPPING = new EnumMap<>(RoundingMode.class);
     static {
         ROUNDING_MODE_MAPPING.put(RoundingMode.UNNECESSARY, RoundingMode.UNNECESSARY);
         ROUNDING_MODE_MAPPING.put(RoundingMode.FLOOR,     RoundingMode.UP);
@@ -44,10 +44,10 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     }
 
     private static final char[] DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-    private final static int [] intPowersOfTen = {  // What's missing here is something like C's "const" for the contents of the array. Let's hope for Java 9, 10 or whatever...
+    private static final int[] INT_POWERS_OF_TEN = {
             1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000
     };
-    protected final static long [] powersOfTen = {  // What's missing here is something like C's "const" for the contents of the array. Let's hope for Java 9, 10 or whatever...
+    protected static final long[] POWERS_OF_TEN = {
             1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000, 1_000_000_000,
             10000000000L,
             100000000000L,
@@ -60,8 +60,8 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             1000000000000000000L
     };
 
-    public final static long getPowerOfTen(int scale) {
-        return powersOfTen[scale];
+    public static final long getPowerOfTen(int scale) {
+        return POWERS_OF_TEN[scale];
     }
 
     private transient String asString = null; // due to efforts to return this for arithmetic operations whereever possible, it is likely that the same number will be printed multiple times, and due to Java object alignments, it does not increase the size of the object
@@ -73,11 +73,11 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
 
     /** Returns a fixed point value object which has the same number of decimals as this, with a given mantissa.
      * This implementation returns cached instances for 0 and 1. Otherwise, in case this has the same mantissa, this is returned. */
-    public abstract CLASS newInstanceOf(long mantissa);
+    public abstract CLASS newInstanceOf(long xmantissa);
 
     /** Computes the mantissa for a fixed point number of target scale, for a given double. */
     public static long mantissaFor(double value, int scale) {
-        return Math.round(value * powersOfTen[scale]);
+        return Math.round(value * POWERS_OF_TEN[scale]);
     }
 
     /** Get the number of decimals. */
@@ -90,9 +90,11 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     public abstract CLASS getUnit();
 
     /**
-     * Get a reference to myself (essentially "this", but avoids a type cast). This is a workaround, required because the compiler currently does not acknowledge that this class is abstract.
-     * Invocation is only done from this class (only private callers), but it must be protected because the derived classed have to override it.
-     * */
+     * Get a reference to myself (essentially "this", but avoids a type cast).
+     * This is a workaround, required because the compiler currently does not acknowledge that this class is abstract.
+     * Invocation is only done from this class (only private callers),
+     * but it must be protected because the derived classed have to override it.
+     */
     protected abstract CLASS getMyself();
 
     /** Get the value representing the number 1. */
@@ -113,7 +115,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
 
     /** Checks that the number is within 18 digits of magnitude. */
     public boolean isWithinDigits(int numberOfDigits) {
-        final long oneMore = powersOfTen[numberOfDigits];
+        final long oneMore = POWERS_OF_TEN[numberOfDigits];
         return -oneMore < mantissa && mantissa < oneMore;
     }
 
@@ -124,13 +126,16 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
 
     /** Returns true if this is an integral number. */
     public boolean isIntegralValue() {
-        long scale = powersOfTen[scale()];
+        long scale = POWERS_OF_TEN[scale()];
         return mantissa % scale == 0;
     }
 
-    /** Returns the integral part of the number, as fixed point data type. If you need it as a long, use the longValue() method (with a possible offset of 1 for negative numbers). */
+    /**
+     * Returns the integral part of the number, as fixed point data type.
+     * If you need it as a long, use the longValue() method (with a possible offset of 1 for negative numbers).
+     */
     public CLASS floor() {
-        long scale = powersOfTen[scale()];
+        long scale = POWERS_OF_TEN[scale()];
         long fraction = mantissa % scale;
         if (fraction == 0) {
            return getMyself();
@@ -138,9 +143,12 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         return newInstanceOf(mantissa < 0 ? mantissa - fraction - getUnitAsLong() : mantissa - fraction);
     }
 
-    /** Returns the integral part of the number, as fixed point data type. If you need it as a long, use the longValue() method (with a possible offset of 1 for positive numbers). */
+    /**
+     * Returns the integral part of the number, as fixed point data type.
+     * If you need it as a long, use the longValue() method (with a possible offset of 1 for positive numbers).
+     */
     public CLASS ceil() {
-        long scale = powersOfTen[scale()];
+        long scale = POWERS_OF_TEN[scale()];
         long fraction = mantissa % scale;
         if (fraction == 0) {
            return getMyself();
@@ -149,7 +157,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     }
 
     public long fraction() {
-        long scale = powersOfTen[scale()];
+        long scale = POWERS_OF_TEN[scale()];
         long integralDigits = mantissa / scale;
         return Math.abs(mantissa - integralDigits * scale);
     }
@@ -157,7 +165,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     // only called for digits != 0 && scale > 0
     private static void appendFraction(StringBuilder sb, int scale, int digits, boolean minimized) {
         do {
-            int nextPower = intPowersOfTen[--scale];
+            int nextPower = INT_POWERS_OF_TEN[--scale];
             int nextDigit = digits / nextPower;
             sb.append(DIGITS[nextDigit]);
             digits -= nextDigit * nextPower;
@@ -171,7 +179,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     }
     private static void appendFraction(StringBuilder sb, int scale, long digits, boolean minimized) {
         do {
-            long nextPower = powersOfTen[--scale];
+            long nextPower = POWERS_OF_TEN[--scale];
             long nextDigit = digits / nextPower;
             sb.append(DIGITS[(int) nextDigit]);
             digits -= nextDigit * nextPower;
@@ -196,7 +204,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
                 mantissa = -mantissa;
             }
             // separate the digits in a way that the fractional ones are not negative
-            long ten2scale = powersOfTen[scale];
+            long ten2scale = POWERS_OF_TEN[scale];
             long integralDigits = mantissa / ten2scale;
             long decimalDigits = Math.abs(mantissa - integralDigits * ten2scale);
             sb.append(integralDigits);
@@ -213,10 +221,19 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         }
     }
 
-    /** Returns the value in a human readable form. The same notes as for BigDecimal.toString() apply:
+    /**
+     * Returns the value in a human readable form.
+     *
+     * The same notes as for BigDecimal.toString() apply:
      * <ul>
-     * <li>There is a one-to-one mapping between the distinguishable VariableUnits values and the result of this conversion. That is, every distinguishable VariableUnits value (unscaled value and scale) has a unique string representation as a result of using toString. If that string representation is converted back to a VariableUnits using the VariableUnits(String) constructor, then the original value will be recovered.</li>
-     * <li>The string produced for a given number is always the same; it is not affected by locale. This means that it can be used as a canonical string representation for exchanging decimal data, or as a key for a Hashtable, etc. Locale-sensitive number formatting and parsing is handled by the NumberFormat class and its subclasses.</li>
+     * <li>There is a one-to-one mapping between the distinguishable VariableUnits values and the result of this conversion.
+     *     That is, every distinguishable VariableUnits value (unscaled value and scale) has a unique string representation
+     *     as a result of using toString. If that string representation is converted back to a VariableUnits
+     *     using the VariableUnits(String) constructor, then the original value will be recovered.</li>
+     * <li>The string produced for a given number is always the same; it is not affected by locale.
+     *     This means that it can be used as a canonical string representation for exchanging decimal data,
+     *     or as a key for a Hashtable, etc.
+     *     Locale-sensitive number formatting and parsing is handled by the NumberFormat class and its subclasses.</li>
      * </ul>
      * */
     @Override
@@ -259,17 +276,17 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
      * @param targetScale - the number of digits the result will be scaled for.
      * @return the mantissa in the specified scale
      */
-    static protected final long parseMantissa(String src, int targetScale) {
+    protected static final long parseMantissa(String src, int targetScale) {
         int indexOfDecimalPoint = src.indexOf('.');
         if (indexOfDecimalPoint < 0) {
             // no point included, easy case, integral number
-            return Long.parseLong(src) * powersOfTen[targetScale];
+            return Long.parseLong(src) * POWERS_OF_TEN[targetScale];
         } else {
             // parse the integral part, then the fractional part. Support special case to capture -.4 or +.4 (Long.parse("-") won't work!)
             long integralPart = (
                     indexOfDecimalPoint == 1 && (src.charAt(0) == '-' || src.charAt(0) == '+'))
                     ? 0
-                    : Long.parseLong(src.substring(0, indexOfDecimalPoint)) * powersOfTen[targetScale];
+                    : Long.parseLong(src.substring(0, indexOfDecimalPoint)) * POWERS_OF_TEN[targetScale];
             int decimalDigitsFound = src.length() - indexOfDecimalPoint - 1;
             if (decimalDigitsFound == 0) {   // the "1." case => same as integral case
                 return integralPart;
@@ -284,12 +301,12 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             int fractionalDigitsDiff = targetScale - fraction.length();
             if (fractionalDigitsDiff >= 0) {
                 // no rounding required
-                return integralPart + fractionalPart * powersOfTen[fractionalDigitsDiff];
+                return integralPart + fractionalPart * POWERS_OF_TEN[fractionalDigitsDiff];
             } else {
                 // if we have too may significant digits, throw an Exception
-                if (fractionalPart % powersOfTen[-fractionalDigitsDiff] != 0)
+                if (fractionalPart % POWERS_OF_TEN[-fractionalDigitsDiff] != 0)
                     throw new NumberFormatException("Too many significant fractional digits specified: " + src + ", allowed: " + targetScale);
-                return integralPart + fractionalPart / powersOfTen[-fractionalDigitsDiff];
+                return integralPart + fractionalPart / POWERS_OF_TEN[-fractionalDigitsDiff];
             }
         }
     }
@@ -298,7 +315,10 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         return parseMantissa(src, targetScale);
     }
 
-    /** Computes the target mantissa of an existing with currentScale, for a given desired target scale. In case of precision loss, a flag indicates whether that is acceptable. */
+    /**
+     * Computes the target mantissa of an existing with currentScale, for a given desired target scale.
+     * In case of precision loss, a flag indicates whether that is acceptable.
+     */
     public static final long mantissaFor(long currentMantissa, int currentScale, int desiredScale, boolean allowRounding) {
         if (currentMantissa == 0L) {
             return currentMantissa;
@@ -308,17 +328,17 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             if (toMultiplyWithExponent > 18) {
                 throw new ArithmeticException("Overflow");
             }
-            return currentMantissa * powersOfTen[toMultiplyWithExponent];
+            return currentMantissa * POWERS_OF_TEN[toMultiplyWithExponent];
         } else {
             if (!allowRounding) {
-                if (toMultiplyWithExponent < -18 || currentMantissa % powersOfTen[-toMultiplyWithExponent] != 0L) {
+                if (toMultiplyWithExponent < -18 || currentMantissa % POWERS_OF_TEN[-toMultiplyWithExponent] != 0L) {
                     throw new ArithmeticException("Rounding required but not allowed");
                 }
             }
             if (toMultiplyWithExponent < -18) {
                 return 0L; // underflow
             }
-            return currentMantissa / powersOfTen[-toMultiplyWithExponent];
+            return currentMantissa / POWERS_OF_TEN[-toMultiplyWithExponent];
         }
     }
 
@@ -419,20 +439,20 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         // medium difficulty: they have the same scale
         // both operands have the same sign, but differ in scaling. Scale down first, and only if the numbers then are the same, scale up
         if (scaleDiff < 0) {
-            long diff = mantissa - that.mantissa / powersOfTen[-scaleDiff];
+            long diff = mantissa - that.mantissa / POWERS_OF_TEN[-scaleDiff];
             if (diff != 0)
                 return diff < 0 ? -1 : 1;
             // scaled difference is 0. In this case, scaling up cannot result in an overflow.
-            diff = mantissa * powersOfTen[-scaleDiff] - that.mantissa;
+            diff = mantissa * POWERS_OF_TEN[-scaleDiff] - that.mantissa;
             if (diff != 0)
                 return diff < 0 ? -1 : 1;
             return 0;
         } else {
-            long diff = mantissa  / powersOfTen[scaleDiff] - that.mantissa;
+            long diff = mantissa  / POWERS_OF_TEN[scaleDiff] - that.mantissa;
             if (diff != 0)
                 return diff < 0 ? -1 : 1;
             // scaled difference is 0. In this case, scaling up cannot result in an overflow.
-            diff = mantissa - that.mantissa * powersOfTen[scaleDiff];
+            diff = mantissa - that.mantissa * POWERS_OF_TEN[scaleDiff];
             if (diff != 0)
                 return diff < 0 ? -1 : 1;
             return 0;
@@ -442,22 +462,22 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     public int operator_spaceship(FixedPointBase<?> that) {
         return compareTo(that);
     }
-    public boolean operator_equals(FixedPointBase<?> that) {
+    public final boolean operator_equals(FixedPointBase<?> that) {
         return compareTo(that) == 0;
     }
-    public boolean operator_notEquals(FixedPointBase<?> that) {
+    public final boolean operator_notEquals(FixedPointBase<?> that) {
         return compareTo(that) != 0;
     }
-    public boolean operator_lessThan(FixedPointBase<?> that) {
+    public final boolean operator_lessThan(FixedPointBase<?> that) {
         return compareTo(that) < 0;
     }
-    public boolean operator_lessEquals(FixedPointBase<?> that) {
+    public final boolean operator_lessEquals(FixedPointBase<?> that) {
         return compareTo(that) <= 0;
     }
-    public boolean operator_greaterThan(FixedPointBase<?> that) {
+    public final boolean operator_greaterThan(FixedPointBase<?> that) {
         return compareTo(that) > 0;
     }
-    public boolean operator_greaterEquals(FixedPointBase<?> that) {
+    public final boolean operator_greaterEquals(FixedPointBase<?> that) {
         return compareTo(that) >= 0;
     }
 
@@ -492,7 +512,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
 
     /** Returns this + 1. */
     public CLASS increment() {
-        return newInstanceOf(mantissa + powersOfTen[scale()]);
+        return newInstanceOf(mantissa + POWERS_OF_TEN[scale()]);
     }
     /** Xtend syntax sugar. ++ maps to the increment method. */
     public CLASS operator_plusplus() {
@@ -501,7 +521,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
 
     /** Returns this - 1. */
     public CLASS decrement() {
-        return newInstanceOf(mantissa - powersOfTen[scale()]);
+        return newInstanceOf(mantissa - POWERS_OF_TEN[scale()]);
     }
     /** Xtend syntax sugar. -- maps to the decrement method. */
     public CLASS operator_minusminus() {
@@ -516,7 +536,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         long mantissaB = that.mantissa;
         if (digitsToScale <= 0) {
             // easy, no rounding
-            return mantissaA * mantissaB * powersOfTen[-digitsToScale];
+            return mantissaA * mantissaB * POWERS_OF_TEN[-digitsToScale];
         }
         long sign = 1;
         if (mantissaA < 0) {
@@ -586,30 +606,30 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         long work;
         switch (rounding) {
         case UNNECESSARY:
-            if (unroundedProduct % powersOfTen[digitsToScale] != 0L)
+            if (unroundedProduct % POWERS_OF_TEN[digitsToScale] != 0L)
                 throw new ArithmeticException("Rounding required but forbidden, scaling " + unroundedProduct + " by " + digitsToScale + " digits");
-            return sign * unroundedProduct % powersOfTen[digitsToScale];
+            return sign * unroundedProduct % POWERS_OF_TEN[digitsToScale];
         case DOWN:
-            return sign * unroundedProduct / powersOfTen[digitsToScale];
+            return sign * unroundedProduct / POWERS_OF_TEN[digitsToScale];
         case UP:
-            work = unroundedProduct % powersOfTen[digitsToScale];
-            return sign * (unroundedProduct / powersOfTen[digitsToScale] + (work != 0 ? 1 : 0));
+            work = unroundedProduct % POWERS_OF_TEN[digitsToScale];
+            return sign * (unroundedProduct / POWERS_OF_TEN[digitsToScale] + (work != 0 ? 1 : 0));
         case HALF_UP:
-            work = unroundedProduct % powersOfTen[digitsToScale];
-            return sign * (unroundedProduct / powersOfTen[digitsToScale] + (work >= (powersOfTen[digitsToScale] >> 1) ? 1 : 0));
+            work = unroundedProduct % POWERS_OF_TEN[digitsToScale];
+            return sign * (unroundedProduct / POWERS_OF_TEN[digitsToScale] + (work >= (POWERS_OF_TEN[digitsToScale] >> 1) ? 1 : 0));
         case HALF_DOWN:
-            work = unroundedProduct % powersOfTen[digitsToScale];
-            return sign * (unroundedProduct / powersOfTen[digitsToScale] + (work > (powersOfTen[digitsToScale] >> 1) ? 1 : 0));
+            work = unroundedProduct % POWERS_OF_TEN[digitsToScale];
+            return sign * (unroundedProduct / POWERS_OF_TEN[digitsToScale] + (work > (POWERS_OF_TEN[digitsToScale] >> 1) ? 1 : 0));
         case CEILING:
-            work = unroundedProduct % powersOfTen[digitsToScale];
-            return sign * unroundedProduct / powersOfTen[digitsToScale] + (work != 0 ? 1 : 0);
+            work = unroundedProduct % POWERS_OF_TEN[digitsToScale];
+            return sign * unroundedProduct / POWERS_OF_TEN[digitsToScale] + (work != 0 ? 1 : 0);
         case FLOOR:
-            work = unroundedProduct % powersOfTen[digitsToScale];
-            return sign * unroundedProduct / powersOfTen[digitsToScale] - (sign < 0 && work != 0 ? 1 : 0);
+            work = unroundedProduct % POWERS_OF_TEN[digitsToScale];
+            return sign * unroundedProduct / POWERS_OF_TEN[digitsToScale] - (sign < 0 && work != 0 ? 1 : 0);
         case HALF_EVEN:
-            work = unroundedProduct % (powersOfTen[digitsToScale] << 1);
+            work = unroundedProduct % (POWERS_OF_TEN[digitsToScale] << 1);
             // round as follows: [0, 0.5] down, (0.5, 1) up, [1, 1.5) down, [1.5, 2) up
-            return sign * (unroundedProduct / powersOfTen[digitsToScale] + (work >= (powersOfTen[digitsToScale] >> 1) ? 1 : 0));
+            return sign * (unroundedProduct / POWERS_OF_TEN[digitsToScale] + (work >= (POWERS_OF_TEN[digitsToScale] >> 1) ? 1 : 0));
         default:
             return 0;   // FIXME
         }
@@ -648,13 +668,13 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         final long productAbsolute;
         if (digitsToScale <= 0) {
             // easy, no rounding (but maybe overflow! TODO: check for it!
-            productAbsolute = mantissaA * mantissaB * powersOfTen[-digitsToScale];
+            productAbsolute = mantissaA * mantissaB * POWERS_OF_TEN[-digitsToScale];
         } else {
             // invoke the computation. If we have changed the sign, adjust the requested rounding mode accordingly.
             // check if we can do it with a long
             if (((mantissaA | mantissaB) & 0xffffffff80000000L) == 0L) {
                 // both have 31 bits only
-                productAbsolute = roundMantissa(mantissaA * mantissaB, powersOfTen[digitsToScale], negateResult ? ROUNDING_MODE_MAPPING.get(rounding) : rounding);
+                productAbsolute = roundMantissa(mantissaA * mantissaB, POWERS_OF_TEN[digitsToScale], negateResult ? ROUNDING_MODE_MAPPING.get(rounding) : rounding);
             } else {
                 if (Math.multiplyHigh(mantissaA, mantissaB) == 0) {
                     // another chance to do it within a single multiplication - this covers additional asymmetric operands
@@ -717,7 +737,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             // already by design
             return getMyself();
         }
-        final long div = powersOfTen[power];
+        final long div = POWERS_OF_TEN[power];
         final long newMantissa;
         if (mantissa < 0L) {
             newMantissa = -roundMantissa(-mantissa, div, ROUNDING_MODE_MAPPING.get(rounding)) * div;
@@ -831,7 +851,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         if (mantissa == 0 || that.mantissa == 0)
             return getZero();           // x * 0 = 0 * x = 0
         // no tests for second operand equal to one here, due to possible rounding effects
-        return newInstanceOf(mantissa_of_multiplication(that, desiredDecimals, rounding) * powersOfTen[scale() - desiredDecimals]);
+        return newInstanceOf(mantissa_of_multiplication(that, desiredDecimals, rounding) * POWERS_OF_TEN[scale() - desiredDecimals]);
     }
 
 
@@ -870,10 +890,11 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         int digitsToRound = scale() - desiredDecimals;
         if (digitsToRound <= that.scale()) {
             // we can implement the rounding by reduction of the scale factor, and later multiplication
-            return newInstanceOf(FixedPointNative.scale_and_divide(mantissa, that.scale() - digitsToRound, that.mantissa, rounding) * powersOfTen[digitsToRound]);
+            return newInstanceOf(FixedPointNative.scale_and_divide(mantissa, that.scale() - digitsToRound, that.mantissa, rounding)
+              * POWERS_OF_TEN[digitsToRound]);
         } else {
             // no multiplication at all, rather round
-            final long tempMantissa = FixedPointNative.scale_and_divide(mantissa, 0, that.mantissa, rounding) * powersOfTen[that.scale()];
+            final long tempMantissa = FixedPointNative.scale_and_divide(mantissa, 0, that.mantissa, rounding) * POWERS_OF_TEN[that.scale()];
             // still needs rounding by digitsToRound - that.scale() digits. FIXME: This is double rounding!
             LOGGER.warn("Double rounding for scales {} / {], desired {}", scale(), that.scale(), desiredDecimals);
             return newInstanceOf(tempMantissa).round(desiredDecimals, rounding);
@@ -898,7 +919,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         int digitsToRound = scale() - desiredDecimals;
         if (digitsToRound <= 0) {
             // we can implement the rounding by reduction of the scale factor, and later multiplication
-            return newInstanceOf(FixedPointNative.scale_and_divide(mantissa, - digitsToRound, that, rounding) * powersOfTen[digitsToRound]);
+            return newInstanceOf(FixedPointNative.scale_and_divide(mantissa, - digitsToRound, that, rounding) * POWERS_OF_TEN[digitsToRound]);
         } else {
             // no multiplication at all, rather round
             final long tempMantissa = FixedPointNative.scale_and_divide(mantissa, 0, that, rounding);
@@ -928,9 +949,9 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             return this;
         int diff = this.scale() - that.scale();
         if (diff >= 0)
-            return this.newInstanceOf(this.mantissa + powersOfTen[diff] * that.mantissa);
+            return this.newInstanceOf(this.mantissa + POWERS_OF_TEN[diff] * that.mantissa);
         else
-            return that.newInstanceOf(that.mantissa + powersOfTen[-diff] * this.mantissa);
+            return that.newInstanceOf(that.mantissa + POWERS_OF_TEN[-diff] * this.mantissa);
     }
 
     /** Adds two fixed point numbers of exactly same type. For variable scale subtypes, the scale of the sum is the bigger of the operand scales. */
@@ -951,9 +972,9 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             return that.negate();
         int diff = this.scale() - that.scale();
         if (diff >= 0)
-            return this.newInstanceOf(this.mantissa - powersOfTen[diff] * that.mantissa);
+            return this.newInstanceOf(this.mantissa - POWERS_OF_TEN[diff] * that.mantissa);
         else
-            return that.newInstanceOf(-that.mantissa + powersOfTen[-diff] * this.mantissa);
+            return that.newInstanceOf(-that.mantissa + POWERS_OF_TEN[-diff] * this.mantissa);
     }
     /** Subtracts two fixed point numbers of exactly same type. For variable scale subtypes, the scale of the sum is the bigger of the operand scales. */
     public CLASS subtract(CLASS that) {
@@ -1009,19 +1030,20 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
      * @param unscaledAmounts
      * @return scaled values
      */
-    public long [] roundWithErrorDistribution(long [] unscaledAmounts, int sourceScale) {
+    public long[] roundWithErrorDistribution(long[] unscaledAmounts, int sourceScale) {
         int scaleDiff = scale() - sourceScale;
         if (scaleDiff == 0)
             return unscaledAmounts;
         int n = unscaledAmounts.length;
-        long scaledAmounts [] = new long [n];
+        long scaledAmounts[] = new long[n];
 
         if (scaleDiff > 0) {
-            final long factor = FixedPointBase.powersOfTen[scaleDiff];
-            for (int i = 0; i < n; ++i)
+            final long factor = FixedPointBase.POWERS_OF_TEN[scaleDiff];
+            for (int i = 0; i < n; ++i) {
                 scaledAmounts[i] = factor * unscaledAmounts[i];
+            }
         } else {
-            final long factor = FixedPointBase.powersOfTen[-scaleDiff];
+            final long factor = FixedPointBase.POWERS_OF_TEN[-scaleDiff];
             long sum = 0;
             for (int i = 0; i < n; ++i) {
                 scaledAmounts[i] = divide_longs(unscaledAmounts[i], factor, RoundingMode.HALF_EVEN);
@@ -1033,8 +1055,8 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
                 // error distribution is required.
                 long adjustment = diff > 0 ? 1 : -1;
                 // System.out.println("compareSign=" + compareSign + ", difference="+difference.toPlainString());
-                assert(Math.abs(diff) < n);  // can have an error of 1 per item, at most
-                double [] relativeError = new double [n];
+                assert (Math.abs(diff) < n);  // can have an error of 1 per item, at most
+                double[] relativeError = new double[n];
                 for (int i = 0; i < n; ++i) {
                     // only items are eligible, which have been rounded in the "wrong" way. Namely, only items which have been rounded at all!
                     long thisDiff = unscaledAmounts[i] - scaledAmounts[i] * factor;
@@ -1058,7 +1080,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
                             pickedIndex = i;
                         }
                     }
-                    assert(pickedIndex >= 0);             // did actually find one
+                    assert (pickedIndex >= 0);             // did actually find one
                     // System.out.println("adjusting index " + pickedIndex);
                     relativeError[pickedIndex] = 0.0;     // mark it "used"
                     if (pickedIndex > 0)
@@ -1110,13 +1132,13 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             if (power < -18) {
                 return getZero();
             } else {
-                return newInstanceOf(mantissa / powersOfTen[-power]);
+                return newInstanceOf(mantissa / POWERS_OF_TEN[-power]);
             }
         } else {
             if (power > 18) {
                 throw new ArithmeticException("Overflow");
             } else {
-                return newInstanceOf(mantissa * powersOfTen[power]);
+                return newInstanceOf(mantissa * POWERS_OF_TEN[power]);
             }
         }
     }
@@ -1130,6 +1152,6 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             return true;
         }
         int digitsToScrap = scale() - digits;
-        return mantissa % powersOfTen[digitsToScrap] == 0L;
+        return mantissa % POWERS_OF_TEN[digitsToScrap] == 0L;
     }
 }

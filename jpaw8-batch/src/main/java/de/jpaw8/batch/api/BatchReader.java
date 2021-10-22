@@ -30,10 +30,10 @@ import de.jpaw8.function.ObjIntPredicate;
 @FunctionalInterface
 public interface BatchReader<E> extends BatchIO {
     // the only real method
-    public void produceTo(ObjIntConsumer<? super E> whereToPut) throws Exception;
+    void produceTo(ObjIntConsumer<? super E> whereToPut) throws Exception;
 
     /** Creates a batch from some Iterable. */
-    static public <F> BatchReaderIterable<F> of(Iterable<F> iter) {
+    static <F> BatchReaderIterable<F> of(Iterable<F> iter) {
         return new BatchReaderIterable<F>(iter);
     }
 
@@ -41,13 +41,13 @@ public interface BatchReader<E> extends BatchIO {
 
     // filter
 
-    default public BatchReader<E> filter(Predicate<? super E> filter) {
+    default BatchReader<E> filter(Predicate<? super E> filter) {
         return new BatchReaderFilter<E>(this, filter);
     }
-    default public BatchReader<E> intfilter(IntPredicate ordinalFilter) {       // different name required because it's ambiguous otherwise
+    default BatchReader<E> intfilter(IntPredicate ordinalFilter) {       // different name required because it's ambiguous otherwise
         return new BatchReaderFilterInt<E>(this, ordinalFilter);
     }
-    default public BatchReader<E> filter(ObjIntPredicate<? super E> biFilter) {
+    default BatchReader<E> filter(ObjIntPredicate<? super E> biFilter) {
         return new BatchReaderFilterObjInt<E>(this, biFilter);
     }
 
@@ -55,33 +55,33 @@ public interface BatchReader<E> extends BatchIO {
 
     // map
 
-    default public <F> BatchReader<F> map(Function<E,F> function) {
-        return new BatchReaderMap<E,F>(this, function);
+    default <F> BatchReader<F> map(Function<E, F> function) {
+        return new BatchReaderMap<E, F>(this, function);
     }
-    default public <F> BatchReader<F> map(ObjIntFunction<E,F> function) {
-        return new BatchReaderMapObjInt<E,F>(this, function);
+    default <F> BatchReader<F> map(ObjIntFunction<E, F> function) {
+        return new BatchReaderMapObjInt<E, F>(this, function);
     }
 
 
 
     // forEach
 
-    default public Batch<E> forEach(Consumer<? super E> consumer) {
-        return new Batch<E> (this, new BatchWriterConsumer<E>(consumer));
+    default Batch<E> forEach(Consumer<? super E> consumer) {
+        return new Batch<E>(this, new BatchWriterConsumer<E>(consumer));
     }
-    default public Batch<E> forEach(ObjIntConsumer<? super E> consumer) {
-        return new Batch<E> (this, new BatchWriterConsumerObjInt<E>(consumer));
+    default Batch<E> forEach(ObjIntConsumer<? super E> consumer) {
+        return new Batch<E>(this, new BatchWriterConsumerObjInt<E>(consumer));
     }
-    default public Batch<E> forEach(BatchWriter<? super E> consumer) {
-        return new Batch<E> (this, consumer);
+    default Batch<E> forEach(BatchWriter<? super E> consumer) {
+        return new Batch<E>(this, consumer);
     }
 
     // discard
-    default public Batch<E> discard() {
-        return new Batch<E> (this, new BatchWriterDevNull<E>());
+    default Batch<E> discard() {
+        return new Batch<E>(this, new BatchWriterDevNull<E>());
     }
     // add a discard and run it right away.
-    default public void run() throws Exception {
+    default void run() throws Exception {
         discard().run();       // just a synonym
     }
 
@@ -89,15 +89,15 @@ public interface BatchReader<E> extends BatchIO {
 
     // thread splitter
 
-    default public <F> BatchReader<E> newThread() {
+    default <F> BatchReader<E> newThread() {
         return new BatchReaderNewThread<E>(this, 1024);
     }
 
     // execute parallel sinks (corresponds to forEach)
-    default public Batches<E> parallel(BatchWriterFactory<? super E> writers) {
+    default Batches<E> parallel(BatchWriterFactory<? super E> writers) {
         return new Batches<E>(new BatchReaderNewThreads<E>(this), writers);
     }
-    default public Batches<E> parallel(int numThreads, int bufferSize, BatchWriterFactory<? super E> writers) {
+    default Batches<E> parallel(int numThreads, int bufferSize, BatchWriterFactory<? super E> writers) {
         return new Batches<E>(new BatchReaderNewThreads<E>(this, bufferSize, numThreads), writers);
     }
     // parallel sinks with an arbitrary splitter

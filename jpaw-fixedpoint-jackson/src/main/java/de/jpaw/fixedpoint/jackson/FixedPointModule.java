@@ -17,10 +17,10 @@ public class FixedPointModule extends SimpleModule {
 
         this.addSerializer(MilliUnits.class, new FixedPointJacksonSerializer<MilliUnits>(MilliUnits.class));
         this.addSerializer(MicroUnits.class, new FixedPointJacksonSerializer<MicroUnits>(MicroUnits.class));
-        this.addSerializer(NanoUnits.class,  new FixedPointJacksonSerializer<NanoUnits> (NanoUnits.class));
+        this.addSerializer(NanoUnits.class,  new FixedPointJacksonSerializer<NanoUnits>(NanoUnits.class));
 
         this.addDeserializer(MilliUnits.class, new FixedPointJacksonDeserializer<MilliUnits>(new MilliUnitsFactory()));
         this.addDeserializer(MicroUnits.class, new FixedPointJacksonDeserializer<MicroUnits>(new MicroUnitsFactory()));
-        this.addDeserializer(NanoUnits.class,  new FixedPointJacksonDeserializer<NanoUnits> (new NanoUnitsFactory()));
+        this.addDeserializer(NanoUnits.class,  new FixedPointJacksonDeserializer<NanoUnits>(new NanoUnitsFactory()));
     }
 }

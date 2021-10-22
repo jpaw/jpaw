@@ -22,7 +22,7 @@ import de.jpaw.algebra.AbelianGroup;
 public final class BonaMoney implements Serializable, AbelianGroup<BonaMoney> {
     private static final long serialVersionUID = 6269291861207854500L;
 
-//    private static final BigDecimal [] EMPTY_ARRAY = new BigDecimal[0];
+//    private static final BigDecimal[] EMPTY_ARRAY = new BigDecimal[0];
     private static final ImmutableList<BigDecimal> EMPTY_LIST = ImmutableList.of();
 
     private final BonaCurrency currency;                        // the currency of this amount
@@ -44,7 +44,7 @@ public final class BonaMoney implements Serializable, AbelianGroup<BonaMoney> {
     }
 
     /** Constructor for a single with a breakdown of equal-sign components (for example net + taxes). */
-    public BonaMoney(BonaCurrency currency, boolean allowRounding, boolean requireSameSign, BigDecimal amount, BigDecimal ... components)
+    public BonaMoney(BonaCurrency currency, boolean allowRounding, boolean requireSameSign, BigDecimal amount, BigDecimal... components)
             throws MonetaryException {
         this.currency = currency;
         if (components == null || components.length == 0) {
@@ -93,20 +93,23 @@ public final class BonaMoney implements Serializable, AbelianGroup<BonaMoney> {
         try {
             ImmutableList.Builder<BigDecimal> b = ImmutableList.builder();
             if (!allowRounding) {
-                for (BigDecimal t : components)
+                for (BigDecimal t : components) {
                     b.add(currency.scale(t, RoundingMode.UNNECESSARY));
+                }
                 this.componentAmounts = b.build();
                 this.amount = currency.scale(amount, RoundingMode.UNNECESSARY);
             } else {
                 // complex case? Scaling could lead to a difference, which then needs to be allocated to the elements.
                 // we assign all values to some big array and delegate to the BonaCurrency class to do the heavy lifting
-                BigDecimal [] unscaled = new BigDecimal [1 + components.length];
+                BigDecimal[] unscaled = new BigDecimal[1 + components.length];
                 unscaled[0] = amount;
-                for (int i = 0; i < components.length; ++i)
+                for (int i = 0; i < components.length; ++i) {
                     unscaled[i + 1] = components[i];
-                BigDecimal [] scaled = currency.roundWithErrorDistribution(unscaled);
-                for (int i = 0; i < components.length; ++i)
+                }
+                BigDecimal[] scaled = currency.roundWithErrorDistribution(unscaled);
+                for (int i = 0; i < components.length; ++i) {
                     b.add(scaled[i + 1]);
+                }
                 this.componentAmounts = b.build();
                 this.amount = scaled[0];
             }
@@ -132,9 +135,10 @@ public final class BonaMoney implements Serializable, AbelianGroup<BonaMoney> {
                 return new BonaMoney(targetCurrency, true, amount.multiply(factor));
             }
             // at least one component amount, possible rounding issues. Compute with stupid approach and delegate to constructor.
-            BigDecimal components[] = new BigDecimal[componentAmounts.size()];
-            for (int i = 0; i < componentAmounts.size(); ++i)
+            BigDecimal[] components = new BigDecimal[componentAmounts.size()];
+            for (int i = 0; i < componentAmounts.size(); ++i) {
                 components[i] = componentAmounts.get(i).multiply(factor);
+            }
             return new BonaMoney(targetCurrency, true, false, amount.multiply(factor), components);
         } catch (MonetaryException e) {
             throw new MonetaryException(MonetaryException.UNEXPECTED_ROUNDING_PROBLEM, "Code " + e.getErrorCode()
@@ -155,9 +159,10 @@ public final class BonaMoney implements Serializable, AbelianGroup<BonaMoney> {
             // easy case again, no chance of differing signs
             return new BonaMoney(currency, false, amount.add(augent.amount));
         }
-        BigDecimal taxes[] = new BigDecimal[componentAmounts.size()];
-        for (int i = 0; i < componentAmounts.size(); ++i)
+        BigDecimal[] taxes = new BigDecimal[componentAmounts.size()];
+        for (int i = 0; i < componentAmounts.size(); ++i) {
             taxes[i] = componentAmounts.get(i).add(augent.amount);
+        }
         return new BonaMoney(currency, false, false, amount.add(augent.amount), taxes);
     }
 
@@ -174,9 +179,10 @@ public final class BonaMoney implements Serializable, AbelianGroup<BonaMoney> {
             // easy case again, no chance of differing signs
             return new BonaMoney(currency, false, amount.subtract(subtrahend.amount));
         }
-        BigDecimal taxes[] = new BigDecimal[componentAmounts.size()];
-        for (int i = 0; i < componentAmounts.size(); ++i)
+        BigDecimal[] taxes = new BigDecimal[componentAmounts.size()];
+        for (int i = 0; i < componentAmounts.size(); ++i) {
             taxes[i] = componentAmounts.get(i).subtract(subtrahend.amount);
+        }
         return new BonaMoney(currency, false, false, amount.subtract(subtrahend.amount), taxes);
     }
 
@@ -190,11 +196,12 @@ public final class BonaMoney implements Serializable, AbelianGroup<BonaMoney> {
 //    /** Factory method to create a new BonaMoney from a readable source of amounts.
 //     * If componentAmounts.size() >= 0, expects the list to have exactly that many amounts, else (-1) don't care.
 //     * @throws MonetaryException */
-//    public static BonaMoney fromAmounts(BonaCurrency currency, boolean allowRounding, int numTaxAmounts, boolean addMissingTaxAmounts, boolean requireSameSign,
+//    public static BonaMoney fromAmounts(BonaCurrency currency, boolean allowRounding, int numTaxAmounts,
+//           boolean addMissingTaxAmounts, boolean requireSameSign,
 //            MoneyGetter source)
 //            throws MonetaryException {
 //        int got = source.getComponentAmounts().size();
-//        BigDecimal [] componentAmounts = numTaxAmounts == 0 ? EMPTY_ARRAY : new BigDecimal[numTaxAmounts];
+//        BigDecimal[] componentAmounts = numTaxAmounts == 0 ? EMPTY_ARRAY : new BigDecimal[numTaxAmounts];
 //        for (int i = 0; i < got; ++i)
 //            componentAmounts[i] = source.getComponentAmounts().get(i);
 //        if (numTaxAmounts != got) {
@@ -237,13 +244,15 @@ public final class BonaMoney implements Serializable, AbelianGroup<BonaMoney> {
         if (obj == null || getClass() != obj.getClass())
             return false;
         BonaMoney other = (BonaMoney) obj;
-        if (componentAmounts.size() != other.componentAmounts.size() ||
-                !currency.equals(other.currency) ||
-                !amount.equals(other.amount))
+        if (componentAmounts.size() != other.componentAmounts.size()
+          || !currency.equals(other.currency)
+          || !amount.equals(other.amount)) {
             return false;
-        for (int i = 0; i < componentAmounts.size(); ++i)
+        }
+        for (int i = 0; i < componentAmounts.size(); ++i) {
             if (!componentAmounts.get(i).equals(other.componentAmounts.get(i)))
                 return false;
+        }
         return true;
     }
 
@@ -252,8 +261,9 @@ public final class BonaMoney implements Serializable, AbelianGroup<BonaMoney> {
         final int prime = 31;
         int result = currency.hashCode();
         result = (prime * result) + amount.hashCode();
-        for (int i = 0; i < componentAmounts.size(); ++i)
+        for (int i = 0; i < componentAmounts.size(); ++i) {
             result = (prime * result) + componentAmounts.get(i).hashCode();
+        }
         return result;
     }
 
@@ -284,9 +294,10 @@ public final class BonaMoney implements Serializable, AbelianGroup<BonaMoney> {
             return new BonaMoney(currency, false, amount.negate());
         }
         // BonaMoney with breakdown, more complex
-        BigDecimal taxes[] = new BigDecimal[componentAmounts.size()];
-        for (int i = 0; i < componentAmounts.size(); ++i)
+        BigDecimal[] taxes = new BigDecimal[componentAmounts.size()];
+        for (int i = 0; i < componentAmounts.size(); ++i) {
             taxes[i] = componentAmounts.get(i).negate();
+        }
         return new BonaMoney(currency, false, false, amount.negate(), taxes);
     }
 

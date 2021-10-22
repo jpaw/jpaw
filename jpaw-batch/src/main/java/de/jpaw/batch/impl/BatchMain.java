@@ -21,7 +21,7 @@ import de.jpaw.batch.api.BatchWriter;
  * A specific application must call the mainSub method with appropriate parameters for input, output and processing.
  */
 
-abstract public class BatchMain<E, F> extends ContributorNoop implements BatchExecutor<E,F> {
+public abstract class BatchMain<E, F> extends ContributorNoop implements BatchExecutor<E, F> {
     private static final Logger LOG = LoggerFactory.getLogger(BatchMain.class);
 
     // some statistics data
@@ -34,12 +34,12 @@ abstract public class BatchMain<E, F> extends ContributorNoop implements BatchEx
         return timeInMillis == 0 ? 0.0 : 1000.0 * numRecords / timeInMillis;
     }
 
-    public void run(String [] args,
+    public void run(String[] args,
             BatchReader<? extends E> reader,
             BatchWriter<? super F> writer,
-            BatchProcessorFactory<E,F> processorFactory) throws Exception {
+            BatchProcessorFactory<E, F> processorFactory) throws Exception {
 
-        BatchExecutor<E,F> executor = this;             // extensions of this class should implement the engine
+        BatchExecutor<E, F> executor = this;             // extensions of this class should implement the engine
         programStart = new Date();
         // add the main command line parameters
         SimpleJSAP commandLineOptions = null;
@@ -90,6 +90,6 @@ abstract public class BatchMain<E, F> extends ContributorNoop implements BatchEx
         programEnd = new Date();
         timediffInMillis = programEnd.getTime() - programStart.getTime();
         LOG.info("{}, Bonaparte batch: processed {} records, total time = {} ms, {} records per second, {} exceptions",
-                programEnd,numRecords, timediffInMillis, recPerSec(timediffInMillis, numRecords), numExceptions);
+                programEnd, numRecords, timediffInMillis, recPerSec(timediffInMillis, numRecords), numExceptions);
     }
 }

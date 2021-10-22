@@ -14,7 +14,7 @@ import de.jpaw.util.IntegralLimits;
  */
 public final class HashMapPrimitiveLongObject<V> {
 
-    static private class Entry<V> {
+    private static class Entry<V> {
         final long key;
         V value;
         Entry<V> next;

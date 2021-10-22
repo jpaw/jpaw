@@ -28,19 +28,20 @@ public abstract class AbstractStringEnumSet<E extends Enum<E> & TokenizableEnum>
     public void assign(Collection<E> that) {
         clear();
         if (that != null) {
-            for (E o : that)
+            for (E o : that) {
                 add(o);
+            }
         }
     }
 
     /** Iterator which returns the elements of the set in order of tokens sorted ascending. */
-    static protected class SetOfEnumsIterator<E extends TokenizableEnum> implements Iterator<E> {
+    protected static class SetOfEnumsIterator<E extends TokenizableEnum> implements Iterator<E> {
         private final String bitmap;
         // private static final ConcurrentHashMap<String, TokenizableEnum> lookupTable = new ConcurrentHashMap<String, TokenizableEnum>();
-        private final E [] values;
+        private final E[] values;
         private int index = 0;
 
-        public SetOfEnumsIterator(E [] values, String bitmap) {
+        public SetOfEnumsIterator(E[] values, String bitmap) {
             this.bitmap = bitmap;
             this.values = values;
         }
@@ -64,7 +65,7 @@ public abstract class AbstractStringEnumSet<E extends Enum<E> & TokenizableEnum>
             if (bitmap.length() <= index)
                 return null;                // shortcut
             ++index;
-            return getValue(bitmap.substring(index-1, index));   // GC overhead due to new String. But a Character would be as well...
+            return getValue(bitmap.substring(index - 1, index));   // GC overhead due to new String. But a Character would be as well...
         }
 
         @Override

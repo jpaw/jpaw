@@ -86,7 +86,7 @@ public class BatchReaderNewThreads<E> extends BatchLinked implements BatchReader
         final Disruptor<DataWithOrdinal<E>> disruptor = new Disruptor<DataWithOrdinal<E>>(factory, bufferSize, threads);
 
         // Connect the handler - MT - notice the difference between EventHandler (all get the same record) and WorkHandler (only one of all gets the recod)
-        WorkHandler<DataWithOrdinal<E>> [] handlerTab = new WorkHandler [numThreads];
+        WorkHandler<DataWithOrdinal<E>>[] handlerTab = new WorkHandler [numThreads];
         for (int i = 0; i < numThreads; ++i)
             handlerTab[i] = new MyEventHandler(consumerFactory.get(i));
         disruptor.handleEventsWithWorkerPool(handlerTab);

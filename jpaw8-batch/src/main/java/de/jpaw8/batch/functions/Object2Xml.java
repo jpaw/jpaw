@@ -15,7 +15,7 @@ import de.jpaw.cmdline.CmdlineParserContext;
 import de.jpaw8.batch.impl.BatchCharsetUtil;
 
 
-public class Object2Xml<T> implements Function <T,String>, CmdlineCallback {
+public class Object2Xml<T> implements Function<T, String>, CmdlineCallback {
     private final JAXBContext context;
     private final boolean threadSafe;       // if not (only sequential use), then the marshaller can be reused.
     private boolean formatted = false;
@@ -28,7 +28,8 @@ public class Object2Xml<T> implements Function <T,String>, CmdlineCallback {
         this.threadSafe = threadSafe;
         CmdlineParserContext.getContext()
             .addSwitch("formatted", 'F', "write formatted output")
-            .addFlaggedOption("xmlEncoding", JSAP.STRING_PARSER, null, JSAP.NOT_REQUIRED, JSAP.NO_SHORTFLAG, "XML encoding (default is UTF-8, LIST to get a list of available character sets)")
+            .addFlaggedOption("xmlEncoding", JSAP.STRING_PARSER, null,
+              JSAP.NOT_REQUIRED, JSAP.NO_SHORTFLAG, "XML encoding (default is UTF-8, LIST to get a list of available character sets)")
             .registerCallback(this);
     }
 

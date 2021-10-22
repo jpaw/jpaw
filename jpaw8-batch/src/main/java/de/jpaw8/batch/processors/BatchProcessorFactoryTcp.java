@@ -21,7 +21,7 @@ import de.jpaw8.batch.api.BatchMarshallerFactory;
 import de.jpaw8.batch.api.BatchProcessor;
 import de.jpaw8.batch.api.BatchProcessorFactory;
 
-public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X,X>, CmdlineCallback {
+public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X, X>, CmdlineCallback {
     private static final Logger LOG = LoggerFactory.getLogger(BatchProcessorFactoryTcp.class);
     private final BatchMarshallerFactory<X> marshallerFactory;
     private final BatchMarshaller<X> immutableMarshaller;
@@ -80,7 +80,7 @@ public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X,X>, 
     }
 
     @Override
-    public BatchProcessor<X,X> getProcessor(int threadNo) throws IOException {
+    public BatchProcessor<X, X> getProcessor(int threadNo) throws IOException {
         // connect and then return the new processor
         Socket conn = null;
         if (useSsl) {
@@ -98,13 +98,13 @@ public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X,X>, 
                 immutableMarshaller != null ? immutableMarshaller : marshallerFactory.getMarshaller(threadNo));
     }
 
-    private static class BatchProcessorTcp<X> implements BatchProcessor<X,X> {
+    private static final class BatchProcessorTcp<X> implements BatchProcessor<X, X> {
         private final Socket conn;
-        private final byte [] responseBuffer;
+        private final byte[] responseBuffer;
         private final BatchMarshaller<X> marshaller;
 
         private BatchProcessorTcp(int bufferSize, Socket conn, BatchMarshaller<X> marshaller) {
-            responseBuffer = new byte [bufferSize];
+            responseBuffer = new byte[bufferSize];
             this.marshaller = marshaller;
             this.conn = conn;
         }
@@ -115,7 +115,7 @@ public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X,X>, 
             boolean foundDelimiter = false;
             byte delimiter = marshaller.getDelimiter();
 
-//          byte [] payload = marshaller.marshal(data);
+//          byte[] payload = marshaller.marshal(data);
 //          conn.getOutputStream().write(payload);
             marshaller.marshal(data, conn.getOutputStream());
             int haveBytes = 0;
@@ -124,7 +124,7 @@ public class BatchProcessorFactoryTcp<X> implements BatchProcessorFactory<X,X>, 
                 if (numBytes <= 0)
                     break;
                 for (int i = 0; i < numBytes; ++i) {
-                    if (responseBuffer[haveBytes+i] == delimiter) {
+                    if (responseBuffer[haveBytes + i] == delimiter) {
                         foundDelimiter = true;
                         break;
                         // fast track: return new ByteArrayParser(responseBuffer, 0, haveBytes+i+1).readRecord();

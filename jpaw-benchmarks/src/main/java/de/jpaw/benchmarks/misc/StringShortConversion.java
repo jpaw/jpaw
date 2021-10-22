@@ -34,7 +34,7 @@ public class StringShortConversion {
     public Charset utf8Charset = ByteArray.CHARSET_UTF8;
     public String utf8Name = "UTF-8";
     public String sampleText = "jÄskjÜ€h";
-    public byte [] sampleByteArray = null;
+    public byte[] sampleByteArray = null;
 
     @Setup
     public void doSetup() throws UnsupportedEncodingException {
@@ -52,21 +52,21 @@ public class StringShortConversion {
     }
 
     @Benchmark
-    public byte [] encodeText() throws UnsupportedEncodingException {
+    public byte[] encodeText() throws UnsupportedEncodingException {
         return sampleText.getBytes(utf8Name);
     }
 
     @Benchmark
-    public byte [] encodeCharset() {
+    public byte[] encodeCharset() {
         return sampleText.getBytes(utf8Charset);
     }
 
     @Benchmark
-    public byte [] encodeCesu() {
+    public byte[] encodeCesu() {
         return Cesu8Encoder.encodeToCesu8(sampleText);
     }
     @Benchmark
-    public byte [] encodeCesu2() {
+    public byte[] encodeCesu2() {
         return Cesu8Encoder.encodeToCesu8Copy(sampleText);
     }
 }

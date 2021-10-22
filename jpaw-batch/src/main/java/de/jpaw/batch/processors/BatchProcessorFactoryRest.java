@@ -16,7 +16,7 @@ import de.jpaw.batch.api.BatchProcessor;
 import de.jpaw.batch.api.BatchProcessorFactory;
 import de.jpaw.batch.api.BatchProcessorMarshaller;
 
-public class BatchProcessorFactoryRest<X> implements BatchProcessorFactory<X,X> {
+public class BatchProcessorFactoryRest<X> implements BatchProcessorFactory<X, X> {
     private static final Logger LOG = LoggerFactory.getLogger(BatchProcessorFactoryRest.class);
     private final BatchProcessorMarshaller<X> marshaller;
     private int bufferSize = 1024 * 1024;
@@ -28,8 +28,10 @@ public class BatchProcessorFactoryRest<X> implements BatchProcessorFactory<X,X> 
 
     @Override
     public void addCommandlineParameters(JSAP params) throws Exception {
-        params.registerParameter(new FlaggedOption("url", JSAP.STRING_PARSER, null, JSAP.REQUIRED, 'U', "url", "remote URL"));
-        params.registerParameter(new FlaggedOption("buffersize", JSAP.INTEGER_PARSER, "1000000", JSAP.NOT_REQUIRED, 'B', "rest-buffer-size", "buffer size for REST requests"));
+        params.registerParameter(new FlaggedOption("url", JSAP.STRING_PARSER, null,
+          JSAP.REQUIRED, 'U', "url", "remote URL"));
+        params.registerParameter(new FlaggedOption("buffersize", JSAP.INTEGER_PARSER, "1000000",
+          JSAP.NOT_REQUIRED, 'B', "rest-buffer-size", "buffer size for REST requests"));
     }
 
     @Override
@@ -48,17 +50,17 @@ public class BatchProcessorFactoryRest<X> implements BatchProcessorFactory<X,X> 
     }
 
     @Override
-    public BatchProcessor<X,X> getProcessor(int threadNo) {
+    public BatchProcessor<X, X> getProcessor(int threadNo) {
         return new BatchProcessorRest<X>(bufferSize, url, marshaller);
     }
 
-    private static class BatchProcessorRest<X> implements BatchProcessor<X,X> {
-        private final byte [] buffer;
+    private static final class BatchProcessorRest<X> implements BatchProcessor<X, X> {
+        private final byte[] buffer;
         private final URL url;
         private final BatchProcessorMarshaller<X> marshaller;
 
         private BatchProcessorRest(int bufferSize, URL url, BatchProcessorMarshaller<X> marshaller) {
-            buffer = new byte [bufferSize];
+            buffer = new byte[bufferSize];
             this.url = url;
             this.marshaller = marshaller;
         }
@@ -66,7 +68,7 @@ public class BatchProcessorFactoryRest<X> implements BatchProcessorFactory<X,X> 
         @Override
         public X process(int recordNo, X data) throws Exception {
             // get the raw data
-            byte [] payload = marshaller.marshal(data);
+            byte[] payload = marshaller.marshal(data);
 
             // 1.) create a connection to the target. This does not use any of the above SSL context.
 

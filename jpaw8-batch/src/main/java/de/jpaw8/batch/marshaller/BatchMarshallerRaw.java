@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import de.jpaw8.batch.api.BatchMarshaller;
 
-public class BatchMarshallerRaw implements BatchMarshaller<byte []> {
+public class BatchMarshallerRaw implements BatchMarshaller<byte[]> {
     private static final String MEDIA_TYPE = "application/octet-stream";
 
     @Override
@@ -14,7 +14,7 @@ public class BatchMarshallerRaw implements BatchMarshaller<byte []> {
     }
 
     @Override
-    public byte[] marshal(byte [] request) throws Exception {
+    public byte[] marshal(byte[] request) throws Exception {
         return request;
     }
 
@@ -24,7 +24,7 @@ public class BatchMarshallerRaw implements BatchMarshaller<byte []> {
     }
 
     @Override
-    public byte [] unmarshal(byte[] response, int length) throws Exception {
+    public byte[] unmarshal(byte[] response, int length) throws Exception {
         if (response == null || response.length == length)
             return response;
         return Arrays.copyOf(response, length);

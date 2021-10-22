@@ -16,9 +16,9 @@ import de.jpaw.batch.api.BatchProcessorFactory;
 import de.jpaw.batch.api.BatchWriter;
 import de.jpaw.batch.api.DataWithOrdinal;
 
-public class BatchExecutorMultiThreaded<E,F> extends BatchMain<E,F> {
+public class BatchExecutorMultiThreaded<E, F> extends BatchMain<E, F> {
     private static final Logger LOG = LoggerFactory.getLogger(BatchExecutorMultiThreaded.class);
-    public static int EOF = -1;
+    public static final int EOF = -1;
 
     private int numberOfThreads = 1;
     private int inQueueSize = 100;
@@ -31,7 +31,7 @@ public class BatchExecutorMultiThreaded<E,F> extends BatchMain<E,F> {
     private BlockingQueue<DataWithOrdinal<F>> outputQueue = null;
     private BatchExecutorMTResultCollector<? super F> collector = null;
     private Thread collectorThread = null;
-    private Thread [] workerThreads = null;
+    private Thread[] workerThreads = null;
 
 //  protected AtomicInteger numError = new AtomicInteger(0);
 //  protected AtomicInteger numProcessed = new AtomicInteger(0);  // number of records processed (good and error records)
@@ -39,7 +39,7 @@ public class BatchExecutorMultiThreaded<E,F> extends BatchMain<E,F> {
 
     // if worker threads are desired, create
     @Override
-    public void open(BatchProcessorFactory<E,F> processorFactory, BatchWriter<? super F> writer) throws Exception {
+    public void open(BatchProcessorFactory<E, F> processorFactory, BatchWriter<? super F> writer) throws Exception {
         inputQueue = new ArrayBlockingQueue<DataWithOrdinal<E>>(inQueueSize);
         outputQueue = new ArrayBlockingQueue<DataWithOrdinal<F>>(outQueueSize);
 
@@ -99,10 +99,14 @@ public class BatchExecutorMultiThreaded<E,F> extends BatchMain<E,F> {
 
     @Override
     public void addCommandlineParameters(JSAP params) throws Exception {
-        params.registerParameter(new FlaggedOption("threads", JSAP.INTEGER_PARSER, "1", JSAP.NOT_REQUIRED, 't', "threads", "number of worker threads (0 = single thread)"));
-        params.registerParameter(new FlaggedOption("inqsize", JSAP.INTEGER_PARSER, "100", JSAP.NOT_REQUIRED, 'q', "inqueue-size", "size of input queue buffer (default 100)"));
-        params.registerParameter(new FlaggedOption("outqsize", JSAP.INTEGER_PARSER, "100", JSAP.NOT_REQUIRED, 'Q', "outqueue-size", "size of output queue buffer (default 100)"));
-        params.registerParameter(new FlaggedOption("timeout", JSAP.LONG_PARSER, "300", JSAP.NOT_REQUIRED, 'w', "max-wait", "maximum wait time per record, before a timeout occurs, in seconds, default 300 (5 minutes)"));
+        params.registerParameter(new FlaggedOption("threads", JSAP.INTEGER_PARSER, "1",
+          JSAP.NOT_REQUIRED, 't', "threads", "number of worker threads (0 = single thread)"));
+        params.registerParameter(new FlaggedOption("inqsize", JSAP.INTEGER_PARSER, "100",
+          JSAP.NOT_REQUIRED, 'q', "inqueue-size", "size of input queue buffer (default 100)"));
+        params.registerParameter(new FlaggedOption("outqsize", JSAP.INTEGER_PARSER, "100",
+          JSAP.NOT_REQUIRED, 'Q', "outqueue-size", "size of output queue buffer (default 100)"));
+        params.registerParameter(new FlaggedOption("timeout", JSAP.LONG_PARSER, "300",
+          JSAP.NOT_REQUIRED, 'w', "max-wait", "maximum wait time per record, before a timeout occurs, in seconds, default 300 (5 minutes)"));
     }
 
     @Override

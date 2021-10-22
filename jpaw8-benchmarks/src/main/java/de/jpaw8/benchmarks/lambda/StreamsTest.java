@@ -40,11 +40,11 @@ public class StreamsTest {
 
     @Benchmark
     public void javaStreamSequentialMap(Blackhole bh) {
-        LongStream.rangeClosed(1, NUM)         .map(l -> l* l).forEach(l -> bh.consume(l));
+        LongStream.rangeClosed(1, NUM)         .map(l -> l * l).forEach(l -> bh.consume(l));
     }
     @Benchmark
     public void javaStreamSequentialSetup(Blackhole bh) {
-        LongStream.rangeClosed(1,  10)         .map(l -> l* l).forEach(l -> bh.consume(l));
+        LongStream.rangeClosed(1,  10)         .map(l -> l * l).forEach(l -> bh.consume(l));
     }
 
     @Benchmark

@@ -35,10 +35,10 @@ public class Hashes {
     private static final int NUM = 1000;
 
     public static AtomicBoolean conflict = new AtomicBoolean();
-    public static int [] a;
-    public static byte [] b;
-    public static String [] c;      // 14 chars +/- 1
-    public static String [] d;      // 32 chars +/- 2
+    public static int[] a;
+    public static byte[] b;
+    public static String[] c;      // 14 chars +/- 1
+    public static String[] d;      // 32 chars +/- 2
     int sizeC = 0;
     int sizeD = 0;
 

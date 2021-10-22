@@ -10,7 +10,10 @@ import de.jpaw.fixedpoint.types.Tenths;
 import de.jpaw.fixedpoint.types.Units;
 import de.jpaw.fixedpoint.types.VariableUnits;
 
-public class FixedPointSelector {
+public final class FixedPointSelector {
+
+    private FixedPointSelector() { }
+
     public static FixedPointBase<?> getZeroForScale(int scale) {
         switch (VariableUnits.scaleCheck(scale)) {
         case  0: return Units.ZERO;

@@ -10,8 +10,8 @@ import de.jpaw8.batch.functions.Xml2Object;
 
 public class BatchProcessorMarshallerXml<T> implements BatchMarshaller<T> {
     private static final String MEDIA_TYPE = "application/xml";
-    private final Function <T,String> toXml;
-    private final Function <String,T> fromXml;
+    private final Function<T, String> toXml;
+    private final Function<String, T> fromXml;
 
     /** Command line configurable constructor. */
     public BatchProcessorMarshallerXml(JAXBContext context, Class<T> clazz) {

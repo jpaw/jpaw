@@ -14,7 +14,7 @@ import de.jpaw8.batch.api.BatchMarshallerFactory;
 import de.jpaw8.batch.api.BatchProcessor;
 import de.jpaw8.batch.api.BatchProcessorFactory;
 
-public class BatchProcessorFactoryRest<X> implements BatchProcessorFactory<X,X>, CmdlineCallback {
+public class BatchProcessorFactoryRest<X> implements BatchProcessorFactory<X, X>, CmdlineCallback {
     private final BatchMarshallerFactory<X> marshallerFactory;
     private final BatchMarshaller<X> immutableMarshaller;
     private int bufferSize = 1024 * 1024;
@@ -57,18 +57,18 @@ public class BatchProcessorFactoryRest<X> implements BatchProcessorFactory<X,X>,
     }
 
     @Override
-    public BatchProcessor<X,X> getProcessor(int threadNo) {
+    public BatchProcessor<X, X> getProcessor(int threadNo) {
         return new BatchProcessorRest<X>(bufferSize, url,
                 immutableMarshaller != null ? immutableMarshaller : marshallerFactory.getMarshaller(threadNo));
     }
 
-    private static class BatchProcessorRest<X> implements BatchProcessor<X,X> {
-        private final byte [] buffer;
+    private static final class BatchProcessorRest<X> implements BatchProcessor<X, X> {
+        private final byte[] buffer;
         private final URL url;
         private final BatchMarshaller<X> marshaller;
 
         private BatchProcessorRest(int bufferSize, URL url, BatchMarshaller<X> marshaller) {
-            buffer = new byte [bufferSize];
+            buffer = new byte[bufferSize];
             this.url = url;
             this.marshaller = marshaller;
         }
@@ -76,7 +76,7 @@ public class BatchProcessorFactoryRest<X> implements BatchProcessorFactory<X,X>,
         @Override
         public X process(X data, int recordNo) throws Exception {
             // get the raw data
-            byte [] payload = marshaller.marshal(data);
+            byte[] payload = marshaller.marshal(data);
 
             // 1.) create a connection to the target. This does not use any of the above SSL context.
 

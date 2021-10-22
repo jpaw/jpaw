@@ -22,8 +22,8 @@ import de.jpaw8.batch.producers.impl.BatchReaderNewThreadsViaQueue;
 
 
 public class SingleRequest {
-    static private class Adder implements Consumer<Long> {
-        long sum = 0L;
+    private static class Adder implements Consumer<Long> {
+        private long sum = 0L;
 
         @Override
         public void accept(Long t) {
@@ -31,23 +31,23 @@ public class SingleRequest {
             sum += t.longValue();
         }
     }
-    static private class Counter implements Consumer<Object> {
-        int num = 0;
+    private static class Counter implements Consumer<Object> {
+        private int num = 0;
 
         @Override
         public void accept(Object t) {
             ++num;
         }
     }
-    static private class ParallelCounter implements Consumer<Object> {
-        AtomicInteger num = new AtomicInteger();
+    private static class ParallelCounter implements Consumer<Object> {
+        private AtomicInteger num = new AtomicInteger();
 
         @Override
         public void accept(Object t) {
             num.incrementAndGet();
         }
     }
-    static private class Delay implements Predicate<Object> {
+    private static class Delay implements Predicate<Object> {
 
         @Override
         public boolean test(Object t) {
@@ -59,7 +59,7 @@ public class SingleRequest {
             return true;
         }
     }
-    static private class DelayFunction<T> implements Function<T,T> {
+    private static class DelayFunction<T> implements Function<T, T> {
 
         @Override
         public T apply(T t) {
@@ -215,7 +215,10 @@ public class SingleRequest {
         BatchWriter<Object> consumer = new BatchWriterConsumer<Object>(ctr);
         BatchWriter<Object> consumer2 = consumer.intfilteredFrom(d);
         Date start = new Date();
-        new Batches<Long>(new BatchReaderNewThreadsViaQueue<Long>(new BatchReaderRange(1L, 12L), 16, 4), new BatchWriterFactoryByIdentity<Object>(consumer2)).run();
+        new Batches<Long>(new BatchReaderNewThreadsViaQueue<Long>(
+          new BatchReaderRange(1L, 12L), 16, 4),
+          new BatchWriterFactoryByIdentity<Object>(consumer2)
+        ).run();
         Date end = new Date();
         Assertions.assertEquals(12, ctr.num.get());
         System.out.println("Took " + (end.getTime() - start.getTime()) + " ms");

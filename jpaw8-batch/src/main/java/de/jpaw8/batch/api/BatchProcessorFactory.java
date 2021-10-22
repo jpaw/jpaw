@@ -6,8 +6,8 @@ import de.jpaw8.batch.processors.BatchProcessorFactoryTcp;
 
 /** Process input of type E to produce output of type F. */
 @FunctionalInterface
-public interface BatchProcessorFactory<E,F> extends BatchIO {
-    BatchProcessor<E,F> getProcessor(int threadNo) throws Exception;
+public interface BatchProcessorFactory<E, F> extends BatchIO {
+    BatchProcessor<E, F> getProcessor(int threadNo) throws Exception;
 
     public static final String SYSTEM_PROPERTY_CONNECTION = System.getProperty("jpaw.remote.connection", "rest");
 

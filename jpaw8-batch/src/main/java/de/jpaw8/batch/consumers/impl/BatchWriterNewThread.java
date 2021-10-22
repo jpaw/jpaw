@@ -13,7 +13,7 @@ import de.jpaw8.batch.factories.BatchLinked;
 import de.jpaw8.batch.lmax.DataWithOrdinal;
 import de.jpaw8.batch.lmax.TheEventFactory;
 
-public class BatchWriterNewThread <E> extends BatchLinked implements BatchWriter<E> {
+public class BatchWriterNewThread<E> extends BatchLinked implements BatchWriter<E> {
     private final BatchWriter<? super E> consumer;
     private final int bufferSize;
     private final int numThreads;
@@ -41,7 +41,7 @@ public class BatchWriterNewThread <E> extends BatchLinked implements BatchWriter
     @Override
     public void open() throws Exception {
         // create an executorService
-        threads = (numThreads <= 1) ? Executors.newSingleThreadExecutor() : Executors.newFixedThreadPool(numThreads) ;
+        threads = (numThreads <= 1) ? Executors.newSingleThreadExecutor() : Executors.newFixedThreadPool(numThreads);
 
         // Construct the Disruptor which interfaces the decoder to DB storage
         disruptor = new Disruptor<DataWithOrdinal<E>>(factory, bufferSize, threads);
@@ -51,7 +51,7 @@ public class BatchWriterNewThread <E> extends BatchLinked implements BatchWriter
         disruptor.handleEventsWith(handler);
 
         // Connect the handler - MT - notice the difference between EventHandler (all get the same record) and WorkHandler (only one of all gets the recod)
-//        WorkHandler<DataWithOrdinal<E>> [] handlerTab = new WorkHandler [numThreads];
+//        WorkHandler<DataWithOrdinal<E>>[] handlerTab = new WorkHandler [numThreads];
 //        for (int i = 0; i < numThreads; ++i)
 //            handlerTab[i] = (data) -> whereToPut.accept(data.data, data.recordno);
 //        disruptor.handleEventsWithWorkerPool(handlerTab);

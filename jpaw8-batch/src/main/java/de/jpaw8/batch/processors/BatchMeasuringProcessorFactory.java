@@ -6,8 +6,8 @@ import org.HdrHistogram.Histogram;
 import de.jpaw8.batch.api.BatchProcessor;
 import de.jpaw8.batch.api.BatchProcessorFactory;
 
-public class BatchMeasuringProcessorFactory<E,F> implements BatchProcessorFactory<E,F> {
-    private final BatchProcessorFactory<E,F> delegate;
+public class BatchMeasuringProcessorFactory<E, F> implements BatchProcessorFactory<E, F> {
+    private final BatchProcessorFactory<E, F> delegate;
     private final Histogram histogram = new ConcurrentHistogram(3600000000L, 3);
 
     public BatchMeasuringProcessorFactory(BatchProcessorFactory<E, F> delegate) {
@@ -15,11 +15,11 @@ public class BatchMeasuringProcessorFactory<E,F> implements BatchProcessorFactor
         this.delegate = delegate;
     }
 
-    private static class LocalMeasuringProcessor<E1,F1> implements BatchProcessor<E1,F1> {
-        private final BatchProcessor<E1,F1> processor;
+    private static class LocalMeasuringProcessor<E1, F1> implements BatchProcessor<E1, F1> {
+        private final BatchProcessor<E1, F1> processor;
         private final Histogram histogram;
 
-        public LocalMeasuringProcessor(BatchProcessor<E1, F1> processor, Histogram histogram) {
+        LocalMeasuringProcessor(BatchProcessor<E1, F1> processor, Histogram histogram) {
             super();
             this.processor = processor;
             this.histogram = histogram;

@@ -16,7 +16,7 @@ public class SimpleRawTcpClient {
 
     protected final InetAddress addr;
     protected final Socket conn;
-    protected final byte [] responseBuffer;
+    protected final byte[] responseBuffer;
 
     private static void printSocketInfo(SSLSocket s) {
         LOGGER.info("Socket class: " + s.getClass());
@@ -37,7 +37,7 @@ public class SimpleRawTcpClient {
 
     public SimpleRawTcpClient(String hostname, int port, boolean useSsl, int bufferSize) throws IOException {
         addr = InetAddress.getByName(hostname);
-        responseBuffer = new byte [bufferSize];
+        responseBuffer = new byte[bufferSize];
 
         if (useSsl) {
             SSLSocketFactory f = (SSLSocketFactory) SSLSocketFactory.getDefault();
@@ -52,7 +52,7 @@ public class SimpleRawTcpClient {
         }
     }
 
-    public byte [] doRawIO(byte [] request) throws Exception {
+    public byte[] doRawIO(byte[] request) throws Exception {
         boolean foundDelimiter = false;
         conn.getOutputStream().write(request, 0, request.length);
         int haveBytes = 0;
@@ -61,7 +61,7 @@ public class SimpleRawTcpClient {
             if (numBytes <= 0)
                 break;
             for (int i = 0; i < numBytes; ++i) {
-                if (responseBuffer[haveBytes+i] == (byte)0x0a) {
+                if (responseBuffer[haveBytes + i] == (byte)0x0a) {
                     foundDelimiter = true;
                     break;
                     // fast track: return new ByteArrayParser(responseBuffer, 0, haveBytes+i+1).readRecord();

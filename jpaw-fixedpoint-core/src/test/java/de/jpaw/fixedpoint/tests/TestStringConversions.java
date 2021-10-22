@@ -11,7 +11,7 @@ import de.jpaw.fixedpoint.types.VariableUnits;
 
 
 public class TestStringConversions {
-    static private class TestCase {
+    private static class TestCase {
         public TestCase(String stringRep, FixedPointBase<?> data) {
             super();
             this.stringRep = stringRep;
@@ -21,7 +21,7 @@ public class TestStringConversions {
         final FixedPointBase<?> data;
     }
 
-    static private TestCase [] testCasesToString = {
+    private static TestCase[] testCasesToString = {
         new TestCase("1", Units.valueOf(1)),
         new TestCase("-1", MilliUnits.valueOf(-1)),
         new TestCase("3.14", Hundreds.valueOf(3.14)),           // also tests double to Hundreds
@@ -47,7 +47,7 @@ public class TestStringConversions {
     }
 
 
-    static private TestCase [] testCasesParse = {
+    private static TestCase[] testCasesParse = {
         new TestCase("-1.000", MilliUnits.valueOf(-1)),
         new TestCase("3.14", MilliUnits.valueOf(3.14)),
         new TestCase("-3.14", MilliUnits.valueOf(-3.14)),

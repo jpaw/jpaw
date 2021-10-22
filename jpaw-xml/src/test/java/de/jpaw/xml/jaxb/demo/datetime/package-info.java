@@ -1,12 +1,9 @@
 /** A copy of this annotation is required in every package where the mappings should be used. */
 
 @XmlJavaTypeAdapters({
-    @XmlJavaTypeAdapter(type=LocalDate.class,
-        value=LocalDateAdapter.class),
-    @XmlJavaTypeAdapter(type=LocalTime.class,
-        value=LocalTimeAdapter.class),
-    @XmlJavaTypeAdapter(type=LocalDateTime.class,
-        value=LocalDateTimeAdapter.class)
+    @XmlJavaTypeAdapter(type = LocalDate.class, value = LocalDateAdapter.class),
+    @XmlJavaTypeAdapter(type = LocalTime.class, value = LocalTimeAdapter.class),
+    @XmlJavaTypeAdapter(type = LocalDateTime.class, value = LocalDateTimeAdapter.class)
 })
 package de.jpaw.xml.jaxb.demo.datetime;
 

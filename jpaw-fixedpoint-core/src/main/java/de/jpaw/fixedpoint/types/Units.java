@@ -6,7 +6,7 @@ import java.math.RoundingMode;
 import de.jpaw.fixedpoint.FixedPointBase;
 
 /** Instances of this class represent numbers with a fixed precision of 0 decimals, and up to 18 total digits precision. */
-public class Units extends FixedPointBase<Units> {
+public final class Units extends FixedPointBase<Units> {
     private static final long serialVersionUID = -466464673376366000L;
     private static final int DECIMALS = 0;
     private static final long UNIT_MANTISSA = 1L;
@@ -52,7 +52,7 @@ public class Units extends FixedPointBase<Units> {
     public static Units of(FixedPointBase<?> that) {
         int scaleDiff = DECIMALS - that.scale();
         if (scaleDiff >= 0)
-            return Units.of(that.getMantissa() * powersOfTen[scaleDiff]);
+            return Units.of(that.getMantissa() * POWERS_OF_TEN[scaleDiff]);
         throw new ArithmeticException("Retyping with reduction of scale requires specfication of a rounding mode");
     }
 
@@ -60,9 +60,9 @@ public class Units extends FixedPointBase<Units> {
     public static Units of(FixedPointBase<?> that, RoundingMode rounding) {
         int scaleDiff = DECIMALS - that.scale();
         if (scaleDiff >= 0)
-            return Units.of(that.getMantissa() * powersOfTen[scaleDiff]);
+            return Units.of(that.getMantissa() * POWERS_OF_TEN[scaleDiff]);
         // rescale
-        return  Units.of(divide_longs(that.getMantissa(), powersOfTen[-scaleDiff], rounding));
+        return  Units.of(divide_longs(that.getMantissa(), POWERS_OF_TEN[-scaleDiff], rounding));
     }
 
     /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>.
@@ -81,7 +81,8 @@ public class Units extends FixedPointBase<Units> {
         }
         // This is certainly not the most efficient implementation, as it involves the construction of up to one new BigDecimal and a BigInteger
         // TODO: replace it by a zero GC version
-        // blame JDK, there is not even a current method to determine if a BigDecimal is integral despite a scale > 0, nor to get its mantissa without creating additional objects
+        // Blame JDK, there is not even a current method to determine if a BigDecimal is integral despite a scale > 0,
+        // nor to get its mantissa without creating additional objects.
         return of(number.setScale(DECIMALS, RoundingMode.UNNECESSARY).unscaledValue().longValue());
     }
 

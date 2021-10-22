@@ -16,25 +16,28 @@ public class TestEnumSetConversion {
     @Test
     public void testSetMap() throws Exception {
         StringBuilder sb = new StringBuilder(63);
-        for (int i = 0; i < 10; ++i)
+        for (int i = 0; i < 10; ++i) {
             sb.append((char)('0' + i));
-        for (int i = 0; i < 26; ++i)
+        }
+        for (int i = 0; i < 26; ++i) {
             sb.append((char)('A' + i));
-        for (int i = 0; i < 26; ++i)
+        }
+        for (int i = 0; i < 26; ++i) {
             sb.append((char)('a' + i));
+        }
         sb.append('_');
 
-        assert(sb.toString().equals(EnumSetMarker.STANDARD_TOKENS));
+        assert (sb.toString().equals(EnumSetMarker.STANDARD_TOKENS));
     }
 
-    private static enum ByteTestEnum {
+    private enum ByteTestEnum {
         Z0, Z1, Z2, Z3, Z4, Z5, Z6 }
-    private static enum ShortTestEnum {
+    private enum ShortTestEnum {
         Z0, Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, ZA, ZB, ZC, ZD, ZE }
-    private static enum IntTestEnum {
+    private enum IntTestEnum {
         Z0, Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, ZA, ZB, ZC, ZD, ZE, ZF,
         X0, X1, X2, X3, X4, X5, X6, X7, X8, X9, XA, XB, XC, XD, XE }
-    private static enum LongTestEnum { Z0, Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, ZA, ZB, ZC, ZD, ZE, ZF,
+    private enum LongTestEnum { Z0, Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9, ZA, ZB, ZC, ZD, ZE, ZF,
         T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, TA, TB, TC, TD, TE, TF,
         Y0, Y1, Y2, Y3, Y4, Y5, Y6, Y7, Y8, Y9, YA, YB, YC, YD, YE, YF,
         X0, X1, X2, X3, X4, X5, X6, X7, X8, X9, XA, XB, XC, XD, XE }

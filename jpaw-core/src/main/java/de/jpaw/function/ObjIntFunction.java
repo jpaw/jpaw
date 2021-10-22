@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface ObjIntFunction <T, R> {
+public interface ObjIntFunction<T, R> {
 
     /**
      * Applies this function to the given argument.

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @XmlRootElement
-@XmlType(propOrder={
+@XmlType(propOrder = {
    "dateMidnight",
    "localDate",
    "localTime",

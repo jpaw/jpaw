@@ -15,7 +15,7 @@ import de.jpaw.batch.api.BatchProcessorFactory;
 import de.jpaw.batch.impl.ContributorNoop;
 
 /** Processor to convert an object into its String representation. */
-public class BatchProcessorFactoryToXml extends ContributorNoop implements BatchProcessorFactory<Object,String> {
+public class BatchProcessorFactoryToXml extends ContributorNoop implements BatchProcessorFactory<Object, String> {
     private final JAXBContext context;
     private boolean formatted = false;
 
@@ -35,7 +35,7 @@ public class BatchProcessorFactoryToXml extends ContributorNoop implements Batch
 
 
     @Override
-    public BatchProcessor<Object,String> getProcessor(int threadNo) throws Exception {
+    public BatchProcessor<Object, String> getProcessor(int threadNo) throws Exception {
         // create a new Marshaller and hand it to the Processor
         Marshaller m = context.createMarshaller();
         m.setProperty(Marshaller.JAXB_FRAGMENT, true);
@@ -44,7 +44,7 @@ public class BatchProcessorFactoryToXml extends ContributorNoop implements Batch
         return new BatchProcessorToXml(m, formatted);
     }
 
-    static private class BatchProcessorToXml implements BatchProcessor<Object,String> {
+    private static final class BatchProcessorToXml implements BatchProcessor<Object, String> {
         private final Marshaller m;
         private final boolean formatted;
 

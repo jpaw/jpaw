@@ -29,30 +29,31 @@ public class ISOTest {
     public void testJavaCurrencies() throws Exception {
         List<CurrencyData> all = JavaCurrencyDataProvider.INSTANCE.getAll();
         System.out.println("I got " + all.size() + " currencies from Java");
-        assert(all.size() > 200);   // jdk 1.8.031: 220
+        assert (all.size() > 200);   // jdk 1.8.031: 220
     }
 
     @Test
     public void testJavaCountries() throws Exception {
-        String [] all = Locale.getISOCountries();
+        String[] all = Locale.getISOCountries();
         System.out.println("I got " + all.length + " countries from Java");
-        assert(all.length > 200);   // jdk 1.8.031: 250
+        assert (all.length > 200);   // jdk 1.8.031: 250
     }
 
     @Test
     public void testJavaLanguages() throws Exception {
-        String [] all = Locale.getISOLanguages();
+        String[] all = Locale.getISOLanguages();
         System.out.println("I got " + all.length + " languages from Java");
-        assert(all.length > 150);   // jdk 1.8.031: 188
+        assert (all.length > 150);   // jdk 1.8.031: 188
     }
 
     @Test
     public void testJavaLocales() throws Exception {
-        Locale [] all = Locale.getAvailableLocales();
+        Locale[] all = Locale.getAvailableLocales();
         System.out.println("I got " + all.length + " locales from Java");
-        assert(all.length > 150);   // jdk 1.8.031: 160  ?? less locales than languages? 44, 108
+        assert (all.length > 150);   // jdk 1.8.031: 160  ?? less locales than languages? 44, 108
 
-        int sum2 = 0, sum5 = 0;
+        int sum2 = 0;
+        int sum5 = 0;
         for (int i = 0; i < all.length; ++i) {
             String s = all[i].toString();
             sum2 += is2LetterLocale(s);
@@ -77,30 +78,31 @@ public class ISOTest {
     public void testICUCurrencies() throws Exception {
         List<CurrencyData> all = ICUCurrencyDataProvider.INSTANCE.getAll();
         System.out.println("I got " + all.size() + " currencies from ICU");
-        assert(all.size() > 200);   // ICU 54.1.1: 296
+        assert (all.size() > 200);   // ICU 54.1.1: 296
     }
 
     @Test
     public void testICUCountries() throws Exception {
-        String [] all = ULocale.getISOCountries();
+        String[] all = ULocale.getISOCountries();
         System.out.println("I got " + all.length + " countries from ICU");
-        assert(all.length > 200);   // ICU 54.1.1: 249  ?? less countries than standard Java?
+        assert (all.length > 200);   // ICU 54.1.1: 249  ?? less countries than standard Java?
     }
 
     @Test
     public void testICULanguages() throws Exception {
-        String [] all = ULocale.getISOLanguages();
+        String[] all = ULocale.getISOLanguages();
         System.out.println("I got " + all.length + " languages from ICU");
-        assert(all.length > 150);   // ICU 54.1.1: 559
+        assert (all.length > 150);   // ICU 54.1.1: 559
     }
 
     @Test
     public void testICULocales() throws Exception {
-        ULocale [] all = ULocale.getAvailableLocales();
+        ULocale[] all = ULocale.getAvailableLocales();
         System.out.println("I got " + all.length + " locales from ICU");
-        assert(all.length > 150);   // ICU 54.1.1: 684, 118, 356
+        assert (all.length > 150);   // ICU 54.1.1: 684, 118, 356
 
-        int sum2 = 0, sum5 = 0;
+        int sum2 = 0;
+        int sum5 = 0;
         for (int i = 0; i < all.length; ++i) {
             String s = all[i].getName();
             sum2 += is2LetterLocale(s);

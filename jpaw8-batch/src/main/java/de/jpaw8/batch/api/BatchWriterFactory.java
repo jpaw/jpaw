@@ -9,8 +9,8 @@ public interface BatchWriterFactory<E> extends BatchIO {
     // default methods to avoid the need for an abstract superclass of all implementations (in xtend, this would be just extension methods)
     // map
 
-    default public <F> BatchWriterFactory<F> mappedFrom(BatchProcessorFactory<F,E> function) {
-        return new BatchWriterFactoryMapForProcessorFactory<F,E>(this, function);
+    default <F> BatchWriterFactory<F> mappedFrom(BatchProcessorFactory<F, E> function) {
+        return new BatchWriterFactoryMapForProcessorFactory<F, E>(this, function);
     }
 
 }

@@ -73,8 +73,9 @@ public final class ICUCurrencyDataProvider implements CurrencyDataProvider {
     public List<CurrencyData> getAll() {
         Set<Currency> allICUCurrencies = Currency.getAvailableCurrencies();
         List<CurrencyData> result = new ArrayList<CurrencyData>(allICUCurrencies.size());
-        for (Currency c : allICUCurrencies)
+        for (Currency c : allICUCurrencies) {
             result.add(INSTANCE.get(c.getCurrencyCode()));
+        }
         return result;
     }
 }

@@ -19,7 +19,7 @@ import de.jpaw.batch.api.BatchProcessorFactory;
 import de.jpaw.batch.api.BatchWriter;
 import de.jpaw.batch.api.DataWithOrdinal;
 
-public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
+public class BatchExecutor3Threads<E, F> extends BatchMain<E, F> {
     private static final Logger LOG = LoggerFactory.getLogger(BatchExecutor3Threads.class);
 
 
@@ -41,7 +41,7 @@ public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
 //        this.outFactory = outFactory;
 //    }
 
-    private BatchProcessor<E,F> localProcessor = null;
+    private BatchProcessor<E, F> localProcessor = null;
     private BatchWriter<? super F> localWriter = null;
 
     private int inBufferSize = 1024;
@@ -76,19 +76,19 @@ public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
 //    private BlockingQueue<DataWithOrdinal<F>> outputQueue = null;
 //    private BatchExecutorMTResultCollector<F> collector = null;
 //    private Thread collectorThread = null;
-//    private Thread [] workerThreads = null;
+//    private Thread[] workerThreads = null;
 
 
     private class FirstEventHandler implements EventHandler<DataWithOrdinal<E>> {
-        private final BatchProcessor<E,F> localProcessor;
+        private final BatchProcessor<E, F> localProcessor;
         private int numRecords = 0;         // number of records read (added to input queue)
         private int numExceptions = 0;      // number of records which could not be scheduled
         private final EventFactory<DataWithOrdinal<F>> outFactory = new DWOFactory<F>();
         private int outBufferSize = 1024;
-        Disruptor<DataWithOrdinal<F>> disruptorOut;
-        RingBuffer<DataWithOrdinal<F>> ringBufferOut = null;
+        private Disruptor<DataWithOrdinal<F>> disruptorOut;
+        private RingBuffer<DataWithOrdinal<F>> ringBufferOut = null;
 
-        private FirstEventHandler(BatchProcessor<E,F> localProcessor, BatchWriter<? super F> localWriter, int bs) {
+        private FirstEventHandler(BatchProcessor<E, F> localProcessor, BatchWriter<? super F> localWriter, int bs) {
             this.localProcessor = localProcessor;
             this.outBufferSize = bs;
 
@@ -138,7 +138,7 @@ public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
 
     // if worker threads are desired, create
     @Override
-    public void open(BatchProcessorFactory<E,F> processorFactory, BatchWriter<? super F> writer) throws Exception {
+    public void open(BatchProcessorFactory<E, F> processorFactory, BatchWriter<? super F> writer) throws Exception {
         this.localWriter = writer;
         this.localProcessor = processorFactory.getProcessor(0);
 
@@ -185,9 +185,12 @@ public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
 
     @Override
     public void addCommandlineParameters(JSAP params) throws Exception {
-        params.registerParameter(new FlaggedOption("inbsize", JSAP.INTEGER_PARSER, "1024", JSAP.NOT_REQUIRED, 'q', "inbuffer-size", "size of input ring buffer (default 1024)"));
-        params.registerParameter(new FlaggedOption("outbsize", JSAP.INTEGER_PARSER, "1024", JSAP.NOT_REQUIRED, 'Q', "outbuffer-size", "size of output ring buffer (default 1024)"));
-//      params.registerParameter(new FlaggedOption("timeout", JSAP.LONG_PARSER, "300", JSAP.NOT_REQUIRED, 'w', "max-wait", "maximum wait time per record, before a timeout occurs, in seconds, default 300 (5 minutes)"));
+        params.registerParameter(new FlaggedOption("inbsize", JSAP.INTEGER_PARSER, "1024",
+          JSAP.NOT_REQUIRED, 'q', "inbuffer-size", "size of input ring buffer (default 1024)"));
+        params.registerParameter(new FlaggedOption("outbsize", JSAP.INTEGER_PARSER, "1024",
+          JSAP.NOT_REQUIRED, 'Q', "outbuffer-size", "size of output ring buffer (default 1024)"));
+//      params.registerParameter(new FlaggedOption("timeout", JSAP.LONG_PARSER, "300",
+//        JSAP.NOT_REQUIRED, 'w', "max-wait", "maximum wait time per record, before a timeout occurs, in seconds, default 300 (5 minutes)"));
     }
 
     @Override
@@ -195,11 +198,11 @@ public class BatchExecutor3Threads<E,F> extends BatchMain<E,F> {
 //        timeout = params.getLong("timeout");
         inBufferSize = params.getInt("inbsize");
         outBufferSize = params.getInt("outbsize");
-        if (inBufferSize <= 0 || (inBufferSize & (inBufferSize-1)) != 0) {
+        if (inBufferSize <= 0 || (inBufferSize & (inBufferSize - 1)) != 0) {
             LOG.error("Input buffer size must be a power of 2");
             inBufferSize = 1024;
         }
-        if (outBufferSize <= 0 || (outBufferSize & (outBufferSize-1)) != 0) {
+        if (outBufferSize <= 0 || (outBufferSize & (outBufferSize - 1)) != 0) {
             LOG.error("Output buffer size must be a power of 2");
             outBufferSize = 1024;
         }

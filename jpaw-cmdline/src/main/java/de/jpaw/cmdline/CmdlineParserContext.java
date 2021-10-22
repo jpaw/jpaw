@@ -46,8 +46,8 @@ public class CmdlineParserContext {
         StringParser parser;
     }
 
-    private final Map<String,ParserAttribs> options = new HashMap<String,ParserAttribs>(31);
-    private final Map<Character,String> shortOptions = new HashMap<Character,String>(31);
+    private final Map<String, ParserAttribs> options = new HashMap<String, ParserAttribs>(31);
+    private final Map<Character, String> shortOptions = new HashMap<Character, String>(31);
     private final Set<CmdlineCallback> registeredInstances = new HashSet<CmdlineCallback>(40);
 
     public CmdlineParserContext(String execName, String help) {
@@ -150,18 +150,19 @@ public class CmdlineParserContext {
     }
 
     private void callbackInvocations() {
-        for (CmdlineCallback e : registeredInstances)
+        for (CmdlineCallback e : registeredInstances) {
             e.readParameters(this);
+        }
     }
 
-    public void parse(String ... args) throws Exception {
+    public void parse(String... args) throws Exception {
         result = ctx.parse(args);
         if (ctx.messagePrinted()) {
             throw new Exception("Command line parsing error");
         }
         callbackInvocations();
     }
-    public void parseOrQuit(String ... args) {
+    public void parseOrQuit(String... args) {
         try {
             result = ctx.parse(args);
         } catch (Exception e) {

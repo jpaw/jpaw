@@ -8,8 +8,10 @@ import javax.net.ssl.SSLSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SessionInfo {
+public final class SessionInfo {
     private static final Logger LOGGER = LoggerFactory.getLogger(SessionInfo.class);
+
+    private SessionInfo() { }
 
     /*
      * to extract the DN, we would need extra JARs from org.bouncycastle.asn1 public static String certToCn(X509Certificate cert) { X500Principal principal =

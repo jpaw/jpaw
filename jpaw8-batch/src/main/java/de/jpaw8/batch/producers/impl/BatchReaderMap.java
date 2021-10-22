@@ -6,11 +6,11 @@ import java.util.function.ObjIntConsumer;
 import de.jpaw8.batch.api.BatchReader;
 import de.jpaw8.batch.factories.BatchLinked;
 
-public class BatchReaderMap<E,R> extends BatchLinked implements BatchReader<R> {
+public class BatchReaderMap<E, R> extends BatchLinked implements BatchReader<R> {
     private final BatchReader<? extends E> producer;
-    private final Function<E,R> function;
+    private final Function<E, R> function;
 
-    public BatchReaderMap(BatchReader<? extends E> producer, Function<E,R> function) {
+    public BatchReaderMap(BatchReader<? extends E> producer, Function<E, R> function) {
         super(producer);
         this.producer = producer;
         this.function = function;

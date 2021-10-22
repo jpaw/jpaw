@@ -66,9 +66,9 @@ import de.jpaw.fixedpoint.types.MilliUnits;
 
 public class FPMult {
 
-    long [] testNums = {  0L, 1L, 237648264832L, 25L, -444L, -723428748764827364L, 87264L, 242987492L, -55558963L, 87326487543L };
-    MicroUnits [] testMicros = new MicroUnits[10];
-    MilliUnits [] testMillis = new MilliUnits[10];
+    long[] testNums = {  0L, 1L, 237648264832L, 25L, -444L, -723428748764827364L, 87264L, 242987492L, -55558963L, 87326487543L };
+    MicroUnits[] testMicros = new MicroUnits[10];
+    MilliUnits[] testMillis = new MilliUnits[10];
 
     @Setup
     public void setUp() throws UnsupportedEncodingException {
@@ -84,8 +84,9 @@ public class FPMult {
 
     @Benchmark
     public void countLeadingBits(Blackhole bh) {
-        for (int i = 0; i < testNums.length; ++i)
-            bh.consume(Long.numberOfLeadingZeros(testNums[i]));
+        for (int i = 0; i < testNums.length; ++i) {
+			bh.consume(Long.numberOfLeadingZeros(testNums[i]));
+		}
     }
 
 //    @Benchmark
@@ -96,42 +97,49 @@ public class FPMult {
 
     @Benchmark
     public void multFPintMult(Blackhole bh) {
-        for (int i = 0; i < testNums.length; ++i)
-            bh.consume(testMicros[i].multiply(3));
+        for (int i = 0; i < testNums.length; ++i) {
+			bh.consume(testMicros[i].multiply(3));
+		}
     }
     @Benchmark
     public void multFPsubNoScale(Blackhole bh) {
-        for (int i = 0; i < testNums.length; ++i)
-            bh.consume(testMicros[i].mantissa_of_multiplication(testMillis[9-i], 9, RoundingMode.UNNECESSARY));
+        for (int i = 0; i < testNums.length; ++i) {
+			bh.consume(testMicros[i].mantissa_of_multiplication(testMillis[9 - i], 9, RoundingMode.UNNECESSARY));
+		}
     }
 
     @Benchmark
     public void multFPsubWithScale(Blackhole bh) {
-        for (int i = 0; i < testNums.length; ++i)
-            bh.consume(testMicros[i].mantissa_of_multiplication(testMillis[9-i], 3, RoundingMode.DOWN));
+        for (int i = 0; i < testNums.length; ++i) {
+			bh.consume(testMicros[i].mantissa_of_multiplication(testMillis[9 - i], 3, RoundingMode.DOWN));
+		}
     }
 
     @Benchmark
     public void multFPsubWithScaleWithBD(Blackhole bh) {
-        for (int i = 0; i < testNums.length; ++i)
-            bh.consume(testMicros[i].mantissa_of_multiplication_using_BD(testMillis[9-i], 3, RoundingMode.DOWN));
+        for (int i = 0; i < testNums.length; ++i) {
+			bh.consume(testMicros[i].mantissa_of_multiplication_using_BD(testMillis[9 - i], 3, RoundingMode.DOWN));
+		}
     }
 
     @Benchmark
     public void roundFast(Blackhole bh) {
-        for (int i = 0; i < testNums.length; ++i)
-            bh.consume(MilliUnits.of(testMicros[i], RoundingMode.DOWN));
+        for (int i = 0; i < testNums.length; ++i) {
+			bh.consume(MilliUnits.of(testMicros[i], RoundingMode.DOWN));
+		}
     }
 
     @Benchmark
     public void roundSlow(Blackhole bh) {
-        for (int i = 0; i < testNums.length; ++i)
-            bh.consume(MilliUnits.of(testMicros[i], RoundingMode.HALF_EVEN));
+        for (int i = 0; i < testNums.length; ++i) {
+			bh.consume(MilliUnits.of(testMicros[i], RoundingMode.HALF_EVEN));
+		}
     }
 
     @Benchmark
     public void roundNot(Blackhole bh) {
-        for (int i = 0; i < testNums.length; ++i)
-            bh.consume(MicroUnits.of(testMillis[i], RoundingMode.UNNECESSARY));
+        for (int i = 0; i < testNums.length; ++i) {
+			bh.consume(MicroUnits.of(testMillis[i], RoundingMode.UNNECESSARY));
+		}
     }
 }

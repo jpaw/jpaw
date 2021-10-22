@@ -85,7 +85,7 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
     }
 
     /** Subroutine for valueOf(String) and String constructor, to define the desired number of digits. */
-    static private final int parseTargetScale(String src) {
+    private static final int parseTargetScale(String src) {
         int indexOfDecimalPoint = src.indexOf('.');
         return indexOfDecimalPoint < 0 ? 0 : src.length() - indexOfDecimalPoint - 1;
     }

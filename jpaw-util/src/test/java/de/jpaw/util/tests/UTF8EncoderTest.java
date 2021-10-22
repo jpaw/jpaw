@@ -14,8 +14,8 @@ public class UTF8EncoderTest {
         // for the range tested, CESU8 is identical to UTF8
         for (int i = 0; i < 0xd800; ++i) {
             String testString = "A" + Character.valueOf((char)i) + "O";
-            byte [] fromString = testString.getBytes("UTF-8");
-            byte [] myOwn = Cesu8Encoder.encodeToCesu8(testString);
+            byte[] fromString = testString.getBytes("UTF-8");
+            byte[] myOwn = Cesu8Encoder.encodeToCesu8(testString);
             Assert.assertArrayEquals("for index " + i, fromString, myOwn);
         }
     }
@@ -25,8 +25,8 @@ public class UTF8EncoderTest {
 //    public void testUnsafeEncoder() throws UnsupportedEncodingException {
 //        for (int i = 0; i < 0xd800; ++i) {
 //            String testString = "A" + Character.valueOf((char)i) + "O";
-//            byte [] fromString = testString.getBytes("UTF-8");
-//            byte [] myOwn = Cesu8DirectEncoder.encodeToCesu8(testString);
+//            byte[] fromString = testString.getBytes("UTF-8");
+//            byte[] myOwn = Cesu8DirectEncoder.encodeToCesu8(testString);
 //            Assert.assertEquals(fromString, myOwn, "for index " + i);
 //        }
 //    }

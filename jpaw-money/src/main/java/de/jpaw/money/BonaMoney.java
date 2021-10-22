@@ -22,8 +22,8 @@ import de.jpaw.algebra.AbelianGroup;
 public final class BonaMoney implements Serializable, AbelianGroup<BonaMoney> {
     private static final long serialVersionUID = 6269291861207854500L;
 
-//    static private final BigDecimal [] EMPTY_ARRAY = new BigDecimal[0];
-    static private final ImmutableList<BigDecimal> EMPTY_LIST = ImmutableList.of();
+//    private static final BigDecimal [] EMPTY_ARRAY = new BigDecimal[0];
+    private static final ImmutableList<BigDecimal> EMPTY_LIST = ImmutableList.of();
 
     private final BonaCurrency currency;                        // the currency of this amount
     private final BigDecimal amount;                            // the main (gross) amount (or total)

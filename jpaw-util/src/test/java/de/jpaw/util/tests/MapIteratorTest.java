@@ -13,7 +13,8 @@ public class MapIteratorTest {
         Map<String, Object> testmap = new HashMap<String, Object>();
         testmap.put("foo", "bar");
         MapIterator<?> me = new MapIterator(testmap);
-        while (me.hasNext())
+        while (me.hasNext()) {
             System.out.println("next value is " + me.next().toString());
+        }
     }
 }

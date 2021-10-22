@@ -9,7 +9,7 @@ import de.jpaw.cmdline.CmdlineParserContext;
 
 /** Misuse of the filter to implement a delay. */
 public class BatchFilterDelay implements IntPredicate, CmdlineCallback {
-    static private final String OPTION = "delay";
+    private static final String OPTION = "delay";
     final String prefix;
     int delay = 0;
 

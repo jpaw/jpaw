@@ -36,7 +36,7 @@ public abstract class AbstractStringEnumSet<E extends Enum<E> & TokenizableEnum>
     /** Iterator which returns the elements of the set in order of tokens sorted ascending. */
     static protected class SetOfEnumsIterator<E extends TokenizableEnum> implements Iterator<E> {
         private final String bitmap;
-        // static private final ConcurrentHashMap<String, TokenizableEnum> lookupTable = new ConcurrentHashMap<String, TokenizableEnum>();
+        // private static final ConcurrentHashMap<String, TokenizableEnum> lookupTable = new ConcurrentHashMap<String, TokenizableEnum>();
         private final E [] values;
         private int index = 0;
 

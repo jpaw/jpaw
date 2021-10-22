@@ -6,7 +6,7 @@ import de.jpaw.cmdline.CmdlineParserContext;
 
 /** Skips the first n records of a batch. (for example to discard header lines) */
 public class BatchFilterSkip extends BatchFilterRange {
-    static private final String OPTION = "skip";
+    private static final String OPTION = "skip";
 
     /** hardcoded range. */
     public BatchFilterSkip(int lines) {

@@ -16,22 +16,22 @@ public class JsonException extends ApplicationException {
 
     private static final int OFFSET = CL_VALIDATION_ERROR * CLASSIFICATION_FACTOR + 14000;  // offset for all codes in this class
 
-    static public final int JSON_GARBAGE_AT_END          = OFFSET + 1;
-    static public final int JSON_BAD_IDENTIFIER          = OFFSET + 2;
-    static public final int JSON_BAD_STRING              = OFFSET + 3;
-    static public final int JSON_BAD_NUMBER              = OFFSET + 4;
-    static public final int JSON_SYNTAX                  = OFFSET + 5;
-    static public final int JSON_PREMATURE_END           = OFFSET + 6;
-    static public final int JSON_BAD_ESCAPE              = OFFSET + 7;
+    public static final int JSON_GARBAGE_AT_END          = OFFSET + 1;
+    public static final int JSON_BAD_IDENTIFIER          = OFFSET + 2;
+    public static final int JSON_BAD_STRING              = OFFSET + 3;
+    public static final int JSON_BAD_NUMBER              = OFFSET + 4;
+    public static final int JSON_SYNTAX                  = OFFSET + 5;
+    public static final int JSON_PREMATURE_END           = OFFSET + 6;
+    public static final int JSON_BAD_ESCAPE              = OFFSET + 7;
 
     static {
-        codeToDescription.put(JSON_PREMATURE_END            , "Premature end of embedded JSON object");
-        codeToDescription.put(JSON_GARBAGE_AT_END           , "Garbage at end of embedded JSON object");
-        codeToDescription.put(JSON_BAD_IDENTIFIER           , "Bad JSON identifier");
-        codeToDescription.put(JSON_BAD_STRING               , "Bad string in JSON");
-        codeToDescription.put(JSON_BAD_NUMBER               , "Malformed number in JSON");
-        codeToDescription.put(JSON_SYNTAX                   , "Invalid JSON syntax");
-        codeToDescription.put(JSON_BAD_ESCAPE               , "Invalid JSON (unicode) escape sequence");
+        codeToDescription.put(JSON_PREMATURE_END,             "Premature end of embedded JSON object");
+        codeToDescription.put(JSON_GARBAGE_AT_END,            "Garbage at end of embedded JSON object");
+        codeToDescription.put(JSON_BAD_IDENTIFIER,            "Bad JSON identifier");
+        codeToDescription.put(JSON_BAD_STRING,                "Bad string in JSON");
+        codeToDescription.put(JSON_BAD_NUMBER,                "Malformed number in JSON");
+        codeToDescription.put(JSON_SYNTAX,                    "Invalid JSON syntax");
+        codeToDescription.put(JSON_BAD_ESCAPE,                "Invalid JSON (unicode) escape sequence");
     }
 
     public JsonException(int errorCode, int pos) {

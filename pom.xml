@@ -133,17 +133,16 @@
                     </reportSet>
                 </reportSets>
             </plugin>
-
+<!--
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <configuration>
                     <effort>Max</effort>
                     <threshold>Medium</threshold>
-<!--                <includeFilterFile>jpaw-sca/lib-filter.xml</includeFilterFile> -->
                 </configuration>
             </plugin>
-
+-->
         </plugins>
     </reporting>
 

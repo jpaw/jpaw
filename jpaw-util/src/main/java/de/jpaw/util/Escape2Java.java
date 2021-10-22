@@ -1,9 +1,11 @@
 package de.jpaw.util;
 
-public class Escape2Java {
-    private static final char [] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
+public final class Escape2Java {
+    private static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
 
-    static public String escapeString2Java(final String s) {
+    private Escape2Java() { }
+
+    public static String escapeString2Java(final String s) {
         if (!needsEscaping(s))
             return s;  // shortcut - avoid buffer allocation unless required
         final StringBuilder sb = new StringBuilder(s.length() * 2);  // rough estimate on size

@@ -34,12 +34,21 @@ import java.util.regex.Pattern;
  * 1.2.1:   changed 0x7f to be no longer considered as a "printable" character, in order to be consistent with the Java patterns and common expectation
  */
 
-public class CharTestsASCII {
-    public static final Pattern UPPERCASE_PATTERN        = Pattern.compile("\\A[A-Z]*\\z");             // tests if a field consists of uppercase characters only
-    public static final Pattern LOWERCASE_PATTERN        = Pattern.compile("\\A[a-z]*\\z");             // tests if a field consists of lowercase characters only
-    public static final Pattern DIGIT_PATTERN            = Pattern.compile("\\A[0-9]*\\z");             // tests if a field consists of digits characters only
-    public static final Pattern PRINTABLE_PATTERN        = Pattern.compile("\\A[\\x20-\\x7e]*\\z");     // tests if a field consists of printable ASCII characters only
-    public static final Pattern PRINTABLE_OR_TAB_PATTERN = Pattern.compile("\\A[\\x20-\\x7e\t]*\\z");   // tests if a field consists of printable ASCII characters or TABs only
+public final class CharTestsASCII {
+    /** Pattern to test if a field consists of uppercase characters only. */
+    public static final Pattern UPPERCASE_PATTERN        = Pattern.compile("\\A[A-Z]*\\z");
+
+    /** Pattern to test if a field consists of lowercase characters only. */
+    public static final Pattern LOWERCASE_PATTERN        = Pattern.compile("\\A[a-z]*\\z");
+
+    /** Pattern to test if a field consists of digits characters only. */
+    public static final Pattern DIGIT_PATTERN            = Pattern.compile("\\A[0-9]*\\z");
+
+    /** Pattern to test if a field consists of printable ASCII characters only. */
+    public static final Pattern PRINTABLE_PATTERN        = Pattern.compile("\\A[\\x20-\\x7e]*\\z");
+
+    /** Pattern to test if a field consists of printable ASCII characters or TABs only. */
+    public static final Pattern PRINTABLE_OR_TAB_PATTERN = Pattern.compile("\\A[\\x20-\\x7e\t]*\\z");
 
     // ID map:
     // 0 = lowercase
@@ -48,7 +57,7 @@ public class CharTestsASCII {
     // 3 = other identifier in Javascript (before ES 5, later a much wider set of characters was allowed)
     // 9 = anything else
     // index ranges from 0x20 to 0x7f
-    private static final byte CHAR_TYPE [] = {
+    private static final byte CHAR_TYPE[] = {
         9, 9, 9, 9, 3, 9, 9, 9,  9, 9, 9, 9, 9, 9, 9, 9,
         2, 2, 2, 2, 2, 2, 2, 2,  2, 2, 9, 9, 9, 9, 9, 9,
         9, 1, 1, 1, 1, 1, 1, 1,  1, 1, 1, 1, 1, 1, 1, 1,
@@ -59,7 +68,7 @@ public class CharTestsASCII {
     // ID map:
     // 0 = no number
     // 1 = integral number (digits, + / -, ., e / E)
-    private static final byte NUMBER_TYPE [] = {        // digits, +, -, . and e / E
+    private static final byte NUMBER_TYPE[] = {
         0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 1, 0, 1, 1, 0,
         1, 1, 1, 1, 1, 1, 1, 1,  1, 1, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 1, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0,
@@ -204,7 +213,8 @@ public class CharTestsASCII {
      *
      * @param c
      *            the character to test
-     * @return <code>true</code> if the parameter represents an upper case or lower case ASCII letter or a digit, or dollar or underscore, <code>false</code> otherwise.
+     * @return <code>true</code> if the parameter represents an upper case or lower case ASCII letter or a digit,
+     * or dollar or underscore, <code>false</code> otherwise.
      */
     public static boolean isJavascriptIdChar(final char c) {
         return (c >= ' ') && (c <= 0x7f) && CHAR_TYPE[c - ' '] <= 3;
@@ -215,7 +225,8 @@ public class CharTestsASCII {
      *
      * @param s
      *            the string to test
-     * @return <code>true</code> if the parameter represents an upper case or lower case ASCII letter or a digit, or dollar or underscore, <code>false</code> otherwise.
+     * @return <code>true</code> if the parameter represents an upper case or lower case ASCII letter or a digit,
+     * or dollar or underscore, <code>false</code> otherwise.
      */
     public static boolean isJavascriptId(final String s) {
         final int len = s.length();
@@ -235,7 +246,8 @@ public class CharTestsASCII {
      *
      * @param c
      *            the character to test
-     * @return <code>true</code> if the parameter represents an upper case or lower case ASCII letter or a digit, or dollar or underscore, <code>false</code> otherwise.
+     * @return <code>true</code> if the parameter represents an upper case or lower case ASCII letter or a digit,
+     * or dollar or underscore, <code>false</code> otherwise.
      */
     public static boolean isJavascriptNumberChar(final char c) {
         return (c >= ' ') && (c <= 0x7f) && NUMBER_TYPE[c - ' '] != 0;

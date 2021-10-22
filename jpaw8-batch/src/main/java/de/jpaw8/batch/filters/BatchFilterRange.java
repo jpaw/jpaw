@@ -9,8 +9,8 @@ import de.jpaw.cmdline.CmdlineParserContext;
 
 /** Misuse of the filter to implement skipping records or limiting records. */
 public class BatchFilterRange implements IntPredicate, CmdlineCallback {
-    static private final String OPTION_MIN = "min";
-    static private final String OPTION_MAX = "max";
+    private static final String OPTION_MIN = "min";
+    private static final String OPTION_MAX = "max";
     protected int recordNoMin = 1;
     protected int recordNoMax = Integer.MAX_VALUE;
 

@@ -10,7 +10,7 @@ import de.jpaw8.batch.api.BatchReader;
 /** Batch reader for testing. This one repeats the provided input a specified number of times,
  *  and optionally waits between data production. */
 public class BatchReaderRepeater<E> implements BatchReader<E> {
-    static private final String OPTION = "num";
+    private static final String OPTION = "num";
     private final E objectToRepeat;
     private int numRepeats = 1;
     private final CmdlineParserContext ctx;

@@ -12,7 +12,7 @@ import de.jpaw.util.IntegralLimits;
  * This class is not thread-safe.
  *
  */
-public class HashMapPrimitiveLongObject<V> {
+public final class HashMapPrimitiveLongObject<V> {
 
     static private class Entry<V> {
         final long key;
@@ -140,13 +140,13 @@ public class HashMapPrimitiveLongObject<V> {
         return null;
     }
 
-    private final Entry<V> getEntry(long key) {
+    private Entry<V> getEntry(long key) {
         int hash = longHash(key);
         int index = hash & (elementData.length - 1);
         return findNonNullKeyEntry(key, index, hash);
     }
 
-    private final Entry<V> findNonNullKeyEntry(long key, int index, int keyHash) {
+    private Entry<V> findNonNullKeyEntry(long key, int index, int keyHash) {
         Entry<V> m = elementData[index];
         while (m != null && key != m.key) {
             m = m.next;
@@ -227,7 +227,7 @@ public class HashMapPrimitiveLongObject<V> {
     }
 
 
-    private final Entry<V> removeEntry(long key) {
+    private Entry<V> removeEntry(long key) {
         int index = 0;
         Entry<V> entry;
         Entry<V> last = null;

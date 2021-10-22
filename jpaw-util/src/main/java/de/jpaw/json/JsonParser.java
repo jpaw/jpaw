@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import de.jpaw.json.JsonException;
 import de.jpaw.util.CharTestsASCII;
 
 public class JsonParser {
@@ -24,8 +23,9 @@ public class JsonParser {
     }
 
     private void skipSpaces() {
-        while (i < len && Character.isWhitespace(s.charAt(i)))
+        while (i < len && Character.isWhitespace(s.charAt(i))) {
             ++i;
+        }
     }
 
     private char peekNeededChar() throws JsonException {
@@ -42,13 +42,14 @@ public class JsonParser {
     }
 
     // return true if the next characters in the input sequence match txt
-    protected boolean nextStartsWith(String txt) {
+    protected final boolean nextStartsWith(String txt) {
         final int len1 = txt.length();
         if (i + len1 > len)
             return false;           // too short
-        for (int j = 0; j < len1; ++j)
+        for (int j = 0; j < len1; ++j) {
             if (s.charAt(i + j) != txt.charAt(j))
                 return false;
+        }
         return true;
     }
 
@@ -96,10 +97,10 @@ public class JsonParser {
 //        ++i;
 //        skipSpaces();
 //        return sb.toString();
-        String s = parseStringSub();
-        if (s.length() == 0 || CharTestsASCII.isAsciiDigit(s.charAt(0)))
+        final String s2 = parseStringSub();
+        if (s2.length() == 0 || CharTestsASCII.isAsciiDigit(s2.charAt(0)))
             throw new JsonException(JsonException.JSON_BAD_IDENTIFIER, i);
-        return s;
+        return s2;
     }
 
 // table based implementation: less jumps, but may need additional memory access and therefore be slower
@@ -240,7 +241,7 @@ public class JsonParser {
                         // pattern is integral
                         long l = Long.parseLong(sb.toString());
                         skipSpaces();
-                        if((int)l == l)
+                        if ((int)l == l)
                             return Integer.valueOf((int)l);
                         return Long.valueOf(l);
                     }
@@ -309,7 +310,7 @@ public class JsonParser {
         return map;
     }
 
-    public Object parseElement() throws JsonException {
+    public final Object parseElement() throws JsonException {
         if (s == null)
             return null;    // shortcut
         Object obj = parseElementSub();

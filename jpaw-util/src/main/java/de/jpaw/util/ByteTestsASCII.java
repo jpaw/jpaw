@@ -27,14 +27,13 @@ package de.jpaw.util;
  * 1.2.1:   changed 0x7f to be no longer considered as a "printable" character, in order to be consistent with the Java patterns and common expectation
  */
 
-public class ByteTestsASCII {
+public final class ByteTestsASCII {
     /**
      * The constructor is defined as private, in order to prevent that anyone
      * instantiates this class, which is not meaningful, because it contains
      * only static methods.
      */
-    private ByteTestsASCII() {
-    }
+    private ByteTestsASCII() { }
 
     /**
      * <code>isAsciiPrintable()</code> tests if a byte is a US-ASCII (7

@@ -8,12 +8,12 @@ import java.util.Set;
 import de.jpaw.api.iso.CurrencyData;
 import de.jpaw.api.iso.CurrencyDataProvider;
 
-public class JavaCurrencyDataProvider implements CurrencyDataProvider {
-    static public final JavaCurrencyDataProvider instance = new JavaCurrencyDataProvider();
-    private JavaCurrencyDataProvider() {
-    }
+public final class JavaCurrencyDataProvider implements CurrencyDataProvider {
+    public static final JavaCurrencyDataProvider INSTANCE = new JavaCurrencyDataProvider();
 
-    public static class JavaCurrencyData implements CurrencyData {
+    private JavaCurrencyDataProvider() { }
+
+    public static final class JavaCurrencyData implements CurrencyData {
         private final Currency currency;
         private JavaCurrencyData(Currency currency) {
             this.currency = currency;
@@ -72,8 +72,9 @@ public class JavaCurrencyDataProvider implements CurrencyDataProvider {
     public List<CurrencyData> getAll() {
         Set<Currency> allJavaCurrencies = Currency.getAvailableCurrencies();
         List<CurrencyData> result = new ArrayList<CurrencyData>(allJavaCurrencies.size());
-        for (Currency c : allJavaCurrencies)
-            result.add(instance.get(c.getCurrencyCode()));
+        for (Currency c : allJavaCurrencies) {
+            result.add(INSTANCE.get(c.getCurrencyCode()));
+        }
         return result;
     }
 }

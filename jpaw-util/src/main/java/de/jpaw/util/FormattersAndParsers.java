@@ -9,8 +9,10 @@ import java.time.LocalTime;
  * A collection of parsers and formatters for JSON and XML input / output.
  * These formats allow certain control (parser strictness settings, output formatting).
  */
-public class FormattersAndParsers {
-    private static final char [] DIGITS = { '0', '1', '2','3', '4', '5', '6', '7', '8', '9' };
+public final class FormattersAndParsers {
+    private static final char[] DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+
+    private FormattersAndParsers() { }
 
     // zero-GC implementation of appendable.append(String.format("%02d", n));
     private static void append2Digits(Appendable sb, int n) throws IOException {
@@ -71,7 +73,7 @@ public class FormattersAndParsers {
         if (tolerateSuffixUTC) {
             int len = dateTime.length();
             if (len > 0 && dateTime.charAt(len - 1) == 'Z') {
-                return LocalDateTime.parse(dateTime.substring(0, len-1));
+                return LocalDateTime.parse(dateTime.substring(0, len - 1));
             }
         }
         return LocalDateTime.parse(dateTime);

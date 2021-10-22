@@ -1,9 +1,11 @@
 package de.jpaw.util;
 
-public class ExceptionUtil {
+public final class ExceptionUtil {
+
+    private ExceptionUtil() { }
 
     /** Returns a string of the exception with message, and a chain of causes (but not the full stack trace). */
-    static public String causeChain(Throwable e) {
+    public static String causeChain(Throwable e) {
         final StringBuilder b = new StringBuilder(1000);
         do {
             b.append(e.getClass().getCanonicalName());

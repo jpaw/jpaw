@@ -8,18 +8,18 @@ package de.jpaw.api.iso;
  */
 public interface CurrencyData {
     /** Returns the ISO 4217 code. */
-    public String getCurrencyCode();
+    String getCurrencyCode();
 
     /** Returns the ISO numeric code. */
-    public int getNumericCode();
+    int getNumericCode();
 
     /** Returns the currency symbol, for the default locale. */
-    public String getSymbol();
+    String getSymbol();
 
     /** Returns the description, for the default locale. */
-    public String getDisplayName();
+    String getDisplayName();
 
     /** Returns the default number of decimals. */
-    public int getDefaultFractionDigits();
+    int getDefaultFractionDigits();
 
 }

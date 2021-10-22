@@ -5,7 +5,7 @@ import java.math.RoundingMode;
 
 /** Support class which performs 64 * 64 bit to 128 bit multiplication, and subsequent scaling. */
 public class FixedPointNative {
-    static private final String LIBRARY_NAME = "jpawFP128";
+    private static final String LIBRARY_NAME = "jpawFP128";
     static private volatile boolean nativeAvailable = false;
     static {
         try {

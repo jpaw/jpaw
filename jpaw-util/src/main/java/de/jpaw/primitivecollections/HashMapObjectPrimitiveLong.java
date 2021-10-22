@@ -5,7 +5,7 @@ import java.util.Arrays;
 import de.jpaw.util.IntegralLimits;
 
 /** reverse HashMap to return a primitive long (key) for an Object type key. */
-public class HashMapObjectPrimitiveLong<K> {
+public final class HashMapObjectPrimitiveLong<K> {
 
     private static class Entry<K> {
         final K key;
@@ -131,13 +131,13 @@ public class HashMapObjectPrimitiveLong<K> {
         return 0;
     }
 
-    private final Entry<K> getEntry(K key) {
+    private Entry<K> getEntry(K key) {
         int hash = key.hashCode();
         int index = hash & (elementData.length - 1);
         return findNonNullKeyEntry(key, index, hash);
     }
 
-    private final Entry<K> findNonNullKeyEntry(K key, int index, int keyHash) {
+    private Entry<K> findNonNullKeyEntry(K key, int index, int keyHash) {
         Entry<K> m = elementData[index];
         while (m != null && !key.equals(m.key)) {
             m = m.next;
@@ -211,7 +211,7 @@ public class HashMapObjectPrimitiveLong<K> {
     }
 
 
-    private final Entry<K> removeEntry(K key) {
+    private Entry<K> removeEntry(K key) {
         int index = 0;
         Entry<K> entry;
         Entry<K> last = null;

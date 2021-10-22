@@ -68,7 +68,7 @@
   <!-- Checks for whitespace                               -->
   <!-- See https://checkstyle.org/config_whitespace.html -->
   <module name="FileTabCharacter">
-    <property name="fileExtensions" value="java, xml, xtend, xtend"/>
+    <property name="fileExtensions" value="java, xml, xtend, xtend, bon, bddl"/>
   </module>
 
   <!-- Miscellaneous other checks.                   -->
@@ -106,7 +106,9 @@
     <module name="LocalFinalVariableName"/>
     <module name="LocalVariableName"/>
     <module name="MemberName"/>
-    <module name="MethodName"/>
+    <module name="MethodName">
+      <property name="format" value="^(operator_)?[a-z][a-zA-Z0-9]*$"/>  <!-- support operator overloading for xtend as long as we still use it -->
+    </module>
     <module name="PackageName"/>
     <module name="ParameterName"/>
     <module name="StaticVariableName"/>
@@ -117,13 +119,14 @@
     <module name="AvoidStarImport"/>
     <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
     <module name="RedundantImport"/>
-    <module name="UnusedImports">
-      <property name="processJavadoc" value="false"/>
-    </module>
+    <module name="UnusedImports"/>  <!-- use default (consider javadoc) because Eclipse asks for imports of types referenced in Javadoc. -->
 
     <!-- Checks for Size Violations.                    -->
     <!-- See https://checkstyle.org/config_sizes.html -->
-    <module name="MethodLength"/>
+    <module name="MethodLength">
+      <property name="max" value="200"/>
+      <property name="countEmpty" value="false"/>  <!-- leaving it at true could lead to deletion of empty lines or comments! -->
+    </module>
     <module name="ParameterNumber"/>
 
     <!-- Checks for whitespace                               -->
@@ -131,7 +134,12 @@
     <module name="EmptyForIteratorPad"/>
     <module name="GenericWhitespace"/>
     <module name="MethodParamPad"/>
-    <module name="NoWhitespaceAfter"/>
+
+    <module name="NoWhitespaceAfter"> <!-- omitting ARRAY_INIT and TYPECAST from default, adding METHOD_REF -->
+      <property name="tokens" value="AT, INC, DEC, UNARY_MINUS, UNARY_PLUS, BNOT, LNOT, DOT, ARRAY_DECLARATOR, INDEX_OP,  METHOD_REF"/>
+      <property name="allowLineBreaks" value="false"/>
+    </module>
+
     <module name="NoWhitespaceBefore"/>
     <module name="OperatorWrap"/>
     <module name="ParenPad"/>
@@ -142,6 +150,10 @@
       <property name="tokens" value="COMMA, SEMI, LITERAL_IF, LITERAL_ELSE, LITERAL_WHILE, LITERAL_DO, LITERAL_FOR, DO_WHILE"/>
     </module>
     <module name="WhitespaceAround"/>
+    <!-- does not seem to work. Not critical, because global search/replace {} => { } will cure it (and could also be reverted easily later if desired).
+      <property name="allowEmptyConstructors" value="true"/>
+      <property name="allowEmptyMethods" value="true"/>
+    </module> -->
 
     <!-- Modifier Checks                                    -->
     <!-- See https://checkstyle.org/config_modifier.html -->
@@ -150,7 +162,9 @@
 
     <!-- Checks for blocks. You know, those {}'s         -->
     <!-- See https://checkstyle.org/config_blocks.html -->
-    <module name="AvoidNestedBlocks"/>
+    <module name="AvoidNestedBlocks">
+      <property name="allowInSwitchCase" value="true"/>
+    </module>
     <module name="EmptyBlock"/>
     <module name="LeftCurly"/>
 
@@ -168,29 +182,42 @@
     <!-- jpaw: same name in constructors is common practice -->
     <module name="HiddenField">
       <property name="ignoreConstructorParameter" value="true"/>
+      <property name="ignoreSetter" value="true"/>
     </module>
     <module name="IllegalInstantiation"/>
     <module name="InnerAssignment"/>
+    <!-- TODO: decide which checks we want
     <module name="MagicNumber"/>
+    -->
+    <!-- deactivating: a default maskes no sense if all enum instances have been addressed!
     <module name="MissingSwitchDefault"/>
+    -->
     <module name="MultipleVariableDeclarations"/>
     <module name="SimplifyBooleanExpression"/>
     <module name="SimplifyBooleanReturn"/>
 
     <!-- Checks for class design                         -->
     <!-- See https://checkstyle.org/config_design.html -->
-    <module name="DesignForExtension"/>
+    <module name="DesignForExtension">
+      <property name="ignoredAnnotations" value="Override, Test"/>
+    </module>
     <module name="FinalClass"/>
     <module name="HideUtilityClassConstructor"/>
     <module name="InterfaceIsType"/>
-    <module name="VisibilityModifier"/>
+    <module name="VisibilityModifier">
+      <property name="protectedAllowed" value="true"/> <!-- we want final protected only, but that option does not exist -->
+      <property name="allowPublicFinalFields" value="true"/>
+    </module>
 
     <!-- Miscellaneous other checks.                   -->
     <!-- See https://checkstyle.org/config_misc.html -->
     <module name="ArrayTypeStyle"/>
+    <!--  FIXME: We want this!
     <module name="FinalParameters"/>
+    -->
     <module name="TodoComment">
       <property name="format" value="(TODO)|(FIXME)"/>
+      <property name="severity" value="warning"/>
     </module>
     <module name="UpperEll"/>
 

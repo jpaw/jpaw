@@ -18,10 +18,10 @@ public class ByteBuilderSerializationTest {
 
         // compare the serialized forms of both methods
         void compare(String msg) throws Exception {
-            byte [] data_bb = bb.getBytes();
-            byte [] data_dos = baos.toByteArray();
-            System.out.println("Length for test " + msg + " is " + data_bb.length + " bytes (should be " + data_dos.length + " bytes)");
-            Assert.assertArrayEquals(data_bb, data_dos);
+            byte[] databb = bb.getBytes();
+            byte[] datados = baos.toByteArray();
+            System.out.println("Length for test " + msg + " is " + databb.length + " bytes (should be " + datados.length + " bytes)");
+            Assert.assertArrayEquals(databb, datados);
         }
     }
 
@@ -29,7 +29,7 @@ public class ByteBuilderSerializationTest {
     private String getString() {
         int i = 0;
         int data = 0;
-        char [] raw = new char[50];
+        char[] raw = new char[50];
         while (i < raw.length) {
             raw[i] = (char)data;
             data = data * 5 + 1;
@@ -75,10 +75,10 @@ public class ByteBuilderSerializationTest {
 
 
     // construct a string of some characters of all possible UTF lengths
-    private byte [] getByteArray() {
+    private byte[] getByteArray() {
         int i = 0;
         int data = 0;
-        byte [] raw = new byte[50];
+        byte[] raw = new byte[50];
         while (i < raw.length) {
             raw[i] = (byte)data;
             data = data * 5 + 1;
@@ -89,7 +89,7 @@ public class ByteBuilderSerializationTest {
 
     @Test
     public void testByteArray() throws Exception {
-        byte [] test = getByteArray();
+        byte[] test = getByteArray();
         Engine e = new Engine();
         e.bb.write(test);
         e.dos.write(test);
@@ -98,7 +98,7 @@ public class ByteBuilderSerializationTest {
 
     @Test
     public void testByteArrayPart() throws Exception {
-        byte [] test = getByteArray();
+        byte[] test = getByteArray();
         Engine e = new Engine();
         e.bb.write(test, 3, 23);
         e.dos.write(test, 3, 23);

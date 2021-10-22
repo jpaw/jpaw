@@ -11,9 +11,9 @@ public class ISOTest {
 
     @Test
     public void testJavaCurrencies() throws Exception {
-        List<CurrencyData> all = JavaCurrencyDataProvider.instance.getAll();
+        List<CurrencyData> all = JavaCurrencyDataProvider.INSTANCE.getAll();
         System.out.println("I got " + all.size() + " currencies from standard Java (" + System.getProperty("java.version") + ")");
-        assert(all.size() > 200);
+        assert (all.size() > 200);
     }
 
 }

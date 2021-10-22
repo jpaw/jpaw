@@ -11,7 +11,7 @@ public class TestToString {
 
     @Test
     public void testToString() throws Exception {
-        FPCurrency Euro = new FPCurrency(JavaCurrencyDataProvider.instance.get("EUR"));
+        FPCurrency Euro = new FPCurrency(JavaCurrencyDataProvider.INSTANCE.get("EUR"));
 
         FPAmount x = new FPAmount(Euro, 1999, 1680, 319);
 

@@ -2,15 +2,18 @@ package de.jpaw.util;
 
 import java.util.Arrays;
 
-public class Cesu8Encoder {
-    public static byte [] encodeToCesu8(final String s) {
+public final class Cesu8Encoder {
+
+    private Cesu8Encoder() { }
+
+    public static byte[] encodeToCesu8(final String s) {
         int bytesNeeded = 0;
         final int len = s.length();
         for (int i = 0; i < len; ++i) {
             final char c = s.charAt(i);
             bytesNeeded += c < 2048 ? (c < 128 ? 1 : 2) : 3;
         }
-        final byte [] buff = new byte [bytesNeeded];
+        final byte[] buff = new byte[bytesNeeded];
         int j = -1;
         for (int i = 0; i < len; ++i) {
             final char c = s.charAt(i);
@@ -30,9 +33,9 @@ public class Cesu8Encoder {
         return buff;
     }
     /** Same method, but does a single pass and does an array copy in the end. */
-    public static byte [] encodeToCesu8Copy(final String s) {
+    public static byte[] encodeToCesu8Copy(final String s) {
         final int len = s.length();
-        final byte [] buff = new byte [len << 2];
+        final byte[] buff = new byte[len << 2];
         int j = -1;
         for (int i = 0; i < len; ++i) {
             final char c = s.charAt(i);
@@ -49,6 +52,6 @@ public class Cesu8Encoder {
                 buff[++j] = (byte) (0x80 + (c & 0x3f));
             }
         }
-        return Arrays.copyOf(buff, j+1);    // create an array of appropriate length
+        return Arrays.copyOf(buff, j + 1);    // create an array of appropriate length
     }
 }

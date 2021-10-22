@@ -1,6 +1,9 @@
 package de.jpaw.util;
 
-public class CollectionUtil {
+public final class CollectionUtil {
+
+    private CollectionUtil() { }
+
     /** Pick a size for a map which avoids resizing for the default load factor (0.75).
      * Also leave some gap...
      * @param numEntries The number of expected entries

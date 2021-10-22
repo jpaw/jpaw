@@ -81,10 +81,13 @@ public final class Base64 {
     private static final int[] IA = new int[256];
     static {
         Arrays.fill(IA, -1);
-        for (int i = 0, iS = CA.length; i < iS; i++)
+        for (int i = 0, iS = CA.length; i < iS; i++) {
             IA[CA[i]] = i;
+        }
         IA['='] = 0;
     }
+
+    private Base64() { }
 
     // ****************************************************************************************
     // *  byte[] version
@@ -96,7 +99,7 @@ public final class Base64 {
      * little faster.
      * return A BASE64 encoded array. Never <code>null</code>.
      */
-    public final static void encodeToByte(ByteBuilder target, byte[] sArr, int offset, int length) {
+    public static void encodeToByte(ByteBuilder target, byte[] sArr, int offset, int length) {
         // Check special case
         if (length == 0)
             return;
@@ -141,18 +144,20 @@ public final class Base64 {
     /** Decodes a BASE64 encoded byte array. All illegal characters will be ignored and can handle both arrays with
      * and without line separators.
      * @param sArr The source array. Length 0 will return an empty array. <code>null</code> will throw an exception.
-     * return The decoded array of bytes. May be of length 0. Will be <code>null</code> if the legal characters (including '=') isn't divideable by 4. (I.e. definitely corrupted).
+     * return The decoded array of bytes. May be of length 0. Will be <code>null</code> if the legal characters (including '=')
+     * isn't divideable by 4. (I.e. definitely corrupted).
      */
-    public final static byte[] decode(byte[] sArr, int offset, int sLen) {
+    public static byte[] decode(byte[] sArr, int offset, int sLen) {
 
         // Check so that legal chars (including '=') are evenly divideable by 4 as specified in RFC 2045.
         if ((sLen) % 4 != 0)
             return null;
 
         int pad = 0;
-        for (int i = sLen; i > 1 && IA[sArr[offset + --i] & 0xff] <= 0;)
+        for (int i = sLen; i > 1 && IA[sArr[offset + --i] & 0xff] <= 0;) {
             if (sArr[offset + i] == '=')
                 pad++;
+        }
 
         int len = ((sLen) * 6 >> 3) - pad;
 
@@ -172,7 +177,7 @@ public final class Base64 {
             // Add the bytes
             dArr[d++] = (byte) (i >> 16);
             if (d < len) {
-                dArr[d++]= (byte) (i >> 8);
+                dArr[d++] = (byte) (i >> 8);
                 if (d < len)
                     dArr[d++] = (byte) i;
             }
@@ -191,21 +196,24 @@ public final class Base64 {
      * @param sArr The source array. Length 0 will return an empty array. <code>null</code> will throw an exception.
      * @return The decoded array of bytes. May be of length 0.
      */
-    public final static byte[] decodeFast(byte[] sArr) {
+    public static byte[] decodeFast(byte[] sArr) {
         // Check special case
         int sLen = sArr.length;
         if (sLen == 0)
             return new byte[0];
 
-        int sIx = 0, eIx = sLen - 1;    // Start and end index after trimming.
+        int sIx = 0;
+        int eIx = sLen - 1;    // Start and end index after trimming.
 
         // Trim illegal chars from start
-        while (sIx < eIx && IA[sArr[sIx] & 0xff] < 0)
+        while (sIx < eIx && IA[sArr[sIx] & 0xff] < 0) {
             sIx++;
+        }
 
         // Trim illegal chars from end
-        while (eIx > 0 && IA[sArr[eIx] & 0xff] < 0)
+        while (eIx > 0 && IA[sArr[eIx] & 0xff] < 0) {
             eIx--;
+        }
 
         // get the padding count (=) (0, 1 or 2)
         int pad = sArr[eIx] == '=' ? (sArr[eIx - 1] == '=' ? 2 : 1) : 0;  // Count '=' at end.
@@ -236,11 +244,13 @@ public final class Base64 {
         if (d < len) {
             // Decode last 1-3 bytes (incl '=') into 1-3 bytes
             int i = 0;
-            for (int j = 0; sIx <= eIx - pad; j++)
+            for (int j = 0; sIx <= eIx - pad; j++) {
                 i |= IA[sArr[sIx++]] << (18 - j * 6);
+            }
 
-            for (int r = 16; d < len; r -= 8)
+            for (int r = 16; d < len; r -= 8) {
                 dArr[d++] = (byte) (i >> r);
+            }
         }
 
         return dArr;

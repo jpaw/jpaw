@@ -20,7 +20,7 @@ public final class BonaCurrency implements Serializable {
     /** Scaled zeroes holds a cached array of zero with respect to the different scales.
      * This is purely for speed optimization.
      */
-    static private final BigDecimal [] SCALED_ZEROES;       // provides a preinitialized array of a few zeroes
+    private static final BigDecimal [] SCALED_ZEROES;       // provides a preinitialized array of a few zeroes
     static {
         SCALED_ZEROES = new BigDecimal [BonaCurrency.MAX_DECIMALS + 1];
         SCALED_ZEROES[0] = BigDecimal.ZERO;
@@ -31,7 +31,7 @@ public final class BonaCurrency implements Serializable {
     /** Smallest unit holds a cached array of the smallest representable unit with respect to the different scales.
      * This is purely for speed optimization.
      */
-    static private final BigDecimal [] SMALLEST_UNITS;       // provides a preinitialized array of a few smallest units
+    private static final BigDecimal [] SMALLEST_UNITS;       // provides a preinitialized array of a few smallest units
     static {
         SMALLEST_UNITS = new BigDecimal [BonaCurrency.MAX_DECIMALS + 1];
         SMALLEST_UNITS[0] = BigDecimal.ONE;

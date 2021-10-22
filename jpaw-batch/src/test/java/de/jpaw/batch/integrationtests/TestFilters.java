@@ -10,7 +10,7 @@ import de.jpaw.batch.impl.BatchExecutorUnthreaded;
 import de.jpaw.batch.processors.BatchProcessorFactoryIdentity;
 
 public class TestFilters {
-    static private final String TESTDATA = "Hello, world";
+    private static final String TESTDATA = "Hello, world";
 
     @Test
     public void testHardCodedEvenOddFilter() throws Exception {

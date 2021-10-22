@@ -36,18 +36,18 @@ public class MonetaryException extends ApplicationException {
     private static final int OFFSET = (CL_PARAMETER_ERROR * CLASSIFICATION_FACTOR) + 18000; // offset for all codes in this class
     private static final int OFFSET_ILE = (CL_INTERNAL_LOGIC_ERROR * CLASSIFICATION_FACTOR) + 18000; // offset for all codes in this class
 
-    static public final int ILLEGAL_CURRENCY_CODE        = OFFSET + 1;
-    static public final int ILLEGAL_NUMBER_OF_DECIMALS   = OFFSET + 2;
-    static public final int UNDEFINED_AMOUNTS            = OFFSET + 3;
-    static public final int TAX_EXCEED_GROSS             = OFFSET + 4;
-    static public final int SUM_MISMATCH                 = OFFSET + 5;
-    static public final int ROUNDING_PROBLEM             = OFFSET + 6;
-    static public final int SIGNS_DIFFER                 = OFFSET + 7;
-    static public final int INCOMPATIBLE_OPERANDS        = OFFSET + 8;
-    static public final int INCORRECT_NUMBER_TAX_AMOUNTS = OFFSET + 9;
-    static public final int NOT_AN_ISO4217_CODE          = OFFSET + 10;
+    public static final int ILLEGAL_CURRENCY_CODE        = OFFSET + 1;
+    public static final int ILLEGAL_NUMBER_OF_DECIMALS   = OFFSET + 2;
+    public static final int UNDEFINED_AMOUNTS            = OFFSET + 3;
+    public static final int TAX_EXCEED_GROSS             = OFFSET + 4;
+    public static final int SUM_MISMATCH                 = OFFSET + 5;
+    public static final int ROUNDING_PROBLEM             = OFFSET + 6;
+    public static final int SIGNS_DIFFER                 = OFFSET + 7;
+    public static final int INCOMPATIBLE_OPERANDS        = OFFSET + 8;
+    public static final int INCORRECT_NUMBER_TAX_AMOUNTS = OFFSET + 9;
+    public static final int NOT_AN_ISO4217_CODE          = OFFSET + 10;
 
-    static public final int UNEXPECTED_ROUNDING_PROBLEM  = OFFSET_ILE + 21;
+    public static final int UNEXPECTED_ROUNDING_PROBLEM  = OFFSET_ILE + 21;
 
     static {
         codeToDescription.put(ILLEGAL_CURRENCY_CODE        , "Currency code may not be null, must have 3 upper case characters length");

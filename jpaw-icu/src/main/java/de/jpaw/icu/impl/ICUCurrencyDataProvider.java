@@ -9,12 +9,12 @@ import com.ibm.icu.util.Currency;
 import de.jpaw.api.iso.CurrencyData;
 import de.jpaw.api.iso.CurrencyDataProvider;
 
-public class ICUCurrencyDataProvider implements CurrencyDataProvider {
-    static public final ICUCurrencyDataProvider instance = new ICUCurrencyDataProvider();
-    private ICUCurrencyDataProvider() {
-    }
+public final class ICUCurrencyDataProvider implements CurrencyDataProvider {
+    public static final ICUCurrencyDataProvider INSTANCE = new ICUCurrencyDataProvider();
 
-    public static class ICUCurrencyData implements CurrencyData {
+    private ICUCurrencyDataProvider() { }
+
+    public static final class ICUCurrencyData implements CurrencyData {
         private final Currency currency;
         private ICUCurrencyData(Currency currency) {
             this.currency = currency;
@@ -74,7 +74,7 @@ public class ICUCurrencyDataProvider implements CurrencyDataProvider {
         Set<Currency> allICUCurrencies = Currency.getAvailableCurrencies();
         List<CurrencyData> result = new ArrayList<CurrencyData>(allICUCurrencies.size());
         for (Currency c : allICUCurrencies)
-            result.add(instance.get(c.getCurrencyCode()));
+            result.add(INSTANCE.get(c.getCurrencyCode()));
         return result;
     }
 }

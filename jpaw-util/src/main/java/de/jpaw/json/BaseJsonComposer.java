@@ -26,7 +26,7 @@ public class BaseJsonComposer implements JsonEscaper {
         // preset other control characters
         for (int i = 0; i < 32; ++i) {
             if (jsonEscapes[i] == null)
-                jsonEscapes[i] = "\\u00" + HEX_CHARS[i/16] + HEX_CHARS[i & 15];
+                jsonEscapes[i] = "\\u00" + HEX_CHARS[i / 16] + HEX_CHARS[i & 15];
         }
     }
 
@@ -168,7 +168,7 @@ public class BaseJsonComposer implements JsonEscaper {
             appendable.append(']');
             return;
         }
-        if (obj instanceof Map<?,?>) {
+        if (obj instanceof Map<?, ?>) {
             outputJsonObject((Map<String, Object>)obj);
             return;
         }
@@ -178,7 +178,7 @@ public class BaseJsonComposer implements JsonEscaper {
         }
         // array type stuff. See http://stackoverflow.com/questions/219881/java-array-reflection-isarray-vs-instanceof
         // first, check of arrays of objects
-        if (obj instanceof Object []) {
+        if (obj instanceof Object[]) {
             boolean needDelim = false;
             appendable.append('[');
             for (Object o : (Object[])obj) {
@@ -210,16 +210,16 @@ public class BaseJsonComposer implements JsonEscaper {
 
     // code moved out due to excessive length
     private void outputPrimitiveArrays(Object obj) throws IOException {
-        if (obj instanceof byte []) {
+        if (obj instanceof byte[]) {
             // special case: not an array, but a base64 encoded string
-            byte [] array = (byte [])obj;
+            byte[] array = (byte[])obj;
             ByteBuilder tmp = new ByteBuilder(0, null);
             Base64.encodeToByte(tmp, array, 0, array.length);
             outputAscii(tmp.toString());
             return;
         }
-        if (obj instanceof int []) {
-            int [] array = (int [])obj;
+        if (obj instanceof int[]) {
+            int[] array = (int[])obj;
             appendable.append('[');
             for (int i = 0; i < array.length; ++i) {
                 if (i > 0)
@@ -229,8 +229,8 @@ public class BaseJsonComposer implements JsonEscaper {
             appendable.append(']');
             return;
         }
-        if (obj instanceof boolean []) {
-            boolean [] array = (boolean [])obj;
+        if (obj instanceof boolean[]) {
+            boolean[] array = (boolean[])obj;
             appendable.append('[');
             for (int i = 0; i < array.length; ++i) {
                 if (i > 0)
@@ -240,19 +240,19 @@ public class BaseJsonComposer implements JsonEscaper {
             appendable.append(']');
             return;
         }
-        if (obj instanceof char []) {
-            char [] array = (char [])obj;
+        if (obj instanceof char[]) {
+            char[] array = (char[])obj;
             appendable.append('[');
             for (int i = 0; i < array.length; ++i) {
                 if (i > 0)
                     appendable.append(',');
-                outputUnicodeWithControls(Character.toString(array[i]));    // converts char [] to a string
+                outputUnicodeWithControls(Character.toString(array[i]));    // converts char[] to a string
             }
             appendable.append(']');
             return;
         }
-        if (obj instanceof long []) {
-            long [] array = (long [])obj;
+        if (obj instanceof long[]) {
+            long[] array = (long[])obj;
             appendable.append('[');
             for (int i = 0; i < array.length; ++i) {
                 if (i > 0)
@@ -262,8 +262,8 @@ public class BaseJsonComposer implements JsonEscaper {
             appendable.append(']');
             return;
         }
-        if (obj instanceof short []) {
-            short [] array = (short [])obj;
+        if (obj instanceof short[]) {
+            short[] array = (short[])obj;
             appendable.append('[');
             for (int i = 0; i < array.length; ++i) {
                 if (i > 0)
@@ -273,8 +273,8 @@ public class BaseJsonComposer implements JsonEscaper {
             appendable.append(']');
             return;
         }
-        if (obj instanceof double []) {
-            double [] array = (double [])obj;
+        if (obj instanceof double[]) {
+            double[] array = (double[])obj;
             appendable.append('[');
             for (int i = 0; i < array.length; ++i) {
                 if (i > 0)
@@ -284,8 +284,8 @@ public class BaseJsonComposer implements JsonEscaper {
             appendable.append(']');
             return;
         }
-        if (obj instanceof float []) {
-            float [] array = (float [])obj;
+        if (obj instanceof float[]) {
+            float[] array = (float[])obj;
             appendable.append('[');
             for (int i = 0; i < array.length; ++i) {
                 if (i > 0)

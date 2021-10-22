@@ -20,9 +20,9 @@ import de.jpaw.batch.processors.BatchProcessorFactoryToXml;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestXmlWriter {
-    static private final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    static private final String HEADER = XML_HEADER + "<Data>\n";
-    static private final String FOOTER = "</Data>\n";
+    private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    private static final String HEADER = XML_HEADER + "<Data>\n";
+    private static final String FOOTER = "</Data>\n";
 
     @XmlRootElement
     @XmlAccessorType(XmlAccessType.FIELD)

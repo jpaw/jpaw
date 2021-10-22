@@ -24,7 +24,7 @@ public class TestJsonParser {
     @Test
     public void testParseStringObject() throws Exception {
         Assert.assertEquals(new JsonParser("\"hello\"", true).parseElement(), "hello");
-        Assert.assertNull  (new JsonParser("null",      true).parseElement());
+        Assert.assertNull(new JsonParser("null",      true).parseElement());
     }
 
     @Test

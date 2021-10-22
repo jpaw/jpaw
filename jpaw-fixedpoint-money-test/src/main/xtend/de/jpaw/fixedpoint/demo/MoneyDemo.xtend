@@ -20,7 +20,7 @@ class MoneyDemo {
         val net2 = gross2 - tax
         println('''A gross amount of «gross2» minus «tax» VAT gives «net2» total''')
 
-        val unitPrice = new FPAmount(6995000.micros, JavaCurrencyDataProvider.instance.get("EUR")) - tax
+        val unitPrice = new FPAmount(6995000.micros, JavaCurrencyDataProvider.INSTANCE.get("EUR")) - tax
         val factor = 25.tenths
         val orderItemAmount = unitPrice.convert(factor, EUR)  // multiply unit price with scalar factor and round to 2 digits (standard EUR precision)
 

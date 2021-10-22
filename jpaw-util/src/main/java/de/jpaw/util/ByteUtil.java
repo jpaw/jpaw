@@ -3,13 +3,15 @@ package de.jpaw.util;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
-public class ByteUtil {
+public final class ByteUtil {
 //    private static final Logger LOG = LoggerFactory.getLogger(ByteUtil.class);
 
-    public static byte [] deepCopy(byte [] org) {
+    private ByteUtil() { }
+
+    public static byte[] deepCopy(byte[] org) {
         if (org == null)
             return null;
-        byte [] result = new byte [org.length];
+        byte[] result = new byte[org.length];
         System.arraycopy(org, 0, result, 0, org.length);
         return result;
     }
@@ -52,7 +54,8 @@ public class ByteUtil {
      * <code>dump()</code> dumps the contents of a byte array in a readable 2-column format (hex as well as masked ASCII)
      * to the logger at <code>trace</code> logging level.
      * @param a          the byte array to dump
-     * @param startAt    the first byte to be included in the dump (the actual start can be up to 15 bytes earlier, this implementation will always align at 16 byte boundaries)
+     * @param startAt    The first byte to be included in the dump (the actual start can be up to 15 bytes earlier.
+     *                   This implementation will always align at 16 byte boundaries).
      * @param maxlength  the maximum number of bytes to output to the logger (to avoid megabytes of data)
      */
     public static String dump(byte[] a, int startAt, int maxlength) {
@@ -89,15 +92,14 @@ public class ByteUtil {
                     hexOrBlank(a, i + 7),
                     hexOrBlank(a, i + 8),
                     hexOrBlank(a, i + 9),
-                    hexOrBlank(a, i +10),
-                    hexOrBlank(a, i +11),
-                    hexOrBlank(a, i +12),
-                    hexOrBlank(a, i +13),
-                    hexOrBlank(a, i +14),
-                    hexOrBlank(a, i +15),
+                    hexOrBlank(a, i + 10),
+                    hexOrBlank(a, i + 11),
+                    hexOrBlank(a, i + 12),
+                    hexOrBlank(a, i + 13),
+                    hexOrBlank(a, i + 14),
+                    hexOrBlank(a, i + 15),
                     readable(a, i, w, a.length - i)));
         }
         return buff.toString();
     }
-
 }

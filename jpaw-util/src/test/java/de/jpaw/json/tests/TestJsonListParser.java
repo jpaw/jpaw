@@ -9,11 +9,11 @@ import org.junit.Test;
 import de.jpaw.json.JsonParser;
 
 public class TestJsonListParser {
-    static class EmitChecker implements Consumer<Map<String, Object>> {
-        private final int [] expected;
+    static final class EmitChecker implements Consumer<Map<String, Object>> {
+        private final int[] expected;
         private int index = 0;
 
-        private EmitChecker(int [] expected) {
+        private EmitChecker(int[] expected) {
             this.expected = expected;
         }
 

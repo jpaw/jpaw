@@ -294,12 +294,12 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         }
     }
 
-    static public final long mantissaFor(String src, int targetScale) {
+    public static final long mantissaFor(String src, int targetScale) {
         return parseMantissa(src, targetScale);
     }
 
     /** Computes the target mantissa of an existing with currentScale, for a given desired target scale. In case of precision loss, a flag indicates whether that is acceptable. */
-    static public final long mantissaFor(long currentMantissa, int currentScale, int desiredScale, boolean allowRounding) {
+    public static final long mantissaFor(long currentMantissa, int currentScale, int desiredScale, boolean allowRounding) {
         if (currentMantissa == 0L) {
             return currentMantissa;
         }

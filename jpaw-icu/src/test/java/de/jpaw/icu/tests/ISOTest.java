@@ -27,7 +27,7 @@ public class ISOTest {
 
     @Test
     public void testJavaCurrencies() throws Exception {
-        List<CurrencyData> all = JavaCurrencyDataProvider.instance.getAll();
+        List<CurrencyData> all = JavaCurrencyDataProvider.INSTANCE.getAll();
         System.out.println("I got " + all.size() + " currencies from Java");
         assert(all.size() > 200);   // jdk 1.8.031: 220
     }
@@ -66,7 +66,7 @@ public class ISOTest {
 
     @Test
     public void testJavaCurrenciesWithMoreDecimals() throws Exception {
-        List<CurrencyData> all = JavaCurrencyDataProvider.instance.getAll();
+        List<CurrencyData> all = JavaCurrencyDataProvider.INSTANCE.getAll();
         for (CurrencyData cd: all) {
             if (cd.getDefaultFractionDigits() > 2)
                 System.out.println(cd.getCurrencyCode() + " has " + cd.getDefaultFractionDigits() + " decimals (" + cd.getDisplayName() + ")");
@@ -75,7 +75,7 @@ public class ISOTest {
 
     @Test
     public void testICUCurrencies() throws Exception {
-        List<CurrencyData> all = ICUCurrencyDataProvider.instance.getAll();
+        List<CurrencyData> all = ICUCurrencyDataProvider.INSTANCE.getAll();
         System.out.println("I got " + all.size() + " currencies from ICU");
         assert(all.size() > 200);   // ICU 54.1.1: 296
     }

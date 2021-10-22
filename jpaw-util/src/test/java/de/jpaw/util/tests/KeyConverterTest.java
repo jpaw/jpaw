@@ -47,7 +47,7 @@ public class KeyConverterTest {
     @Test
     public void testA3ToInt() throws Exception {
         if (initCache)
-            CurrencyKeyConverter.populateCache(JavaCurrencyDataProvider.instance);
+            CurrencyKeyConverter.populateCache(JavaCurrencyDataProvider.INSTANCE);
         Assert.assertEquals(CurrencyKeyConverter.currencyCodeA3ToInt("USD"), 2);
         Assert.assertEquals(CurrencyKeyConverter.currencyCodeA3ToInt("TND"), 100 + 19 * 676 + 13 * 26 + 3);
         Assert.assertEquals(CurrencyKeyConverter.currencyCodeA3ToInt("XXX"), 1);
@@ -56,7 +56,7 @@ public class KeyConverterTest {
     @Test
     public void testIntToA3() throws Exception {
         if (initCache)
-            CurrencyKeyConverter.populateCache(JavaCurrencyDataProvider.instance);
+            CurrencyKeyConverter.populateCache(JavaCurrencyDataProvider.INSTANCE);
         Assert.assertEquals(CurrencyKeyConverter.intToCurrencyCodeA3(2), "USD");
         Assert.assertEquals(CurrencyKeyConverter.intToCurrencyCodeA3(100 + 19 * 676 + 13 * 26 + 3), "TND");
         Assert.assertEquals(CurrencyKeyConverter.intToCurrencyCodeA3(1), "XXX");

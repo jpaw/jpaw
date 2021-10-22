@@ -3,7 +3,9 @@ package de.jpaw.util;
 /**
  * Escapes control characters in a string, to allow editing of serialized Bonaportable objects for example.
  */
-public class StringSerializer {
+public final class StringSerializer {
+
+    private StringSerializer() { }
 
     /**
      * The escape char to display the bonaportable control chars
@@ -90,9 +92,9 @@ public class StringSerializer {
         int i = 0;
         while (i < src.length()) {
             char c = src.charAt(i);
-            if (c == '<' && i < src.length() - 2 && src.charAt(i+2) == '>') {
+            if (c == '<' && i < src.length() - 2 && src.charAt(i + 2) == '>') {
                 // escaped?
-                c = src.charAt(i+1);
+                c = src.charAt(i + 1);
                 if (c >= '@' && c < 96) {
                     result.append((char)(c - 64));
                     i += 3;

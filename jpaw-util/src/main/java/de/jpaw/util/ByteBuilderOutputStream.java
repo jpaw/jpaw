@@ -45,11 +45,11 @@ public class ByteBuilderOutputStream extends OutputStream {
     }
 
     @Override
-    public void write(byte [] b, int offset, int len) throws IOException {
+    public void write(byte[] b, int offset, int len) throws IOException {
         buff.write(b, offset, len);
     }
 
-    public ByteArray asByteArray() {
+    public final ByteArray asByteArray() {
         return new ByteArray(buff.getCurrentBuffer(), 0, buff.length());
     }
 }

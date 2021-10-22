@@ -26,7 +26,7 @@ import org.openjdk.jmh.infra.Blackhole;
 @State(value = Scope.Thread)
 @OperationsPerInvocation(TimeTest.OPERATIONS_PER_INVOCATION)
 public class TimeTest {
-    static public final int OPERATIONS_PER_INVOCATION = 100000;
+    public static final int OPERATIONS_PER_INVOCATION = 100000;
 
 
 //

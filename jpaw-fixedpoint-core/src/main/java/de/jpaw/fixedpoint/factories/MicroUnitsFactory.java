@@ -23,27 +23,27 @@ public class MicroUnitsFactory implements FixedPointFactory<MicroUnits> {
     }
 
     @Override
-    public MicroUnits of(long mantissa) {
+    public MicroUnits of(final long mantissa) {
         return MicroUnits.of(mantissa);
     }
 
     @Override
-    public MicroUnits valueOf(String s) {
+    public MicroUnits valueOf(final String s) {
         return MicroUnits.valueOf(s);
     }
 
     @Override
-    public MicroUnits valueOf(long n) {
+    public MicroUnits valueOf(final long n) {
         return MicroUnits.valueOf(n);
     }
 
     @Override
-    public MicroUnits valueOf(BigDecimal n) {
+    public MicroUnits valueOf(final BigDecimal n) {
         return MicroUnits.of(n); // naming mismatch
     }
 
     @Override
-    public MicroUnits valueOf(double n) {
+    public MicroUnits valueOf(final double n) {
         return MicroUnits.valueOf(n);
     }
 }

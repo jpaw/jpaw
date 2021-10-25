@@ -12,7 +12,7 @@ import de.jpaw.fixedpoint.types.VariableUnits;
 
 public class TestStringConversions {
     private static class TestCase {
-        public TestCase(String stringRep, FixedPointBase<?> data) {
+        TestCase(String stringRep, FixedPointBase<?> data) {
             super();
             this.stringRep = stringRep;
             this.data = data;

@@ -23,27 +23,27 @@ public class NanoUnitsFactory implements FixedPointFactory<NanoUnits> {
     }
 
     @Override
-    public NanoUnits of(long mantissa) {
+    public NanoUnits of(final long mantissa) {
         return NanoUnits.of(mantissa);
     }
 
     @Override
-    public NanoUnits valueOf(String s) {
+    public NanoUnits valueOf(final String s) {
         return NanoUnits.valueOf(s);
     }
 
     @Override
-    public NanoUnits valueOf(long n) {
+    public NanoUnits valueOf(final long n) {
         return NanoUnits.valueOf(n);
     }
 
     @Override
-    public NanoUnits valueOf(BigDecimal n) {
+    public NanoUnits valueOf(final BigDecimal n) {
         return NanoUnits.of(n); // naming mismatch
     }
 
     @Override
-    public NanoUnits valueOf(double n) {
+    public NanoUnits valueOf(final double n) {
         return NanoUnits.valueOf(n);
     }
 }

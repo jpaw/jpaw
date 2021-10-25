@@ -20,12 +20,12 @@ public final class MilliUnits extends FixedPointBase<MilliUnits> {
     public static final MilliUnits ONE = new MilliUnits(UNIT_MANTISSA);
 
     // external callers use valueOf factory method, which returns existing objects for 0 and 1. This constructor is used by the factory methods
-    private MilliUnits(long mantissa) {
+    private MilliUnits(final long mantissa) {
         super(mantissa);
     }
 
     /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
-    public static MilliUnits of(long mantissa) {
+    public static MilliUnits of(final long mantissa) {
         // caching checks...
         if (mantissa == 0)
             return ZERO;
@@ -35,31 +35,31 @@ public final class MilliUnits extends FixedPointBase<MilliUnits> {
     }
 
     /** Constructs an instance with a specified integral value. See also of(long mantissa), which constructs an instance with a specified mantissa. */
-    public static MilliUnits valueOf(long value) {
+    public static MilliUnits valueOf(final long value) {
         return of(value * UNIT_MANTISSA);
     }
 
     /** Constructs an instance with a value specified via a parameter of type double. */
-    public static MilliUnits valueOf(double value) {
+    public static MilliUnits valueOf(final double value) {
         return of(Math.round(value * UNIT_SCALE));
     }
 
     /** Constructs an instance with a value specified via string representation. */
-    public static MilliUnits valueOf(String value) {
+    public static MilliUnits valueOf(final String value) {
         return of(parseMantissa(value, DECIMALS));
     }
 
     /** Returns a re-typed instance of another fixed point type. Loosing precision is not supported. */
-    public static MilliUnits of(FixedPointBase<?> that) {
-        int scaleDiff = DECIMALS - that.scale();
+    public static MilliUnits of(final FixedPointBase<?> that) {
+        final int scaleDiff = DECIMALS - that.scale();
         if (scaleDiff >= 0)
             return MilliUnits.of(that.getMantissa() * POWERS_OF_TEN[scaleDiff]);
         throw new ArithmeticException("Retyping with reduction of scale requires specfication of a rounding mode");
     }
 
     /** Returns a re-typed instance of that. */
-    public static MilliUnits of(FixedPointBase<?> that, RoundingMode rounding) {
-        int scaleDiff = DECIMALS - that.scale();
+    public static MilliUnits of(final FixedPointBase<?> that, final RoundingMode rounding) {
+        final int scaleDiff = DECIMALS - that.scale();
         if (scaleDiff >= 0)
             return MilliUnits.of(that.getMantissa() * POWERS_OF_TEN[scaleDiff]);
         // rescale
@@ -69,12 +69,12 @@ public final class MilliUnits extends FixedPointBase<MilliUnits> {
     /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>.
      * Deprecated. Use valueOf() instead. */
     @Deprecated
-    public static MilliUnits of(BigDecimal number) {
+    public static MilliUnits of(final BigDecimal number) {
         return valueOf(number);
     }
 
     /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>. */
-    public static MilliUnits valueOf(BigDecimal number) {
+    public static MilliUnits valueOf(final BigDecimal number) {
         final int scaleOfBigDecimal = number.scale();
         if (scaleOfBigDecimal <= 0) {
             // the value of the BigDecimal is integral
@@ -89,7 +89,7 @@ public final class MilliUnits extends FixedPointBase<MilliUnits> {
 
     /** Returns an instance of this class with a specified mantissa. */
     @Override
-    public MilliUnits newInstanceOf(long mantissa) {
+    public MilliUnits newInstanceOf(final long mantissa) {
         if (mantissa == this.mantissa)
             return this;
         return of(mantissa);
@@ -128,7 +128,7 @@ public final class MilliUnits extends FixedPointBase<MilliUnits> {
     }
 
     /** Used by deserialization code of the bonaparte adapters, to avoid separate adapter classes. */
-    public static MilliUnits unmarshal(Long mantissa) {
+    public static MilliUnits unmarshal(final Long mantissa) {
         return mantissa == null ? null : of(mantissa.longValue());
     }
 

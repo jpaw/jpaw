@@ -12,9 +12,9 @@ public final class FixedPointNative {
             System.loadLibrary(LIBRARY_NAME); // Load native library at runtime
             System.out.println("Successfully loaded native library " + LIBRARY_NAME);
             nativeAvailable = true;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println("Failed to load native library " + LIBRARY_NAME + ": " + e);
-        } catch (UnsatisfiedLinkError e) {
+        } catch (final UnsatisfiedLinkError e) {
             System.out.println("Failed to call native library " + LIBRARY_NAME + ": " + e);
         }
     }
@@ -25,29 +25,29 @@ public final class FixedPointNative {
     private static native long multdiv128(long a, long b, long c, int roundingMode);
 
     /** multiply and divide - generic entry. Computes a * p / q. */
-    public static long mult_div(long a, long p, long q, RoundingMode rounding) {
+    public static long mult_div(final long a, final long p, final long q, final RoundingMode rounding) {
         if (nativeAvailable) {
             return multdiv128(a, p, q, rounding.ordinal());
         }
         // fallback implementation.
-        BigDecimal product = BigDecimal.valueOf(a).multiply(BigDecimal.valueOf(p)).divide(BigDecimal.valueOf(q), rounding);
+        final BigDecimal product = BigDecimal.valueOf(a).multiply(BigDecimal.valueOf(p)).divide(BigDecimal.valueOf(q), rounding);
         return product.longValue();
     }
 
 
     /** decimalsScale is in range 0..18 */
-    public static long multiply_and_scale(long mantissaA, long mantissaB, int decimalsScale, RoundingMode rounding) {
+    public static long multiply_and_scale(final long mantissaA, final long mantissaB, final int decimalsScale, final RoundingMode rounding) {
         if (nativeAvailable) {
             return multdiv128(mantissaA, mantissaB, FixedPointBase.POWERS_OF_TEN[decimalsScale], rounding.ordinal());
         }
         // fallback implementation. Is there a better one with just BigInteger?
-        BigDecimal product = BigDecimal.valueOf(mantissaA).multiply(BigDecimal.valueOf(mantissaB, decimalsScale));
-        BigDecimal scaledProduct = product.setScale(0, rounding);
+        final BigDecimal product = BigDecimal.valueOf(mantissaA).multiply(BigDecimal.valueOf(mantissaB, decimalsScale));
+        final BigDecimal scaledProduct = product.setScale(0, rounding);
         return scaledProduct.longValue();
     }
 
     /** decimalsScale is in range 0..18 */
-    public static long scale_and_divide(long mantissa, int decimalsScale, long divisor, RoundingMode rounding) {
+    public static long scale_and_divide(long mantissa, final int decimalsScale, long divisor, final RoundingMode rounding) {
         if (divisor < 0) {
             // move the sign to the dividend
             divisor  = -divisor;
@@ -57,7 +57,7 @@ public final class FixedPointNative {
             return multdiv128(mantissa, FixedPointBase.POWERS_OF_TEN[decimalsScale], divisor, rounding.ordinal());
         }
         // fallback implementation. Is there a better one with just BigInteger?
-        BigDecimal quotient = BigDecimal.valueOf(mantissa).divide(BigDecimal.valueOf(divisor, decimalsScale), 0, rounding);
+        final BigDecimal quotient = BigDecimal.valueOf(mantissa).divide(BigDecimal.valueOf(divisor, decimalsScale), 0, rounding);
         return quotient.longValue();
     }
 

@@ -18,105 +18,105 @@ public final class FixedPointExtensions {
     private FixedPointExtensions() { }
 
     // suffix-like methods, as Xtend syntax sugar (16.millis)
-    public static Units units(long a) {
+    public static Units units(final long a) {
         return Units.of(a);
     }
 
-    public static Tenths tenths(long a) {
+    public static Tenths tenths(final long a) {
         return Tenths.of(a);
     }
 
-    public static Hundreds hundreds(long a) {
+    public static Hundreds hundreds(final long a) {
         return Hundreds.of(a);
     }
 
-    public static MilliUnits millis(long a) {
+    public static MilliUnits millis(final long a) {
         return MilliUnits.of(a);
     }
 
-    public static MicroUnits micros(long a) {
+    public static MicroUnits micros(final long a) {
         return MicroUnits.of(a);
     }
 
-    public static NanoUnits nanos(long a) {
+    public static NanoUnits nanos(final long a) {
         return NanoUnits.of(a);
     }
 
-    public static PicoUnits picos(long a) {
+    public static PicoUnits picos(final long a) {
         return PicoUnits.of(a);
     }
 
-    public static FemtoUnits femtos(long a) {
+    public static FemtoUnits femtos(final long a) {
         return FemtoUnits.of(a);
     }
 
     // type casts
-    public static Units asUnits(FixedPointBase<?> a) {
+    public static Units asUnits(final FixedPointBase<?> a) {
         return Units.of(a);
     }
 
-    public static MilliUnits asMillis(FixedPointBase<?> a) {
+    public static MilliUnits asMillis(final FixedPointBase<?> a) {
         return MilliUnits.of(a);
     }
 
-    public static MicroUnits asMicros(FixedPointBase<?> a) {
+    public static MicroUnits asMicros(final FixedPointBase<?> a) {
         return MicroUnits.of(a);
     }
 
-    public static NanoUnits asNanos(FixedPointBase<?> a) {
+    public static NanoUnits asNanos(final FixedPointBase<?> a) {
         return NanoUnits.of(a);
     }
 
-    public static PicoUnits asPicos(FixedPointBase<?> a) {
+    public static PicoUnits asPicos(final FixedPointBase<?> a) {
         return PicoUnits.of(a);
     }
 
-    public static FemtoUnits asFemtos(FixedPointBase<?> a) {
+    public static FemtoUnits asFemtos(final FixedPointBase<?> a) {
         return FemtoUnits.of(a);
     }
 
-    public static VariableUnits asVariable(FixedPointBase<?> a) {
+    public static VariableUnits asVariable(final FixedPointBase<?> a) {
         return VariableUnits.of(a);
     }
 
     // percent is a synonym to hundreds, when applied to an integer
-    public static Hundreds percent(long a) {
+    public static Hundreds percent(final long a) {
         return Hundreds.of(a);
     }
 
 
     // type conversions with possible scale
-    public static Units asUnits(FixedPointBase<?> a, RoundingMode rounding) {
+    public static Units asUnits(final FixedPointBase<?> a, final RoundingMode rounding) {
         return Units.of(a, rounding);
     }
 
-    public static MilliUnits asMillis(FixedPointBase<?> a, RoundingMode rounding) {
+    public static MilliUnits asMillis(final FixedPointBase<?> a, final RoundingMode rounding) {
         return MilliUnits.of(a, rounding);
     }
 
-    public static MicroUnits asMicros(FixedPointBase<?> a, RoundingMode rounding) {
+    public static MicroUnits asMicros(final FixedPointBase<?> a, final RoundingMode rounding) {
         return MicroUnits.of(a, rounding);
     }
 
-    public static NanoUnits asNanos(FixedPointBase<?> a, RoundingMode rounding) {
+    public static NanoUnits asNanos(final FixedPointBase<?> a, final RoundingMode rounding) {
         return NanoUnits.of(a, rounding);
     }
 
-    public static PicoUnits asPicos(FixedPointBase<?> a, RoundingMode rounding) {
+    public static PicoUnits asPicos(final FixedPointBase<?> a, final RoundingMode rounding) {
         return PicoUnits.of(a, rounding);
     }
 
-    public static FemtoUnits asFemtos(FixedPointBase<?> a, RoundingMode rounding) {
+    public static FemtoUnits asFemtos(final FixedPointBase<?> a, final RoundingMode rounding) {
         return FemtoUnits.of(a, rounding);
     }
 
-    public static VariableUnits ofScale(long a, int scale) {
+    public static VariableUnits ofScale(final long a, final int scale) {
         return VariableUnits.valueOf(a, scale);
     }
 
-    public static FixedPointBase<?> gsum(Iterable<FixedPointBase<?>> iterable) {
+    public static FixedPointBase<?> gsum(final Iterable<FixedPointBase<?>> iterable) {
         FixedPointBase<?> sum = Units.ZERO;
-        for (FixedPointBase<?> a : iterable) {
+        for (final FixedPointBase<?> a : iterable) {
             sum = sum.gadd(a);
         }
         return sum;
@@ -124,29 +124,29 @@ public final class FixedPointExtensions {
 
     // sum iterable extension. Attn! Due to the unknown type, for an empty iterator, null is returned.
     // altering this would need to define it per subtype, but then it cannot be applied to generic types any more.
-    public static <CLASS extends FixedPointBase<CLASS>> CLASS sum(Iterable<CLASS> iterable) {
+    public static <CLASS extends FixedPointBase<CLASS>> CLASS sum(final Iterable<CLASS> iterable) {
         CLASS sum = null;
-        for (CLASS a : iterable) {
+        for (final CLASS a : iterable) {
             sum = sum != null ? sum.add(a) : a;
         }
         return sum;
     }
 
-    public static <CLASS extends FixedPointBase<CLASS>> CLASS operator_plus(CLASS a, CLASS b) {
+    public static <CLASS extends FixedPointBase<CLASS>> CLASS operator_plus(final CLASS a, final CLASS b) {
         return a.add(b);
     }
-    public static <CLASS extends FixedPointBase<CLASS>> CLASS operator_minus(CLASS a, CLASS b) {
+    public static <CLASS extends FixedPointBase<CLASS>> CLASS operator_minus(final CLASS a, final CLASS b) {
         return a.subtract(b);
     }
-    public static <CLASS extends FixedPointBase<CLASS>> CLASS operator_multiply(CLASS a, int b) {
+    public static <CLASS extends FixedPointBase<CLASS>> CLASS operator_multiply(final CLASS a, final int b) {
         return a.multiply(b);
     }
     /** Xtend syntax sugar. unary minus maps to the negate method. */
-    public static <CLASS extends FixedPointBase<CLASS>> CLASS operator_minus(CLASS a) {
+    public static <CLASS extends FixedPointBase<CLASS>> CLASS operator_minus(final CLASS a) {
         return a.negate();
     }
     /** Xtend syntax sugar. not maps to the isZero method. */
-    public static <CLASS extends FixedPointBase<CLASS>> boolean operator_not(CLASS a) {
+    public static <CLASS extends FixedPointBase<CLASS>> boolean operator_not(final CLASS a) {
         return a.getMantissa() == 0;
     }
 

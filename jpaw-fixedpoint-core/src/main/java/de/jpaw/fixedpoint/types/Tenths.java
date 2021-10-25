@@ -20,12 +20,12 @@ public final class Tenths extends FixedPointBase<Tenths> {
     public static final Tenths ONE = new Tenths(UNIT_MANTISSA);
 
     // external callers use valueOf factory method, which returns existing objects for 0 and 1. This constructor is used by the factory methods
-    private Tenths(long mantissa) {
+    private Tenths(final long mantissa) {
         super(mantissa);
     }
 
     /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
-    public static Tenths of(long mantissa) {
+    public static Tenths of(final long mantissa) {
         // caching checks...
         if (mantissa == 0)
             return ZERO;
@@ -35,31 +35,31 @@ public final class Tenths extends FixedPointBase<Tenths> {
     }
 
     /** Constructs an instance with a specified integral value. See also of(long mantissa), which constructs an instance with a specified mantissa. */
-    public static Tenths valueOf(long value) {
+    public static Tenths valueOf(final long value) {
         return of(value * UNIT_MANTISSA);
     }
 
     /** Constructs an instance with a value specified via a parameter of type double. */
-    public static Tenths valueOf(double value) {
+    public static Tenths valueOf(final double value) {
         return of(Math.round(value * UNIT_SCALE));
     }
 
     /** Constructs an instance with a value specified via string representation. */
-    public static Tenths valueOf(String value) {
+    public static Tenths valueOf(final String value) {
         return of(parseMantissa(value, DECIMALS));
     }
 
     /** Returns a re-typed instance of another fixed point type. Loosing precision is not supported. */
-    public static Tenths of(FixedPointBase<?> that) {
-        int scaleDiff = DECIMALS - that.scale();
+    public static Tenths of(final FixedPointBase<?> that) {
+        final int scaleDiff = DECIMALS - that.scale();
         if (scaleDiff >= 0)
             return Tenths.of(that.getMantissa() * POWERS_OF_TEN[scaleDiff]);
         throw new ArithmeticException("Retyping with reduction of scale requires specfication of a rounding mode");
     }
 
     /** Returns a re-typed instance of that. */
-    public static Tenths of(FixedPointBase<?> that, RoundingMode rounding) {
-        int scaleDiff = DECIMALS - that.scale();
+    public static Tenths of(final FixedPointBase<?> that, final RoundingMode rounding) {
+        final int scaleDiff = DECIMALS - that.scale();
         if (scaleDiff >= 0)
             return Tenths.of(that.getMantissa() * POWERS_OF_TEN[scaleDiff]);
         // rescale
@@ -69,12 +69,12 @@ public final class Tenths extends FixedPointBase<Tenths> {
     /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>.
      * Deprecated. Use valueOf() instead. */
     @Deprecated
-    public static Tenths of(BigDecimal number) {
+    public static Tenths of(final BigDecimal number) {
         return valueOf(number);
     }
 
     /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>. */
-    public static Tenths valueOf(BigDecimal number) {
+    public static Tenths valueOf(final BigDecimal number) {
         final int scaleOfBigDecimal = number.scale();
         if (scaleOfBigDecimal <= 0) {
             // the value of the BigDecimal is integral
@@ -89,7 +89,7 @@ public final class Tenths extends FixedPointBase<Tenths> {
 
     /** Returns an instance of this class with a specified mantissa. */
     @Override
-    public Tenths newInstanceOf(long mantissa) {
+    public Tenths newInstanceOf(final long mantissa) {
         if (mantissa == this.mantissa)
             return this;
         return of(mantissa);
@@ -128,7 +128,7 @@ public final class Tenths extends FixedPointBase<Tenths> {
     }
 
     /** Used by deserialization code of the bonaparte adapters, to avoid separate adapter classes. */
-    public static Tenths unmarshal(Long mantissa) {
+    public static Tenths unmarshal(final Long mantissa) {
         return mantissa == null ? null : of(mantissa.longValue());
     }
 

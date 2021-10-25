@@ -14,7 +14,7 @@ public final class FixedPointSelector {
 
     private FixedPointSelector() { }
 
-    public static FixedPointBase<?> getZeroForScale(int scale) {
+    public static FixedPointBase<?> getZeroForScale(final int scale) {
         switch (VariableUnits.scaleCheck(scale)) {
         case  0: return Units.ZERO;
         case  1: return Tenths.ZERO;

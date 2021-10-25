@@ -23,27 +23,27 @@ public class MilliUnitsFactory implements FixedPointFactory<MilliUnits> {
     }
 
     @Override
-    public MilliUnits of(long mantissa) {
+    public MilliUnits of(final long mantissa) {
         return MilliUnits.of(mantissa);
     }
 
     @Override
-    public MilliUnits valueOf(String s) {
+    public MilliUnits valueOf(final String s) {
         return MilliUnits.valueOf(s);
     }
 
     @Override
-    public MilliUnits valueOf(long n) {
+    public MilliUnits valueOf(final long n) {
         return MilliUnits.valueOf(n);
     }
 
     @Override
-    public MilliUnits valueOf(BigDecimal n) {
+    public MilliUnits valueOf(final BigDecimal n) {
         return MilliUnits.of(n); // naming mismatch
     }
 
     @Override
-    public MilliUnits valueOf(double n) {
+    public MilliUnits valueOf(final double n) {
         return MilliUnits.valueOf(n);
     }
 }

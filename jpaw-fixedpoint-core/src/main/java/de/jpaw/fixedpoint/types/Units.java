@@ -19,12 +19,12 @@ public final class Units extends FixedPointBase<Units> {
     public static final Units ONE = new Units(UNIT_MANTISSA);
 
     // external callers use valueOf factory method, which returns existing objects for 0 and 1. This constructor is used by the factory methods
-    private Units(long mantissa) {
+    private Units(final long mantissa) {
         super(mantissa);
     }
 
     /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
-    public static Units of(long mantissa) {
+    public static Units of(final long mantissa) {
         // caching checks...
         if (mantissa == 0)
             return ZERO;
@@ -34,31 +34,31 @@ public final class Units extends FixedPointBase<Units> {
     }
 
     /** Constructs an instance with a specified integral value. See also of(long mantissa), which constructs an instance with a specified mantissa. */
-    public static Units valueOf(long value) {
+    public static Units valueOf(final long value) {
         return of(value);
     }
 
     /** Constructs an instance with a value specified via a parameter of type double. */
-    public static Units valueOf(double value) {
+    public static Units valueOf(final double value) {
         return of(Math.round(value));
     }
 
     /** Constructs an instance with a value specified via string representation. */
-    public static Units valueOf(String value) {
+    public static Units valueOf(final String value) {
         return of(parseMantissa(value, DECIMALS));
     }
 
     /** Returns a re-typed instance of another fixed point type. Loosing precision is not supported. */
-    public static Units of(FixedPointBase<?> that) {
-        int scaleDiff = DECIMALS - that.scale();
+    public static Units of(final FixedPointBase<?> that) {
+        final int scaleDiff = DECIMALS - that.scale();
         if (scaleDiff >= 0)
             return Units.of(that.getMantissa() * POWERS_OF_TEN[scaleDiff]);
         throw new ArithmeticException("Retyping with reduction of scale requires specfication of a rounding mode");
     }
 
     /** Returns a re-typed instance of that. */
-    public static Units of(FixedPointBase<?> that, RoundingMode rounding) {
-        int scaleDiff = DECIMALS - that.scale();
+    public static Units of(final FixedPointBase<?> that, final RoundingMode rounding) {
+        final int scaleDiff = DECIMALS - that.scale();
         if (scaleDiff >= 0)
             return Units.of(that.getMantissa() * POWERS_OF_TEN[scaleDiff]);
         // rescale
@@ -68,12 +68,12 @@ public final class Units extends FixedPointBase<Units> {
     /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>.
      * Deprecated. Use valueOf() instead. */
     @Deprecated
-    public static Units of(BigDecimal number) {
+    public static Units of(final BigDecimal number) {
         return valueOf(number);
     }
 
     /** Constructs an instance with a value specified via a parameter of type <code>BigDecimal</code>. */
-    public static Units valueOf(BigDecimal number) {
+    public static Units valueOf(final BigDecimal number) {
         final int scaleOfBigDecimal = number.scale();
         if (scaleOfBigDecimal <= 0) {
             // the value of the BigDecimal is integral
@@ -88,7 +88,7 @@ public final class Units extends FixedPointBase<Units> {
 
     /** Returns an instance of this class with a specified mantissa. */
     @Override
-    public Units newInstanceOf(long mantissa) {
+    public Units newInstanceOf(final long mantissa) {
         if (mantissa == this.mantissa)
             return this;
         return of(mantissa);
@@ -127,7 +127,7 @@ public final class Units extends FixedPointBase<Units> {
     }
 
     /** Used by deserialization code of the bonaparte adapters, to avoid separate adapter classes. */
-    public static Units unmarshal(Long mantissa) {
+    public static Units unmarshal(final Long mantissa) {
         return mantissa == null ? null : of(mantissa.longValue());
     }
 

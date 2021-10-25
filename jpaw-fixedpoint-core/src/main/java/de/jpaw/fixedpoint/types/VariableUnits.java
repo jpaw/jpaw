@@ -6,7 +6,7 @@ import java.util.List;
 
 import de.jpaw.fixedpoint.FixedPointBase;
 
-public class VariableUnits extends FixedPointBase<VariableUnits> {
+public final class VariableUnits extends FixedPointBase<VariableUnits> {
     private static final long serialVersionUID = 8621674182590849295L;
     private final int scale;
     private static final VariableUnits[] ZEROs = {
@@ -52,46 +52,46 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
             new VariableUnits(POWERS_OF_TEN[18], 18)
     };
 
-    public static final int scaleCheck(int scale) {
+    public static int scaleCheck(final int scale) {
         if (scale < 0 || scale > 18)
             throw new IllegalArgumentException("Illegal scale " + scale + ", must be in range [0,18]");
         return scale;
     }
 
     /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
-    public static VariableUnits of(long mantissa, int scale) {
+    public static VariableUnits of(final long mantissa, final int scale) {
         return ZEROs[scale].newInstanceOf(mantissa);
     }
 
     /** Constructs an instance with a specified integral value. See also of(long mantissa), which constructs an instance with a specified mantissa. */
-    public static VariableUnits valueOf(long value) {
+    public static VariableUnits valueOf(final long value) {
         return ZEROs[0].newInstanceOf(value);
     }
 
     /** Returns a re-typed instance of that. Loosing precision is not supported. */
-    public static VariableUnits of(FixedPointBase<?> that) {
+    public static VariableUnits of(final FixedPointBase<?> that) {
         return ZEROs[that.scale()].newInstanceOf(that.getMantissa());
     }
 
     /** Returns a re-typed instance of that. SAME AS THE PREVIOUS METHOD, provided for symmetry. */
-    public static VariableUnits of(FixedPointBase<?> that, RoundingMode rounding) {
+    public static VariableUnits of(final FixedPointBase<?> that, final RoundingMode rounding) {
         return ZEROs[that.scale()].newInstanceOf(that.getMantissa());
     }
 
     // This is certainly not be the most efficient implementation, as it involves the construction of up to 2 new BigDecimals
     // TODO: replace it by a zero GC version
-    public static VariableUnits valueOf(BigDecimal number, int scale) {
+    public static VariableUnits valueOf(final BigDecimal number, final int scale) {
         return valueOf(number.setScale(scale, RoundingMode.UNNECESSARY).scaleByPowerOfTen(scale).longValue(), scale);
     }
 
     /** Subroutine for valueOf(String) and String constructor, to define the desired number of digits. */
-    private static final int parseTargetScale(String src) {
-        int indexOfDecimalPoint = src.indexOf('.');
+    private static int parseTargetScale(final String src) {
+        final int indexOfDecimalPoint = src.indexOf('.');
         return indexOfDecimalPoint < 0 ? 0 : src.length() - indexOfDecimalPoint - 1;
     }
 
     /** Factory method. Similar to the constructor, but returns cached instances for 0 and 1. */
-    public static VariableUnits valueOf(long mantissa, int scale) {
+    public static VariableUnits valueOf(final long mantissa, final int scale) {
         scaleCheck(scale);
         if (mantissa == 0)
             return ZEROs[scale];
@@ -101,24 +101,24 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
     }
 
     /** Constructs an instance with a specified value specified via string representation. */
-    public static VariableUnits valueOf(String value) {
-        int newScale = scaleCheck(parseTargetScale(value));
+    public static VariableUnits valueOf(final String value) {
+        final int newScale = scaleCheck(parseTargetScale(value));
         return ZEROs[newScale].newInstanceOf(parseMantissa(value, newScale));
     }
 
-    private VariableUnits(long mantissa, int scale) {
+    private VariableUnits(final long mantissa, final int scale) {
         super(mantissa);
         this.scale = scaleCheck(scale);
     }
 
-    public static VariableUnits parse(String value) {
+    public static VariableUnits parse(final String value) {
         final int _scale = parseTargetScale(value);
         final long _mantissa = parseMantissa(value, scaleCheck(_scale));
         return valueOf(_mantissa, _scale);
     }
 
     @Override
-    public VariableUnits newInstanceOf(long mantissa) {
+    public VariableUnits newInstanceOf(final long mantissa) {
         // caching checks...
         if (mantissa == 0)
             return ZEROs[scale];
@@ -161,8 +161,8 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
 
     /** Adds two fixed point numbers of exactly same type. For variable scale subtypes, the scale of the sum is the bigger of the operand scales. */
     @Override
-    public VariableUnits add(VariableUnits that) {
-        int diff = this.scale() - that.scale();
+    public VariableUnits add(final VariableUnits that) {
+        final int diff = this.scale() - that.scale();
         if (diff >= 0)
             return this.newInstanceOf(this.mantissa + POWERS_OF_TEN[diff] * that.mantissa);
         else
@@ -171,12 +171,12 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
 
     /** Subtracts two fixed point numbers of exactly same type. For variable scale subtypes, the scale of the sum is the bigger of the operand scales. */
     @Override
-    public VariableUnits subtract(VariableUnits that) {
+    public VariableUnits subtract(final VariableUnits that) {
         if (that.mantissa == 0L) {
             return getMyself();
         }
         // first checks, if we can void adding the numbers and return either operand.
-        int diff = this.scale() - that.scale();
+        final int diff = this.scale() - that.scale();
         if (diff >= 0)
             return this.newInstanceOf(this.mantissa - POWERS_OF_TEN[diff] * that.mantissa);
         else
@@ -185,14 +185,14 @@ public class VariableUnits extends FixedPointBase<VariableUnits> {
 
 
     /** Create a new VariableUnits instance as the sum of the provided generic FixedPoint numbers. */
-    public static VariableUnits sumOf(List<? extends FixedPointBase<?>> components, boolean addOne) {
+    public static VariableUnits sumOf(final List<? extends FixedPointBase<?>> components, final boolean addOne) {
         int maxScale = 0;
-        for (FixedPointBase<?> e : components) {
+        for (final FixedPointBase<?> e : components) {
             if (e.scale() > maxScale)
                 maxScale = e.scale();
         }
         long sum = addOne ? POWERS_OF_TEN[maxScale] : 0;
-        for (FixedPointBase<?> e : components) {
+        for (final FixedPointBase<?> e : components) {
             sum += e.getMantissa() * POWERS_OF_TEN[maxScale - e.scale()];
         }
         return VariableUnits.of(sum, maxScale);

@@ -997,6 +997,14 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         return this.newInstanceOf(this.mantissa - that.mantissa);
     }
 
+    /** Computes this * a/b, using a specified RoundingMode. */
+    public CLASS multAndDivide(final int multiplicator, final int divisor, final RoundingMode roundingMode) {
+        if (divisor == 0)
+            throw new ArithmeticException("Division by 0");
+        final long newMantissa = divide_longs(mantissa * multiplicator, divisor, roundingMode);
+        return newInstanceOf(newMantissa);
+    }
+
     /** Divides a number by an integer, at maximum precision, using RoundingMode.DOWN. */
     public CLASS divide(final int divisor) {
         if (divisor == 0)
@@ -1007,6 +1015,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             return this.negate();
         return newInstanceOf(mantissa / divisor);
     }
+
     /** Xtend syntax sugar. divide maps to the divide method. */
     public CLASS operator_divide(final int divisor) {
         return divide(divisor);

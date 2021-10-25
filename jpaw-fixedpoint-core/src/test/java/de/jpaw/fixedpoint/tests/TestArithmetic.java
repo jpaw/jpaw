@@ -101,4 +101,11 @@ public class TestArithmetic {
        Assertions.assertEquals(-3L, MicroUnits.of(-3_140_000).longValue());
        Assertions.assertEquals(-3L, BigDecimal.valueOf(-3.14).longValue());
     }
+
+    @Test
+    public void testMultDivide() throws Exception {
+       Assertions.assertEquals(MicroUnits.of(666_667), MicroUnits.ONE.multAndDivide(2, 3, RoundingMode.HALF_EVEN));
+       Assertions.assertEquals(MicroUnits.of(666_666), MicroUnits.ONE.multAndDivide(2, 3, RoundingMode.DOWN));
+       Assertions.assertEquals(MicroUnits.of(666_667), MicroUnits.ONE.multAndDivide(2, 3, RoundingMode.UP));
+    }
 }

@@ -12,7 +12,7 @@ public abstract class AbstractXEnumBase<E extends AbstractXEnumBase<E>> implemen
     private final String _token;
     private final XEnumFactory<E> _factory;
 
-    protected AbstractXEnumBase(Enum<?> enumVal, int ordinal, String name, String token, XEnumFactory<E> factory) {
+    protected AbstractXEnumBase(final Enum<?> enumVal, final int ordinal, final String name, final String token, final XEnumFactory<E> factory) {
         this._enum = enumVal;
         this._ordinal = ordinal;
         this._name = name;
@@ -56,7 +56,7 @@ public abstract class AbstractXEnumBase<E extends AbstractXEnumBase<E>> implemen
     }
 
     @Override
-    public int compareTo(E o) {
+    public int compareTo(final E o) {
         if (_factory.getBaseClass() != o.getFactory().getBaseClass())
             throw new ClassCastException("Comparing XEnum of base class " + _factory.getBaseClass().getSimpleName() + " with " + o.getFactory().getBaseClass().getSimpleName());
         return Integer.valueOf(_ordinal).compareTo(o.ordinal());
@@ -75,7 +75,7 @@ public abstract class AbstractXEnumBase<E extends AbstractXEnumBase<E>> implemen
 
     /** xenum equals delegates to the underlying enum identity. */
     @Override
-    public boolean equals(Object _o) {
+    public boolean equals(final Object _o) {
         if (_o == null)
             return false;
 //        if (_o instanceof Enum) {

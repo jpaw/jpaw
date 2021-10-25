@@ -285,31 +285,31 @@ public final class CharTestsASCII {
 
     /** Returns true if the whole String contains ASCII upper case characters only, else false. */
     public static boolean isUpperCaseByPattern(final String s) {
-        Matcher m = UPPERCASE_PATTERN.matcher(s);
+        final Matcher m = UPPERCASE_PATTERN.matcher(s);
         return m.find();
     }
 
     /** Returns true if the whole String contains ASCII lower case characters only, else false. */
     public static boolean isLowerCaseByPattern(final String s) {
-        Matcher m = LOWERCASE_PATTERN.matcher(s);
+        final Matcher m = LOWERCASE_PATTERN.matcher(s);
         return m.find();
     }
 
     /** Returns true if the whole String contains ASCII digits only, else false. */
     public static boolean isDigitByPattern(final String s) {
-        Matcher m = DIGIT_PATTERN.matcher(s);
+        final Matcher m = DIGIT_PATTERN.matcher(s);
         return m.find();
     }
 
     /** Returns true if the whole String contains ASCII printable characters only (range 0x20 .. 0x7e), else false. */
     public static boolean isPrintableByPattern(final String s) {
-        Matcher m = PRINTABLE_PATTERN.matcher(s);
+        final Matcher m = PRINTABLE_PATTERN.matcher(s);
         return m.find();
     }
 
     /** Returns true if the whole String contains ASCII printable characters or TABs only (range 0x20 .. 0x7e and 0x09), else false. */
     public static boolean isPrintableOrTabByPattern(final String s) {
-        Matcher m = PRINTABLE_OR_TAB_PATTERN.matcher(s);
+        final Matcher m = PRINTABLE_OR_TAB_PATTERN.matcher(s);
         return m.find();
     }
 }

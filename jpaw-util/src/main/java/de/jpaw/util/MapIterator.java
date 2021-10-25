@@ -15,7 +15,7 @@ public class MapIterator<E> implements Iterator<E> {
     private boolean nextIsValue = false;
     private E nextValue = null;
 
-    public MapIterator(Map<E, E> map) {
+    public MapIterator(final Map<E, E> map) {
         me = map.entrySet().iterator();
     }
 
@@ -29,7 +29,7 @@ public class MapIterator<E> implements Iterator<E> {
         nextIsValue = !nextIsValue;
         if (!nextIsValue)
             return nextValue;
-        Map.Entry<E, E> nextPair = me.next();
+        final Map.Entry<E, E> nextPair = me.next();
         nextValue = nextPair.getValue();
         return nextPair.getKey();
     }

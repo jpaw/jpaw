@@ -19,19 +19,19 @@ public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
     public static boolean outputFractionalSeconds   = true;     // output fractional seconds
 
     @Override
-    public String marshal(LocalDateTime dateTime) {
+    public String marshal(final LocalDateTime dateTime) {
         try {
             final StringBuilder sb = new StringBuilder(30);
             FormattersAndParsers.appendLocalDateTime(sb, dateTime, outputFractionalSeconds, addSuffixTimezone);
             return sb.toString();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOGGER.error("This should not happen - {} on StringBuilder: {}", e.getClass().getSimpleName(), ExceptionUtil.causeChain(e));
             return null;  // cannot happen (IOException on StringBuilder)
         }
     }
 
     @Override
-    public LocalDateTime unmarshal(String dateTime) {
+    public LocalDateTime unmarshal(final String dateTime) {
         return FormattersAndParsers.parseLocalDateTime(dateTime, ignoreFractionalSeconds, tolerateSuffixUTC);
     }
 }

@@ -14,17 +14,17 @@ public abstract class AbstractStringXEnumSet<E extends AbstractXEnumBase<E>> ext
         super(EMPTY);
     }
 
-    protected AbstractStringXEnumSet(String bitmap) {
+    protected AbstractStringXEnumSet(final String bitmap) {
         super(bitmap);
     }
 
     @Override
-    public boolean add(E e) {
+    public boolean add(final E e) {
         return addEnum(e);
     }
 
     @Override
-    public boolean contains(Object o) {
+    public boolean contains(final Object o) {
         if (o != null && o instanceof AbstractXEnumBase)
             return contains(((AbstractXEnumBase)o).getToken());
         return super.contains(o);
@@ -37,7 +37,7 @@ public abstract class AbstractStringXEnumSet<E extends AbstractXEnumBase<E>> ext
         private final String bitmap;
         private int index = 0;
 
-        public SetOfXEnumsIterator(String bitmap, XEnumFactory<E> myFactory) {
+        public SetOfXEnumsIterator(final String bitmap, final XEnumFactory<E> myFactory) {
             this.myFactory = myFactory;
             this.bitmap = bitmap;
         }

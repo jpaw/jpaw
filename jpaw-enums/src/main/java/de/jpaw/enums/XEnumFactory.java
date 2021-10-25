@@ -15,17 +15,17 @@ public class XEnumFactory<E extends AbstractXEnumBase<E>> {
     private final int maxTokenLength;
     private final String pqon;              // partially qualified class name of the base
     private final Class<E> baseClass;
-    private final Map<String, E> tokenToXEnum = new ConcurrentHashMap<String, E>();
-    private final Map<String, E> nameToXEnum = new ConcurrentHashMap<String, E>();
-    private final Map<Enum<?>, E> baseEnumToXEnum = new ConcurrentHashMap<Enum<?>, E>();
-    private static final Map<String, XEnumFactory<?>> REGISTRY = new ConcurrentHashMap<String, XEnumFactory<?>>(200);
+    private final Map<String, E> tokenToXEnum = new ConcurrentHashMap<>();
+    private final Map<String, E> nameToXEnum = new ConcurrentHashMap<>();
+    private final Map<Enum<?>, E> baseEnumToXEnum = new ConcurrentHashMap<>();
+    private static final Map<String, XEnumFactory<?>> REGISTRY = new ConcurrentHashMap<>(200);
     private static final Map<Class<? extends AbstractXEnumBase<?>>, XEnumFactory<?>> CLASS_REGISTRY
-      = new ConcurrentHashMap<Class<? extends AbstractXEnumBase<?>>, XEnumFactory<?>>(200);
+      = new ConcurrentHashMap<>(200);
     // private final List<Class<? extends E>> listOfSubclasses = new ArrayList<E>(10);   // remembers all XEnum classes which use this factory
     private E nullToken = null;     // stores an instance which has the empty token
 
     // TODO: should only be invoked from XEnum classes. How to verify this? (C++ "friend" needed here...)
-    public XEnumFactory(int maxTokenLength, Class<E> baseClass, String pqon) {
+    public XEnumFactory(final int maxTokenLength, final Class<E> baseClass, final String pqon) {
         this.maxTokenLength = maxTokenLength;
         this.pqon = pqon;
         this.baseClass = baseClass;
@@ -35,16 +35,16 @@ public class XEnumFactory<E extends AbstractXEnumBase<E>> {
 //      };
         // we do it later instead...
     }
-    public static final XEnumFactory<?> getFactoryByPQON(String pqon) {
+    public static final XEnumFactory<?> getFactoryByPQON(final String pqon) {
         return REGISTRY.get(pqon);
     }
-    public static final XEnumFactory<?> getFactoryByClass(Class<? extends AbstractXEnumBase<?>> xenumClass) {
-        XEnumFactory<?> result = CLASS_REGISTRY.get(xenumClass);
+    public static final XEnumFactory<?> getFactoryByClass(final Class<? extends AbstractXEnumBase<?>> xenumClass) {
+        final XEnumFactory<?> result = CLASS_REGISTRY.get(xenumClass);
         if (result == null)
             throw new IllegalArgumentException("No XEnumFactory registered for class " + xenumClass.getCanonicalName());
         return result;
     }
-    public void publishInstance(E e) {
+    public void publishInstance(final E e) {
         if (tokenToXEnum.put(e.getToken(), e) != null)
             throw new IllegalArgumentException(e.getClass().getSimpleName() + ": duplicate token " + e.getToken() + " for base XEnum " + pqon);
         if (nameToXEnum.put(e.name(), e) != null)
@@ -54,7 +54,7 @@ public class XEnumFactory<E extends AbstractXEnumBase<E>> {
         if (e.getToken().length() == 0)
             nullToken = e;
     }
-    public void register(String thisPqon, Class<? extends AbstractXEnumBase<E>> xenumClass) {
+    public void register(final String thisPqon, final Class<? extends AbstractXEnumBase<E>> xenumClass) {
         REGISTRY.put(thisPqon, this);
         CLASS_REGISTRY.put(xenumClass, this);
     }
@@ -62,13 +62,13 @@ public class XEnumFactory<E extends AbstractXEnumBase<E>> {
     public Class<E> getBaseClass() {
         return baseClass;
     }
-    public E getByToken(String token) {
+    public E getByToken(final String token) {
         return tokenToXEnum.get(token);
     }
-    public E getByName(String name) {
+    public E getByName(final String name) {
         return nameToXEnum.get(name);
     }
-    public E getByEnum(Enum<?> enumVal) {
+    public E getByEnum(final Enum<?> enumVal) {
         return baseEnumToXEnum.get(enumVal);
     }
     // return an instance which has the token "", or null if no such exists
@@ -81,14 +81,14 @@ public class XEnumFactory<E extends AbstractXEnumBase<E>> {
     public String getPqon() {
         return pqon;
     }
-    public E getByTokenWithNull(String token) {
+    public E getByTokenWithNull(final String token) {
         return token == null ? nullToken : tokenToXEnum.get(token);
     }
     // same as getByEnum, but throw an exception if the instance isn't known
-    public E of(Enum<?> enumVal) {
+    public E of(final Enum<?> enumVal) {
         if (enumVal == null)
             return null;
-        E myEnum = baseEnumToXEnum.get(enumVal);
+        final E myEnum = baseEnumToXEnum.get(enumVal);
         if (myEnum == null)
             throw new IllegalArgumentException(
               enumVal.getClass().getSimpleName() + "." + enumVal.name() + " is not a valid instance for " + baseClass.getSimpleName());
@@ -96,33 +96,33 @@ public class XEnumFactory<E extends AbstractXEnumBase<E>> {
     }
 
     // array conversion
-    public E[] of(Enum<?>[] arrayOfEnums) {
+    public E[] of(final Enum<?>[] arrayOfEnums) {
         if (arrayOfEnums == null)
             return null;
         // the following line does not compile. Why not? B the bound, the lower object type should be known!
         //E[] result = new E [arrayOfEnums.length];
         // the following line does compile, but has a warning of course
         @SuppressWarnings("unchecked")
-        E[] result = (E[]) new AbstractXEnumBase[arrayOfEnums.length];
+        final E[] result = (E[]) new AbstractXEnumBase[arrayOfEnums.length];
         for (int i = 0; i < arrayOfEnums.length; ++i) {
             result[i] = of(arrayOfEnums[i]);
         }
         return result;
     }
-    public List<E> of(List<Enum<?>> listOfEnums) {
+    public List<E> of(final List<Enum<?>> listOfEnums) {
         if (listOfEnums == null)
             return null;
-        List<E> result = new ArrayList<E>(listOfEnums.size());
-        for (Enum<?> i : listOfEnums) {
+        final List<E> result = new ArrayList<>(listOfEnums.size());
+        for (final Enum<?> i : listOfEnums) {
             result.add(of(i));
         }
         return result;
     }
-    public Set<E> of(Set<Enum<?>> setOfEnums) {
+    public Set<E> of(final Set<Enum<?>> setOfEnums) {
         if (setOfEnums == null)
             return null;
-        Set<E> result = new HashSet<E>(setOfEnums.size());
-        for (Enum<?> i : setOfEnums) {
+        final Set<E> result = new HashSet<>(setOfEnums.size());
+        for (final Enum<?> i : setOfEnums) {
             result.add(of(i));
         }
         return result;
@@ -135,6 +135,6 @@ public class XEnumFactory<E extends AbstractXEnumBase<E>> {
 
     /** Returns a copy of the list of values. */
     public List<E> valuesAsList() {
-        return Collections.unmodifiableList(new ArrayList<E>(tokenToXEnum.values()));  // cast should not be required...
+        return Collections.unmodifiableList(new ArrayList<>(tokenToXEnum.values()));  // cast should not be required...
     }
 }

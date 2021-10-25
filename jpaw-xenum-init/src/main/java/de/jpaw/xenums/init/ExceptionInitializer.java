@@ -9,18 +9,18 @@ import de.jpaw.util.ApplicationException;
 public class ExceptionInitializer {
     private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionInitializer.class);
 
-    public static void initializeExceptionClasses(String packageName) {
+    public static void initializeExceptionClasses(final String packageName) {
         initializeExceptionClasses(ReflectionsPackageCache.get(packageName));
     }
 
-    public static void initializeExceptionClasses(Reflections ... reflections) {
+    public static void initializeExceptionClasses(final Reflections ... reflections) {
         for (int i = 0; i < reflections.length; ++i) {
             int ctr = 0;
-            for (Class<? extends ApplicationException> cls : reflections[i].getSubTypesOf(ApplicationException.class)) {
+            for (final Class<? extends ApplicationException> cls : reflections[i].getSubTypesOf(ApplicationException.class)) {
                 try {
                     Class.forName(cls.getCanonicalName()); // initialize the class, to load the error descriptions
                     ++ctr;
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     LOGGER.warn("Cannot initialize application exception class {}: {}", cls.getCanonicalName(), e.getMessage());
                 }
             }

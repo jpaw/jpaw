@@ -36,7 +36,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
         if (n >= 2) {
             char c = s.charAt(0);
             for (int i = 1; i < n; ++i) {
-                char d = s.charAt(i);
+                final char d = s.charAt(i);
                 if (c >= d)
                     return false;
                 c = d;
@@ -48,7 +48,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
     public static final String sortTokens(final String s) {
         if (s.length() < 2)
             return s;
-        char[] charArray = s.toCharArray();
+        final char[] charArray = s.toCharArray();
         Arrays.sort(charArray);
         return new String(charArray);
     }
@@ -70,12 +70,12 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
 
     /** Creates a bitmap from an array of arbitrary enums. */
     public static String bitmapOf(final TokenizableEnum[] arg) {
-        TreeSet<String> values = new TreeSet<String>();
+        final TreeSet<String> values = new TreeSet<>();
         for (int i = 0; i < arg.length; ++i) {
             values.add(arg[i].getToken());
         }
-        StringBuilder buff = new StringBuilder(values.size());
-        for (String token : values) {
+        final StringBuilder buff = new StringBuilder(values.size());
+        for (final String token : values) {
             buff.append(token);
         }
         return buff.toString();
@@ -120,7 +120,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
 
     // Utility method to add a component enum
     public final boolean addEnum(final TokenizableEnum e) {
-        String token = e.getToken();    // may throw NPE, as per contract
+        final String token = e.getToken();    // may throw NPE, as per contract
         verify$Not$Frozen();            // check if modification is allowed
         if (bitmap.length() == 0) {
             // shortcut for a simple case
@@ -136,7 +136,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
 
     @Override
     public final boolean remove(final Object o) {
-        String token = ((TokenizableEnum)o).getToken();
+        final String token = ((TokenizableEnum)o).getToken();
         verify$Not$Frozen();            // check if modification is allowed
         if (bitmap.equals(token)) {
             // shortcut, removing the last element: avoid substrings
@@ -144,7 +144,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
             return true;
         }
         final char c = token.charAt(0);
-        int index = bitmap.indexOf(c);
+        final int index = bitmap.indexOf(c);
         if (index < 0)
             return false;
         bitmap = index == 0 ? bitmap.substring(1) : bitmap.substring(0, index) + bitmap.substring(index + 1);
@@ -188,7 +188,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
             return; // no op
         }
         // real merge, no shortcut possible. Use a linear time algorithm. We know both bitmaps are sorted.
-        StringBuilder buff = new StringBuilder(n + m); // worst case length
+        final StringBuilder buff = new StringBuilder(n + m); // worst case length
         int i = 0;
         int j = 0;
         while (i < n && j < m) {
@@ -237,7 +237,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
         }
 
         // real merge, no shortcut possible. Use a linear time algorithm. We know both bitmaps are sorted.
-        StringBuilder buff = new StringBuilder(n); // worst case length: cannot be longer than before
+        final StringBuilder buff = new StringBuilder(n); // worst case length: cannot be longer than before
         int i = 0;
         int j = 0;
         while (i < n && j < m) {
@@ -276,7 +276,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
             return; // no op
         }
         // real merge, no shortcut possible. Use a linear time algorithm. We know both bitmaps are sorted.
-        StringBuilder buff = new StringBuilder(n); // worst case length
+        final StringBuilder buff = new StringBuilder(n); // worst case length
         int i = 0;
         int j = 0;
         while (i < n && j < m) {
@@ -323,7 +323,7 @@ public abstract class AbstractStringAnyEnumSet<E> extends AbstractCollection<E> 
             return;
         }
         // real compare, no shortcut possible. Use a linear time algorithm. We know both bitmaps are sorted.
-        StringBuilder buff = new StringBuilder(n + m); // worst case length
+        final StringBuilder buff = new StringBuilder(n + m); // worst case length
         int i = 0;
         int j = 0;
         while (i < n && j < m) {

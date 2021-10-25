@@ -10,18 +10,18 @@ public abstract class AbstractScaledDecimalAdapter extends XmlAdapter<String, Bi
     private final boolean allowRounding;
     private final int scale;
 
-    protected AbstractScaledDecimalAdapter(int scale, boolean allowRounding) {
+    protected AbstractScaledDecimalAdapter(final int scale, final boolean allowRounding) {
         this.scale = scale;
         this.allowRounding = allowRounding;
     }
 
-    private BigDecimal scaleAndRound(BigDecimal decimal) {
+    private BigDecimal scaleAndRound(final BigDecimal decimal) {
         return decimal.setScale(scale, allowRounding ? RoundingMode.HALF_EVEN : RoundingMode.UNNECESSARY);
     }
 
     @Override
-    public BigDecimal unmarshal(String value) throws Exception {
-        BigDecimal decimal = new BigDecimal(value);
+    public BigDecimal unmarshal(final String value) throws Exception {
+        final BigDecimal decimal = new BigDecimal(value);
         if (decimal.signum() == 0)
             return BigDecimal.ZERO;
 
@@ -29,7 +29,7 @@ public abstract class AbstractScaledDecimalAdapter extends XmlAdapter<String, Bi
     }
 
     @Override
-    public String marshal(BigDecimal value) throws Exception {
+    public String marshal(final BigDecimal value) throws Exception {
         return scaleAndRound(value).toPlainString();
     }
 }

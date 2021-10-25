@@ -7,12 +7,12 @@ import de.jpaw.fixedpoint.types.MilliUnits;
 public class MilliUnitsAdapter extends XmlAdapter<String, MilliUnits> {
 
     @Override
-    public MilliUnits unmarshal(String v) throws Exception {
+    public MilliUnits unmarshal(final String v) throws Exception {
         return MilliUnits.valueOf(v);
     }
 
     @Override
-    public String marshal(MilliUnits v) throws Exception {
+    public String marshal(final MilliUnits v) throws Exception {
         return v.toString();
     }
 }

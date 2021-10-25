@@ -44,8 +44,8 @@ public abstract class AbstractLongEnumSet<E extends Enum<E>> extends AbstractFre
     public static long fromStringMap(final String s) {
         long work = 0;
         for (int i = 0; i < s.length(); ++i) {
-            char c = s.charAt(i);
-            int pos = STANDARD_TOKENS.indexOf(c);
+            final char c = s.charAt(i);
+            final int pos = STANDARD_TOKENS.indexOf(c);
             if (pos >= 0 && pos < MAX_TOKENS) {
                 work |= BIT << pos;
             } else {
@@ -78,16 +78,16 @@ public abstract class AbstractLongEnumSet<E extends Enum<E>> extends AbstractFre
     public final boolean contains(final Object o) {
         if (o == null || !(o instanceof Enum))
             return false;
-        int q = ((Enum<?>)o).ordinal();
+        final int q = ((Enum<?>)o).ordinal();
         return q < MAX_TOKENS && (bitmap & (BIT << q)) != 0;
     }
 
     @Override
     public final boolean add(final E e) {
-        int q = e.ordinal();   // may throw NPE
+        final int q = e.ordinal();   // may throw NPE
         if (q >= MAX_TOKENS || q >= getMaxOrdinal())
             throw new IllegalArgumentException(e.getClass().getCanonicalName() + "." + e.name() + " has ordinal " + e.ordinal());
-        long b = (long) (BIT << q);
+        final long b = (long) (BIT << q);
         if ((bitmap & b) != 0)
             return false;
         verify$Not$Frozen();            // check if modification is allowed
@@ -99,10 +99,10 @@ public abstract class AbstractLongEnumSet<E extends Enum<E>> extends AbstractFre
     public final boolean remove(final Object o) {
         if (o == null || !(o instanceof Enum))      // preliminary check for "not contained"
             return false;
-        int q = ((Enum<?>)o).ordinal();
+        final int q = ((Enum<?>)o).ordinal();
         if (q >= MAX_TOKENS || q >= getMaxOrdinal())
             throw new IllegalArgumentException(o.getClass().getCanonicalName() + "." + o.toString() + " has ordinal " + q + " which is too big for this set");
-        long b = (long) (BIT << q);
+        final long b = (long) (BIT << q);
         if ((bitmap & b) == 0)
             return false;
         verify$Not$Frozen();                // check if modification is allowed

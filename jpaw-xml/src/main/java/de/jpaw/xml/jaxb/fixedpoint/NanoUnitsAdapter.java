@@ -7,12 +7,12 @@ import de.jpaw.fixedpoint.types.NanoUnits;
 public class NanoUnitsAdapter extends XmlAdapter<String, NanoUnits> {
 
     @Override
-    public NanoUnits unmarshal(String v) throws Exception {
+    public NanoUnits unmarshal(final String v) throws Exception {
         return NanoUnits.valueOf(v);
     }
 
     @Override
-    public String marshal(NanoUnits v) throws Exception {
+    public String marshal(final NanoUnits v) throws Exception {
         return v.toString();
     }
 }

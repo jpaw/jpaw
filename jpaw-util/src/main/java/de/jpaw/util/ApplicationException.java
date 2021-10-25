@@ -179,7 +179,7 @@ public class ApplicationException extends RuntimeException {
      *  inheriting this class to populate this map for the descriptions of the codes they represent.
      *  It is recommended to perform such initialization not during class load, but lazily, once the first exception is thrown.
      */
-    protected static final Map<Integer, String> codeToDescription = new HashMap<Integer, String>(200);
+    protected static final Map<Integer, String> codeToDescription = new HashMap<>(200);
 
     private final int errorCode;
 
@@ -189,13 +189,13 @@ public class ApplicationException extends RuntimeException {
     }
 
     /** Creates a new ApplicationException for a given error code. */
-    public ApplicationException(int errorCode) {
+    public ApplicationException(final int errorCode) {
         super();
         this.errorCode = errorCode;
     }
 
     /** Creates a new ApplicationException for a given error code, with some explanatory details. */
-    public ApplicationException(int errorCode, String detailedMessage) {
+    public ApplicationException(final int errorCode, final String detailedMessage) {
         super("Code " + Integer.toString(errorCode) + (detailedMessage == null ? "" : " @ " + detailedMessage));
         this.errorCode = errorCode;
     }
@@ -206,18 +206,18 @@ public class ApplicationException extends RuntimeException {
     }
 
     /** Returns information if a code is an "OK" code. */
-    public static boolean isOk(int returnCode) {
+    public static boolean isOk(final int returnCode) {
         return returnCode >= 0 && returnCode < CLASSIFICATION_FACTOR;
     }
 
     /** Returns information if a code is a "Future" code. */
-    public static boolean isFuture(int returnCode) {
+    public static boolean isFuture(final int returnCode) {
         return returnCode >= CL_FUTURE;
     }
 
     /** returns a text representation of an error code, independent of an existing exception */
-    public static String codeToString(int code) {
-        String msg = codeToDescription.get(Integer.valueOf(code));
+    public static String codeToString(final int code) {
+        final String msg = codeToDescription.get(Integer.valueOf(code));
         return msg != null ? msg : "unknown code";
     }
 

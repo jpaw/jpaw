@@ -19,33 +19,33 @@ public final class ImmutableStringEnumSet implements Serializable {
     public static final ImmutableStringEnumSet EMPTY = new ImmutableStringEnumSet("");
 
     /** Factory: Construct an enum set from a String bitmap. for empty or null, always the same instance is returned. */
-    public static final ImmutableStringEnumSet of(String tokens) {
+    public static ImmutableStringEnumSet of(final String tokens) {
         if (tokens == null || tokens.length() == 0)
             return EMPTY;
         return new ImmutableStringEnumSet(AbstractStringAnyEnumSet.isSorted(tokens) ? tokens : AbstractStringAnyEnumSet.sortTokens(tokens));
     }
-    private ImmutableStringEnumSet(String bitmap) {
+    private ImmutableStringEnumSet(final String bitmap) {
         this.bitmap = bitmap;
     }
 
     /** Construct an enum set from an (x)enumSet. */
-    public ImmutableStringEnumSet(AbstractStringAnyEnumSet<?> enumSet) {
+    public ImmutableStringEnumSet(final AbstractStringAnyEnumSet<?> enumSet) {
         bitmap = enumSet.getBitmap();
     }
 
-    private final String enumToken(TokenizableEnum myEnum) {
-        String s = myEnum.getToken();
+    private String enumToken(final TokenizableEnum myEnum) {
+        final String s = myEnum.getToken();
         if (s == null || s.length() != 1)
             throw new IllegalArgumentException("Token of " + myEnum.getClass().getCanonicalName() + " has not length 1");
         return s;
     }
 
     /** Construct a single element map. */
-    public ImmutableStringEnumSet(TokenizableEnum myEnum) {
+    public ImmutableStringEnumSet(final TokenizableEnum myEnum) {
         bitmap = enumToken(myEnum);
     }
 
-    public static ImmutableStringEnumSet ofTokens(TokenizableEnum ... enums) {
+    public static ImmutableStringEnumSet ofTokens(final TokenizableEnum... enums) {
         return new ImmutableStringEnumSet(AbstractStringAnyEnumSet.bitmapOf(enums));
     }
 
@@ -60,9 +60,10 @@ public final class ImmutableStringEnumSet implements Serializable {
 
     // acts like "contains all"
     public boolean contains(final String tokens) {
-        for (int i = 0; i < tokens.length(); ++i)
+        for (int i = 0; i < tokens.length(); ++i) {
             if (bitmap.indexOf(tokens.charAt(i)) < 0)
                 return false;
+        }
         return true;
     }
 
@@ -71,7 +72,7 @@ public final class ImmutableStringEnumSet implements Serializable {
     }
 
 
-    private ImmutableStringEnumSet add1(String token) {
+    private ImmutableStringEnumSet add1(final String token) {
         final char c = token.charAt(0);
         for (int pos = 0; pos < bitmap.length(); ++pos) {
             // perform the Java equivalent of C's strncmp, without GC overhead (extracting substrings)
@@ -131,7 +132,7 @@ public final class ImmutableStringEnumSet implements Serializable {
             return this;
 
         // real merge, no shortcut possible. Use a linear time algorithm. We know both bitmaps are sorted.
-        StringBuilder buff = new StringBuilder(n + m); // worst case length
+        final StringBuilder buff = new StringBuilder(n + m); // worst case length
         int i = 0;
         int j = 0;
         while (i < n && j < m) {
@@ -176,7 +177,7 @@ public final class ImmutableStringEnumSet implements Serializable {
             return this;
 
         // real merge, no shortcut possible. Use a linear time algorithm. We know both bitmaps are sorted.
-        StringBuilder buff = new StringBuilder(n); // worst case length: cannot be longer than before
+        final StringBuilder buff = new StringBuilder(n); // worst case length: cannot be longer than before
         int i = 0;
         int j = 0;
         while (i < n && j < m) {
@@ -201,7 +202,7 @@ public final class ImmutableStringEnumSet implements Serializable {
     }
 
     /** Subtracts another bitmap from this one. */
-    public ImmutableStringEnumSet minus(ImmutableStringEnumSet that) {
+    public ImmutableStringEnumSet minus(final ImmutableStringEnumSet that) {
         final String thatmap = that.bitmap;
         final int m = thatmap.length();
         final int n = bitmap.length();
@@ -211,7 +212,7 @@ public final class ImmutableStringEnumSet implements Serializable {
         if (bitmap.equals(thatmap))     // just a shortcut here, and not the only case when EMPTY is returned
             return EMPTY;
         // real merge, no shortcut possible. Use a linear time algorithm. We know both bitmaps are sorted.
-        StringBuilder buff = new StringBuilder(n); // worst case length
+        final StringBuilder buff = new StringBuilder(n); // worst case length
         int i = 0;
         int j = 0;
         while (i < n && j < m) {
@@ -240,7 +241,7 @@ public final class ImmutableStringEnumSet implements Serializable {
     }
 
     /** Builds the symmetric exclusive or. */
-    public ImmutableStringEnumSet xor(ImmutableStringEnumSet that) {
+    public ImmutableStringEnumSet xor(final ImmutableStringEnumSet that) {
         final String thatmap = that.bitmap;
         final int m = thatmap.length();
         if (m == 0)
@@ -253,7 +254,7 @@ public final class ImmutableStringEnumSet implements Serializable {
         if (bitmap.equals(thatmap))
             return EMPTY;
         // real compare, no shortcut possible. Use a linear time algorithm. We know both bitmaps are sorted.
-        StringBuilder buff = new StringBuilder(n + m); // worst case length
+        final StringBuilder buff = new StringBuilder(n + m); // worst case length
         int i = 0;
         int j = 0;
         while (i < n && j < m) {
@@ -308,7 +309,7 @@ public final class ImmutableStringEnumSet implements Serializable {
 
     // two ImmutableStringEnumSet are considered equal if they have the same contents
     @Override
-    public boolean equals(Object _that) {
+    public boolean equals(final Object _that) {
         if (this == _that)
             return true;
         if (_that == null || getClass() != _that.getClass())

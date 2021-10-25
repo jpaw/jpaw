@@ -13,7 +13,7 @@ public final class LanguageKeyConverter {
     private static final String[] FREQUENT_LANGUAGE_CODES = {
         "xx", "es", "en", "hi", "zh", "zh_CN", "zh_TW", "de", "fr", "it", "pt", "en_GB", "en_US"    // "xxx" for default
     };
-    private static final ConcurrentMap<String, Integer> FREQUENT_LANGUAGE_CODES_MAP = new ConcurrentHashMap<String, Integer>(400);
+    private static final ConcurrentMap<String, Integer> FREQUENT_LANGUAGE_CODES_MAP = new ConcurrentHashMap<>(400);
     static {
         for (int i = 0; i < FREQUENT_LANGUAGE_CODES.length; ++i) {
             FREQUENT_LANGUAGE_CODES_MAP.put(FREQUENT_LANGUAGE_CODES[i], Integer.valueOf(i + 1));
@@ -24,8 +24,8 @@ public final class LanguageKeyConverter {
 
     /** convert a language code string into a number, or return 0 if the code does not conform to the spec.
      * Frequently occurring codes will get small numbers. */
-    public static int languageCodeToInt(String languageCode) {
-        Integer frequent = FREQUENT_LANGUAGE_CODES_MAP.get(languageCode);
+    public static int languageCodeToInt(final String languageCode) {
+        final Integer frequent = FREQUENT_LANGUAGE_CODES_MAP.get(languageCode);
         if (frequent != null)
             return frequent.intValue();
         // error check
@@ -79,11 +79,11 @@ public final class LanguageKeyConverter {
     public static void populateCache() {
         final String[] languages = Locale.getISOLanguages();
         for (int i = 0; i < languages.length; ++i) {
-            String languageCode = languages[i];
-            Integer code = FREQUENT_LANGUAGE_CODES_MAP.get(languageCode);
+            final String languageCode = languages[i];
+            final Integer code = FREQUENT_LANGUAGE_CODES_MAP.get(languageCode);
             if (code == null) {
                 // not yet in cache
-                int newCode = languageCodeToInt(languageCode);
+                final int newCode = languageCodeToInt(languageCode);
                 if (newCode > 0) {
                     // valid code: store it with the predictable index
                     FREQUENT_LANGUAGE_CODES_MAP.putIfAbsent(languageCode, Integer.valueOf(newCode));

@@ -61,7 +61,7 @@ public final class ByteArray implements Externalizable, Cloneable {
     }
 
     /** Constructs a ByteArray from a source byte[], which is defensively copied. */
-    public ByteArray(byte[] source) {
+    public ByteArray(final byte[] source) {
         if (source == null || source.length == 0) {
             buffer = ZERO_JAVA_BYTE_ARRAY;
             offset = 0;
@@ -76,7 +76,7 @@ public final class ByteArray implements Externalizable, Cloneable {
     // construct a ByteArray from a trusted source byte[]
     // this method is always called with unsafeTrustedReuseOfJavaByteArray = true, the parameter is only required in order to distinguish the constructor
     // from the copying one
-    private ByteArray(byte[] source, boolean unsafeTrustedReuseOfJavaByteArray) {
+    private ByteArray(final byte[] source, final boolean unsafeTrustedReuseOfJavaByteArray) {
         if (source == null || source.length == 0) {
             buffer = ZERO_JAVA_BYTE_ARRAY;
             offset = 0;
@@ -90,28 +90,28 @@ public final class ByteArray implements Externalizable, Cloneable {
 
     /** Constructs a ByteArray from a ByteArrayOutputStream, which has just been contructed by some previous process.
      * @throws IOException */
-    public static ByteArray fromByteArrayOutputStream(ByteArrayOutputStream baos) throws IOException {
+    public static ByteArray fromByteArrayOutputStream(final ByteArrayOutputStream baos) throws IOException {
         baos.flush();
         return new ByteArray(baos.toByteArray(), true);
     }
 
     /** Writes the contents of this ByteArray to an OutputStream. */
-    public void toOutputStream(OutputStream os) throws IOException {
+    public void toOutputStream(final OutputStream os) throws IOException {
         os.write(buffer, offset, length);
     }
 
     /** Constructs a ByteArray from the provided DataInput, with a predefined length. */
-    public static ByteArray fromDataInput(DataInput in, int len) throws IOException {
+    public static ByteArray fromDataInput(final DataInput in, final int len) throws IOException {
         if (len <= 0)
             return ZERO_BYTE_ARRAY;
-        byte[] tmp = new byte[len];
+        final byte[] tmp = new byte[len];
         in.readFully(tmp);
         return new ByteArray(tmp, true);
     }
 
     /** read bytes from an input stream, up to maxBytes (or all which exist, if maxBytes = 0). */
     public static ByteArray fromInputStream(final InputStream is, final int maxBytes) throws IOException {
-        ByteBuilder tmp = maxBytes > 0 ? new ByteBuilder(maxBytes, CHARSET_UTF8) : new ByteBuilder();
+        final ByteBuilder tmp = maxBytes > 0 ? new ByteBuilder(maxBytes, CHARSET_UTF8) : new ByteBuilder();
         tmp.readFromInputStream(is, maxBytes);
         if (tmp.length() == 0)
             return ZERO_BYTE_ARRAY;
@@ -119,19 +119,19 @@ public final class ByteArray implements Externalizable, Cloneable {
     }
 
     /** Constructs a ByteArray from the provided ByteBuilder. */
-    public static ByteArray fromByteBuilder(ByteBuilder in) {
+    public static ByteArray fromByteBuilder(final ByteBuilder in) {
         if (in == null || in.length() == 0)
             return ZERO_BYTE_ARRAY;
         return new ByteArray(in.getCurrentBuffer(), 0, in.length());
     }
 
     /** Constructs a ByteArray from the provided String, using the UTF8 character set. */
-    public static ByteArray fromString(String in) {
+    public static ByteArray fromString(final String in) {
         return fromString(in, CHARSET_UTF8);
     }
 
     /** Constructs a ByteArray from the provided String, using the specified character set. */
-    public static ByteArray fromString(String in, Charset cs) {
+    public static ByteArray fromString(final String in, final Charset cs) {
         if (in == null || in.length() == 0)
             return ZERO_BYTE_ARRAY;
         return new ByteArray(in.getBytes(cs), true);    // we know these bytes are never changed, so no extra copy required
@@ -143,12 +143,12 @@ public final class ByteArray implements Externalizable, Cloneable {
     }
 
     /** returns the byte array as a string, using a specified character set. */
-    public String asString(Charset cs) {
+    public String asString(final Charset cs) {
         return new String(buffer, offset, length, cs);
     }
 
     /** construct a ByteArray from a source byte[], with offset and length. source may not be null. */
-    public ByteArray(byte[] source, int offset, int length) {
+    public ByteArray(final byte[] source, final int offset, final int length) {
         if (source == null || offset < 0 || length < 0 || offset + length > source.length)
             throw new IllegalArgumentException();
         buffer = new byte[length];
@@ -159,7 +159,7 @@ public final class ByteArray implements Externalizable, Cloneable {
 
     /** Construct a ByteArray from another one. Could also just assign it due to immutability.
      * The only benefit of this constructor is that it converts a null parameter into the non-null empty ByteArray. */
-    public ByteArray(ByteArray source) {
+    public ByteArray(final ByteArray source) {
         if (source == null) {
             buffer = ZERO_JAVA_BYTE_ARRAY;
             offset = 0;
@@ -173,7 +173,7 @@ public final class ByteArray implements Externalizable, Cloneable {
 
     /** Construct a ByteArray from a source byte[], with offset and length. source may not be null.
      * Similar to the subArray member method. */
-    public ByteArray(ByteArray source, int offset, int length) {
+    public ByteArray(final ByteArray source, final int offset, final int length) {
         if (source == null || offset < 0 || length < 0 || offset + length > source.length)
             throw new IllegalArgumentException();
 
@@ -184,17 +184,17 @@ public final class ByteArray implements Externalizable, Cloneable {
 
     /** Returns a ByteArray which contains a subsequence of the bytes of this one. The underlying buffer is shared.
      * Functionality wise this corresponds to String.substring (before Java 6) or ByteBuffer.slice. */
-    public ByteArray subArray(int xoffset, int xlength) {
+    public ByteArray subArray(final int xoffset, final int xlength) {
         // create a new ByteArray sharing the same buffer
         return new ByteArray(this, xoffset, xlength);
     }
 
     /** Returns a ByteArray which contains a subsequence of the bytes of this one. The underlying buffer is not shared.
      * Use this variant if the original ByteArray holds a much larger byte[] and can be GCed afterwards. */
-    public ByteArray subArrayUnshared(int xoffset, int xlength) {
+    public ByteArray subArrayUnshared(final int xoffset, final int xlength) {
         if (xoffset < 0 || xlength < 0 || xoffset + xlength > this.length)
             throw new IllegalArgumentException();
-        byte[] newBuffer = new byte[xlength];
+        final byte[] newBuffer = new byte[xlength];
         System.arraycopy(buffer, xoffset, newBuffer, 0, xlength);
         // create a new ByteArray using the new buffer
         return new ByteArray(newBuffer, true);
@@ -225,7 +225,7 @@ public final class ByteArray implements Externalizable, Cloneable {
 //        return this.buffer;
 //    }
 
-    public int indexOf(byte x) {
+    public int indexOf(final byte x) {
         int i = 0;
         while (i < length) {
             if (buffer[offset + i] == x)
@@ -235,7 +235,7 @@ public final class ByteArray implements Externalizable, Cloneable {
         return -1;
     }
 
-    public int indexOf(byte x, int fromIndex) {
+    public int indexOf(final byte x, final int fromIndex) {
         int i = fromIndex >= 0 ? fromIndex : 0;
         while (i < length) {
             if (buffer[offset + i] == x)
@@ -245,7 +245,7 @@ public final class ByteArray implements Externalizable, Cloneable {
         return -1;
     }
 
-    public int lastIndexOf(byte x) {
+    public int lastIndexOf(final byte x) {
         int i = length;
         while (i > 0) {
             if (buffer[offset + --i] == x)
@@ -254,7 +254,7 @@ public final class ByteArray implements Externalizable, Cloneable {
         return -1;
     }
 
-    public int lastIndexOf(byte x, int fromIndex) {
+    public int lastIndexOf(final byte x, final int fromIndex) {
         int i = fromIndex >= length ? length - 1 : fromIndex;
         while (i >= 0) {
             if (buffer[offset + i] == x)
@@ -264,7 +264,7 @@ public final class ByteArray implements Externalizable, Cloneable {
         return -1;
     }
 
-    public byte byteAt(int pos) {
+    public byte byteAt(final int pos) {
         if (pos < 0 || pos >= length)
             throw new IllegalArgumentException();
         return buffer[offset + pos];
@@ -277,22 +277,22 @@ public final class ByteArray implements Externalizable, Cloneable {
 
     // return a defensive copy of the contents
     public byte[] getBytes() {
-        byte[] result = new byte[length];
+        final byte[] result = new byte[length];
         System.arraycopy(buffer, offset, result, 0, length);
         return result;
     }
 
     // return a defensive copy of part of the contents. Shorthand for subArray(offset, length).getBytes(),
     // which would create a temporary object
-    public byte[] getBytes(int xoffset, int xlength) {
+    public byte[] getBytes(final int xoffset, final int xlength) {
         if (xoffset < 0 || xlength < 0 || xoffset + xlength > this.length)
             throw new IllegalArgumentException();
-        byte[] result = new byte[xlength];
+        final byte[] result = new byte[xlength];
         System.arraycopy(buffer, xoffset + this.offset, result, 0, xlength);
         return result;
     }
 
-    private boolean contentEqualsSub(byte[] dst, int dstOffset, int dstLength) {
+    private boolean contentEqualsSub(final byte[] dst, final int dstOffset, final int dstLength) {
         if (length != dstLength)
             return false;
         for (int i = 0; i < dstLength; ++i) {
@@ -303,20 +303,20 @@ public final class ByteArray implements Externalizable, Cloneable {
     }
 
     // following: all arguments must be not null
-    public boolean contentEquals(ByteArray that) {
+    public boolean contentEquals(final ByteArray that) {
         return contentEqualsSub(that.buffer, that.offset, that.length);
     }
-    public boolean contentEquals(byte[] that) {
+    public boolean contentEquals(final byte[] that) {
         return contentEqualsSub(that, 0, that.length);
     }
-    public boolean contentEquals(byte[] that, int thatOffset, int thatLength) {
+    public boolean contentEquals(final byte[] that, final int thatOffset, final int thatLength) {
         if (thatOffset < 0 || thatLength < 0 || thatOffset + thatLength > that.length)
             throw new IllegalArgumentException();
         return contentEqualsSub(that, thatOffset, thatLength);
     }
 
     // returns if the two instances share the same backing buffer (for debugging)
-    public boolean shareBuffer(ByteArray that) {
+    public boolean shareBuffer(final ByteArray that) {
         return buffer == that.buffer;
     }
 
@@ -331,12 +331,12 @@ public final class ByteArray implements Externalizable, Cloneable {
 
     // two ByteArrays are considered equal if they have the same visible contents
     @Override
-    public boolean equals(Object that) {
+    public boolean equals(final Object that) {
         if (this == that)
             return true;
         if (that == null || getClass() != that.getClass())
             return false;
-        ByteArray xthat = (ByteArray)that;
+        final ByteArray xthat = (ByteArray)that;
         // same as contentEqualsSub(..) now
         if (this.length != xthat.length)
             return false;
@@ -348,18 +348,18 @@ public final class ByteArray implements Externalizable, Cloneable {
     }
 
     // support function to allow dumping contents to DataOutput without the need to expose our internal buffer
-    public void writeToDataOutput(DataOutput out) throws IOException {
+    public void writeToDataOutput(final DataOutput out) throws IOException {
         out.write(buffer, offset, length);
     }
 
-    public String hexdump(int startAt, int maxlength) {
+    public String hexdump(final int startAt, final int maxlength) {
         if (length <= startAt)
             return "";      // no data to dump
         return ByteUtil.dump(buffer, offset + startAt, (maxlength > 0 && maxlength < length) ? maxlength : length);
     }
 
     @Override
-    public void writeExternal(ObjectOutput out) throws IOException {
+    public void writeExternal(final ObjectOutput out) throws IOException {
         //writeBytes(out, buffer, offset, length);
         if (length < 256 && length != MAGIC_LENGTH_INDICATING_32_BIT_SIZE) {
             out.writeByte(length);
@@ -371,7 +371,7 @@ public final class ByteArray implements Externalizable, Cloneable {
     }
 
     // support function to allow ordinary byte[] to be written in same fashion
-    public static void writeBytes(ObjectOutput out, byte[] buffer, int offset, int length) throws IOException {
+    public static void writeBytes(final ObjectOutput out, final byte[] buffer, final int offset, final int length) throws IOException {
         if (length < 256 && length != MAGIC_LENGTH_INDICATING_32_BIT_SIZE) {
             out.writeByte(length);
         } else {
@@ -381,7 +381,7 @@ public final class ByteArray implements Externalizable, Cloneable {
         out.write(buffer, offset, length);
     }
 
-    public static byte[] readBytes(ObjectInput in) throws IOException {
+    public static byte[] readBytes(final ObjectInput in) throws IOException {
         int newlength = in.readByte();
         if (newlength < 0)
             newlength += 256;  // want full unsigned range
@@ -391,10 +391,10 @@ public final class ByteArray implements Externalizable, Cloneable {
         // System.out.println("ByteArray.readExternal() with length " + newlength);
         if (newlength == 0)
             return ZERO_JAVA_BYTE_ARRAY;
-        byte[] localBuffer = new byte[newlength];
+        final byte[] localBuffer = new byte[newlength];
         int done = 0;
         while (done < newlength) {
-            int nRead = in.read(localBuffer, done, newlength - done);  // may return less bytes than requested!
+            final int nRead = in.read(localBuffer, done, newlength - done);  // may return less bytes than requested!
             if (nRead <= 0)
                 throw new IOException("deserialization of ByteArray returned " + nRead + " while expecting " + (newlength - done));
             done += nRead;
@@ -403,7 +403,7 @@ public final class ByteArray implements Externalizable, Cloneable {
     }
 
     // factory method to read from objectInput via above helper function
-    public static ByteArray read(ObjectInput in) throws IOException {
+    public static ByteArray read(final ObjectInput in) throws IOException {
         return new ByteArray(readBytes(in), true);
     }
 
@@ -415,7 +415,7 @@ public final class ByteArray implements Externalizable, Cloneable {
     // which lets us preserve the immutability
     // see also http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6379948 for discussion around this
     @Override
-    public void readExternal(ObjectInput in) throws IOException {
+    public void readExternal(final ObjectInput in) throws IOException {
         extraFieldJustRequiredForDeserialization = new ByteArray(readBytes(in), true);
     }
 
@@ -427,26 +427,26 @@ public final class ByteArray implements Externalizable, Cloneable {
     }
 
     // factory method to construct a byte array from a prevalidated base64 byte sequence. returns null if length is suspicious
-    public static ByteArray fromBase64(byte[] data, int offset, int length) {
+    public static ByteArray fromBase64(final byte[] data, final int offset, final int length) {
         if (length == 0)
             return ZERO_BYTE_ARRAY;
-        byte[] tmp = Base64.decode(data, offset, length);
+        final byte[] tmp = Base64.decode(data, offset, length);
         if (tmp == null)
             return null;
         return new ByteArray(tmp, true);
     }
 
-    public void appendBase64(ByteBuilder b) {
+    public void appendBase64(final ByteBuilder b) {
         Base64.encodeToByte(b, buffer, offset, length);
     }
-    public void appendToRaw(ByteBuilder b) {
+    public void appendToRaw(final ByteBuilder b) {
         b.write(buffer, offset, length);
     }
 
     /** Returns the contents of this ByteArray as a base64 encoded string.
      * @since 1.2.12 */
     public String asBase64() {
-        ByteBuilder tmp = new ByteBuilder(0, null);
+        final ByteBuilder tmp = new ByteBuilder(0, null);
         Base64.encodeToByte(tmp, buffer, offset, length);
         return tmp.toString();
     }

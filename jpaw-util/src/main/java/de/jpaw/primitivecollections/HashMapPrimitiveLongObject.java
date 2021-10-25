@@ -19,7 +19,7 @@ public final class HashMapPrimitiveLongObject<V> {
         V value;
         Entry<V> next;
 
-        Entry(long key) {
+        Entry(final long key) {
             this.key = key;
         }
     }
@@ -56,7 +56,7 @@ public final class HashMapPrimitiveLongObject<V> {
      * @return Reference to the element array
      */
     @SuppressWarnings("unchecked")
-    private Entry<V>[] newElementArray(int s) {
+    private Entry<V>[] newElementArray(final int s) {
         return new Entry[s];
     }
 
@@ -75,7 +75,7 @@ public final class HashMapPrimitiveLongObject<V> {
      * @throws IllegalArgumentException
      *                when the capacity is less than zero.
      */
-    public HashMapPrimitiveLongObject(int capacity) {
+    public HashMapPrimitiveLongObject(final int capacity) {
         this(capacity, 0.75f);  // default load factor of 0.75
     }
 
@@ -92,7 +92,7 @@ public final class HashMapPrimitiveLongObject<V> {
      *                when the capacity is less than zero or the load factor is
      *                less or equal to zero.
      */
-    public HashMapPrimitiveLongObject(int capacity, float loadFactor) {
+    public HashMapPrimitiveLongObject(int capacity, final float loadFactor) {
         if (capacity >= 0 && loadFactor > 0) {
             capacity = capacity <= 16 ? 16 : IntegralLimits.nextPowerOf2(capacity);
             elementCount = 0;
@@ -132,21 +132,21 @@ public final class HashMapPrimitiveLongObject<V> {
      * @return the value of the mapping with the specified key, or {@code null}
      *         if no mapping for the specified key is found.
      */
-    public V get(long key) {
-        Entry<V> m = getEntry(key);
+    public V get(final long key) {
+        final Entry<V> m = getEntry(key);
         if (m != null) {
             return m.value;
         }
         return null;
     }
 
-    private Entry<V> getEntry(long key) {
-        int hash = longHash(key);
-        int index = hash & (elementData.length - 1);
+    private Entry<V> getEntry(final long key) {
+        final int hash = longHash(key);
+        final int index = hash & (elementData.length - 1);
         return findNonNullKeyEntry(key, index, hash);
     }
 
-    private Entry<V> findNonNullKeyEntry(long key, int index, int keyHash) {
+    private Entry<V> findNonNullKeyEntry(final long key, final int index, final int keyHash) {
         Entry<V> m = elementData[index];
         while (m != null && key != m.key) {
             m = m.next;
@@ -171,10 +171,10 @@ public final class HashMapPrimitiveLongObject<V> {
      * @return the value of any previous mapping with the specified key or
      *         {@code null} if there was no such mapping.
      */
-    public V put(long key, V value) {
+    public V put(final long key, final V value) {
         Entry<V> entry;
-        int hash = longHash(key);
-        int index = hash & (elementData.length - 1);
+        final int hash = longHash(key);
+        final int index = hash & (elementData.length - 1);
         entry = findNonNullKeyEntry(key, index, hash);
         if (entry == null) {
            entry = createHashedEntry(key, index);
@@ -183,29 +183,29 @@ public final class HashMapPrimitiveLongObject<V> {
            }
         }
 
-        V result = entry.value;
+        final V result = entry.value;
         entry.value = value;
         return result;
     }
 
 
-    private Entry<V> createHashedEntry(long key, int index) {
-        Entry<V> entry = new Entry<V>(key);
+    private Entry<V> createHashedEntry(final long key, final int index) {
+        final Entry<V> entry = new Entry<>(key);
         entry.next = elementData[index];
         elementData[index] = entry;
         return entry;
     }
 
-    void rehash(int capacity) {
-        int length = capacity < DEFAULT_SIZE ? DEFAULT_SIZE : capacity << 1;
+    void rehash(final int capacity) {
+        final int length = capacity < DEFAULT_SIZE ? DEFAULT_SIZE : capacity << 1;
 
-        Entry<V>[] newData = newElementArray(length);
+        final Entry<V>[] newData = newElementArray(length);
         for (int i = 0; i < elementData.length; i++) {
             Entry<V> entry = elementData[i];
             elementData[i] = null;
             while (entry != null) {
-                int index = longHash(entry.key) & (length - 1);
-                Entry<V> next = entry.next;
+                final int index = longHash(entry.key) & (length - 1);
+                final Entry<V> next = entry.next;
                 entry.next = newData[index];
                 newData[index] = entry;
                 entry = next;
@@ -218,8 +218,8 @@ public final class HashMapPrimitiveLongObject<V> {
     private void rehash() {
         rehash(elementData.length);
     }
-    public V remove(long key) {
-        Entry<V> entry = removeEntry(key);
+    public V remove(final long key) {
+        final Entry<V> entry = removeEntry(key);
         if (entry != null) {
             return entry.value;
         }
@@ -227,12 +227,12 @@ public final class HashMapPrimitiveLongObject<V> {
     }
 
 
-    private Entry<V> removeEntry(long key) {
+    private Entry<V> removeEntry(final long key) {
         int index = 0;
         Entry<V> entry;
         Entry<V> last = null;
 
-        int hash = longHash(key);
+        final int hash = longHash(key);
         index = hash & (elementData.length - 1);
         entry = elementData[index];
         while (entry != null && key != entry.key) {

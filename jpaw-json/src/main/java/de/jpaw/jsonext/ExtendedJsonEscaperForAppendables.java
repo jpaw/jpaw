@@ -1,7 +1,6 @@
 package de.jpaw.jsonext;
 
 import java.io.IOException;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,20 +34,20 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
     protected final boolean instantInMillis;
     protected final boolean outputFractionalSeconds;
 
-    public ExtendedJsonEscaperForAppendables(Appendable appendable) {
+    public ExtendedJsonEscaperForAppendables(final Appendable appendable) {
         super(appendable);      // default: writeNulls = true, escapeNonAscii = false
         instantInMillis              = defaultInstantInMillis;
         outputFractionalSeconds      = defaultOutputFractionalSeconds;
     }
 
-    public ExtendedJsonEscaperForAppendables(Appendable appendable, boolean writeNulls, boolean escapeNonASCII, boolean instantInMillis) {
+    public ExtendedJsonEscaperForAppendables(final Appendable appendable, final boolean writeNulls, final boolean escapeNonASCII, final boolean instantInMillis) {
         super(appendable, writeNulls, escapeNonASCII);
         this.instantInMillis         = instantInMillis;
         outputFractionalSeconds      = defaultOutputFractionalSeconds;
     }
 
-    public ExtendedJsonEscaperForAppendables(Appendable appendable, boolean writeNulls, boolean escapeNonASCII, boolean instantInMillis,
-      boolean outputFractionalSeconds) {
+    public ExtendedJsonEscaperForAppendables(final Appendable appendable, final boolean writeNulls, final boolean escapeNonASCII, final boolean instantInMillis,
+      final boolean outputFractionalSeconds) {
         super(appendable, writeNulls, escapeNonASCII);
         this.instantInMillis         = instantInMillis;
         this.outputFractionalSeconds = outputFractionalSeconds;
@@ -56,7 +55,7 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
 
 
     // provided as a hook to allow overriding
-    protected void outputEnumSet(Object obj) throws IOException {
+    protected void outputEnumSet(final Object obj) throws IOException {
         if (obj instanceof AbstractStringEnumSet<?>) {
             outputUnicodeNoControls(((AbstractStringEnumSet<?>)obj).getBitmap());
         } else if (obj instanceof AbstractStringXEnumSet<?>) {
@@ -75,19 +74,19 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
     }
 
     // provided as a hook to allow overriding
-    protected void outputTokenizableEnum(TokenizableEnum obj) throws IOException {
+    protected void outputTokenizableEnum(final TokenizableEnum obj) throws IOException {
         outputUnicodeNoControls(obj.getToken());
     }
 
     // provided as a hook to allow overriding
-    protected void outputNonTokenizableEnum(Enum<?> obj) throws IOException {
+    protected void outputNonTokenizableEnum(final Enum<?> obj) throws IOException {
         outputNumber(obj.ordinal());
     }
 
     // provided as a hook to allow overriding
-    protected void outputInstant(Instant obj) throws IOException {
-        long seconds = obj.getEpochSecond();
-        int millis = obj.getNano() / 1000000;
+    protected void outputInstant(final Instant obj) throws IOException {
+        final long seconds = obj.getEpochSecond();
+        final int millis = obj.getNano() / 1000000;
         if (instantInMillis) {
             appendable.append(Long.toString(1000L * seconds + millis));
         } else {
@@ -101,7 +100,7 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
     }
 
     @Override
-    public void outputJsonElement(Object obj) throws IOException {
+    public void outputJsonElement(final Object obj) throws IOException {
         // add Joda-Time types and enum / enumset types
         if (obj instanceof Enum) {
             // distinguish Tokenizable

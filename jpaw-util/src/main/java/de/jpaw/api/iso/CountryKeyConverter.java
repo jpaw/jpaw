@@ -12,7 +12,7 @@ public final class CountryKeyConverter {
     private static final String[] FREQUENT_COUNTRY_CODES_A2 = {            // sorted by descending gross domestic product, 2012
         "XX", "US", "CN", "JP", "DE", "FR", "BR", "GB", "RU", "IN", "IT"    // plus "XX" for default
     };
-    private static final ConcurrentMap<String, Integer> FREQUENT_COUNTRY_CODES_A2_MAP = new ConcurrentHashMap<String, Integer>(400);
+    private static final ConcurrentMap<String, Integer> FREQUENT_COUNTRY_CODES_A2_MAP = new ConcurrentHashMap<>(400);
     static {
         for (int i = 0; i < FREQUENT_COUNTRY_CODES_A2.length; ++i) {
             FREQUENT_COUNTRY_CODES_A2_MAP.put(FREQUENT_COUNTRY_CODES_A2[i], Integer.valueOf(i + 1));
@@ -24,8 +24,8 @@ public final class CountryKeyConverter {
     /** convert a country code string into a number, or return 0 if the code does not conform to the spec.
      * Frequently occurring codes will get small numbers.
      * The range is within [1..776) (10 bit) */
-    public static int countryCodeA2ToInt(String countryCode) {
-        Integer frequent = FREQUENT_COUNTRY_CODES_A2_MAP.get(countryCode);
+    public static int countryCodeA2ToInt(final String countryCode) {
+        final Integer frequent = FREQUENT_COUNTRY_CODES_A2_MAP.get(countryCode);
         if (frequent != null)
             return frequent.intValue();
         // error check
@@ -54,11 +54,11 @@ public final class CountryKeyConverter {
     public static void populateCache() {
         final String[] countries = Locale.getISOCountries();
         for (int i = 0; i < countries.length; ++i) {
-            String countryCode = countries[i];
-            Integer code = FREQUENT_COUNTRY_CODES_A2_MAP.get(countryCode);
+            final String countryCode = countries[i];
+            final Integer code = FREQUENT_COUNTRY_CODES_A2_MAP.get(countryCode);
             if (code == null) {
                 // not yet in cache
-                int newCode = countryCodeA2ToInt(countryCode);
+                final int newCode = countryCodeA2ToInt(countryCode);
                 if (newCode > 0) {
                     // valid code: store it with the predictable index
                     FREQUENT_COUNTRY_CODES_A2_MAP.putIfAbsent(countryCode, Integer.valueOf(newCode));

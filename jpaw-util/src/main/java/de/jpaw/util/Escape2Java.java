@@ -10,7 +10,7 @@ public final class Escape2Java {
             return s;  // shortcut - avoid buffer allocation unless required
         final StringBuilder sb = new StringBuilder(s.length() * 2);  // rough estimate on size
         for (int i = 0; i < s.length(); ++i) {
-            int c = 0xffff & s.charAt(i);
+            final int c = 0xffff & s.charAt(i);
             if (c < 0x20) {
                 switch (c) {
                 case '\b':
@@ -61,7 +61,7 @@ public final class Escape2Java {
         return sb.toString();
     }
 
-    private static void appendHex(StringBuilder sb, int c) {
+    private static void appendHex(final StringBuilder sb, final int c) {
         sb.append('\\');
         sb.append('u');
         sb.append(HEX_DIGITS[0xf & (c >> 12)]);
@@ -74,7 +74,7 @@ public final class Escape2Java {
     private static boolean needsEscaping(final String s) {
         if (s != null) {
             for (int i = 0; i < s.length(); ++i) {
-                int c = s.charAt(i);
+                final int c = s.charAt(i);
                 if (c < 0x20 || c > 0x7e)
                     return true;
                 switch (c) {

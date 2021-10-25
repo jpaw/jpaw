@@ -34,15 +34,15 @@ public class JsonException extends ApplicationException {
         codeToDescription.put(JSON_BAD_ESCAPE,                "Invalid JSON (unicode) escape sequence");
     }
 
-    public JsonException(int errorCode, int pos) {
+    public JsonException(final int errorCode, final int pos) {
         super(errorCode, String.format("At pos %d", pos));
     }
 
-    public JsonException(int errorCode, String text) {
+    public JsonException(final int errorCode, final String text) {
         super(errorCode, text);
     }
 
-    public JsonException(int errorCode) {
+    public JsonException(final int errorCode) {
         this(errorCode, null);
     }
 

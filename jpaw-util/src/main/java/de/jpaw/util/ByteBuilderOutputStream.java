@@ -31,21 +31,21 @@ public class ByteBuilderOutputStream extends OutputStream {
     private static final Charset DEFAULT_CHARSET = ByteArray.CHARSET_UTF8;
     private final ByteBuilder buff;
 
-    public ByteBuilderOutputStream(int initialSize) {
+    public ByteBuilderOutputStream(final int initialSize) {
         buff = new ByteBuilder(initialSize, DEFAULT_CHARSET);
     }
 
-    public ByteBuilderOutputStream(ByteBuilder buff) {
+    public ByteBuilderOutputStream(final ByteBuilder buff) {
         this.buff = buff;
     }
 
     @Override
-    public void write(int b) throws IOException {
+    public void write(final int b) throws IOException {
         buff.append((byte)b);
     }
 
     @Override
-    public void write(byte[] b, int offset, int len) throws IOException {
+    public void write(final byte[] b, final int offset, final int len) throws IOException {
         buff.write(b, offset, len);
     }
 

@@ -10,21 +10,21 @@ public abstract class AbstractScaledShortAdapter extends XmlAdapter<BigDecimal, 
     private final boolean allowRounding;
     private final int scale;
 
-    protected AbstractScaledShortAdapter(int scale, boolean allowRounding) {
+    protected AbstractScaledShortAdapter(final int scale, final boolean allowRounding) {
         this.scale = scale;
         this.allowRounding = allowRounding;
     }
 
     @Override
-    public Short unmarshal(BigDecimal v) throws Exception {
+    public Short unmarshal(final BigDecimal v) throws Exception {
         if (v.signum() == 0)
             return ZERO;  // always valid
-        BigDecimal vv = v.setScale(scale, allowRounding ? RoundingMode.HALF_EVEN : RoundingMode.UNNECESSARY);
+        final BigDecimal vv = v.setScale(scale, allowRounding ? RoundingMode.HALF_EVEN : RoundingMode.UNNECESSARY);
         return vv.unscaledValue().shortValue();
     }
 
     @Override
-    public BigDecimal marshal(Short v) throws Exception {
+    public BigDecimal marshal(final Short v) throws Exception {
         return BigDecimal.valueOf(v.shortValue(), scale);
     }
 }

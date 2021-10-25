@@ -14,21 +14,21 @@ public abstract class AbstractStringEnumSet<E extends Enum<E> & TokenizableEnum>
         super(EMPTY);
     }
 
-    protected AbstractStringEnumSet(String bitmap) {
+    protected AbstractStringEnumSet(final String bitmap) {
         super(bitmap);
     }
 
     @Override
-    public boolean add(E e) {
+    public boolean add(final E e) {
         return addEnum(e);
     }
 
     /** Let this instance have the same contents as that. */
     @Override
-    public void assign(Collection<E> that) {
+    public void assign(final Collection<E> that) {
         clear();
         if (that != null) {
-            for (E o : that) {
+            for (final E o : that) {
                 add(o);
             }
         }
@@ -41,13 +41,13 @@ public abstract class AbstractStringEnumSet<E extends Enum<E> & TokenizableEnum>
         private final E[] values;
         private int index = 0;
 
-        public SetOfEnumsIterator(E[] values, String bitmap) {
+        public SetOfEnumsIterator(final E[] values, final String bitmap) {
             this.bitmap = bitmap;
             this.values = values;
         }
 
-        private E getValue(String token) {
-            for (E e: values) {
+        private E getValue(final String token) {
+            for (final E e: values) {
                 if (token.equals(e.getToken())) {
                     return e;
                 }

@@ -34,20 +34,20 @@ public class BaseJsonComposer implements JsonEscaper {
     protected final boolean writeNulls;
     protected final boolean escapeNonASCII;
 
-    public BaseJsonComposer(Appendable appendable) {
+    public BaseJsonComposer(final Appendable appendable) {
         this.appendable     = appendable;
         this.writeNulls     = true;
         this.escapeNonASCII = false;
     }
 
-    public BaseJsonComposer(Appendable appendable, boolean writeNulls, boolean escapeNonASCII) {
+    public BaseJsonComposer(final Appendable appendable, final boolean writeNulls, final boolean escapeNonASCII) {
         this.appendable     = appendable;
         this.writeNulls     = writeNulls;
         this.escapeNonASCII = escapeNonASCII;       // escape all non-ASCII-chars (required for sockJS)
     }
 
     @Override
-    public void writeUnicodeEscape(char c) throws IOException {
+    public void writeUnicodeEscape(final char c) throws IOException {
         appendable.append('\\');
         appendable.append('u');
         appendable.append(HEX_CHARS[(c >> 12) & 0xF]);
@@ -58,14 +58,14 @@ public class BaseJsonComposer implements JsonEscaper {
 
     /** Writes a quoted string. We know that we don't need escaping. */
     @Override
-    public void outputAscii(String s) throws IOException {
+    public void outputAscii(final String s) throws IOException {
         appendable.append('"');
         appendable.append(s);
         appendable.append('"');
     }
 
     @Override
-    public void outputUnicodeNoControls(String s) throws IOException {
+    public void outputUnicodeNoControls(final String s) throws IOException {
         if (escapeNonASCII) {
             outputUnicodeWithControls(s);       // nonstd - need to check as well in this case
         } else {
@@ -78,11 +78,11 @@ public class BaseJsonComposer implements JsonEscaper {
      * See here for the explanation: http://stackoverflow.com/questions/1527856/how-can-i-iterate-through-the-unicode-codepoints-of-a-java-string
      *  */
     @Override
-    public void outputUnicodeWithControls(String s) throws IOException {
+    public void outputUnicodeWithControls(final String s) throws IOException {
         appendable.append('\"');
-        int len = s.length();
+        final int len = s.length();
         for (int i = 0; i < len; ++i) {
-            char c = s.charAt(i);
+            final char c = s.charAt(i);
             if ((c & ~0x7f) != 0) {   // TODO: check if this works correctly for Unicodes characters of the upper plane
                 // non-ASCII (0x80 and above)
                 if (escapeNonASCII)
@@ -101,14 +101,14 @@ public class BaseJsonComposer implements JsonEscaper {
     }
 
     @Override
-    public void outputJsonObject(Map<String, Object> obj) throws IOException {
+    public void outputJsonObject(final Map<String, Object> obj) throws IOException {
         if (obj == null) {
             appendable.append("null");
             return;
         }
         appendable.append('{');
         boolean needDelim = false;
-        for (Map.Entry<String, Object> elem: obj.entrySet()) {
+        for (final Map.Entry<String, Object> elem: obj.entrySet()) {
             if (elem.getValue() != null || writeNulls) {
                 if (needDelim)
                     appendable.append(',');
@@ -122,14 +122,14 @@ public class BaseJsonComposer implements JsonEscaper {
     }
 
     @Override
-    public void outputJsonArray(List<?> obj) throws IOException {
+    public void outputJsonArray(final List<?> obj) throws IOException {
         if (obj == null) {
             appendable.append("null");
             return;
         }
         boolean needDelim = false;
         appendable.append('[');
-        for (Object o : obj) {
+        for (final Object o : obj) {
             if (needDelim)
                 appendable.append(',');
             outputOptionalJsonElement(o);
@@ -139,7 +139,7 @@ public class BaseJsonComposer implements JsonEscaper {
     }
 
     @Override
-    public void outputJsonElement(Object obj) throws IOException {
+    public void outputJsonElement(final Object obj) throws IOException {
         if (obj instanceof Number) {
             outputNumber((Number)obj);
             return;
@@ -159,7 +159,7 @@ public class BaseJsonComposer implements JsonEscaper {
         if (obj instanceof Set<?>) {
             boolean needDelim = false;
             appendable.append('[');
-            for (Object o : (Set<?>)obj) {
+            for (final Object o : (Set<?>)obj) {
                 if (needDelim)
                     appendable.append(',');
                 outputOptionalJsonElement(o);
@@ -181,7 +181,7 @@ public class BaseJsonComposer implements JsonEscaper {
         if (obj instanceof Object[]) {
             boolean needDelim = false;
             appendable.append('[');
-            for (Object o : (Object[])obj) {
+            for (final Object o : (Object[])obj) {
                 if (needDelim)
                     appendable.append(',');
                 outputOptionalJsonElement(o);
@@ -199,27 +199,27 @@ public class BaseJsonComposer implements JsonEscaper {
     }
 
     @Override
-    public void outputNumber(Number n) throws IOException {
+    public void outputNumber(final Number n) throws IOException {
         appendable.append(n.toString());
     }
 
     @Override
-    public void outputBoolean(boolean b) throws IOException {
+    public void outputBoolean(final boolean b) throws IOException {
         appendable.append(b ? "true" : "false");
     }
 
     // code moved out due to excessive length
-    private void outputPrimitiveArrays(Object obj) throws IOException {
+    private void outputPrimitiveArrays(final Object obj) throws IOException {
         if (obj instanceof byte[]) {
             // special case: not an array, but a base64 encoded string
-            byte[] array = (byte[])obj;
-            ByteBuilder tmp = new ByteBuilder(0, null);
+            final byte[] array = (byte[])obj;
+            final ByteBuilder tmp = new ByteBuilder(0, null);
             Base64.encodeToByte(tmp, array, 0, array.length);
             outputAscii(tmp.toString());
             return;
         }
         if (obj instanceof int[]) {
-            int[] array = (int[])obj;
+            final int[] array = (int[])obj;
             appendable.append('[');
             for (int i = 0; i < array.length; ++i) {
                 if (i > 0)
@@ -230,7 +230,7 @@ public class BaseJsonComposer implements JsonEscaper {
             return;
         }
         if (obj instanceof boolean[]) {
-            boolean[] array = (boolean[])obj;
+            final boolean[] array = (boolean[])obj;
             appendable.append('[');
             for (int i = 0; i < array.length; ++i) {
                 if (i > 0)
@@ -241,7 +241,7 @@ public class BaseJsonComposer implements JsonEscaper {
             return;
         }
         if (obj instanceof char[]) {
-            char[] array = (char[])obj;
+            final char[] array = (char[])obj;
             appendable.append('[');
             for (int i = 0; i < array.length; ++i) {
                 if (i > 0)
@@ -252,7 +252,7 @@ public class BaseJsonComposer implements JsonEscaper {
             return;
         }
         if (obj instanceof long[]) {
-            long[] array = (long[])obj;
+            final long[] array = (long[])obj;
             appendable.append('[');
             for (int i = 0; i < array.length; ++i) {
                 if (i > 0)
@@ -263,7 +263,7 @@ public class BaseJsonComposer implements JsonEscaper {
             return;
         }
         if (obj instanceof short[]) {
-            short[] array = (short[])obj;
+            final short[] array = (short[])obj;
             appendable.append('[');
             for (int i = 0; i < array.length; ++i) {
                 if (i > 0)
@@ -274,7 +274,7 @@ public class BaseJsonComposer implements JsonEscaper {
             return;
         }
         if (obj instanceof double[]) {
-            double[] array = (double[])obj;
+            final double[] array = (double[])obj;
             appendable.append('[');
             for (int i = 0; i < array.length; ++i) {
                 if (i > 0)
@@ -285,7 +285,7 @@ public class BaseJsonComposer implements JsonEscaper {
             return;
         }
         if (obj instanceof float[]) {
-            float[] array = (float[])obj;
+            final float[] array = (float[])obj;
             appendable.append('[');
             for (int i = 0; i < array.length; ++i) {
                 if (i > 0)
@@ -299,7 +299,7 @@ public class BaseJsonComposer implements JsonEscaper {
     }
 
     @Override
-    public void outputOptionalJsonElement(Object obj) throws IOException {
+    public void outputOptionalJsonElement(final Object obj) throws IOException {
         if (obj == null) {
             appendable.append("null");
         } else {

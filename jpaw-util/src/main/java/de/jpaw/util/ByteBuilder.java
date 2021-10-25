@@ -43,7 +43,7 @@ public final class ByteBuilder implements DataOutput {
     private byte[] buffer;
 
     // set all private variables
-    private void constructorHelper(int size) {
+    private void constructorHelper(final int size) {
         buffer = size > 0 ? new byte[size] : DEFAULT_EMPTY_BUFFER;
         currentAllocSize = size;
         currentLength = 0;
@@ -53,7 +53,7 @@ public final class ByteBuilder implements DataOutput {
     public ByteBuilder() {  // default constructor
         constructorHelper(DEFAULT_INITIAL_CAPACITY);
     }
-    public ByteBuilder(int initialSize, Charset charset) {  // constructor with possibility to override settings
+    public ByteBuilder(final int initialSize, final Charset charset) {  // constructor with possibility to override settings
         constructorHelper(initialSize >= 0 ? initialSize : DEFAULT_INITIAL_CAPACITY);
         if (charset != null)
             this.charset = charset;
@@ -64,7 +64,7 @@ public final class ByteBuilder implements DataOutput {
         return charset;
     }
 
-    public void setCharset(Charset charset) {
+    public void setCharset(final Charset charset) {
         this.charset = charset;
     }
 
@@ -74,7 +74,7 @@ public final class ByteBuilder implements DataOutput {
         int newAllocSize = currentAllocSize <= 16 ? 32 : 2 * currentAllocSize;
         if (newAllocSize < currentLength + minimumRequired)
             newAllocSize = currentLength + minimumRequired;
-        byte[] newBuffer = new byte[newAllocSize];
+        final byte[] newBuffer = new byte[newAllocSize];
         // uuuh, at this point we allocate the old plus the new space
         // see if we have to transfer data
         if (currentLength > 0)
@@ -84,12 +84,12 @@ public final class ByteBuilder implements DataOutput {
         currentAllocSize = newAllocSize;
     }
     /** StringBuilder compatibility function: ensure that the total space is at least as requested. */
-    public void ensureCapacity(int minimumCapacity) {
+    public void ensureCapacity(final int minimumCapacity) {
         if (minimumCapacity > currentAllocSize)
             createMoreSpace(minimumCapacity - currentLength);
     }
     /** Ensure that at least delta bytes are left in the buffer, extending the buffer if required. */
-    public void require(int delta) {
+    public void require(final int delta) {
         if (currentLength + delta > currentAllocSize)
             createMoreSpace(currentLength + delta - currentLength);
     }
@@ -98,7 +98,7 @@ public final class ByteBuilder implements DataOutput {
      * External class must have obtained buffer through getCurrentBuffer() after calling ensureCapacity and getLength().
      * @param newLength
      */
-    public void setLength(int newLength) {
+    public void setLength(final int newLength) {
         if (newLength > currentAllocSize)
             throw new IndexOutOfBoundsException();
         currentLength = newLength;
@@ -107,30 +107,30 @@ public final class ByteBuilder implements DataOutput {
      * External class must have obtained buffer through getCurrentBuffer() after calling ensureCapacity and getLength().
      * @param delta
      */
-    public void advanceBy(int delta) {
+    public void advanceBy(final int delta) {
         if (delta < 0 || currentLength + delta > currentAllocSize)
             throw new IndexOutOfBoundsException();
         currentLength += delta;
     }
-    public void append(String s) {
+    public void append(final String s) {
         if (s.length() > 0) {
             append(s.getBytes(charset));
         }
     }
     // append a single double-byte character (BMP 0)
-    public void appendUnicode(int c) {
+    public void appendUnicode(final int c) {
         if (c <= 127) {
             // ASCII character: this is faster
             append((byte)c);
         } else {
             // this is weird! Can't we do it better?
-            int[] tmp = new int[1];
+            final int[] tmp = new int[1];
             tmp[0] = c;
             append(new String(tmp, 0, 1).getBytes(charset));
         }
     }
     // append the contents of String, assuming all characters are single-byte. No test is done. Argument must not be null.
-    public void appendAscii(String s) {
+    public void appendAscii(final String s) {
         final int length = s.length();
         if (currentLength + length > currentAllocSize)
             createMoreSpace(length);
@@ -138,7 +138,7 @@ public final class ByteBuilder implements DataOutput {
             buffer[currentLength++] = (byte) s.charAt(i);
         }
     }
-    public void appendAscii(StringBuilder s) {
+    public void appendAscii(final StringBuilder s) {
         final int length = s.length();
         if (currentLength + length > currentAllocSize)
             createMoreSpace(length);
@@ -147,7 +147,7 @@ public final class ByteBuilder implements DataOutput {
         }
     }
 
-    public byte byteAt(int pos) {
+    public byte byteAt(final int pos) {
         if (pos < 0 || pos >= currentLength)
             throw new IndexOutOfBoundsException();
         return buffer[pos];
@@ -164,7 +164,7 @@ public final class ByteBuilder implements DataOutput {
 
     // returns a defensive copy of the contents
     public byte[] getBytes() {
-        byte[] tmp = new byte[currentLength];
+        final byte[] tmp = new byte[currentLength];
         System.arraycopy(buffer, 0, tmp, 0, currentLength);
         return tmp;
     }
@@ -191,7 +191,7 @@ public final class ByteBuilder implements DataOutput {
             int maxNow = maxBytes == 0 ? BUFFER_SIZE : maxBytes - totalBytes;
             if (maxNow > BUFFER_SIZE)
                 maxNow = BUFFER_SIZE;
-            int morebytes = is.read(tmpBuffer, 0, maxNow);
+            final int morebytes = is.read(tmpBuffer, 0, maxNow);
             if (morebytes > 0) {
                 totalBytes += morebytes;
                 write(tmpBuffer, 0, morebytes);
@@ -202,7 +202,7 @@ public final class ByteBuilder implements DataOutput {
         return totalBytes;
     }
 
-    public String hexdump(int startAt, int maxlength) {
+    public String hexdump(final int startAt, final int maxlength) {
         if (currentLength <= startAt)
             return "";      // no data to dump
         return ByteUtil.dump(buffer, startAt, (maxlength > 0 && maxlength < currentLength) ? maxlength : currentLength);
@@ -219,12 +219,12 @@ public final class ByteBuilder implements DataOutput {
 
     // append another byte array
     @Deprecated
-    public void append(byte[] array) {
+    public void append(final byte[] array) {
         write(array);
     }
     @Override
-    public void write(byte[] array) {
-        int length = array.length;
+    public void write(final byte[] array) {
+        final int length = array.length;
         if (length > 0) {
             if (currentLength + length > currentAllocSize)
                 createMoreSpace(length);
@@ -235,11 +235,11 @@ public final class ByteBuilder implements DataOutput {
 
     // append part of another byte array. use write!
     @Deprecated
-    public void append(byte[] array, int offset, int length) {
+    public void append(final byte[] array, final int offset, final int length) {
         write(array, offset, length);
     }
     @Override
-    public void write(byte[] array, int offset, int length) {
+    public void write(final byte[] array, final int offset, final int length) {
         if (length > 0) {
             if (currentLength + length > currentAllocSize)
                 createMoreSpace(length);
@@ -249,21 +249,21 @@ public final class ByteBuilder implements DataOutput {
     }
 
     @Override
-    public void writeBoolean(boolean v) throws IOException {
+    public void writeBoolean(final boolean v) throws IOException {
         writeByte(v ? 1 : 0);
     }
 
     @Override
-    public void write(int n) {
+    public void write(final int n) {
         writeByte(n);
     }
 
     /** Append a byte to the buffer. */
-    public void append(byte b) {
+    public void append(final byte b) {
         write(b);
     }
     @Override
-    public void writeByte(int b) {
+    public void writeByte(final int b) {
         if (currentLength >= currentAllocSize)
             createMoreSpace(1);
         buffer[currentLength++] = (byte)b;
@@ -271,11 +271,11 @@ public final class ByteBuilder implements DataOutput {
 
     /** Append a short to the buffer. High endian. */
     @Deprecated
-    public void append(short n) {
+    public void append(final short n) {
         writeShort(n);
     }
     @Override
-    public void writeShort(int n) {
+    public void writeShort(final int n) {
         if (currentLength + 2 > currentAllocSize)
             createMoreSpace(2);
         buffer[currentLength++] = (byte) (n >>> 8);
@@ -283,17 +283,17 @@ public final class ByteBuilder implements DataOutput {
     }
 
     @Override
-    public void writeChar(int v) {
+    public void writeChar(final int v) {
         writeShort(v);
     }
 
     /** Append an int to the buffer. High endian. */
     @Deprecated
-    public void append(int n) {
+    public void append(final int n) {
         writeInt(n);
     }
     @Override
-    public void writeInt(int n) {
+    public void writeInt(final int n) {
         if (currentLength + 4 > currentAllocSize)
             createMoreSpace(4);
         buffer[currentLength] = (byte) (n >>> 24);
@@ -305,14 +305,14 @@ public final class ByteBuilder implements DataOutput {
 
     /** Append a long to the buffer. High endian. */
     @Deprecated
-    public void append(long n) {
+    public void append(final long n) {
         writeLong(n);
     }
     @Override
-    public void writeLong(long n) {
+    public void writeLong(final long n) {
         if (currentLength + 8 > currentAllocSize)
             createMoreSpace(8);
-        int nn = (int)(n >> 32);
+        final int nn = (int)(n >> 32);
         buffer[currentLength] = (byte) (nn >>> 24);
         buffer[currentLength + 1] = (byte) (nn >>> 16);
         buffer[currentLength + 2] = (byte) (nn >>> 8);
@@ -325,18 +325,18 @@ public final class ByteBuilder implements DataOutput {
     }
 
     @Override
-    public void writeFloat(float v) {
+    public void writeFloat(final float v) {
         writeInt(Float.floatToRawIntBits(v));
     }
 
     @Override
-    public void writeDouble(double v) throws IOException {
+    public void writeDouble(final double v) throws IOException {
         writeLong(Double.doubleToRawLongBits(v));
     }
 
     // writes s as ASCII string (1 byte per character)
     @Override
-    public void writeBytes(String s) throws IOException {
+    public void writeBytes(final String s) throws IOException {
         final int len = s.length();
         if (currentLength + len > currentAllocSize)
             createMoreSpace(len);
@@ -347,12 +347,12 @@ public final class ByteBuilder implements DataOutput {
 
     // writes s as UTF-16 string (2 byte per character)
     @Override
-    public void writeChars(String s) throws IOException {
+    public void writeChars(final String s) throws IOException {
         final int len = s.length();
         if (currentLength + 2 * len > currentAllocSize)
             createMoreSpace(2 * len);
         for (int i = 0; i < len; ++i) {
-            char c = s.charAt(i);
+            final char c = s.charAt(i);
             buffer[currentLength++] = (byte) (c >>> 8);
             buffer[currentLength++] = (byte) c;
         }
@@ -360,11 +360,11 @@ public final class ByteBuilder implements DataOutput {
 
     // writeUTF is weird, do not use. It uses a modified UTF-8 encoding which probably is not understood by applications written in other languages.
     @Override
-    public void writeUTF(String s) throws IOException {
+    public void writeUTF(final String s) throws IOException {
         final int len = s.length(); // length in characters
         int numBytes = len;         // length in bytes
         for (int i = 0; i < len; ++i) {
-            char c = s.charAt(i);
+            final char c = s.charAt(i);
             if (c < 0x80) {
                 if (c == 0)
                     ++numBytes;
@@ -384,7 +384,7 @@ public final class ByteBuilder implements DataOutput {
         buffer[currentLength++] = (byte) (numBytes >>> 8);
         buffer[currentLength++] = (byte) numBytes;
         for (int i = 0; i < len; ++i) {
-            int c = s.charAt(i);
+            final int c = s.charAt(i);
             if (c != 0 && c < 128) {
                 buffer[currentLength++] = (byte) c;
             } else if (c < 0x800) {

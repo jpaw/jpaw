@@ -9,18 +9,18 @@ import de.jpaw.enums.AbstractXEnumBase;
 public class XenumInitializer {
     private static final Logger LOGGER = LoggerFactory.getLogger(XenumInitializer.class);
 
-    public static void initializeXenums(String packageName) {
+    public static void initializeXenums(final String packageName) {
         initializeXenums(ReflectionsPackageCache.get(packageName));
     }
 
-    public static void initializeXenums(Reflections ... reflections) {
+    public static void initializeXenums(final Reflections ... reflections) {
         for (int i = 0; i < reflections.length; ++i) {
             int ctr = 0;
-            for (Class<? extends AbstractXEnumBase> cls : reflections[i].getSubTypesOf(AbstractXEnumBase.class)) {
+            for (final Class<? extends AbstractXEnumBase> cls : reflections[i].getSubTypesOf(AbstractXEnumBase.class)) {
                 try {
                     cls.getMethod("xenum$MetaData").invoke(null);
                     ++ctr;
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     LOGGER.warn("Cannot initialize xenum {}: {}", cls.getCanonicalName(), e.getMessage());
                 }
             }

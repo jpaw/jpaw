@@ -9,7 +9,7 @@ public final class CollectionUtil {
      * @param numEntries The number of expected entries
      * @return the size which allows a map without resizing
      */
-    public static int mapInitialSize(int numEntries) {
+    public static int mapInitialSize(final int numEntries) {
         return numEntries <= 0 ? 0 : numEntries + ((1 + numEntries) >> 1);      // good for a load factor as low as 0.6667
     }
 }

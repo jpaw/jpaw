@@ -20,9 +20,9 @@ public final class StringSerializer {
      *            A Stringbuilder that containes a bonaportable
      * @return the converted bonaportable
      */
-    public static String toString(StringBuilder builder) {
-        StringBuilder result = new StringBuilder();
-        for (char c : builder.toString().toCharArray()) {
+    public static String toString(final StringBuilder builder) {
+        final StringBuilder result = new StringBuilder();
+        for (final char c : builder.toString().toCharArray()) {
             if (c == '\t') {
                 // special handling for tabs that only appear in ascii/unicode fields. We want java notation
                 result.append("\\t");
@@ -43,10 +43,10 @@ public final class StringSerializer {
     /**
      * Converts a bonaPortable provided with a simple String representation to Stringbuilder.
      */
-    public static StringBuilder fromString(String string) {
-        StringBuilder result = new StringBuilder();
+    public static StringBuilder fromString(final String string) {
+        final StringBuilder result = new StringBuilder();
         boolean escaped = false;
-        for (char c : string.toCharArray()) {
+        for (final char c : string.toCharArray()) {
             if (escaped) {
                 escaped = false;
                 if (c == 't') {
@@ -68,11 +68,11 @@ public final class StringSerializer {
         return result;
     }
 
-    public static String altToString(String src) {
-        StringBuilder result = new StringBuilder();
-        int i = 0;
+    public static String altToString(final String src) {
+        final StringBuilder result = new StringBuilder();
+        final int i = 0;
         while (i < src.length()) {
-            char c = src.charAt(i);
+            final char c = src.charAt(i);
             if (c < 32) {
                 // escaped
                 result.append('<').append((char) (c + 64)).append('>');
@@ -87,8 +87,8 @@ public final class StringSerializer {
     /**
      * Converts a bonaPortable provided with a simple String representation to Stringbuilder.
      */
-    public static String altFromString(String src) {
-        StringBuilder result = new StringBuilder();
+    public static String altFromString(final String src) {
+        final StringBuilder result = new StringBuilder();
         int i = 0;
         while (i < src.length()) {
             char c = src.charAt(i);

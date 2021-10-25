@@ -15,7 +15,7 @@ public final class JavaCurrencyDataProvider implements CurrencyDataProvider {
 
     public static final class JavaCurrencyData implements CurrencyData {
         private final Currency currency;
-        private JavaCurrencyData(Currency currency) {
+        private JavaCurrencyData(final Currency currency) {
             this.currency = currency;
         }
 
@@ -46,16 +46,16 @@ public final class JavaCurrencyDataProvider implements CurrencyDataProvider {
 
     }
     @Override
-    public CurrencyData get(String key) {
+    public CurrencyData get(final String key) {
         try {
             return new JavaCurrencyData(Currency.getInstance(key));
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             return null;
         }
     }
 
     @Override
-    public void set(String key, CurrencyData data) {
+    public void set(final String key, final CurrencyData data) {
         throw new UnsupportedOperationException("Cannot create new currencies");
     }
 
@@ -70,9 +70,9 @@ public final class JavaCurrencyDataProvider implements CurrencyDataProvider {
 
     @Override
     public List<CurrencyData> getAll() {
-        Set<Currency> allJavaCurrencies = Currency.getAvailableCurrencies();
-        List<CurrencyData> result = new ArrayList<CurrencyData>(allJavaCurrencies.size());
-        for (Currency c : allJavaCurrencies) {
+        final Set<Currency> allJavaCurrencies = Currency.getAvailableCurrencies();
+        final List<CurrencyData> result = new ArrayList<>(allJavaCurrencies.size());
+        for (final Currency c : allJavaCurrencies) {
             result.add(INSTANCE.get(c.getCurrencyCode()));
         }
         return result;

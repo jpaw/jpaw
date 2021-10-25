@@ -8,33 +8,33 @@ public final class ByteUtil {
 
     private ByteUtil() { }
 
-    public static byte[] deepCopy(byte[] org) {
+    public static byte[] deepCopy(final byte[] org) {
         if (org == null)
             return null;
-        byte[] result = new byte[org.length];
+        final byte[] result = new byte[org.length];
         System.arraycopy(org, 0, result, 0, org.length);
         return result;
     }
 
-    private static String readable(byte[] a, int offset, StringBuilder w, int max) {
+    private static String readable(final byte[] a, final int offset, final StringBuilder w, final int max) {
         w.setLength(0);
         int l = max < 8 ? max : 8;
         for (int i = 0; i < l; ++i) {
-            char c = (char) (a[offset + i]);
+            final char c = (char) (a[offset + i]);
             w.append(CharTestsASCII.isAsciiPrintable(c) ? c : '.');
         }
         if (max > 8) {
             l = max < 16 ? max : 16;
             w.append(' ');
             for (int i = 8; i < l; ++i) {
-                char c = (char) (a[offset + i]);
+                final char c = (char) (a[offset + i]);
                 w.append(CharTestsASCII.isAsciiPrintable(c) ? c : '.');
             }
         }
         return w.toString();
     }
 
-    private static String hexOrBlank(byte[] a, int i) {
+    private static String hexOrBlank(final byte[] a, final int i) {
         if (i >= a.length)
             return "   ";
         return String.format("%02x ", a[i]);
@@ -46,7 +46,7 @@ public final class ByteUtil {
      * @param a          the byte array to dump
      * @param maxlength  the maximum number of bytes to output to the logger (to avoid megabytes of data)
      */
-    public static String dump(byte[] a, int maxlength) {
+    public static String dump(final byte[] a, final int maxlength) {
         return dump(a, 0, maxlength);
     }
 
@@ -58,13 +58,13 @@ public final class ByteUtil {
      *                   This implementation will always align at 16 byte boundaries).
      * @param maxlength  the maximum number of bytes to output to the logger (to avoid megabytes of data)
      */
-    public static String dump(byte[] a, int startAt, int maxlength) {
+    public static String dump(final byte[] a, int startAt, final int maxlength) {
         startAt = startAt < 0 ? 0 : (startAt & ~0x0f);
         int endAt = maxlength > 0 && maxlength < a.length ? maxlength : a.length;
         if (endAt < startAt)
             endAt = startAt;
-        StringBuilder w = new StringBuilder(20);
-        StringBuilder buff = new StringBuilder((endAt - startAt) * 5 + 80);
+        final StringBuilder w = new StringBuilder(20);
+        final StringBuilder buff = new StringBuilder((endAt - startAt) * 5 + 80);
         // output only multiples of 16...
         int i;
         for (i = (startAt & ~0x0f); i < (a.length & ~0x0f); i += 16) {

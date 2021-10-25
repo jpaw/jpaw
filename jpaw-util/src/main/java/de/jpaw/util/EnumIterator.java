@@ -13,7 +13,7 @@ public class EnumIterator<E extends Enum<E>> implements Iterator<E> {
     private final E[] allValues;
     private int pos;
 
-    public EnumIterator(E[] allValues) {
+    public EnumIterator(final E[] allValues) {
         this.allValues = allValues;
         pos = 0;
     }

@@ -1,7 +1,8 @@
 package de.jpaw.xml.jaxb;
 
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.Instant;
+
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 public class InstantAdapter extends XmlAdapter<String, Instant> {
     public static boolean outputFractionalSeconds   = true;     // output fractional seconds
@@ -23,7 +24,7 @@ public class InstantAdapter extends XmlAdapter<String, Instant> {
     }
 
     @Override
-    public String marshal(Instant v) throws Exception {
+    public String marshal(final Instant v) throws Exception {
         if (outputFractionalSeconds || v.getNano() == 0) {
             return v.toString();
         } else {

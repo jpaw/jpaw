@@ -27,7 +27,7 @@ public abstract class AbstractFreezableEnumSet<E extends Enum<E>> extends Abstra
     public final void assign(final Collection<E> that) {
         clear();
         if (that != null) {
-            for (E o : that) {
+            for (final E o : that) {
                 add(o);
             }
         }

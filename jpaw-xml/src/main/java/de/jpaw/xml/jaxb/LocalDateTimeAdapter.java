@@ -13,7 +13,7 @@ import de.jpaw.util.FormattersAndParsers;
 public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
     private static final Logger LOGGER = LoggerFactory.getLogger(LocalDateTimeAdapter.class);
 
-    public static String  addSuffixTimezone         = null;     // add suffix "Z" (or other) on output (to simulate UTC time zone)    
+    public static String  addSuffixTimezone         = null;     // add suffix "Z" (or other) on output (to simulate UTC time zone)
     public static boolean tolerateSuffixUTC         = false;    // ignore suffix "Z" when parsing
     public static boolean ignoreFractionalSeconds   = false;    // ignore fractional seconds when parsing
     public static boolean outputFractionalSeconds   = true;     // output fractional seconds

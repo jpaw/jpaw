@@ -31,8 +31,8 @@ public class TestXmlWriter {
         private final int value;
 
         DummyClass() {
-        	name = null;
-        	value = 0;
+            name = null;
+            value = 0;
         }
         DummyClass(String name, int value) {
             this.name = name;

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
 @Active(AddLoggerProcessor) annotation AddLogger {}
 
 class AddLoggerProcessor extends AbstractClassProcessor {
-    
+
     override doTransform(MutableClassDeclaration cls, extension TransformationContext context) {
         val factory = LoggerFactory.newTypeReference
         cls.addField('LOGGER') [

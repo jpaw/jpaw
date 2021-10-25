@@ -54,8 +54,8 @@ public class ModVsAnd {
     public void modulusRand(Blackhole bh) {
         int sum = 0;
         for (int i = 0; i < NUM; ++i) {
-			sum += a[i] % b[i];
-		}
+            sum += a[i] % b[i];
+        }
         bh.consume(sum);
     }
 
@@ -63,8 +63,8 @@ public class ModVsAnd {
     public void bitwiseRand(Blackhole bh) {
         int sum = 0;
         for (int i = 0; i < NUM; ++i) {
-			sum += a[i] & b[i];
-		}
+            sum += a[i] & b[i];
+        }
         bh.consume(sum);
     }
 
@@ -72,8 +72,8 @@ public class ModVsAnd {
     public void modulusConst(Blackhole bh) {
         int sum = 0;
         for (int i = 0; i < NUM; ++i) {
-			sum += a[i] % c[i];
-		}
+            sum += a[i] % c[i];
+        }
         bh.consume(sum);
     }
 
@@ -81,8 +81,8 @@ public class ModVsAnd {
     public void bitwiseConst(Blackhole bh) {
         int sum = 0;
         for (int i = 0; i < NUM; ++i) {
-			sum += a[i] & c[i];
-		}
+            sum += a[i] & c[i];
+        }
         bh.consume(sum);
     }
 }

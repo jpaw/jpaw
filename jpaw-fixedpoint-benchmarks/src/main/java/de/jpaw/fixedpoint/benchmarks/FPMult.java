@@ -85,8 +85,8 @@ public class FPMult {
     @Benchmark
     public void countLeadingBits(Blackhole bh) {
         for (int i = 0; i < testNums.length; ++i) {
-			bh.consume(Long.numberOfLeadingZeros(testNums[i]));
-		}
+            bh.consume(Long.numberOfLeadingZeros(testNums[i]));
+        }
     }
 
 //    @Benchmark
@@ -98,48 +98,48 @@ public class FPMult {
     @Benchmark
     public void multFPintMult(Blackhole bh) {
         for (int i = 0; i < testNums.length; ++i) {
-			bh.consume(testMicros[i].multiply(3));
-		}
+            bh.consume(testMicros[i].multiply(3));
+        }
     }
     @Benchmark
     public void multFPsubNoScale(Blackhole bh) {
         for (int i = 0; i < testNums.length; ++i) {
-			bh.consume(testMicros[i].mantissa_of_multiplication(testMillis[9 - i], 9, RoundingMode.UNNECESSARY));
-		}
+            bh.consume(testMicros[i].mantissa_of_multiplication(testMillis[9 - i], 9, RoundingMode.UNNECESSARY));
+        }
     }
 
     @Benchmark
     public void multFPsubWithScale(Blackhole bh) {
         for (int i = 0; i < testNums.length; ++i) {
-			bh.consume(testMicros[i].mantissa_of_multiplication(testMillis[9 - i], 3, RoundingMode.DOWN));
-		}
+            bh.consume(testMicros[i].mantissa_of_multiplication(testMillis[9 - i], 3, RoundingMode.DOWN));
+        }
     }
 
     @Benchmark
     public void multFPsubWithScaleWithBD(Blackhole bh) {
         for (int i = 0; i < testNums.length; ++i) {
-			bh.consume(testMicros[i].mantissa_of_multiplication_using_BD(testMillis[9 - i], 3, RoundingMode.DOWN));
-		}
+            bh.consume(testMicros[i].mantissa_of_multiplication_using_BD(testMillis[9 - i], 3, RoundingMode.DOWN));
+        }
     }
 
     @Benchmark
     public void roundFast(Blackhole bh) {
         for (int i = 0; i < testNums.length; ++i) {
-			bh.consume(MilliUnits.of(testMicros[i], RoundingMode.DOWN));
-		}
+            bh.consume(MilliUnits.of(testMicros[i], RoundingMode.DOWN));
+        }
     }
 
     @Benchmark
     public void roundSlow(Blackhole bh) {
         for (int i = 0; i < testNums.length; ++i) {
-			bh.consume(MilliUnits.of(testMicros[i], RoundingMode.HALF_EVEN));
-		}
+            bh.consume(MilliUnits.of(testMicros[i], RoundingMode.HALF_EVEN));
+        }
     }
 
     @Benchmark
     public void roundNot(Blackhole bh) {
         for (int i = 0; i < testNums.length; ++i) {
-			bh.consume(MicroUnits.of(testMillis[i], RoundingMode.UNNECESSARY));
-		}
+            bh.consume(MicroUnits.of(testMillis[i], RoundingMode.UNNECESSARY));
+        }
     }
 }

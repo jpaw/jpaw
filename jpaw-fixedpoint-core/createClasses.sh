@@ -13,4 +13,3 @@ createFromFemtos Micro 6 1000000L 1_000_000L
 createFromFemtos Nano  9 1000000000L 1_000_000_000L
 createFromFemtos Pico 12 1000000000000L 1_000_000_000_000L
 createFromFemtos "" 0 1L 1L
-

@@ -57,28 +57,28 @@ public class StringEscapers {
     @Benchmark
     public void escape2JavaApache1(Blackhole bh) {
         for (int i = 0; i < N; ++i) {
-			bh.consume(StringEscapeUtils.escapeJava(strings1[i]));
-		}
+            bh.consume(StringEscapeUtils.escapeJava(strings1[i]));
+        }
     }
 
     @Benchmark
     public void escape2JavaJpaw1(Blackhole bh) {
         for (int i = 0; i < N; ++i) {
-			bh.consume(Escape2Java.escapeString2Java(strings1[i]));
-		}
+            bh.consume(Escape2Java.escapeString2Java(strings1[i]));
+        }
     }
 
     @Benchmark
     public void escape2JavaApache5(Blackhole bh) {
         for (int i = 0; i < N; ++i) {
-			bh.consume(StringEscapeUtils.escapeJava(strings5[i]));
-		}
+            bh.consume(StringEscapeUtils.escapeJava(strings5[i]));
+        }
     }
 
     @Benchmark
     public void escape2JavaJpaw5(Blackhole bh) {
         for (int i = 0; i < N; ++i) {
-			bh.consume(Escape2Java.escapeString2Java(strings5[i]));
-		}
+            bh.consume(Escape2Java.escapeString2Java(strings5[i]));
+        }
     }
 }

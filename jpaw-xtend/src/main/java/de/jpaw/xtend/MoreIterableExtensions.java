@@ -19,7 +19,7 @@ public class MoreIterableExtensions {
 
     /**
      * Returns the maximum element of an iterable.
-     * 
+     *
      * @param iterable
      *            the items to be evaluated. May not be <code>null</code>.
      * @return the maximum element, or null if there was no not-null element.
@@ -41,7 +41,7 @@ public class MoreIterableExtensions {
 
     /**
      * Returns the minimum element of an iterable.
-     * 
+     *
      * @param iterable
      *            the items to be evaluated. May not be <code>null</code>.
      * @return the minimum element, or null if there was no not-null element.
@@ -49,7 +49,7 @@ public class MoreIterableExtensions {
     static public <T extends Comparable<? super T>> T min(Iterable<T> iterable) {
         return min(iterable, null);
     }
-    
+
     static public <T extends Comparable<? super T>> T min(Iterable<T> iterable, T infinity) {
         T minimum = infinity;
         Iterator<T> iterator = iterable.iterator();
@@ -61,13 +61,13 @@ public class MoreIterableExtensions {
         return minimum;
     }
 
-  
+
 
     /**
      * Puts the iterable's elements into buckets and applies a reduction method to the elements of each bucket.
      * Similar to SQL's GROUP BY directive.
      * Example of use:
-     * lineItems.groupBy([taxPercentage], [taxAmount], [sum, element | sum + element ]).forEach[pct, sum | (output pct and sum here...)] 
+     * lineItems.groupBy([taxPercentage], [taxAmount], [sum, element | sum + element ]).forEach[pct, sum | (output pct and sum here...)]
      * @param iterable
      *            the items to be grouped. May not be <code>null</code>.
      * @return the minimum element, or null if there was no not-null element.
@@ -103,7 +103,7 @@ public class MoreIterableExtensions {
         }
         return sum;
     }
-    
+
     /* alternate implementation
     static public BigDecimal sum2(Iterable<BigDecimal> iterable) {
         BigDecimal sum = BigDecimal.ZERO;

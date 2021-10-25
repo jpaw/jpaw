@@ -20,7 +20,7 @@ class LazyProcessor extends AbstractFieldProcessor {
 
     /** returns the method if cls or one of its superclasses declares the method m, or null if no such method can be found. */
     def private MethodDeclaration getDeclaredMethod(ClassDeclaration cls, MethodDeclaration m) {
-        cls.findDeclaredMethod(m.simpleName, m.parameters.map[type]) ?: (cls.extendedClass?.type as ClassDeclaration)?.getDeclaredMethod(m) 
+        cls.findDeclaredMethod(m.simpleName, m.parameters.map[type]) ?: (cls.extendedClass?.type as ClassDeclaration)?.getDeclaredMethod(m)
     }
     def private void recurseInterface(InterfaceDeclaration i, MutableClassDeclaration cls, MutableFieldDeclaration f, extension TransformationContext context) {
         for (m: i.declaredMethods) {
@@ -43,7 +43,7 @@ class LazyProcessor extends AbstractFieldProcessor {
         for (xi: i.extendedInterfaces)
             recurseInterface(xi.type as InterfaceDeclaration, cls, f, context)
     }
-    
+
     override doTransform(MutableFieldDeclaration field, extension TransformationContext context) {
         if (!(field.declaringType instanceof MutableClassDeclaration)) {
             field.addError("Annotation must be used within a class")
@@ -52,10 +52,10 @@ class LazyProcessor extends AbstractFieldProcessor {
 //        val cls = field.declaringType as MutableClassDeclaration
         if (field.type.primitive)
             field.addError("Fields with primitives are not supported by @Lazy")
-    
+
         if (field.initializer === null)
             field.addError("A lazy field must have an initializer.")
-    
+
         // add synthetic init-method which takes the field initializer
         field.declaringType.addMethod('_init_' + field.simpleName) [
             visibility = Visibility::PRIVATE

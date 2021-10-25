@@ -163,35 +163,39 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     }
 
     // only called for digits != 0 && scale > 0
-    private static void appendFraction(final StringBuilder sb, int scale, int digits, final boolean minimized) {
+    private static void appendFraction(final StringBuilder sb, int scale, int digits, final int minDigits) {
+        final int maxScaleLeft = scale - minDigits;
         do {
             final int nextPower = INT_POWERS_OF_TEN[--scale];
             final int nextDigit = digits / nextPower;
             sb.append(DIGITS[nextDigit]);
             digits -= nextDigit * nextPower;
         } while (digits != 0);  // replace condition by 'scale > 0' to get full length of fractional digits
-        if (!minimized) {
-            while (scale > 0) {
-                sb.append('0');
-                --scale;
-            }
+        while (scale > maxScaleLeft) {
+            sb.append('0');
+            --scale;
         }
     }
-    private static void appendFraction(final StringBuilder sb, int scale, long digits, final boolean minimized) {
+    private static void appendFraction(final StringBuilder sb, int scale, long digits, final int minDigits) {
+        final int maxScaleLeft = scale - minDigits;
         do {
             final long nextPower = POWERS_OF_TEN[--scale];
             final long nextDigit = digits / nextPower;
             sb.append(DIGITS[(int) nextDigit]);
             digits -= nextDigit * nextPower;
         } while (digits != 0L);  // replace condition by 'scale > 0' to get full length of fractional digits
+        while (scale > maxScaleLeft) {
+            sb.append('0');
+            --scale;
+        }
     }
 
     /** Appends a separately provided mantissa in a human readable form to the provided StringBuilder, based on settings of a reference number (this).
      * Method is also used by external classes. */
     public static void append(final StringBuilder sb, final long mantissa, final int scale) {
-        append(sb, mantissa, scale, true);
+        append(sb, mantissa, scale, 0);
     }
-    public static void append(final StringBuilder sb, long mantissa, final int scale, final boolean minimized) {
+    public static void append(final StringBuilder sb, long mantissa, final int scale, final int minDigits) {
         // straightforward implementation discarded due to too much GC overhead (construction of a temporary BigDecimal)
         // return BigDecimal.valueOf(mantissa, scale()).toPlainString();
         // version with double not considered due to precision loss (mantissa of a double is just 15 digits, we want 18)
@@ -209,13 +213,13 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             final long decimalDigits = Math.abs(mantissa - integralDigits * ten2scale);
             sb.append(integralDigits);
             // conditional append of fractional part
-            if (!minimized || decimalDigits != 0L) {
+            if (minDigits > 0 || decimalDigits != 0L) {
                 sb.append('.');
                 if (decimalDigits <= 999_999_999) {
                     // max 9 digits: do it with integers, to avoid costly 6 bit divisions
-                    appendFraction(sb, scale, (int)decimalDigits, minimized);
+                    appendFraction(sb, scale, (int)decimalDigits, minDigits);
                 } else {
-                    appendFraction(sb, scale, decimalDigits, minimized);
+                    appendFraction(sb, scale, decimalDigits, minDigits);
                 }
             }
         }
@@ -245,7 +249,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             } else {
                 // we need 21 characters at max (19 digits plus optional sign, plus decimal point), so allocate it with sufficient initial size to avoid realloc
                 final StringBuilder sb = new StringBuilder(22);
-                append(sb, mantissa, scale(), outputToStringMinimized);
+                append(sb, mantissa, scale(), outputToStringMinimized ? 0 : scale());
                 asString = sb.toString();
             }
         }
@@ -253,18 +257,27 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     }
 
     public String toString(final boolean minimized) {
-        if (asString == null) {
-            // not yet computed
-            if (scale() == 0) {
-                asString = Long.toString(mantissa);
-            } else {
-                // we need 21 characters at max (19 digits plus optional sign, plus decimal point), so allocate it with sufficient initial size to avoid realloc
-                final StringBuilder sb = new StringBuilder(22);
-                append(sb, mantissa, scale(), minimized);
-                asString = sb.toString();
-            }
+        // not yet computed
+        if (scale() == 0) {
+            return Long.toString(mantissa);
+        } else {
+            // we need 21 characters at max (19 digits plus optional sign, plus decimal point), so allocate it with sufficient initial size to avoid realloc
+            final StringBuilder sb = new StringBuilder(22);
+            append(sb, mantissa, scale(), minimized ? 0 : scale());
+            return sb.toString();
         }
-        return asString;
+    }
+
+    public String toString(final int minFractionalDigits) {
+        // not yet computed
+        if (scale() == 0) {
+            return Long.toString(mantissa);
+        } else {
+            // we need 21 characters at max (19 digits plus optional sign, plus decimal point), so allocate it with sufficient initial size to avoid realloc
+            final StringBuilder sb = new StringBuilder(22);
+            append(sb, mantissa, scale(), minFractionalDigits);
+            return sb.toString();
+        }
     }
 
     /** Parses a string for a maximum number of decimal digits. Extra digits will be ignored as long as they are 0, but

@@ -496,12 +496,12 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
 
     /** Returns the smaller of this and the parameter. */
     public CLASS min(final CLASS that) {
-        return this.compareTo(that) <= 0 ? getMyself() : that;
+        return mantissa <= that.mantissa ? getMyself() : that;
     }
 
     /** Returns the bigger of this and the parameter. */
     public CLASS max(final CLASS that) {
-        return this.compareTo(that) >= 0 ? getMyself() : that;
+        return mantissa >= that.mantissa ? getMyself() : that;
     }
 
     /** Returns the smaller of this and the parameter, allows different type parameters. */
@@ -525,7 +525,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
 
     /** Returns this + 1. */
     public CLASS increment() {
-        return newInstanceOf(mantissa + POWERS_OF_TEN[scale()]);
+        return newInstanceOf(mantissa + getUnitAsLong());
     }
     /** Xtend syntax sugar. ++ maps to the increment method. */
     public CLASS operator_plusplus() {
@@ -534,7 +534,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
 
     /** Returns this - 1. */
     public CLASS decrement() {
-        return newInstanceOf(mantissa - POWERS_OF_TEN[scale()]);
+        return newInstanceOf(mantissa - getUnitAsLong());
     }
     /** Xtend syntax sugar. -- maps to the decrement method. */
     public CLASS operator_minusminus() {

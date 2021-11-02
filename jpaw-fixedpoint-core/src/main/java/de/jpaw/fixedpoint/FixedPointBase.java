@@ -541,6 +541,42 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         return decrement();
     }
 
+    /** Returns true if this is smaller than that. */
+    public boolean isSmallerThan(CLASS that) {
+        return mantissa < that.mantissa;
+    }
+
+    /** Returns true if this is smaller or equal to that. */
+    public boolean isSmallerOrEqual(CLASS that) {
+        return mantissa <= that.mantissa;
+    }
+
+    /** Returns true if this is greater than that. */
+    public boolean isGreaterThan(CLASS that) {
+        return mantissa > that.mantissa;
+    }
+
+    /** Returns true if this is smaller or equal to that. */
+    public boolean isGreaterOrEqual(CLASS that) {
+        return mantissa >= that.mantissa;
+    }
+
+    /**
+     * Returns true if this is equal to that.
+     * This is faster than using equals() because it accepts only non null objects of the same class.
+     */
+    public boolean isEqualTo(CLASS that) {
+        return mantissa == that.mantissa;
+    }
+
+    /**
+     * Returns true if this is not equal to that.
+     * This is faster than using equals() because it accepts only non null objects of the same class.
+     */
+    public boolean isNotEqualTo(CLASS that) {
+        return mantissa != that.mantissa;
+    }
+
     /** Subroutine to provide the mantissa of a multiplication. */
     /*
     public long mantissa_of_multiplication(FixedPointBase<?> that, int targetScale, RoundingMode rounding) {

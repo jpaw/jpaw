@@ -10,6 +10,7 @@ public final class Units extends FixedPointBase<Units> {
     private static final long serialVersionUID = -466464673376366000L;
     private static final int DECIMALS = 0;
     private static final long UNIT_MANTISSA = 1L;
+    private static final double UNIT_SCALE = UNIT_MANTISSA;       // cast to double at class initialization time
     private static final double UNIT_SCALE_AS_DOUBLE_FACTOR = 1.0 / UNIT_MANTISSA;  // multiplication is much faster than division
 
     /** The representation of the number 0 in this class. This implementation attempts to maintain a single instance of 0 only. */
@@ -26,7 +27,7 @@ public final class Units extends FixedPointBase<Units> {
     /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
     public static Units of(final long mantissa) {
         // caching checks...
-        if (mantissa == 0)
+        if (mantissa == 0L)
             return ZERO;
         if (mantissa == UNIT_MANTISSA)
             return ONE;
@@ -135,4 +136,13 @@ public final class Units extends FixedPointBase<Units> {
     public double getScaleAsDouble() {
         return UNIT_SCALE_AS_DOUBLE_FACTOR;
     }
+
+    /** ReadResolve is required to ensure that we keep the singleton property of ZERO and ONE after Serialization. */
+    private Object readResolve() {
+        if (mantissa == 0L)
+            return ZERO;
+        if (mantissa == UNIT_MANTISSA)
+            return ONE;
+        return this;
+     }
 }

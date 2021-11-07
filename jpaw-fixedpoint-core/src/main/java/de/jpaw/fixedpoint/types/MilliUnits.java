@@ -27,7 +27,7 @@ public final class MilliUnits extends FixedPointBase<MilliUnits> {
     /** Constructs an instance with a specified mantissa. See also valueOf(long value), which constructs an integral instance. */
     public static MilliUnits of(final long mantissa) {
         // caching checks...
-        if (mantissa == 0)
+        if (mantissa == 0L)
             return ZERO;
         if (mantissa == UNIT_MANTISSA)
             return ONE;
@@ -136,4 +136,13 @@ public final class MilliUnits extends FixedPointBase<MilliUnits> {
     public double getScaleAsDouble() {
         return UNIT_SCALE_AS_DOUBLE_FACTOR;
     }
+
+    /** ReadResolve is required to ensure that we keep the singleton property of ZERO and ONE after Serialization. */
+    private Object readResolve() {
+        if (mantissa == 0L)
+            return ZERO;
+        if (mantissa == UNIT_MANTISSA)
+            return ONE;
+        return this;
+     }
 }

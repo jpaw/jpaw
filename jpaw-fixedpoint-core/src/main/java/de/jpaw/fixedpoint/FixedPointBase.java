@@ -542,12 +542,12 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     }
 
     /** Returns true if this is smaller than that. */
-    public boolean isSmallerThan(CLASS that) {
+    public boolean isLessThan(CLASS that) {
         return mantissa < that.mantissa;
     }
 
     /** Returns true if this is smaller or equal to that. */
-    public boolean isSmallerOrEqual(CLASS that) {
+    public boolean isLessOrEqual(CLASS that) {
         return mantissa <= that.mantissa;
     }
 

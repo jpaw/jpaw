@@ -1164,12 +1164,12 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
 
     @Override
     public float floatValue() {
-        return (float)(mantissa / getScaleAsDouble());
+        return (float)(mantissa * getScaleAsDouble());
     }
 
     @Override
     public double doubleValue() {
-        return mantissa / getScaleAsDouble();
+        return mantissa * getScaleAsDouble();
     }
 
     /** Converts the fixed point number to a BigDecimal which is either ZERO or ONE (with scale 0), or that the same scale as the class of this indicates. */

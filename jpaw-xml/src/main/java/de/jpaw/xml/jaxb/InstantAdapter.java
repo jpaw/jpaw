@@ -1,6 +1,8 @@
 package de.jpaw.xml.jaxb;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
@@ -9,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import de.jpaw.api.ConfigurationReader;
 import de.jpaw.util.ConfigurationReaderFactory;
+import de.jpaw.util.FormattersAndParsers;
 
 public class InstantAdapter extends XmlAdapter<String, Instant> {
     private static final Logger LOGGER = LoggerFactory.getLogger(InstantAdapter.class);
@@ -46,10 +49,8 @@ public class InstantAdapter extends XmlAdapter<String, Instant> {
 
     @Override
     public String marshal(final Instant v) throws Exception {
-        if (outputFractionalSeconds || v.getNano() == 0) {
-            return v.toString();
-        } else {
-            return Instant.ofEpochSecond(v.getEpochSecond()).toString();
-        }
+        final StringBuilder sb = new StringBuilder(30);
+        FormattersAndParsers.appendLocalDateTime(sb, LocalDateTime.ofInstant(v, ZoneOffset.UTC), outputFractionalSeconds, "Z");
+        return sb.toString();
     }
 }

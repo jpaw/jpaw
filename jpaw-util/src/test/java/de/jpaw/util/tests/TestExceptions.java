@@ -2,7 +2,7 @@ package de.jpaw.util.tests;
 
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.jpaw.util.ExceptionUtil;
 

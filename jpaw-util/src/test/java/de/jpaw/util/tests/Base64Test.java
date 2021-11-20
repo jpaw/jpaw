@@ -2,10 +2,10 @@ package de.jpaw.util.tests;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.Test;
+
 import de.jpaw.util.Base64;
 import de.jpaw.util.ByteBuilder;
-
-import org.junit.Test;
 
 public class Base64Test {
 
@@ -35,7 +35,5 @@ public class Base64Test {
             checkSame(base64decoded, rawdata);
 
         }
-
     }
-
 }

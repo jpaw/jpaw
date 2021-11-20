@@ -3,8 +3,8 @@ package de.jpaw.json.tests;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import de.jpaw.json.JsonParser;
 
@@ -22,14 +22,14 @@ public class TestJsonListParser {
             if (index >= expected.length)
                 throw new RuntimeException("Too many objects emitted");
             if (map == null)
-                Assert.assertEquals("Expected a non-null object", expected[index], -1);
+                Assertions.assertEquals(expected[index], -1, "Expected a non-null object");
             else
-                Assert.assertEquals("Number of parsed elements", expected[index], map.size());
+                Assertions.assertEquals(expected[index], map.size(), "Number of parsed elements");
             ++index;
         }
 
         public void ensureAllUsed() {
-            Assert.assertEquals("Expected more elements emitted", expected.length, index);
+            Assertions.assertEquals(expected.length, index, "Expected more elements emitted");
         }
     }
 

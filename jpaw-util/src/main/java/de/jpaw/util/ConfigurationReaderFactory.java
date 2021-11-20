@@ -22,7 +22,7 @@ public final class ConfigurationReaderFactory {
 
     private static ConfigurationReaderInstance getConfigReaderFromPath(final String path) {
         try (final FileInputStream fis = new FileInputStream(path)) {
-            return new ConfigurationReaderInstance(fis);
+            return new ConfigurationReaderInstance(fis, path, "file");
         } catch (Exception e) {
             LOGGER.error("Error obtaining properties from file {}: {} {}", path, e.getMessage(), ExceptionUtil.causeChain(e));
             return FALLBACK_READER;
@@ -31,7 +31,7 @@ public final class ConfigurationReaderFactory {
 
     private static ConfigurationReaderInstance getConfigReaderFromResource(final String path) {
         try (final InputStream is = ConfigurationReaderFactory.class.getResourceAsStream(path.substring(1))) {
-            return new ConfigurationReaderInstance(is);
+            return new ConfigurationReaderInstance(is, path, "resource");
         } catch (Exception e) {
             LOGGER.error("Error obtaining properties from resource {}: {} {}", path, e.getMessage(), ExceptionUtil.causeChain(e));
             return FALLBACK_READER;

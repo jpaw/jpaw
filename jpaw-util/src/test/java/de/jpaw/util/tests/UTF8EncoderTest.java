@@ -2,8 +2,8 @@ package de.jpaw.util.tests;
 
 import java.io.UnsupportedEncodingException;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import de.jpaw.util.Cesu8Encoder;
 
@@ -16,7 +16,7 @@ public class UTF8EncoderTest {
             String testString = "A" + Character.valueOf((char)i) + "O";
             byte[] fromString = testString.getBytes("UTF-8");
             byte[] myOwn = Cesu8Encoder.encodeToCesu8(testString);
-            Assert.assertArrayEquals("for index " + i, fromString, myOwn);
+            Assertions.assertArrayEquals(fromString, myOwn, "for index " + i);
         }
     }
 
@@ -27,7 +27,7 @@ public class UTF8EncoderTest {
 //            String testString = "A" + Character.valueOf((char)i) + "O";
 //            byte[] fromString = testString.getBytes("UTF-8");
 //            byte[] myOwn = Cesu8DirectEncoder.encodeToCesu8(testString);
-//            Assert.assertEquals(fromString, myOwn, "for index " + i);
+//            Assertions.assertEquals(fromString, myOwn, "for index " + i);
 //        }
 //    }
 //    @Test
@@ -35,6 +35,6 @@ public class UTF8EncoderTest {
 //        String testString = "A" + Character.valueOf((char) 55296) + "O";
 //        byte[] fromString = testString.getBytes("UTF-8");
 //        byte[] myOwn = UTF8Encoder.encodeToCESU8(testString);
-//        Assert.assertEquals(fromString, myOwn);
+//        Assertions.assertEquals(fromString, myOwn);
 //    }
 }

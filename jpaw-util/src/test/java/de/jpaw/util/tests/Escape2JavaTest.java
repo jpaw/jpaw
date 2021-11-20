@@ -1,8 +1,8 @@
 package de.jpaw.util.tests;
 
 import org.apache.commons.text.StringEscapeUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import de.jpaw.util.Escape2Java;
 
@@ -16,7 +16,7 @@ public class Escape2JavaTest {
             String esc1 = StringEscapeUtils.escapeJava(s);
             String esc2 = Escape2Java.escapeString2Java(s);
 
-            Assert.assertEquals(esc2, esc1);
+            Assertions.assertEquals(esc2, esc1);
         }
     }
 }

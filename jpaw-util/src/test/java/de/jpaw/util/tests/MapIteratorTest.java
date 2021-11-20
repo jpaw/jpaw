@@ -3,12 +3,13 @@ package de.jpaw.util.tests;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.jpaw.util.MapIterator;
 
 public class MapIteratorTest {
-    @Test
+
+	@Test
     public void testMapIterator() {
         Map<String, Object> testmap = new HashMap<String, Object>();
         testmap.put("foo", "bar");

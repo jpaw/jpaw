@@ -4,10 +4,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.jpaw.api.ConfigurationReader;
 
 /** Instances of this class store a cached property file and return configuration values. */
 public class ConfigurationReaderInstance implements ConfigurationReader {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationReaderInstance.class);
+
     private final Properties props;
 
     /**
@@ -22,9 +27,10 @@ public class ConfigurationReaderInstance implements ConfigurationReader {
      * Creates an instance of a configuration reader without a fallback to a properties file.
      * This constructor only evaluates environment variables and system properties.
      */
-    public ConfigurationReaderInstance(InputStream is) throws IOException {
+    public ConfigurationReaderInstance(InputStream is, String source, String type) throws IOException {
         props = new Properties();
         props.load(is);
+        LOGGER.info("Successfully loaded properties from {} {} with {} values", type, source, props.size());
     }
 
     @Override

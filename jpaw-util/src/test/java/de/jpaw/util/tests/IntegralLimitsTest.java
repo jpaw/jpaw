@@ -1,7 +1,7 @@
 package de.jpaw.util.tests;
 
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.jpaw.util.IntegralLimits;
 

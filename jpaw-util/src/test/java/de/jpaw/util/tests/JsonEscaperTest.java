@@ -1,7 +1,7 @@
 package de.jpaw.util.tests;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import de.jpaw.json.BaseJsonComposer;
 
@@ -12,6 +12,6 @@ public class JsonEscaperTest {
         StringBuilder buff = new StringBuilder(100);
         BaseJsonComposer escaper = new BaseJsonComposer(buff);
         escaper.outputUnicodeWithControls("E\nS\bC");
-        Assert.assertEquals(buff.toString(), "\"E\\nS\\bC\"");
+        Assertions.assertEquals(buff.toString(), "\"E\\nS\\bC\"");
     }
 }

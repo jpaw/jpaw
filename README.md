@@ -17,4 +17,3 @@ In addition, this repository serves as a parent pom / bom, defining some revisio
 ###Building
 
 This project uses maven3 as a build tool.
-

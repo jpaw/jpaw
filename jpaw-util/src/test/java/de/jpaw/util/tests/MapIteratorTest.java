@@ -9,7 +9,7 @@ import de.jpaw.util.MapIterator;
 
 public class MapIteratorTest {
 
-	@Test
+    @Test
     public void testMapIterator() {
         Map<String, Object> testmap = new HashMap<String, Object>();
         testmap.put("foo", "bar");

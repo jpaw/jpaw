@@ -59,6 +59,8 @@ public final class ConfigurationReaderFactory {
     }
 
     public static ConfigurationReaderInstance getDefaultJpawConfigReader() {
-        return getConfigReader(DEFAULT_JPAW_PROPERTIES);
+        final String jpawPropertiesPath = FALLBACK_READER.getProperty("jpaw.properties", DEFAULT_JPAW_PROPERTIES);
+        LOGGER.info("Reading jpaw.properties from path {}", jpawPropertiesPath);
+        return getConfigReader(jpawPropertiesPath);
     }
 }

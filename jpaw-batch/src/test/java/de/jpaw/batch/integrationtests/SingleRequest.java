@@ -8,7 +8,7 @@ import de.jpaw.batch.examples.BatchTextFileCopyST;
 
 public class SingleRequest {
 
-	@Test
+    @Test
     public void testTmpST() throws Exception {
         BatchTextFileCopyST.main(new String[] { "-i", "/tmp/in", "-o", "/tmp/out" });  // mocked cmdline args
     }

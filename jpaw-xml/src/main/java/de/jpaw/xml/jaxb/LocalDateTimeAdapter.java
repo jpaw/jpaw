@@ -7,16 +7,31 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import de.jpaw.api.ConfigurationReader;
+import de.jpaw.util.ConfigurationReaderFactory;
 import de.jpaw.util.ExceptionUtil;
 import de.jpaw.util.FormattersAndParsers;
 
 public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
     private static final Logger LOGGER = LoggerFactory.getLogger(LocalDateTimeAdapter.class);
 
-    public static String  addSuffixTimezone         = null;     // add suffix "Z" (or other) on output (to simulate UTC time zone)
-    public static boolean tolerateSuffixUTC         = false;    // ignore suffix "Z" when parsing
-    public static boolean ignoreFractionalSeconds   = false;    // ignore fractional seconds when parsing
-    public static boolean outputFractionalSeconds   = true;     // output fractional seconds
+    private static final String  addSuffixTimezone;     // add suffix "Z" (or other) on output (to simulate UTC time zone)
+    private static final boolean tolerateSuffixUTC;    // ignore suffix "Z" when parsing
+    private static final boolean ignoreFractionalSeconds;    // ignore fractional seconds when parsing
+    private static final boolean outputFractionalSeconds;     // output fractional seconds
+
+    static {
+        final ConfigurationReader cfgReader = ConfigurationReaderFactory.getDefaultJpawConfigReader();
+
+        addSuffixTimezone = cfgReader.getProperty("jpaw.xml.LocalDateTime.timezoneSuffix", null);
+        tolerateSuffixUTC = cfgReader.getBooleanProperty("jpaw.xml.LocalDateTime.tolerateSuffixUTC", false);
+        ignoreFractionalSeconds = cfgReader.getBooleanProperty("jpaw.xml.LocalDateTime.ignoreFractionalSeconds", false);
+        outputFractionalSeconds = cfgReader.getBooleanProperty("jpaw.xml.LocalDateTime.outputFractionalSeconds", true);
+
+        LOGGER.info(
+          "jpaw.xml.LocalDateTime configuration is: addSuffixTimezone {}, tolerateSuffixUTC {}, ignoreFractionalSeconds {}, outputFractionalSeconds {}",
+          addSuffixTimezone, tolerateSuffixUTC, ignoreFractionalSeconds, outputFractionalSeconds);
+    }
 
     @Override
     public String marshal(final LocalDateTime dateTime) {

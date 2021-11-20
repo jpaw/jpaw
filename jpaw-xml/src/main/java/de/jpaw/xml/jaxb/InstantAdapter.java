@@ -4,10 +4,31 @@ import java.time.Instant;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import de.jpaw.api.ConfigurationReader;
+import de.jpaw.util.ConfigurationReaderFactory;
+
 public class InstantAdapter extends XmlAdapter<String, Instant> {
-    public static boolean outputFractionalSeconds   = true;     // output fractional seconds
-    public static boolean ignoreFractionalSeconds   = false;    // ignore fractional seconds when parsing
-    public static boolean addMissingSuffixUTC       = false;    // auto-add suffix "Z" if missing when parsing
+    private static final Logger LOGGER = LoggerFactory.getLogger(InstantAdapter.class);
+
+    private static final boolean outputFractionalSeconds;   // output fractional seconds
+    private static final boolean ignoreFractionalSeconds;   // ignore fractional seconds when parsing
+    private static final boolean addMissingSuffixUTC;       // auto-add suffix "Z" if missing when parsing
+
+
+    static {
+        final ConfigurationReader cfgReader = ConfigurationReaderFactory.getDefaultJpawConfigReader();
+
+        addMissingSuffixUTC     = cfgReader.getBooleanProperty("jpaw.xml.Instant.addMissingSuffixUTC", false);
+        ignoreFractionalSeconds = cfgReader.getBooleanProperty("jpaw.xml.Instant.ignoreFractionalSeconds", false);
+        outputFractionalSeconds = cfgReader.getBooleanProperty("jpaw.xml.Instant.outputFractionalSeconds", true);
+
+        LOGGER.info(
+          "jpaw.xml.Instant configuration is: addMissingSuffixUTC {}, ignoreFractionalSeconds {}, outputFractionalSeconds {}",
+          addMissingSuffixUTC, ignoreFractionalSeconds, outputFractionalSeconds);
+    }
 
     @Override
     public Instant unmarshal(String v) throws Exception {

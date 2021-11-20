@@ -6,6 +6,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import de.jpaw.api.ConfigurationReader;
 import de.jpaw.enums.AbstractByteEnumSet;
 import de.jpaw.enums.AbstractIntEnumSet;
 import de.jpaw.enums.AbstractLongEnumSet;
@@ -16,6 +20,7 @@ import de.jpaw.enums.AbstractXEnumBase;
 import de.jpaw.enums.EnumSetMarker;
 import de.jpaw.enums.TokenizableEnum;
 import de.jpaw.json.BaseJsonComposer;
+import de.jpaw.util.ConfigurationReaderFactory;
 import de.jpaw.util.FormattersAndParsers;
 
 /**
@@ -24,10 +29,24 @@ import de.jpaw.util.FormattersAndParsers;
  *
  */
 public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
-    public static String  addSuffixTimezone              = null;    // add suffix "Z" (or other) on output (to simulate UTC time zone)
-    public static boolean defaultOutputFractionalSeconds = true;    // do not output fractional seconds
-    @Deprecated
-    public static boolean defaultInstantInMillis         = false;   // if false: the unit is a second
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExtendedJsonEscaperForAppendables.class);
+
+    private static final String  addSuffixTimezone;     // add suffix "Z" (or other) on output (to simulate UTC time zone)
+    private static final boolean defaultOutputFractionalSeconds;     // output fractional seconds
+
+    static {
+        final ConfigurationReader cfgReader = ConfigurationReaderFactory.getDefaultJpawConfigReader();
+
+        addSuffixTimezone = cfgReader.getProperty("jpaw.json.LocalDateTime.timezoneSuffix", null);
+        defaultOutputFractionalSeconds = cfgReader.getBooleanProperty("jpaw.json.LocalDateTime.outputFractionalSeconds", true);
+
+        LOGGER.info(
+          "jpaw.xml.LocalDateTime configuration is: addSuffixTimezone {}, outputFractionalSeconds {}",
+          addSuffixTimezone, defaultOutputFractionalSeconds);
+    }
+
+    //    @Deprecated
+//    public static boolean defaultInstantInMillis         = false;   // if false: the unit is a second
 
     // if instantInMillis is true, Instants will be written as integral values in milliseconds, otherwise as second + optional fractional parts
     // see DATE_TIMESTAMPS_AS_NANOSECONDS in https://github.com/FasterXML/jackson-datatype-jsr310 for similar setting
@@ -36,7 +55,7 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
 
     public ExtendedJsonEscaperForAppendables(final Appendable appendable) {
         super(appendable);      // default: writeNulls = true, escapeNonAscii = false
-        instantInMillis              = defaultInstantInMillis;
+        instantInMillis              = false; // defaultInstantInMillis;
         outputFractionalSeconds      = defaultOutputFractionalSeconds;
     }
 
@@ -101,7 +120,7 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
 
     @Override
     public void outputJsonElement(final Object obj) throws IOException {
-        // add Joda-Time types and enum / enumset types
+        // add Java 8 date/time types and enum / enumset types
         if (obj instanceof Enum) {
             // distinguish Tokenizable
             if (obj instanceof TokenizableEnum) {

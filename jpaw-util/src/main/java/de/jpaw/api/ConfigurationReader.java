@@ -37,7 +37,7 @@ public interface ConfigurationReader {
      *
      * @return the property, or defaultValue if not found
      */
-    Integer getIntProperty(String key, Integer defaultValue);
+    int getIntProperty(String key, int defaultValue);
 
     /**
      * Gets a property value as a <code>Boolean</code>.
@@ -53,5 +53,5 @@ public interface ConfigurationReader {
      *
      * @return the property, or defaultValue if not found
      */
-    Boolean getBooleanProperty(String key, Boolean defaultValue);
+    boolean getBooleanProperty(String key, boolean defaultValue);
 }

@@ -68,7 +68,7 @@ public class ConfigurationReaderInstance implements ConfigurationReader {
     }
 
     @Override
-    public Integer getIntProperty(String key, Integer defaultValue) {
+    public int getIntProperty(String key, int defaultValue) {
         final Integer actualValue = getIntProperty(key);
         return actualValue != null ? actualValue : defaultValue;
     }
@@ -83,7 +83,7 @@ public class ConfigurationReaderInstance implements ConfigurationReader {
     }
 
     @Override
-    public Boolean getBooleanProperty(String key, Boolean defaultValue) {
+    public boolean getBooleanProperty(String key, boolean defaultValue) {
         final Boolean actualValue = getBooleanProperty(key);
         return actualValue != null ? actualValue : defaultValue;
     }

@@ -38,7 +38,8 @@ public final class FormattersAndParsers {
     }
 
     // zero-GC implementation of appendable.append(String.format("%02d:%02d:%02d%s", lt.getHour(), lt.getMinute(), lt.getSecond(), millis);
-    public static void appendLocalTime(final Appendable sb, final LocalTime lt, final boolean outputFractionalSeconds) throws IOException {
+    public static void appendLocalTime(final Appendable sb, final LocalTime lt, final boolean outputFractionalSeconds, final boolean alwaysOutputFractionals)
+              throws IOException {
         append2Digits(sb, lt.getHour());
         sb.append(':');
         append2Digits(sb, lt.getMinute());
@@ -47,19 +48,31 @@ public final class FormattersAndParsers {
 
         if (outputFractionalSeconds) {
             final int millis = lt.getNano() / 1000000;
-            if (millis != 0) {
+            if (alwaysOutputFractionals || millis != 0) {
                 appendMilliseconds(sb, millis);
             }
         }
     }
 
-    public static void appendLocalDateTime(final Appendable sb, final LocalDateTime ldt, final boolean outputFractionalSeconds, final String addSuffixTimezone) throws IOException {
+    public static void appendLocalDateTime(final Appendable sb, final LocalDateTime ldt, final boolean outputFractionalSeconds,
+         final boolean alwaysOutputFractionals, final String addSuffixTimezone) throws IOException {
         appendLocalDate(sb, ldt.toLocalDate());
         sb.append('T');
-        appendLocalTime(sb, ldt.toLocalTime(), outputFractionalSeconds);
+        appendLocalTime(sb, ldt.toLocalTime(), outputFractionalSeconds, alwaysOutputFractionals);
         if (addSuffixTimezone != null) {
             sb.append(addSuffixTimezone);
         }
+    }
+
+    public static LocalTime parseLocalTime(final String time, final boolean ignoreFractionalSeconds) {
+        if (ignoreFractionalSeconds) {
+            final int pos = time.indexOf('.');
+            if (pos > 0) {
+                // skipping UTC suffix is implied...
+                return LocalTime.parse(time.substring(0, pos));
+            }
+        }
+        return LocalTime.parse(time);
     }
 
     public static LocalDateTime parseLocalDateTime(final String dateTime, final boolean ignoreFractionalSeconds, final boolean tolerateSuffixUTC) {

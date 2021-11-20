@@ -19,18 +19,20 @@ public class InstantAdapter extends XmlAdapter<String, Instant> {
     private static final boolean outputFractionalSeconds;   // output fractional seconds
     private static final boolean ignoreFractionalSeconds;   // ignore fractional seconds when parsing
     private static final boolean addMissingSuffixUTC;       // auto-add suffix "Z" if missing when parsing
+    private static final boolean alwaysOutputFractionals;     // output fractional seconds even if they are 0
 
 
     static {
         final ConfigurationReader cfgReader = ConfigurationReaderFactory.getDefaultJpawConfigReader();
 
-        addMissingSuffixUTC     = cfgReader.getBooleanProperty("jpaw.xml.Instant.addMissingSuffixUTC", false);
+        addMissingSuffixUTC     = cfgReader.getBooleanProperty("jpaw.xml.Instant.addMissingSuffixUTC",     false);
         ignoreFractionalSeconds = cfgReader.getBooleanProperty("jpaw.xml.Instant.ignoreFractionalSeconds", false);
         outputFractionalSeconds = cfgReader.getBooleanProperty("jpaw.xml.Instant.outputFractionalSeconds", true);
+        alwaysOutputFractionals = cfgReader.getBooleanProperty("jpaw.xml.Instant.alwaysOutputFractionals", true);
 
-        LOGGER.info(
-          "jpaw.xml.Instant configuration is: addMissingSuffixUTC {}, ignoreFractionalSeconds {}, outputFractionalSeconds {}",
-          addMissingSuffixUTC, ignoreFractionalSeconds, outputFractionalSeconds);
+        LOGGER.info("jpaw.xml.Instant configuration is: addMissingSuffixUTC {}, ignoreFractionalSeconds {},"
+          + " outputFractionalSeconds {}, alwaysOutputFractionals {}",
+          addMissingSuffixUTC, ignoreFractionalSeconds, outputFractionalSeconds, alwaysOutputFractionals);
     }
 
     @Override
@@ -50,7 +52,7 @@ public class InstantAdapter extends XmlAdapter<String, Instant> {
     @Override
     public String marshal(final Instant v) throws Exception {
         final StringBuilder sb = new StringBuilder(30);
-        FormattersAndParsers.appendLocalDateTime(sb, LocalDateTime.ofInstant(v, ZoneOffset.UTC), outputFractionalSeconds, "Z");
+        FormattersAndParsers.appendLocalDateTime(sb, LocalDateTime.ofInstant(v, ZoneOffset.UTC), outputFractionalSeconds, alwaysOutputFractionals, "Z");
         return sb.toString();
     }
 }

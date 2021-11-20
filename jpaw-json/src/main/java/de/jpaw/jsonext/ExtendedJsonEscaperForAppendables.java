@@ -33,16 +33,17 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
 
     private static final String  addSuffixTimezone;     // add suffix "Z" (or other) on output (to simulate UTC time zone)
     private static final boolean defaultOutputFractionalSeconds;     // output fractional seconds
+    private static final boolean alwaysOutputFractionals;     // output fractional seconds even if they are 0
 
     static {
         final ConfigurationReader cfgReader = ConfigurationReaderFactory.getDefaultJpawConfigReader();
 
         addSuffixTimezone = cfgReader.getProperty("jpaw.json.LocalDateTime.timezoneSuffix", null);
-        defaultOutputFractionalSeconds = cfgReader.getBooleanProperty("jpaw.json.LocalDateTime.outputFractionalSeconds", true);
+        defaultOutputFractionalSeconds = cfgReader.getBooleanProperty("jpaw.json.outputFractionalSeconds", true);
+        alwaysOutputFractionals        = cfgReader.getBooleanProperty("jpaw.json.alwaysOutputFractionals", true);
 
-        LOGGER.info(
-          "jpaw.xml.LocalDateTime configuration is: addSuffixTimezone {}, outputFractionalSeconds {}",
-          addSuffixTimezone, defaultOutputFractionalSeconds);
+        LOGGER.info("jpaw.json configuration is: addSuffixTimezone {}, outputFractionalSeconds {}, alwaysOutputFractionals {}",
+          addSuffixTimezone, defaultOutputFractionalSeconds, alwaysOutputFractionals);
     }
 
     //    @Deprecated
@@ -150,14 +151,14 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
         }
         if (obj instanceof LocalTime) {
             appendable.append('"');
-            FormattersAndParsers.appendLocalTime(appendable, (LocalTime)obj, outputFractionalSeconds);
+            FormattersAndParsers.appendLocalTime(appendable, (LocalTime)obj, outputFractionalSeconds, alwaysOutputFractionals);
             appendable.append('"');
             return;
         }
         if (obj instanceof LocalDateTime) {
             final LocalDateTime ldt = (LocalDateTime)obj;
             appendable.append('"');
-            FormattersAndParsers.appendLocalDateTime(appendable, ldt, outputFractionalSeconds, addSuffixTimezone);
+            FormattersAndParsers.appendLocalDateTime(appendable, ldt, outputFractionalSeconds, alwaysOutputFractionals, addSuffixTimezone);
             appendable.append('"');
             return;
         }

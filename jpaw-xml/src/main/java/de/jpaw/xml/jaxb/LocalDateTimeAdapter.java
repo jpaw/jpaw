@@ -19,25 +19,27 @@ public class LocalDateTimeAdapter extends XmlAdapter<String, LocalDateTime> {
     private static final boolean tolerateSuffixUTC;    // ignore suffix "Z" when parsing
     private static final boolean ignoreFractionalSeconds;    // ignore fractional seconds when parsing
     private static final boolean outputFractionalSeconds;     // output fractional seconds
+    private static final boolean alwaysOutputFractionals;     // output fractional seconds even if they are 0
 
     static {
         final ConfigurationReader cfgReader = ConfigurationReaderFactory.getDefaultJpawConfigReader();
 
-        addSuffixTimezone = cfgReader.getProperty("jpaw.xml.LocalDateTime.timezoneSuffix", null);
-        tolerateSuffixUTC = cfgReader.getBooleanProperty("jpaw.xml.LocalDateTime.tolerateSuffixUTC", false);
+        addSuffixTimezone       = cfgReader.getProperty("jpaw.xml.LocalDateTime.timezoneSuffix", null);
+        tolerateSuffixUTC       = cfgReader.getBooleanProperty("jpaw.xml.LocalDateTime.tolerateSuffixUTC",       false);
         ignoreFractionalSeconds = cfgReader.getBooleanProperty("jpaw.xml.LocalDateTime.ignoreFractionalSeconds", false);
         outputFractionalSeconds = cfgReader.getBooleanProperty("jpaw.xml.LocalDateTime.outputFractionalSeconds", true);
+        alwaysOutputFractionals = cfgReader.getBooleanProperty("jpaw.xml.LocalDateTime.alwaysOutputFractionals", true);
 
-        LOGGER.info(
-          "jpaw.xml.LocalDateTime configuration is: addSuffixTimezone {}, tolerateSuffixUTC {}, ignoreFractionalSeconds {}, outputFractionalSeconds {}",
-          addSuffixTimezone, tolerateSuffixUTC, ignoreFractionalSeconds, outputFractionalSeconds);
+        LOGGER.info("jpaw.xml.LocalDateTime configuration is: addSuffixTimezone {}, tolerateSuffixUTC {}, ignoreFractionalSeconds {},"
+          + " outputFractionalSeconds {}, alwaysOutputFractionals {}",
+          addSuffixTimezone, tolerateSuffixUTC, ignoreFractionalSeconds, outputFractionalSeconds, alwaysOutputFractionals);
     }
 
     @Override
     public String marshal(final LocalDateTime dateTime) {
         try {
             final StringBuilder sb = new StringBuilder(30);
-            FormattersAndParsers.appendLocalDateTime(sb, dateTime, outputFractionalSeconds, addSuffixTimezone);
+            FormattersAndParsers.appendLocalDateTime(sb, dateTime, outputFractionalSeconds, alwaysOutputFractionals, addSuffixTimezone);
             return sb.toString();
         } catch (final Exception e) {
             LOGGER.error("This should not happen - {} on StringBuilder: {}", e.getClass().getSimpleName(), ExceptionUtil.causeChain(e));

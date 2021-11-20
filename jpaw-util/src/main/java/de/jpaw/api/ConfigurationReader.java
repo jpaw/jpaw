@@ -1,5 +1,7 @@
 package de.jpaw.api;
 
+import java.util.UUID;
+
 /**
  *
  * API for configuration readers.
@@ -54,4 +56,12 @@ public interface ConfigurationReader {
      * @return the property, or defaultValue if not found
      */
     boolean getBooleanProperty(String key, boolean defaultValue);
+
+    /**
+     * Gets a property value as a <code>UUID</code>.
+     * The value is retrieved from either property file (if it has been loaded), system parameter, or environment variable.
+     *
+     * @return the property, or null if not found
+     */
+    UUID getUUIDProperty(String key);
 }

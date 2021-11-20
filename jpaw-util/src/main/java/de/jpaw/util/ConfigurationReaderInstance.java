@@ -3,6 +3,7 @@ package de.jpaw.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,4 +88,13 @@ public class ConfigurationReaderInstance implements ConfigurationReader {
         final Boolean actualValue = getBooleanProperty(key);
         return actualValue != null ? actualValue : defaultValue;
     }
+
+	@Override
+	public UUID getUUIDProperty(String key) {
+        final String actualValue = getProperty(key);
+        if (actualValue != null) {
+            return UUID.fromString(actualValue);
+        }
+        return null;
+	}
 }

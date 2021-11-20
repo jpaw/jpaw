@@ -3,7 +3,7 @@ package de.jpaw.icu.tests;
 import java.util.List;
 import java.util.Locale;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.ibm.icu.util.ULocale;
 

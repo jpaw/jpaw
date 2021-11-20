@@ -3,8 +3,8 @@ package de.jpaw.money.tests;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import de.jpaw.money.BonaCurrency;
 
@@ -33,9 +33,9 @@ public class BonaCurrencyTest {
         for (int i = 0; i < 4; ++i) {
             System.out.println(components[i].toPlainString() + " is rounded to " + scaledComponents[i].toPlainString());
         }
-        Assert.assertEquals(scaledComponents[0], new BigDecimal("0.77"));
-        Assert.assertEquals(scaledComponents[1], new BigDecimal("0.38"));
-        Assert.assertEquals(scaledComponents[2], new BigDecimal("0.39"));
-        Assert.assertEquals(scaledComponents[3], new BigDecimal("0.00"));
+        Assertions.assertEquals(new BigDecimal("0.77"), scaledComponents[0]);
+        Assertions.assertEquals(new BigDecimal("0.38"), scaledComponents[1]);
+        Assertions.assertEquals(new BigDecimal("0.39"), scaledComponents[2]);
+        Assertions.assertEquals(new BigDecimal("0.00"), scaledComponents[3]);
     }
 }

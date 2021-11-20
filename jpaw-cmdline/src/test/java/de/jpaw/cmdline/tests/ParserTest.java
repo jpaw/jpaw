@@ -1,7 +1,7 @@
 package de.jpaw.cmdline.tests;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import com.martiansoftware.jsap.JSAP;
 
@@ -19,8 +19,7 @@ public class ParserTest {
 
         ctx.parse("-v");
 
-        Assert.assertEquals(true, ctx.getBoolean("verbose"));
-        Assert.assertEquals("utf-47", ctx.getString("in-encoding"));
+        Assertions.assertEquals(true, ctx.getBoolean("verbose"));
+        Assertions.assertEquals("utf-47", ctx.getString("in-encoding"));
     }
-
 }

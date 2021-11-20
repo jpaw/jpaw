@@ -5,9 +5,8 @@ import de.jpaw.enums.AbstractLongEnumSet
 import de.jpaw.enums.AbstractStringEnumSet
 import de.jpaw.enums.EnumSetMarker
 import de.jpaw.enumsets.SetOfEnum
-import org.junit.Test
-
-import static org.junit.Assert.*
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions
 
 enum Weekday {
     MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
@@ -77,7 +76,7 @@ class SetOfEnumsTest {
 
         mySet.complement
 
-        assertEquals(mySet.size, 4)
+        Assertions.assertEquals(4, mySet.size)
 
         for (d : mySet)
             println('''«d.name» is in the set''')
@@ -94,9 +93,9 @@ class SetOfEnumsTest {
         changeMidnightToMidnight.exactlyOneOf(flipsInTheMorning)
         changeMidnightToMidnight.exactlyOneOf(flipsInTheEvening)
 
-        assertEquals(changeMidnightToMidnight.size, 4)
+        Assertions.assertEquals(4, changeMidnightToMidnight.size)
 
-        assertEquals(changeMidnightToMidnight, LongSetOfWeekdays.ofTokens(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.SUNDAY, Weekday.SATURDAY))
+        Assertions.assertEquals(LongSetOfWeekdays.ofTokens(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.SUNDAY, Weekday.SATURDAY), changeMidnightToMidnight)
     }
 
     @Test
@@ -108,9 +107,8 @@ class SetOfEnumsTest {
         changeMidnightToMidnight.exactlyOneOf(flipsInTheMorning)
         changeMidnightToMidnight.exactlyOneOf(flipsInTheEvening)
 
-        assertEquals(changeMidnightToMidnight.size, 4)
+        Assertions.assertEquals(4, changeMidnightToMidnight.size)
 
-        assertEquals(changeMidnightToMidnight, SetOfWeekdays.ofTokens(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.SUNDAY, Weekday.SATURDAY))
+        Assertions.assertEquals(SetOfWeekdays.ofTokens(Weekday.MONDAY, Weekday.WEDNESDAY, Weekday.SUNDAY, Weekday.SATURDAY), changeMidnightToMidnight)
     }
-
 }

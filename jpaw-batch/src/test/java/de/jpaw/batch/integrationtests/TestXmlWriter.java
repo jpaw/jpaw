@@ -5,9 +5,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import de.jpaw.batch.endpoints.BatchReaderRepeater;
 import de.jpaw.batch.endpoints.BatchReaderXmlFile;
@@ -18,7 +18,7 @@ import de.jpaw.batch.impl.BatchExecutorUnthreaded;
 import de.jpaw.batch.processors.BatchProcessorFactoryIdentity;
 import de.jpaw.batch.processors.BatchProcessorFactoryToXml;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@TestMethodOrder(MethodOrderer.MethodName.class)
 public class TestXmlWriter {
     private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     private static final String HEADER = XML_HEADER + "<Data>\n";

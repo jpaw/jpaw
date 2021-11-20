@@ -1,6 +1,6 @@
 package de.jpaw.batch.integrationtests;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import de.jpaw.batch.endpoints.BatchReaderRepeater;
 import de.jpaw.batch.endpoints.BatchWriterDevNull;
@@ -30,5 +30,4 @@ public class Benchmarks {
     public void testTmpLMAX() throws Exception {
         runMain(new BatchExecutor3Threads<String, String>(), "-n", "10000");
     }
-
 }

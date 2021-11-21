@@ -22,4 +22,14 @@ public class ConfigReaderTest {
         Assertions.assertEquals(Boolean.TRUE, cfgReader.getBooleanProperty("testbool"), "boolean check");
         Assertions.assertEquals(46, cfgReader.getIntProperty("jpaw.testnum"), "numeric check");
     }
+
+    @Test
+    public void testDefaultProperties() throws Exception {
+        final ConfigurationReader cfgReader = ConfigurationReaderFactory.getDefaultJpawConfigReader();
+
+        Assertions.assertNull(cfgReader.getProperty("wedonothavethis"), "Did not expect a missing prperty to be non null");
+        Assertions.assertEquals("string1", cfgReader.getProperty("jpaw.testvalue"), "string check");
+        Assertions.assertEquals(Boolean.TRUE, cfgReader.getBooleanProperty("testbool"), "boolean check");
+        Assertions.assertEquals(46, cfgReader.getIntProperty("jpaw.testnum"), "numeric check");
+    }
 }

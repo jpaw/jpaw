@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public final class ConfigurationReaderFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationReaderFactory.class);
 
-    public static final String DEFAULT_JPAW_PROPERTIES = "&jpaw.properties";
+    public static final String DEFAULT_JPAW_PROPERTIES = "&./jpaw.properties";
 
     private static final ConfigurationReaderInstance FALLBACK_READER = new ConfigurationReaderInstance();
 

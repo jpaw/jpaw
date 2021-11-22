@@ -10,6 +10,8 @@ import java.time.LocalTime;
  * These formats allow certain control (parser strictness settings, output formatting).
  */
 public final class FormattersAndParsers {
+    public static final int LENGTH_OF_ISO_DATE = 10;   // yyyy-mm-dd
+
     private static final char[] DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
     private FormattersAndParsers() { }
@@ -75,7 +77,14 @@ public final class FormattersAndParsers {
         return LocalTime.parse(time);
     }
 
-    public static LocalDateTime parseLocalDateTime(final String dateTime, final boolean ignoreFractionalSeconds, final boolean tolerateSuffixUTC) {
+    public static LocalDateTime parseLocalDateTime(final String dateTime, final boolean ignoreFractionalSeconds, final boolean tolerateSuffixUTC,
+      final boolean tolerateMissingTime) {
+        if (tolerateMissingTime) {
+            if (dateTime.length() == LENGTH_OF_ISO_DATE) {
+                final LocalDate justDate = LocalDate.parse(dateTime);
+                return LocalDateTime.of(justDate, LocalTime.MIDNIGHT);
+            }
+        }
         if (ignoreFractionalSeconds) {
             final int pos = dateTime.indexOf('.');
             if (pos > 0) {

@@ -36,7 +36,7 @@ public class FormattersAndParsers {
     }
 
     // zero-GC implementation of appendable.append(String.format("%02d:%02d:%02d%s", lt.getHour(), lt.getMinute(), lt.getSecond(), millis);
-    public static void appendLocalTime(Appendable sb, LocalTime lt, boolean outputFractionalSeconds) throws IOException {
+    public static void appendLocalTime(Appendable sb, LocalTime lt, boolean outputFractionalSeconds, boolean alwaysFractionals) throws IOException {
         append2Digits(sb, lt.getHour());
         sb.append(':');
         append2Digits(sb, lt.getMinute());
@@ -45,16 +45,16 @@ public class FormattersAndParsers {
 
         if (outputFractionalSeconds) {
             final int millis = lt.getNano() / 1000000;
-            if (millis != 0) {
+            if (alwaysFractionals || millis != 0) {
                 appendMilliseconds(sb, millis);
             }
         }
     }
 
-    public static void appendLocalDateTime(Appendable sb, LocalDateTime ldt, boolean outputFractionalSeconds, String addSuffixTimezone) throws IOException {
+    public static void appendLocalDateTime(Appendable sb, LocalDateTime ldt, boolean outputFractionalSeconds, String addSuffixTimezone, boolean alwaysFractionals) throws IOException {
         appendLocalDate(sb, ldt.toLocalDate());
         sb.append('T');
-        appendLocalTime(sb, ldt.toLocalTime(), outputFractionalSeconds);
+        appendLocalTime(sb, ldt.toLocalTime(), outputFractionalSeconds, alwaysFractionals);
         if (addSuffixTimezone != null) {
             sb.append(addSuffixTimezone);
         }

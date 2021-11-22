@@ -1,7 +1,6 @@
 package de.jpaw.jsonext;
 
 import java.io.IOException;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -131,14 +130,14 @@ public class ExtendedJsonEscaperForAppendables extends BaseJsonComposer {
         }
         if (obj instanceof LocalTime) {
             appendable.append('"');
-            FormattersAndParsers.appendLocalTime(appendable, (LocalTime)obj, outputFractionalSeconds);
+            FormattersAndParsers.appendLocalTime(appendable, (LocalTime)obj, outputFractionalSeconds, outputFractionalSeconds);
             appendable.append('"');
             return;
         }
         if (obj instanceof LocalDateTime) {
             final LocalDateTime ldt = (LocalDateTime)obj;
             appendable.append('"');
-            FormattersAndParsers.appendLocalDateTime(appendable, ldt, outputFractionalSeconds, addSuffixTimezone);
+            FormattersAndParsers.appendLocalDateTime(appendable, ldt, outputFractionalSeconds, addSuffixTimezone, outputFractionalSeconds);
             appendable.append('"');
             return;
         }

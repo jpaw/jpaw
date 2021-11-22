@@ -945,7 +945,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             // no multiplication at all, rather round
             final long tempMantissa = FixedPointNative.scale_and_divide(mantissa, 0, that.mantissa, rounding) * POWERS_OF_TEN[that.scale()];
             // still needs rounding by digitsToRound - that.scale() digits. FIXME: This is double rounding!
-            LOGGER.warn("Double rounding for scales {} / {], desired {}", scale(), that.scale(), desiredDecimals);
+            LOGGER.warn("Double rounding for scales {} & {}, desired {}", scale(), that.scale(), desiredDecimals);
             return newInstanceOf(tempMantissa).round(desiredDecimals, rounding);
         }
     }
@@ -973,7 +973,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             // no multiplication at all, rather round
             final long tempMantissa = FixedPointNative.scale_and_divide(mantissa, 0, that, rounding);
             // still needs rounding by digitsToRound - that.scale() digits. FIXME: This is double rounding!
-            LOGGER.warn("Double rounding for scales {} / {], desired {}", scale(), 0, desiredDecimals);
+            LOGGER.warn("Double rounding for scales {} & 0, desired {}", scale(), desiredDecimals);
             return newInstanceOf(tempMantissa).round(desiredDecimals, rounding);
         }
     }

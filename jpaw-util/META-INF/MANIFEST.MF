@@ -3,7 +3,7 @@ Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Bundle-ManifestVersion: 2
 Bundle-Name: jpaw utility libraries
 Bundle-SymbolicName: jpaw.util
-Bundle-Version: 2.9.6
+Bundle-Version: 2.9.7
 Bundle-Vendor: Michael Bischoff
 Export-Package: de.jpaw.api,
  de.jpaw.api.iso,

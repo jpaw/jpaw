@@ -2,6 +2,7 @@ package de.jpaw.util;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -43,6 +44,25 @@ public final class ConfigurationReaderFactory {
         }
     }
 
+    /** Returns a configuration reader which uses environment or system properties only. */
+    public static ConfigurationReaderInstance getEnvOrSystemPropConfigReader() {
+        return FALLBACK_READER;
+    }
+
+    /** Returns a configuration reader which uses a property file as specified by a system property. */
+    public static ConfigurationReaderInstance getConfigReaderForName(String propertyFileName, String defaultPath) {
+        final String realPropertiesPath = FALLBACK_READER.getProperty(propertyFileName, defaultPath);
+        final String currentWorkingDir = Paths.get("").toAbsolutePath().toString();
+        if (realPropertiesPath == null) {
+            // no default path specified, and no property set, use fallback reader
+            LOGGER.info("Using env/system property configuration for {} (path is unspecified and no default given)", propertyFileName);
+            return FALLBACK_READER;
+        }
+        LOGGER.info("Reading {} from path {} (working dir is {})", propertyFileName, realPropertiesPath, currentWorkingDir);
+        return getConfigReader(realPropertiesPath);
+    }
+
+    /** Returns a configuration reader which uses a resource or file as fallback. */
     public static ConfigurationReaderInstance getConfigReader(final String propertiesFilePath) {
         if (propertiesFilePath == null || propertiesFilePath.isEmpty()) {
             // get instance without property file

@@ -78,6 +78,10 @@ public class ConfigurationReaderInstance implements ConfigurationReader {
     public Boolean getBooleanProperty(String key) {
         final String actualValue = getProperty(key);
         if (actualValue != null) {
+            if (actualValue.equals("1"))
+                return Boolean.TRUE;
+            if (actualValue.equalsIgnoreCase("y"))
+                return Boolean.TRUE;
             return Boolean.valueOf(actualValue);
         }
         return null;
@@ -89,12 +93,12 @@ public class ConfigurationReaderInstance implements ConfigurationReader {
         return actualValue != null ? actualValue : defaultValue;
     }
 
-	@Override
-	public UUID getUUIDProperty(String key) {
+    @Override
+    public UUID getUUIDProperty(String key) {
         final String actualValue = getProperty(key);
         if (actualValue != null) {
             return UUID.fromString(actualValue);
         }
         return null;
-	}
+    }
 }

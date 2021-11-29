@@ -31,6 +31,11 @@ public final class ConfigurationReaderFactory {
 
     private static ConfigurationReaderInstance getConfigReaderFromResource(final String path) {
         try (final InputStream is = ConfigurationReaderFactory.class.getResourceAsStream(path.substring(1))) {
+            if (is == null) {
+                // null is a valid response, if the resource does not exist
+                LOGGER.warn("Resource {} does not exist, using fallback configuration (environment / system property only)", path);
+                return FALLBACK_READER;
+            }
             return new ConfigurationReaderInstance(is, path, "resource");
         } catch (Exception e) {
             LOGGER.error("Error obtaining properties from resource {}: {} {}", path, e.getMessage(), ExceptionUtil.causeChain(e));

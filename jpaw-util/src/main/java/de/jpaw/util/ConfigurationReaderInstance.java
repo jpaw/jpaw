@@ -2,6 +2,7 @@ package de.jpaw.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -34,6 +35,15 @@ public class ConfigurationReaderInstance implements ConfigurationReader {
         LOGGER.info("Successfully loaded properties from {} {} with {} values", type, source, props.size());
     }
 
+    /**
+     * Converts a property name into a suitable environment variable.
+     * Environment names are upper case and use underscores instead of dots
+     * (dots are not allowed as part of environment variable names).
+     */
+    private String convertToEnvironment(String property) {
+        return property.toUpperCase(Locale.ROOT).replace('.', '_');
+    }
+
     @Override
     public String getProperty(String key) {
         // initial attempt is the system property
@@ -42,7 +52,7 @@ public class ConfigurationReaderInstance implements ConfigurationReader {
             return properties;
         }
         // next, try environment
-        properties = System.getenv(key);
+        properties = System.getenv(convertToEnvironment(key));
         if (properties != null) {
             return properties;
         }

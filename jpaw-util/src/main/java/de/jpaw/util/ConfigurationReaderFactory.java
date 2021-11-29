@@ -39,7 +39,8 @@ public final class ConfigurationReaderFactory {
             }
             return new ConfigurationReaderInstance(is, path, "resource");
         } catch (Exception e) {
-            LOGGER.error("Error obtaining properties from resource {}: {} {}", path, e.getMessage(), ExceptionUtil.causeChain(e));
+            LOGGER.warn("Error obtaining properties from resource {}, using fallback configuration (environment / system property only): {} {}",
+              path, e.getMessage(), ExceptionUtil.causeChain(e));
             return FALLBACK_READER;
         }
     }

@@ -136,10 +136,9 @@ public final class CharTestsASCII {
     }
 
     /**
-     * <code>isAsciiPrintable()</code> tests if a character is a US-ASCII (7
-     * bit) printable character, which mainly means that such a character is
-     * available in every character encoding, no matter if single byte or
-     * multi-byte.
+     * <code>isAsciiPrintable()</code> tests if a character is a US-ASCII (7 bit) printable character,
+     * which mainly means that such a character is available in every character encoding,
+     * no matter if single byte or multi-byte.
      *
      * @param c
      *            the character to test
@@ -151,10 +150,9 @@ public final class CharTestsASCII {
     }
 
     /**
-     * <code>isAsciiPrintable()</code> tests if a character is a US-ASCII (7
-     * bit) printable character, or a tab character, which mainly means that such a character is
-     * available in every character encoding, no matter if single byte or
-     * multi-byte.
+     * <code>isAsciiPrintable()</code> tests if a character is a US-ASCII (7 bit) printable character,
+     * or a tab character, which mainly means that such a character is available in every character encoding,
+     * no matter if single byte or multi-byte.
      *
      * @param c
      *            the character to test
@@ -166,9 +164,8 @@ public final class CharTestsASCII {
     }
 
     /**
-     * <code>isAsciiUpperCase()</code> tests if a character is a US-ASCII (7
-     * bit) printable character, and represents an English upper case character
-     * <code>(A .. Z)</code>.
+     * <code>isAsciiUpperCase()</code> tests if a character is a US-ASCII (7 bit) printable character,
+     * and represents an English upper case character <code>(A .. Z)</code>.
      *
      * @param c
      *            the character to test
@@ -180,9 +177,8 @@ public final class CharTestsASCII {
     }
 
     /**
-     * <code>isAsciiLetter()</code> tests if a character is a US-ASCII (7
-     * bit) printable character, and represents an English upper case character
-     * <code>(A .. Z)</code> or lower case character <code>(a .. z)</code>.
+     * <code>isAsciiLetter()</code> tests if a character is a US-ASCII (7 bit) printable character,
+     * and represents an English upper case character <code>(A .. Z)</code> or lower case character <code>(a .. z)</code>.
      *
      * @param c
      *            the character to test
@@ -190,12 +186,11 @@ public final class CharTestsASCII {
      *         character or lower case character <code>(a .. z)</code>, <code>false</code> otherwise.
      */
     public static boolean isAsciiLetter(final char c) {
-        return (c >= 'A') && (c <= 'Z');
+        return c <= 'Z' ? (c >= 'A') : (c >= 'a' && c <= 'z');
     }
 
     /**
-     * <code>isAsciiAlnum()</code> tests if a character is a US-ASCII (7
-     * bit) printable character, and represents an English upper case character
+     * <code>isAsciiAlnum()</code> tests if a character is a US-ASCII (7 bit) printable character, and represents an English upper case character
      * <code>(A .. Z)</code> or lower case character <code>(a .. z)</code> or a digit <code>(0 .. 9)</code>.
      *
      * @param c
@@ -207,9 +202,9 @@ public final class CharTestsASCII {
     }
 
     /**
-     * <code>isJavascriptIdChar()</code> tests if a character is a US-ASCII (7
-     * bit) printable character, and represents an English upper case character
-     * <code>(A .. Z)</code> or lower case character <code>(a .. z)</code> or a digit <code>(0 .. 9)</code> or a dollar or an underscore.
+     * <code>isJavascriptIdChar()</code> tests if a character is a US-ASCII (7 bit) printable character,
+     * and represents an English upper case character <code>(A .. Z)</code> or lower case character <code>(a .. z)</code>
+     * or a digit <code>(0 .. 9)</code> or a dollar or an underscore.
      *
      * @param c
      *            the character to test
@@ -241,8 +236,8 @@ public final class CharTestsASCII {
     }
 
     /**
-     * <code>isJavascriptNumberChar()</code> tests if a character is a US-ASCII (7
-     * bit) printable character, and represents a valid character inside a Javascript / JSON number.
+     * <code>isJavascriptNumberChar()</code> tests if a character is a US-ASCII (7 bit) printable character,
+     * and represents a valid character inside a Javascript / JSON number.
      *
      * @param c
      *            the character to test
@@ -254,8 +249,8 @@ public final class CharTestsASCII {
     }
 
     /**
-     * <code>isAsciiLowerCase()</code> tests if a character is a US-ASCII (7
-     * bit) printable character, and represents an English lower case character
+     * <code>isAsciiLowerCase()</code> tests if a character is a US-ASCII (7 bit) printable character,
+     * and represents an English lower case character
      * <code>(a .. z)</code>.
      *
      * @param c
@@ -268,8 +263,8 @@ public final class CharTestsASCII {
     }
 
     /**
-     * <code>isAsciiDigit()</code> tests if a character is a US-ASCII (7 bit)
-     * printable character, and represents a valid digit <code>(0 .. 9)</code>.
+     * <code>isAsciiDigit()</code> tests if a character is a US-ASCII (7 bit) printable character,
+     * and represents a valid digit <code>(0 .. 9)</code>.
      *
      * @param c
      *            the character to test

@@ -52,6 +52,22 @@ public class TestRounding {
     }
 
     @Test
+    public void testRoundingHalfPositive() throws Exception {
+        final MicroUnits a = MicroUnits.of(995000L); // 0.995
+        Assertions.assertEquals(a.round(2, RoundingMode.HALF_DOWN), MicroUnits.of(990000L), "half down");
+        Assertions.assertEquals(a.round(2, RoundingMode.HALF_UP),   MicroUnits.ONE, "half up");
+        Assertions.assertEquals(a.round(2, RoundingMode.HALF_EVEN), MicroUnits.ONE, "half even");
+    }
+
+    @Test
+    public void testRoundingHalfNegative() throws Exception {
+        final MicroUnits a = MicroUnits.of(-995000L); // 0.995
+        Assertions.assertEquals(a.round(2, RoundingMode.HALF_DOWN), MicroUnits.of(-990000L), "half down");
+        Assertions.assertEquals(a.round(2, RoundingMode.HALF_UP),   MicroUnits.ONE.negate(), "half up");
+        Assertions.assertEquals(a.round(2, RoundingMode.HALF_EVEN), MicroUnits.ONE.negate(), "half even");
+    }
+
+    @Test
     public void testMultiplyAndRounding() throws Exception {
         MicroUnits mpi = MicroUnits.valueOf(Math.PI);
         BigDecimal bdpi = BigDecimal.valueOf(Math.PI).setScale(6, RoundingMode.HALF_EVEN);

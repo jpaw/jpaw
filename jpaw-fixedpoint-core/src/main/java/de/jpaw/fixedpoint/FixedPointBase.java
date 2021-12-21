@@ -765,7 +765,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
                 return quot;
             } else {
                 // exactly in the middle
-                return (quot & 1L) == 0L ? quot + 1L : quot;
+                return (quot & 1L) == 0L ? quot : quot + 1L;
             }
         case HALF_UP:
             if (2 * remainder >= powerOfTen)

@@ -1,7 +1,7 @@
 package de.jpaw.xml.jaxb.demo.datetime;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Marshaller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-se-parent</artifactId>
-        <version>3.0.0</version>
+        <version>3.0.1</version>
         <relativePath/>
     </parent>
 
@@ -18,7 +18,7 @@
       -->
 
     <properties>
-        <poi.version>5.1.0</poi.version>
+        <poi.version>5.2.2</poi.version>
         <hdrHistogram.version>2.1.12</hdrHistogram.version>
     </properties>
     <scm>

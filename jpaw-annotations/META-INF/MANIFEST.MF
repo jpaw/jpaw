@@ -3,7 +3,7 @@ Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Bundle-ManifestVersion: 2
 Bundle-Name: jpaw active annotations
 Bundle-SymbolicName: jpaw.annotations
-Bundle-Version: 3.0.1
+Bundle-Version: 3.0.2
 Bundle-Vendor: Michael Bischoff
 Export-Package: de.jpaw.annotations
 Bundle-ActivationPolicy: lazy

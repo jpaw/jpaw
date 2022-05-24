@@ -114,7 +114,7 @@ public class LambdaListsTest {
     public void javaIndexClassicWithKnownResultSize(Blackhole bh) {
         // classic java approach: preallocate the target, loop
         final List<IndexedString> data = offsets.get(exponent);
-        final Map<Integer, IndexedString> indexed = new HashMap<>(2 * data.size());
+        final Map<Integer, IndexedString> indexed = new HashMap<>(data.size());
         for (IndexedString obj: data) indexed.put(obj.ind, obj);
         bh.consume(indexed);
     }
@@ -130,7 +130,7 @@ public class LambdaListsTest {
     public void javaIndexStreamWithKnownResultSize(Blackhole bh) {
         // streams approach with forEach
         final List<IndexedString> data = offsets.get(exponent);
-        final Map<Integer, IndexedString> indexed = new HashMap<>(2 * data.size());
+        final Map<Integer, IndexedString> indexed = new HashMap<>(data.size());
         data.stream().forEach(obj -> indexed.put(obj.ind,  obj));
         bh.consume(indexed);
     }
@@ -138,7 +138,7 @@ public class LambdaListsTest {
     public void javaIndexForeachWithKnownResultSize(Blackhole bh) {
         // functional approach with forEach directly applied to collection
         final List<IndexedString> data = offsets.get(exponent);
-        final Map<Integer, IndexedString> indexed = new HashMap<>(2 * data.size());
+        final Map<Integer, IndexedString> indexed = new HashMap<>(data.size());
         data.forEach(obj -> indexed.put(obj.ind,  obj));
         bh.consume(indexed);
     }

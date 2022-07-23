@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-se-parent</artifactId>
-        <version>3.0.4</version>
+        <version>3.0.6</version>
         <relativePath/>
     </parent>
 
@@ -77,7 +77,7 @@
                         <dependency>
                             <groupId>org.junit.jupiter</groupId>
                             <artifactId>junit-jupiter-engine</artifactId>
-                            <version>5.7.2</version>
+                            <version>${junit5.version}</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -88,6 +88,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -174,6 +178,13 @@
         <module>jpaw-xtend</module>
         <module>jpaw8-batch</module>
         <module>jpaw8-benchmarks</module>
+
+        <!-- jdp project, formerly separate -->
+        <module>jdp-bom/pom.xml</module>
+        <module>jdp-core/pom.xml</module>
+        <module>jdp-test/pom.xml</module>
+        <module>jdp-benchmarks/pom.xml</module>
+
     </modules>
 
 </project>

@@ -3,7 +3,7 @@ Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Bundle-ManifestVersion: 2
 Bundle-Name: jpaw fixed point arithmetic
 Bundle-SymbolicName: jpaw.fixedpoint.jackson
-Bundle-Version: 3.0.4
+Bundle-Version: 3.0.6
 Bundle-Vendor: Michael Bischoff
 Export-Package: de.jpaw.fixedpoint.jackson
 Bundle-ActivationPolicy: lazy

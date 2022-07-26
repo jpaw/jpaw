@@ -1,11 +1,11 @@
-# Build and publish snapshot package when pushed to master
+# Build and publish package when release is created.
+# Takes name of release for versioning.
 
-name: Publish Snapshot
+name: Publish Release
 
 on:
-  push:
-    branches:
-      - master
+  release:
+    types: [created]
 
 jobs:
   publish:
@@ -39,6 +39,9 @@ jobs:
         cache: maven
 
     - name: Publish to GitHub Packages
-      run: mvn -B -Pgithub deploy
+      run: |
+        mvn -B versions:update-parent -DnewVersion=${{ github.event.release.name }}
+        mvn -B versions:set -DnewVersion=${{ github.event.release.name }}
+        mvn -B -Pgithub deploy
       env:
         GITHUB_TOKEN: ${{ github.token }}

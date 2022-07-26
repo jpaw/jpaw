@@ -23,8 +23,16 @@ jobs:
         distribution: 'corretto'
         cache: maven
         server-id: github
-        server-username: dummy  # not used
+        server-username: dummy # not used
         server-password: GITHUB_TOKEN_REF
+
+    - name: Update parent to latest version
+      run: mvn -B -Pgithub versions:update-parent
+      env:
+          GITHUB_TOKEN_REF: ${{ secrets.GH_WORKFLOWS_PAT_READ_PACKAGES }}
+
+    - name: Set version to release name
+      run: mvn -B -Pgithub versions:set -DnewVersion=${{ github.event.release.name }}
 
     - name: Build with Maven
       run: mvn -B -U -Pgithub package --file pom.xml
@@ -37,12 +45,6 @@ jobs:
         java-version: '17'
         distribution: 'corretto'
         cache: maven
-
-    - name: Set versions to release name
-      run: mvn -B versions:set -DnewVersion=${{ github.event.release.name }}
-
-    - name: Update parent version
-      run: mvn -B versions:update-parent
 
     - name: Publish to GitHub Packages
       run: mvn -B -Pgithub deploy

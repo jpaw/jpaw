@@ -21,9 +21,6 @@
         <poi.version>5.2.2</poi.version>
         <hdrHistogram.version>2.1.12</hdrHistogram.version>
     </properties>
-    <scm>
-        <connection>scm:git:https://github.com/jpaw/jpaw.git</connection>
-    </scm>
 
     <build>
         <pluginManagement>
@@ -184,7 +181,29 @@
         <module>jdp-core/pom.xml</module>
         <module>jdp-test/pom.xml</module>
         <module>jdp-benchmarks/pom.xml</module>
-
     </modules>
+
+    <profiles>
+        <profile>
+            <id>github</id>
+            <repositories>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Packages</name>
+                    <url>https://maven.pkg.github.com/arvato-systems-jacs/dummy</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <distributionManagement>
+                <repository>
+                    <id>github</id>
+                    <name>GitHub Packages</name>
+                    <url>https://maven.pkg.github.com/arvato-systems-jacs/jpaw</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 
 </project>

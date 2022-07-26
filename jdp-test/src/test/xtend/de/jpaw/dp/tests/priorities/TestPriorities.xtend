@@ -5,10 +5,11 @@ import de.jpaw.dp.Fallback
 import de.jpaw.dp.Jdp
 import de.jpaw.dp.Singleton
 import de.jpaw.dp.exceptions.NonuniqueImplementationException
-import org.testng.annotations.BeforeMethod
-import org.testng.annotations.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-import static org.testng.Assert.*
+import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertThrows
 
 interface Leaden {}
 interface Metal {}
@@ -38,31 +39,38 @@ class Gold implements Metal, Medal {
 class Mercury implements Metal, Letal, Grey {
 }
 
-@Test(singleThreaded=true)
 class TestPriorities {
 
-    @BeforeMethod
+    @BeforeEach
     def void setup() {
         Jdp.reset
         Jdp.init("de.jpaw.dp.tests.priorities")
     }
 
+    @Test
     def void testFallback1() {
-        assertEquals(Jdp.getRequired(Leaden).class, Lead)  // the only class is the fallback one
+        assertEquals(Lead, Jdp.getRequired(Leaden).class)  // the only class is the fallback one
     }
+
+    @Test
     def void testFallback2() {
-        assertEquals(Jdp.getRequired(Letal).class, Mercury)  // fallback is skipped in favour of other implementation
+        assertEquals(Mercury, Jdp.getRequired(Letal).class)  // fallback is skipped in favour of other implementation
     }
 
+    @Test
     def void testDefault1() {
-        assertEquals(Jdp.getRequired(Metal).class, Gold)  // Gold has priority (with Fallback)
-    }
-    def void testDefault2() {
-        assertEquals(Jdp.getRequired(Medal).class, Gold)  // Gold has priority (no Fallback)
+        assertEquals(Gold, Jdp.getRequired(Metal).class)  // Gold has priority (with Fallback)
     }
 
-    @Test(expectedExceptions=NonuniqueImplementationException)
+    @Test
+    def void testDefault2() {
+        assertEquals(Gold, Jdp.getRequired(Medal).class)  // Gold has priority (no Fallback)
+    }
+
+    @Test
     def void testNonUnique() {
-        Jdp.getRequired(Grey)                           // fallback and no default, and multiple candidates
+        assertThrows(NonuniqueImplementationException, [
+            Jdp.getRequired(Grey)                           // fallback and no default, and multiple candidates
+        ])
     }
 }

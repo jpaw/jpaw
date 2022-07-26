@@ -3,10 +3,10 @@ package de.jpaw.dp.tests.singleton
 import de.jpaw.dp.Jdp
 import de.jpaw.dp.Singleton
 import java.util.concurrent.atomic.AtomicInteger
-import org.testng.annotations.BeforeMethod
-import org.testng.annotations.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-import static org.testng.Assert.*
+import static org.junit.jupiter.api.Assertions.assertEquals
 
 interface I1 {
     def int open();
@@ -22,9 +22,9 @@ interface I3 {
 
 @Singleton
 class MultiInterfaceClass implements I1, I2, I3 {
-    private static final AtomicInteger instanceCounter = new AtomicInteger();
+    static final AtomicInteger instanceCounter = new AtomicInteger();
 
-    private val myInstanceNo = instanceCounter.incrementAndGet
+    val myInstanceNo = instanceCounter.incrementAndGet
 
     def static void resetCounter() {
         instanceCounter.set(0)
@@ -39,35 +39,37 @@ class MultiInterfaceClass implements I1, I2, I3 {
     }
 }
 
-@Test(singleThreaded=true)
 class TestMIClassThenInterfaces {
 
-    @BeforeMethod
+    @BeforeEach
     def void setup() {
         Jdp.reset
         MultiInterfaceClass.resetCounter
         Jdp.init("de.jpaw.dp.tests.singleton")
     }
 
+    @Test
     def void testClassThenInterfaces() {
-        assertEquals(Jdp.getRequired(MultiInterfaceClass).open, 1)
-        assertEquals(Jdp.getRequired(I1).open, 1)
-        assertEquals(Jdp.getRequired(I2).close, 1)
-        assertEquals(Jdp.getRequired(I3).open, 1)
-        assertEquals(Jdp.getRequired(MultiInterfaceClass).close, 1)
+        assertEquals(1, Jdp.getRequired(MultiInterfaceClass).open)
+        assertEquals(1, Jdp.getRequired(I1).open)
+        assertEquals(1, Jdp.getRequired(I2).close)
+        assertEquals(1, Jdp.getRequired(I3).open)
+        assertEquals(1, Jdp.getRequired(MultiInterfaceClass).close)
     }
 
+    @Test
     def void testInterfaceThenClass() {
-        assertEquals(Jdp.getRequired(I1).open, 1)
-        assertEquals(Jdp.getRequired(I2).close, 1)
-        assertEquals(Jdp.getRequired(I3).open, 1)
-        assertEquals(Jdp.getRequired(MultiInterfaceClass).close, 1)
+        assertEquals(1, Jdp.getRequired(I1).open)
+        assertEquals(1, Jdp.getRequired(I2).close)
+        assertEquals(1, Jdp.getRequired(I3).open)
+        assertEquals(1, Jdp.getRequired(MultiInterfaceClass).close)
     }
 
+    @Test
     def void testInterfaceThenClassOrdering2() {
-        assertEquals(Jdp.getRequired(I2).close, 1)
-        assertEquals(Jdp.getRequired(I1).open, 1)
-        assertEquals(Jdp.getRequired(I3).open, 1)
-        assertEquals(Jdp.getRequired(MultiInterfaceClass).close, 1)
+        assertEquals(1, Jdp.getRequired(I2).close)
+        assertEquals(1, Jdp.getRequired(I1).open)
+        assertEquals(1, Jdp.getRequired(I3).open)
+        assertEquals(1, Jdp.getRequired(MultiInterfaceClass).close)
     }
 }

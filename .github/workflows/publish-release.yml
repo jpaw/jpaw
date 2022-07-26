@@ -38,10 +38,13 @@ jobs:
         distribution: 'corretto'
         cache: maven
 
+    - name: Set versions to release name
+      run: mvn -B versions:set -DnewVersion=${{ github.event.release.name }}
+
+    - name: Update parent version
+      run: mvn -B versions:update-parent
+
     - name: Publish to GitHub Packages
-      run: |
-        mvn -B versions:update-parent -DnewVersion=${{ github.event.release.name }}
-        mvn -B versions:set -DnewVersion=${{ github.event.release.name }}
-        mvn -B -Pgithub deploy
+      run: mvn -B -Pgithub deploy
       env:
         GITHUB_TOKEN: ${{ github.token }}

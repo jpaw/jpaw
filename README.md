@@ -1,4 +1,4 @@
-##Utility classes used for several jpaw projects
+## Utility classes used for several jpaw projects
 
 The classes defined within this repository have been part of the bonaparte java implementation,
 but in fact do not relate to the DSL and/or serialization / deserialization functionality
@@ -14,7 +14,7 @@ Classes which might be useful in other projects are
 
 In addition, this repository serves as a parent pom / bom, defining some revisions of libraries used in other projects.
 
-###Building
+### Building
 
 This project uses maven3 as a build tool. For security reasons, an up to date maven version is enforced (3.8.5 upwards).
 

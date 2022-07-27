@@ -1,5 +1,4 @@
 # Build and publish package when release is created.
-# Takes name of release for versioning.
 
 name: Publish Release
 
@@ -31,7 +30,7 @@ jobs:
       env:
           GITHUB_TOKEN_REF: ${{ secrets.GH_WORKFLOWS_PAT_READ_PACKAGES }}
 
-    - name: Set version to release name
+    - name: Remove SNAPSHOT from version
       run: mvn -B -Pgithub versions:set -DremoveSnapshot
 
     - name: Build with Maven

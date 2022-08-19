@@ -10,6 +10,7 @@ env:
   JAVA_VERSION_TO_USE: '11'
   JAVA_DISTRI_TO_USE: 'corretto'
   GITHUB_TOKEN_READ_PACKAGES: ${{ secrets.GH_WORKFLOWS_PAT_READ_PACKAGES }}
+  GITHUB_TOKEN_DEPLOY_PACKAGES: ${{ github.token }}
   DEPLOY_RETRY: 10
 
 jobs:
@@ -35,14 +36,14 @@ jobs:
         servers: |
           [
             { "id": "github-pkgs", "username": "dummy", "password": "${env.GITHUB_TOKEN_READ_PACKAGES}" },
-            { "id": "github", "username": "${env.GITHUB_ACTOR}", "password": "${env.GITHUB_TOKEN}" }
+            { "id": "github", "username": "${env.GITHUB_ACTOR}", "password": "${env.GITHUB_TOKEN_DEPLOY_PACKAGES}" }
           ]
 
     - name: Update parent to latest version
-      run: mvn -B -Pgithub versions:update-parent
+      run: mvn -B versions:update-parent
 
     - name: Remove SNAPSHOT from version
-      run: mvn -B -Pgithub versions:set -DremoveSnapshot
+      run: mvn -B versions:set -DremoveSnapshot
 
     - name: Build and Publish
       run: mvn -B -Pgithub -DdeployAtEnd=true -DretryFailedDeploymentCount=${{ env.DEPLOY_RETRY }} deploy

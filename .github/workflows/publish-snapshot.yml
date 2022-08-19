@@ -3,13 +3,21 @@
 name: Publish Snapshot
 
 on:
+  workflow_dispatch: # enable manual trigger
   push:
     branches:
       - master
 
+# cancel already running instances of this workflow
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
 env:
   JAVA_VERSION_TO_USE: '11'
   JAVA_DISTRI_TO_USE: 'corretto'
+  GITHUB_TOKEN_READ_PACKAGES: ${{ secrets.GH_WORKFLOWS_PAT_READ_PACKAGES }}
+  DEPLOY_RETRY: 10
 
 jobs:
   publish:
@@ -26,23 +34,16 @@ jobs:
         java-version: ${{ env.JAVA_VERSION_TO_USE }}
         distribution: ${{ env.JAVA_DISTRI_TO_USE }}
         cache: maven
-        server-id: github
-        server-username: dummy  # not used
-        server-password: GITHUB_TOKEN_REF
 
-    - name: Build with Maven
-      run: mvn -B -Pgithub package
-      env:
-          GITHUB_TOKEN_REF: ${{ secrets.GH_WORKFLOWS_PAT_READ_PACKAGES }}
-
-    - name: Set up JDK ${{ env.JAVA_VERSION_TO_USE }} (${{ env.JAVA_DISTRI_TO_USE }}) for publish
-      uses: actions/setup-java@v3
+    - name: Configure maven settings.xml
+      uses: whelk-io/maven-settings-xml-action@v20
       with:
-        java-version: ${{ env.JAVA_VERSION_TO_USE }}
-        distribution: ${{ env.JAVA_DISTRI_TO_USE }}
-        cache: maven
+        repositories: '[{ "id": "github-pkgs", "url": "https://maven.pkg.github.com/arvato-systems-jacs/dummy", "snapshots": { "enabled": "true" } }]'
+        servers: |
+          [
+            { "id": "github-pkgs", "username": "dummy", "password": "${env.GITHUB_TOKEN_READ_PACKAGES}" },
+            { "id": "github", "username": "${env.GITHUB_ACTOR}", "password": "${env.GITHUB_TOKEN}" }
+          ]
 
-    - name: Publish to GitHub Packages
-      run: mvn -B -Pgithub deploy
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+    - name: Build and Publish
+      run: mvn -B -Pgithub -DdeployAtEnd=true -DretryFailedDeploymentCount=${{ env.DEPLOY_RETRY }} deploy

@@ -18,7 +18,7 @@
       -->
 
     <properties>
-        <poi.version>5.2.2</poi.version>
+        <poi.version>5.2.3</poi.version>
         <hdrHistogram.version>2.1.12</hdrHistogram.version>
     </properties>
 

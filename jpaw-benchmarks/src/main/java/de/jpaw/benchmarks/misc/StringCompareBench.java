@@ -14,8 +14,21 @@ import org.openjdk.jmh.infra.Blackhole;
 
 // measure if Java String.equals checks for object identity (positive result) or hashCode (negative case) first
 
-//java -jar target/jpaw-benchmarks.jar -i 5 -f 5 -wf 3 -wi 3 ".*StringCompareBench.*"
-
+// java -jar target/jpaw-benchmarks.jar -i 5 -f 5 -wf 3 -wi 3 ".*StringCompareBench.*"
+//
+// Results:
+//Benchmark                                  Mode  Cnt        Score        Error  Units
+//StringCompareBench.benchNativeBaseline     avgt    9   447200.948 ±  28044.537  ns/op
+//StringCompareBench.benchNativeCopies       avgt    9  5469627.736 ± 115356.791  ns/op
+//StringCompareBench.benchNativeIdentical    avgt    9  2864936.241 ± 209546.436  ns/op
+//StringCompareBench.benchIdentityCopies     avgt    9  5106870.892 ± 171357.337  ns/op
+//StringCompareBench.benchIdentityIdentical  avgt    9  2871717.495 ± 429277.409  ns/op
+//StringCompareBench.benchHashCopies         avgt    9  4725464.687 ± 518035.166  ns/op
+//StringCompareBench.benchHashIdentical      avgt    9  2164779.274 ±  71971.343  ns/op
+//StringCompareBench.benchBothCopies         avgt    9  5732981.966 ± 677038.101  ns/op
+//StringCompareBench.benchBothIdentical      avgt    9  1909927.266 ±  65352.712  ns/op
+//
+// => adding extra checks gives some gains (especially the hashCode check), but does not seem enough to justify the effort
 
 @State(value = Scope.Thread)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)

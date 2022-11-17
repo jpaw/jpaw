@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-base</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.1.1</version>
     </parent>
 
     <artifactId>jpaw-fixedpoint-core</artifactId>
@@ -54,7 +54,7 @@
                                 <configuration>
                                     <target name="jni" description="Generate headers and compile the native code">
                                         <echo>Compiling JNI headers</echo>
-                                        <exec executable="make"></exec>
+                                        <exec executable="make" />
                                     </target>
                                 </configuration>
                                 <goals>

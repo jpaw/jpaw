@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-se-parent</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.1.1</version>
         <relativePath/>
     </parent>
 
@@ -16,6 +16,11 @@
     <!-- Note: in order to compile with Java16, you currently have to specify - -illegal-access=permit as MAVEN_OPTS
          (see https://www.eclipse.org/forums/index.php/t/1107994/) for the projects jpaw-money-test and jpaw-enumsets.
       -->
+
+    <scm>
+	  <developerConnection>scm:git:https://github.com/arvato-systems-jacs/jpaw.git</developerConnection>
+	  <tag>HEAD</tag>
+    </scm>
 
     <properties>
         <poi.version>5.2.3</poi.version>
@@ -107,6 +112,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

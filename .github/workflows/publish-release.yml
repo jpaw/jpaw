@@ -3,26 +3,27 @@
 name: Publish Release
 
 on:
-  release:
-    types: [created]
+  workflow_dispatch: # enable manual trigger
 
 env:
   JAVA_VERSION_TO_USE: '11'
   JAVA_DISTRI_TO_USE: 'corretto'
   GITHUB_TOKEN_READ_PACKAGES: ${{ secrets.GH_WORKFLOWS_PAT_READ_PACKAGES }}
   GITHUB_TOKEN_DEPLOY_PACKAGES: ${{ github.token }}
-  DEPLOY_RETRY: 10
+  DEPLOY_RETRY: 5
 
 jobs:
   publish:
+
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
+
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up JDK ${{ env.JAVA_VERSION_TO_USE }} (${{ env.JAVA_DISTRI_TO_USE }}) for build
+    - name: Set up JDK ${{ env.JAVA_VERSION_TO_USE }} (${{ env.JAVA_DISTRI_TO_USE }})
       uses: actions/setup-java@v3
       with:
         java-version: ${{ env.JAVA_VERSION_TO_USE }}
@@ -39,11 +40,10 @@ jobs:
             { "id": "github", "username": "${env.GITHUB_ACTOR}", "password": "${env.GITHUB_TOKEN_DEPLOY_PACKAGES}" }
           ]
 
-    - name: Update parent to latest version
-      run: mvn -B versions:update-parent
+    - name: Configure Git User
+      run: git config user.name "Release Management"
 
-    - name: Remove SNAPSHOT from version
-      run: mvn -B versions:set -DremoveSnapshot
-
-    - name: Build and Publish
-      run: mvn -B -Pgithub -DdeployAtEnd=true -DretryFailedDeploymentCount=${{ env.DEPLOY_RETRY }} deploy
+    - name: Release Packages
+      run: mvn -B -U -P github -Darguments=-DskipTests -DretryFailedDeploymentCount=${{ env.DEPLOY_RETRY }} release:prepare release:perform
+      env:
+        GITHUB_TOKEN: ${{ github.token }}

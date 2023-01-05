@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>jpaw-base</artifactId>
-    <version>3.1.4-SNAPSHOT</version>
+    <version>3.1.4</version>
     <packaging>pom</packaging>
 
     <description>Common configuration settings for all jpaw basic / utility projects</description>
@@ -19,7 +19,7 @@
 
     <scm>
 	  <developerConnection>scm:git:https://github.com/arvato-systems-jacs/jpaw.git</developerConnection>
-	  <tag>HEAD</tag>
+	  <tag>v3.1.4</tag>
     </scm>
 
     <properties>

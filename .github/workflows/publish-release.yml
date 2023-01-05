@@ -2,8 +2,15 @@
 
 name: Publish Release
 
+run-name: Publish Release ${{ inputs.release_version }}
+
 on:
   workflow_dispatch: # enable manual trigger
+    inputs:
+      release_version:
+        description: 'Release Version'
+        required: true
+        type: string
 
 env:
   JAVA_VERSION_TO_USE: '11'

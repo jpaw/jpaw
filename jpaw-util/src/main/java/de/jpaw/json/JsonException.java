@@ -25,13 +25,13 @@ public class JsonException extends ApplicationException {
     public static final int JSON_BAD_ESCAPE              = OFFSET + 7;
 
     static {
-        codeToDescription.put(JSON_PREMATURE_END,             "Premature end of embedded JSON object");
-        codeToDescription.put(JSON_GARBAGE_AT_END,            "Garbage at end of embedded JSON object");
-        codeToDescription.put(JSON_BAD_IDENTIFIER,            "Bad JSON identifier");
-        codeToDescription.put(JSON_BAD_STRING,                "Bad string in JSON");
-        codeToDescription.put(JSON_BAD_NUMBER,                "Malformed number in JSON");
-        codeToDescription.put(JSON_SYNTAX,                    "Invalid JSON syntax");
-        codeToDescription.put(JSON_BAD_ESCAPE,                "Invalid JSON (unicode) escape sequence");
+        registerCode(JSON_PREMATURE_END,             "Premature end of embedded JSON object");
+        registerCode(JSON_GARBAGE_AT_END,            "Garbage at end of embedded JSON object");
+        registerCode(JSON_BAD_IDENTIFIER,            "Bad JSON identifier");
+        registerCode(JSON_BAD_STRING,                "Bad string in JSON");
+        registerCode(JSON_BAD_NUMBER,                "Malformed number in JSON");
+        registerCode(JSON_SYNTAX,                    "Invalid JSON syntax");
+        registerCode(JSON_BAD_ESCAPE,                "Invalid JSON (unicode) escape sequence");
     }
 
     public JsonException(final int errorCode, final int pos) {

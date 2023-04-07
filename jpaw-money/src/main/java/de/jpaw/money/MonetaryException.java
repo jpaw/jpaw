@@ -50,17 +50,17 @@ public class MonetaryException extends ApplicationException {
     public static final int UNEXPECTED_ROUNDING_PROBLEM  = OFFSET_ILE + 21;
 
     static {
-        codeToDescription.put(ILLEGAL_CURRENCY_CODE,         "Currency code may not be null, must have 3 upper case characters length");
-        codeToDescription.put(ILLEGAL_NUMBER_OF_DECIMALS,    "The number of fractional digits must be between 0 and 6");
-        codeToDescription.put(UNDEFINED_AMOUNTS,             "Both gross and net amounts were null");
-        codeToDescription.put(TAX_EXCEED_GROSS,              "Tax amounts exceed gross amount");
-        codeToDescription.put(SUM_MISMATCH,                  "Gross, net and tax amounts provided, but the sum of net and tax does not match gross");
-        codeToDescription.put(ROUNDING_PROBLEM,              "Problem during rounding (precision loss due to too many provided decimal digits)");
-        codeToDescription.put(SIGNS_DIFFER,                  "The signs of tax and net amount are not consistent");
-        codeToDescription.put(UNEXPECTED_ROUNDING_PROBLEM,   "Unexpected exception from constructor");
-        codeToDescription.put(INCOMPATIBLE_OPERANDS,         "The operands differ in either currency or number of tax amounts");
-        codeToDescription.put(INCORRECT_NUMBER_TAX_AMOUNTS,  "Incorrect number of tax amounts supplied");
-        codeToDescription.put(NOT_AN_ISO4217_CODE,           "No decimals supplied and provided code not an official ISO 4217 code");
+        registerCode(ILLEGAL_CURRENCY_CODE,         "Currency code may not be null, must have 3 upper case characters length");
+        registerCode(ILLEGAL_NUMBER_OF_DECIMALS,    "The number of fractional digits must be between 0 and 6");
+        registerCode(UNDEFINED_AMOUNTS,             "Both gross and net amounts were null");
+        registerCode(TAX_EXCEED_GROSS,              "Tax amounts exceed gross amount");
+        registerCode(SUM_MISMATCH,                  "Gross, net and tax amounts provided, but the sum of net and tax does not match gross");
+        registerCode(ROUNDING_PROBLEM,              "Problem during rounding (precision loss due to too many provided decimal digits)");
+        registerCode(SIGNS_DIFFER,                  "The signs of tax and net amount are not consistent");
+        registerCode(UNEXPECTED_ROUNDING_PROBLEM,   "Unexpected exception from constructor");
+        registerCode(INCOMPATIBLE_OPERANDS,         "The operands differ in either currency or number of tax amounts");
+        registerCode(INCORRECT_NUMBER_TAX_AMOUNTS,  "Incorrect number of tax amounts supplied");
+        registerCode(NOT_AN_ISO4217_CODE,           "No decimals supplied and provided code not an official ISO 4217 code");
     }
 
     public MonetaryException(int errorCode, String message) {

@@ -17,6 +17,11 @@ package de.jpaw.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.BiConsumer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Parent class of all related exception codes.
@@ -33,74 +38,11 @@ import java.util.Map;
 
 public class ApplicationException extends RuntimeException {
     private static final long serialVersionUID = 1122421467960337766L;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationException.class);
 
 
     /** The classification of return codes indicating success (which would never be instantiated as an exception). */
     public static final int SUCCESS = 0;
-
-    /**
-     * The classification of return codes indicating a decline or negative decision,
-     * without being a parameter or processing problem, and therefore also never be instantiated as an exception.
-     */
-    @Deprecated
-    public static final int DENIED  = 1;
-
-    /** The classification of return codes indicating an invalid message format. */
-    @Deprecated
-    public static final int PARSER_ERROR = 2;
-
-    /** The classification of return codes indicating an invalid reference or field value (for example an invalid customer no or invalid country code). */
-    @Deprecated
-    public static final int PARAMETER_ERROR = 3;
-
-    /**
-     * The classification of return codes indicating a processing timeout.
-     * The requester should react by resending the request some time later.
-     * The resource was available but did not respond back in the expected time.
-     */
-    @Deprecated
-    public static final int TIMEOUT = 4;
-
-    /**
-     * The classification of return codes indicating a (hopefully temporary) problem of resource shortage
-     * (no free sockets, disk full, cannot fork due to too many processes...).
-     */
-    @Deprecated
-    public static final int RESOURCE_EXHAUSTED = 5;
-
-    /**
-     * The classification of return codes indicating a resource or service which is temporarily unavailable.
-     * This could be due to a downtime of an OSGi component or remote service.
-     * Senders should treat such return code similar to a timeout return code and retry later.
-     */
-    @Deprecated
-    public static final int SERVICE_UNAVAILABLE = 6;
-
-    /**
-     * An intermediate classification returned by internal validation algorithms such as bonaparte validation or Java Bean Validation.
-     * Contentwise, this is a subset of the <code>PARAMETER_ERROR</code> range, but these codes will most likely be caught
-     * and mapped to more generic return codes, or used as user feedback in the UI.
-     */
-    @Deprecated
-    public static final int VALIDATION_ERROR = 7;
-
-    /**
-     * The classification of return codes indicating failure of an internal plausibility check.
-     * This should never happen and therefore usually indicates a programming error.
-     */
-    @Deprecated
-    public static final int INTERNAL_LOGIC_ERROR = 8;  // assertion failed
-
-    /**
-     * The classification of problems occurring in the persistence layer (usually database),
-     * which have not been caught by a specific exception handler.
-     * This can be due to resource exhaustion, but also programming errors.
-     * Usually deeper investigation is required.
-     * Callers receiving this code should retry at maximum one time, and then defer the request and queue it into a manual analysis queue.
-     * @deprecated use CL_DATABASE_ERROR instead
-     */
-    @Deprecated
-    public static final int DATABASE_ERROR = 9;
 
     /**
      * The classification of return codes indicating success (which would never be instantiated as an exception).
@@ -175,11 +117,53 @@ public class ApplicationException extends RuntimeException {
      */
     public static final int CLASSIFICATION_FACTOR = 100000000;
 
-    /** Provides the mapping of error codes to textual descriptions. It is the responsibility of superclasses
-     *  inheriting this class to populate this map for the descriptions of the codes they represent.
-     *  It is recommended to perform such initialization not during class load, but lazily, once the first exception is thrown.
+    /**
+     * Provides the mapping of error codes to textual descriptions. It is the responsibility of superclasses
+     * inheriting this class to populate this map for the descriptions of the codes they represent.
+     * It is recommended to perform such initialization not during class load, but lazily, once the first exception is thrown.
      */
-    protected static final Map<Integer, String> codeToDescription = new HashMap<>(200);
+    protected static final class DuplicateCheckingMap {
+        private Map<Integer, String> codeToDescriptionInternal = new HashMap<>(200);
+
+        @Deprecated  // use registerCode()
+        public void put(final int errorCode, final String description) {
+            final Integer errorCodeBoxed = Integer.valueOf(errorCode);
+            if (errorCode < 0 || errorCode > 10 * CLASSIFICATION_FACTOR) {
+                LOGGER.error("Attempted to create error message out of range for {}: {}", errorCodeBoxed, description);
+                throw new IllegalArgumentException("out of range");
+            }
+            if ((errorCode % 10000) == 0) {
+                LOGGER.error("Attempted to create error message with zero module offset for {}: {}", errorCodeBoxed, description);
+                throw new IllegalArgumentException("module offset");
+            }
+            // Validate that the exception code has not been used before. In case it has, throw an exception.
+            final String oldDescription = codeToDescriptionInternal.put(errorCodeBoxed, description);
+            if (oldDescription != null) {
+                LOGGER.error("Attempted to create duplicate error message for {}: {} / previously {}", errorCodeBoxed, description, oldDescription);
+                throw new IllegalArgumentException("duplicate error code");
+            }
+        }
+        @Deprecated  // use codeToString()
+        public String get(final int errorCode) {
+            return codeToDescriptionInternal.get(errorCode);
+        }
+        @Deprecated  // rewrite code to use forEachCode() instead
+        public Set<Map.Entry<Integer, String>> entrySet() {
+            return codeToDescriptionInternal.entrySet();
+        }
+    }
+
+    protected static DuplicateCheckingMap codeToDescription = new DuplicateCheckingMap();
+
+    public static void registerCode(final int errorCode, final String description) {
+        codeToDescription.put(errorCode, description);
+    }
+
+    public static void forEachCode(final BiConsumer<Integer, String> processor) {
+        for (final Map.Entry<Integer, String> e: codeToDescription.entrySet()) {
+            processor.accept(e.getKey(), e.getValue());
+        }
+    }
 
     private final int errorCode;
 

@@ -15,9 +15,9 @@
  */
 package de.jpaw.util;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
 import org.slf4j.Logger;
@@ -117,13 +117,17 @@ public class ApplicationException extends RuntimeException {
      */
     public static final int CLASSIFICATION_FACTOR = 100000000;
 
+    private static final Map<Integer, String> CODE_TO_DESCRIPTION = new ConcurrentHashMap<>(2000);
+    private static final Map<Integer, Integer> DUPLICATE_CODE_COUNTER = new ConcurrentHashMap<>(2000);
+    private static final Integer ONE = Integer.valueOf(1);
+
     /**
      * Provides the mapping of error codes to textual descriptions. It is the responsibility of superclasses
      * inheriting this class to populate this map for the descriptions of the codes they represent.
      * It is recommended to perform such initialization not during class load, but lazily, once the first exception is thrown.
      */
+    @Deprecated
     protected static final class DuplicateCheckingMap {
-        private Map<Integer, String> codeToDescriptionInternal = new HashMap<>(200);
 
         @Deprecated  // use registerCode()
         public void put(final int errorCode, final String description) {
@@ -137,19 +141,20 @@ public class ApplicationException extends RuntimeException {
                 throw new IllegalArgumentException("module offset");
             }
             // Validate that the exception code has not been used before. In case it has, throw an exception.
-            final String oldDescription = codeToDescriptionInternal.put(errorCodeBoxed, description);
+            final String oldDescription = CODE_TO_DESCRIPTION.put(errorCodeBoxed, description);
             if (oldDescription != null) {
-                LOGGER.error("Attempted to create duplicate error message for {}: {} / previously {}", errorCodeBoxed, description, oldDescription);
-                throw new IllegalArgumentException("duplicate error code");
+                LOGGER.error("Overwriting error message for {} with '{}' (previously '{}')", errorCodeBoxed, description, oldDescription);
+                // throw new IllegalArgumentException("duplicate error code");
             }
+            DUPLICATE_CODE_COUNTER.merge(errorCode % (CLASSIFICATION_FACTOR - 1), ONE, (a, b) -> (a + b));
         }
         @Deprecated  // use codeToString()
         public String get(final int errorCode) {
-            return codeToDescriptionInternal.get(errorCode);
+            return CODE_TO_DESCRIPTION.get(errorCode);
         }
         @Deprecated  // rewrite code to use forEachCode() instead
         public Set<Map.Entry<Integer, String>> entrySet() {
-            return codeToDescriptionInternal.entrySet();
+            return CODE_TO_DESCRIPTION.entrySet();
         }
     }
 
@@ -160,9 +165,31 @@ public class ApplicationException extends RuntimeException {
     }
 
     public static void forEachCode(final BiConsumer<Integer, String> processor) {
-        for (final Map.Entry<Integer, String> e: codeToDescription.entrySet()) {
+        for (final Map.Entry<Integer, String> e: CODE_TO_DESCRIPTION.entrySet()) {
             processor.accept(e.getKey(), e.getValue());
         }
+    }
+
+    /**
+     * Checks all stored codes for duplicate values - including duplicates of just the base value.
+     */
+    public static boolean checkForDuplicates() {
+        boolean foundDuplicates = false;
+        for (Map.Entry<Integer, Integer> codeAndCount: DUPLICATE_CODE_COUNTER.entrySet()) {
+            if (codeAndCount.getValue() > 1) {
+                LOGGER.error("Code {} has been used {} times", codeAndCount.getKey(), codeAndCount.getValue());
+                foundDuplicates = true;
+                // Now list all (not yet overwritten) entries. Note this could be a single entry if the codes matched exactly.
+                for (int i = 0; i < 10; ++i) {
+                    final int codeWithClassification = i * CLASSIFICATION_FACTOR + codeAndCount.getKey();
+                    final String desc = CODE_TO_DESCRIPTION.get(codeWithClassification);
+                    if (desc != null) {
+                        LOGGER.error("    Code {}: '{}'", codeWithClassification, desc);
+                    }
+                }
+            }
+        }
+        return foundDuplicates;
     }
 
     private final int errorCode;
@@ -201,7 +228,7 @@ public class ApplicationException extends RuntimeException {
 
     /** returns a text representation of an error code, independent of an existing exception */
     public static String codeToString(final int code) {
-        final String msg = codeToDescription.get(Integer.valueOf(code));
+        final String msg = CODE_TO_DESCRIPTION.get(Integer.valueOf(code));
         return msg != null ? msg : "unknown code";
     }
 

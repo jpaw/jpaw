@@ -146,7 +146,7 @@ public class ApplicationException extends RuntimeException {
                 LOGGER.error("Overwriting error message for {} with '{}' (previously '{}')", errorCodeBoxed, description, oldDescription);
                 // throw new IllegalArgumentException("duplicate error code");
             }
-            DUPLICATE_CODE_COUNTER.merge(errorCode % (CLASSIFICATION_FACTOR - 1), ONE, (a, b) -> (a + b));
+            DUPLICATE_CODE_COUNTER.merge(errorCode % CLASSIFICATION_FACTOR, ONE, (a, b) -> (a + b));
         }
         @Deprecated  // use codeToString()
         public String get(final int errorCode) {
@@ -181,7 +181,7 @@ public class ApplicationException extends RuntimeException {
                 foundDuplicates = true;
                 // Now list all (not yet overwritten) entries. Note this could be a single entry if the codes matched exactly.
                 for (int i = 0; i < 10; ++i) {
-                    final int codeWithClassification = i * CLASSIFICATION_FACTOR + codeAndCount.getKey();
+                    final int codeWithClassification = (i * CLASSIFICATION_FACTOR) + codeAndCount.getKey();
                     final String desc = CODE_TO_DESCRIPTION.get(codeWithClassification);
                     if (desc != null) {
                         LOGGER.error("    Code {}: '{}'", codeWithClassification, desc);

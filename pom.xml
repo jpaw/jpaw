@@ -1,45 +1,396 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>de.jpaw</groupId>
-        <artifactId>jpaw-se-parent</artifactId>
-        <version>3.2.0</version>
-        <relativePath />
-    </parent>
-
+    <groupId>de.jpaw</groupId>
     <artifactId>jpaw-base</artifactId>
     <version>3.2.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <description>Common configuration settings for all jpaw basic / utility projects</description>
-    <!-- Note: in order to compile with Java16, you currently have to specify - -illegal-access=permit as MAVEN_OPTS
-         (see https://www.eclipse.org/forums/index.php/t/1107994/) for the projects jpaw-money-test and jpaw-enumsets.
-      -->
+    <description>Common configuration settings for all jpaw basic / utility projects and 3rd party BoM</description>
+
+    <!-- useful commands to check current versions:
+         mvn dependency:resolve
+         mvn dependency:resolve-plugins
+         mvn versions:display-dependency-updates
+         mvn versions:display-plugin-updates
+    -->
 
     <scm>
 	  <developerConnection>scm:git:https://github.com/arvato-systems-jacs/jpaw.git</developerConnection>
 	  <tag>HEAD</tag>
     </scm>
 
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <min-maven.version>3.8.5</min-maven.version>
+
+        <!-- logging -->
+        <slf4j.version>2.0.7</slf4j.version>            <!-- http://www.slf4j.org/ -->
+        <logback.version>1.4.5</logback.version>        <!-- http://logback.qos.ch/ -->
+        <log4j.version>1.2.17</log4j.version>           <!-- Log4j Rev 1 (deprecated, not compatible with Java 9+) -->
+        <log4j2.version>2.19.0</log4j2.version>
+
+        <!-- core tools used -->
+        <guava.version>32.1.2-jre</guava.version>         <!-- http://code.google.com/p/guava-libraries/, 20 is the last Java 6 compatible one -->
+        <xtext.version>2.32.0</xtext.version>           <!-- version of xtext, xtend, and the related libs -->
+        <jodatime.version>2.12.5</jodatime.version>
+        <jsap.version>2.1</jsap.version>
+        <reflections.version>0.9.10</reflections.version>  <!-- 0.9.11 got issues while scanning -->
+        <icu.version>73.2</icu.version>
+        <disruptor.version>3.3.11</disruptor.version>
+        <jackson.version>2.14.3</jackson.version>
+        <jackson-databind.version>2.14.3</jackson-databind.version>       <!-- separate version due to frequent CVE updates which do not release the full set -->
+        <commons-text.version>1.10.0</commons-text.version>               <!-- not used in t9t, but DM made to cover for transitive dependencies -->
+        <commons-lang3.version>3.13.0</commons-lang3.version>             <!-- regularly updated again -->
+        <commons-collections4.version>4.4</commons-collections4.version>
         <poi.version>5.2.3</poi.version>
         <hdrHistogram.version>2.1.12</hdrHistogram.version>
+
+        <!-- new dependencies required for jigsaw (Java 9 and up) -->
+        <asm.version>9.5</asm.version>                  <!-- 7.0 is minimally required version for compiler plugin with version 11, 9.1 for Java 17 -->
+        <javassist.version>3.29.2-GA</javassist.version>
+        <cglib.version>3.3.0</cglib.version>
+        <error-prone.version>2.18.0</error-prone.version>
+
+        <!-- Jakarta (all with jakarta.* namespaces now, no more javax.) -->
+        <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
+        <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
+        <jakarta.xml-bind-api.version>4.0.0</jakarta.xml-bind-api.version>
+        <jakarta.xml-bind.version>4.0.3</jakarta.xml-bind.version>
+        <jakarta.activation-api.version>2.1.2</jakarta.activation-api.version>
+        <jakarta.activation.version>2.0.0</jakarta.activation.version>
+        <jakarta.el-api.version>5.0.1</jakarta.el-api.version>
+        <jakarta.el.version>4.0.2</jakarta.el.version>
+        <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
+
+        <!-- testing support -->
+        <junit.version>4.13.2</junit.version>
+        <junit5.version>5.10.0</junit5.version>
+        <spotbugs.version>4.7.3.4</spotbugs.version>
+
+        <!--  benchmarking -->
+        <jmh.version>1.36</jmh.version>               <!-- http://openjdk.java.net/projects/code-tools/jmh/ -->
+
+        <!-- org.apache.maven.plugins (maven-xxx-plugin) -->
+        <exec.plugin.version>3.0.0</exec.plugin.version>
+        <antrun.plugin.version>3.0.0</antrun.plugin.version>
+        <compiler.plugin.version>3.11.0</compiler.plugin.version>
+        <clean.plugin.version>3.2.0</clean.plugin.version>
+        <enforcer.plugin.version>3.3.0</enforcer.plugin.version>
+        <jar.plugin.version>3.3.0</jar.plugin.version>
+        <war.plugin.version>3.3.2</war.plugin.version>
+        <javadoc.plugin.version>3.5.0</javadoc.plugin.version>
+        <shade.plugin.version>3.4.1</shade.plugin.version>
+        <source.plugin.version>3.3.0</source.plugin.version>
+        <surefire.plugin.version>3.1.0</surefire.plugin.version>   <!-- requires at least M3 for JDK11 -->
+        <failsafe.plugin.version>3.1.0</failsafe.plugin.version>
+        <assembly.plugin.version>3.3.0</assembly.plugin.version>
+        <deploy.plugin.version>3.1.1</deploy.plugin.version>   <!-- 3.0.0.M1 is buggy and this is known since 2018! See https://support.sonatype.com/hc/en-us/articles/360010223594-maven-deploy-plugin-version-3-0-0-M1-deploy-fails-with-401-ReasonPhrase-Unauthorized  looks like this plugin has been abandoned. -->
+        <install.plugin.version>3.1.1</install.plugin.version>
+        <site.plugin.version>3.12.1</site.plugin.version>
+        <checkstyle.plugin.version>3.3.0</checkstyle.plugin.version>
+        <project-info-reports.plugin.version>3.4.4</project-info-reports.plugin.version>
+        <release.plugin.version>3.0.1</release.plugin.version>
+
+        <!-- org.codehaus.mojo maven plugins (xxx-maven-plugin) -->
+        <exec.plugin.version>3.1.0</exec.plugin.version>
+        <build-helper.plugin.version>3.4.0</build-helper.plugin.version>
+        <buildnumber.plugin.version>3.1.0</buildnumber.plugin.version>
+        <properties.plugin.version>1.1.0</properties.plugin.version>
+
+        <!-- org.apache.felix plugins (maven-xxx-plugin) -->
+        <bundle.plugin.version>5.1.2</bundle.plugin.version>
     </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>${asm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>${cglib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>${javassist.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <!-- not needed,just for consistency -->
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava-gwt</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <!-- not needed,just for consistency -->
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava-testlib</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${jodatime.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit5.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-params</artifactId>
+                <version>${junit5.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit5.version}</version>
+            </dependency>
+
+            <!-- jakarta annotation -->
+            <dependency>
+                <groupId>jakarta.annotation</groupId>
+                <artifactId>jakarta.annotation-api</artifactId>
+                <version>${jakarta.annotation-api.version}</version>
+            </dependency>
+
+            <!-- jakarta validation -->
+            <dependency>
+                <groupId>jakarta.validation</groupId>
+                <artifactId>jakarta.validation-api</artifactId>
+                <version>${jakarta.validation-api.version}</version>
+            </dependency>
+
+            <!-- jakarta activation -->
+            <dependency>
+                <groupId>jakarta.activation</groupId>
+                <artifactId>jakarta.activation-api</artifactId>
+                <version>${jakarta.activation-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.angus</groupId>
+                <artifactId>angus-activation</artifactId>
+                <version>${jakarta.activation.version}</version>
+            </dependency>
+
+            <!-- jakarta XML bind (JAXB) -->
+            <dependency>
+                <groupId>jakarta.xml.bind</groupId>
+                <artifactId>jakarta.xml.bind-api</artifactId>
+                <version>${jakarta.xml-bind-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-core</artifactId>
+                <version>${jakarta.xml-bind.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>${jakarta.xml-bind.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-impl</artifactId>
+                <version>4.0.0-old</version>  <!-- do not use, prefer org.glassfish.jaxb:jaxb-runtime -->
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-core</artifactId>
+                <version>4.0.0-old</version>  <!-- do not use, prefer org.glassfish.jaxb:jaxb-runtime -->
+            </dependency>
+
+            <!-- jakarta EL -->
+            <dependency>
+                <groupId>jakarta.el</groupId>
+                <artifactId>jakarta.el-api</artifactId>
+                <version>${jakarta.el-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>jakarta.el</artifactId>
+                <version>${jakarta.el.version}</version>
+            </dependency>
+
+            <!-- declare icu4j before the xtext bom claims a very old one -->
+            <dependency>
+                <groupId>com.ibm.icu</groupId>
+                <artifactId>icu4j</artifactId>
+                <version>${icu.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.errorprone</groupId>
+                <artifactId>error_prone_core</artifactId>
+                <version>${error-prone.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.errorprone</groupId>
+                <artifactId>error_prone_annotations</artifactId>
+                <version>${error-prone.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-jaxb-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson-databind.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <!-- Jackson-jr as lightweight alternative to the full Jackson, it uses the same jackson-core as dependency -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.jr</groupId>
+                <artifactId>jackson-jr-objects</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons-collections4.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>${commons-text.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate-validator.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.eclipse.xtext</groupId>
+                <artifactId>xtext-dev-bom</artifactId>
+                <version>${xtext.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.xtend</groupId>
+                <artifactId>org.eclipse.xtend.lib</artifactId>
+                <version>${xtext.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs</artifactId>
+                <version>${spotbugs.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <pluginManagement>
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>${javadoc.plugin.version}</version>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${compiler.plugin.version}</version>
                     <configuration>
-                        <charset>UTF-8</charset>
+                        <release>17</release>
+                        <source>17</source>
+                        <target>17</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+<!--
+                        <compilerArgs>
+                            <arg>-XDcompilePolicy=simple</arg>
+                            <arg>-Xplugin:ErrorProne</arg>
+                        </compilerArgs>
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>com.google.errorprone</groupId>
+                                <artifactId>error_prone_core</artifactId>
+                                <version>${error-prone.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
+-->
                     </configuration>
                 </plugin>
+
+                <!-- package sources as well. But pay attention to prevent nasty duplicate execution of generate-sources,
+                     which in conjunction with xtext and xtend can take some time -->
                 <plugin>
-                    <!-- must delete generated sources as well -->
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${source.plugin.version}</version>
+                    <executions>
+                        <!-- here we override the super-pom attach-sources executionid which
+                            calls sources:jar goal. That goals forks the lifecycle, causing
+                            the generate-sources phase to be called twice for the install goal.
+                            This causes any other plugin bound to the generate-sources phase to
+                            be called twice which usually has nasty side effects, let alone
+                            creating duplicate processing and longer build times.
+
+                            See http://blog.peterlynch.ca/2010/05/maven-how-to-prevent-generate-sources.html -->
+                        <execution>
+                            <id>attach-sources</id>
+                            <phase>DISABLE_FORKED_LIFECYCLE_MSOURCES-13</phase>
+                        </execution>
+                        <execution>
+                            <id>attach-sources-no-fork</id>
+                            <inherited>true</inherited>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>${clean.plugin.version}</version>
@@ -54,11 +405,14 @@
                         </filesets>
                     </configuration>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${surefire.plugin.version}</version>
                     <configuration>
+                        <forkCount>1</forkCount>
+                        <reuseForks>false</reuseForks>
                         <systemPropertyVariables>
                             <user.timezone>UTC</user.timezone>
                         </systemPropertyVariables>
@@ -83,10 +437,224 @@
                         </dependency>
                     </dependencies>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${failsafe.plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${deploy.plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>${site.plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${checkstyle.plugin.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>10.2</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>${project-info-reports.plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${install.plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                     <groupId>org.codehaus.mojo</groupId>
+                     <artifactId>exec-maven-plugin</artifactId>
+                     <version>${exec.plugin.version}</version>
+                </plugin>
+
+                <!-- default xtend settings -->
+                <plugin>
+                    <groupId>org.eclipse.xtend</groupId>
+                    <artifactId>xtend-maven-plugin</artifactId>
+                    <version>${xtext.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>compile</goal>
+                                <goal>xtend-install-debug-info</goal>
+                                <goal>testCompile</goal>
+                                <goal>xtend-test-install-debug-info</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${project.basedir}/src/main/xtend-gen</outputDirectory>
+                                <testOutputDirectory>${project.basedir}/src/test/xtend-gen</testOutputDirectory>
+                                <javaSourceVersion>11</javaSourceVersion>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- ensure consistency for tagged releases -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>${enforcer.plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>enforce-no-snapshots</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>enforce-maven</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <requireMavenVersion>
+                                        <version>${min-maven.version}</version>
+                                    </requireMavenVersion>
+                                </rules>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <rules>
+                            <requireReleaseDeps>
+                                <message>No snapshots dependencies allowed for final revisions!</message>
+                                <searchTransitive>true</searchTransitive>
+                                <failWhenParentIsSnapshot>true</failWhenParentIsSnapshot>
+                                <onlyWhenRelease>true</onlyWhenRelease>
+                            </requireReleaseDeps>
+                        </rules>
+                        <fail>true</fail>
+                        <failFast>true</failFast>
+                    </configuration>
+                </plugin>
+
+                <!-- build helper maven plugin: define just the version! -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>${build-helper.plugin.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${javadoc.plugin.version}</version>
+                    <configuration>
+                        <charset>UTF-8</charset>
+                        <source>17</source>
+                        <detectJavaApiLink>false</detectJavaApiLink>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>buildnumber-maven-plugin</artifactId>
+                    <version>${buildnumber.plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>create</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <doCheck>true</doCheck>
+                        <doUpdate>false</doUpdate>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${jar.plugin.version}</version>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                            <manifestEntries>
+                                <Implementation-Build>${buildNumber}</Implementation-Build>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>properties-maven-plugin</artifactId>
+                    <version>${properties.plugin.version}</version>
+<!--
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>set-system-properties</goal>
+                            </goals>
+                            <configuration>
+                                <properties>
+                                    <property>
+                                        <name>bonaparte.java.version</name>
+                                        <value>11</value>
+                                    </property>
+                                </properties>
+                            </configuration>
+                        </execution>
+                    </executions>
+-->
+                </plugin>
+
+                <plugin>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs-maven-plugin</artifactId>
+                    <version>${spotbugs.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.github.spotbugs</groupId>
+                            <artifactId>spotbugs</artifactId>
+                            <version>${spotbugs.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>${release.plugin.version}</version>
+                    <configuration>
+                        <tagNameFormat>v@{project.version}</tagNameFormat>
+                    </configuration>
+                </plugin>
+
             </plugins>
         </pluginManagement>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -120,8 +688,75 @@
         </plugins>
     </build>
 
-    <reporting>
+    <!-- define a repositories section to disable access to codehaus which is no longer there, and some external SNAPSHOT repos accessed in some xtend runs. -->
+    <!-- see https://noclassdeffound.wordpress.com/2015/11/02/disabling-repositories-in-maven-sort-of-or-how-to-deal-with-the-demise-of-codehaus/ -->
+    <repositories>
+        <repository>
+            <id>codehaus-snapshots</id>
+            <url>http://nexus.codehaus.org/snapshots/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>sonatype-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>central snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+    </repositories>
+    
+    <pluginRepositories>
+        <pluginRepository>
+            <id>codehaus-snapshots</id>
+            <url>http://nexus.codehaus.org/snapshots/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </pluginRepository>
+        <pluginRepository>
+            <id>sonatype-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </pluginRepository>
+        <pluginRepository>
+            <id>central snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
 
+    <reporting>
         <plugins>
 <!--
             <plugin>

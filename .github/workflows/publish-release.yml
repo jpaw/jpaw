@@ -50,14 +50,6 @@ jobs:
     - name: Configure Git User
       run: git config user.name "Release Management"
 
-    - name: Update Parent Version
-      run: |
-        mvn -B versions:update-parent
-        git add -A
-        git diff-index --quiet HEAD || (git commit -m 'Update parent version to latest version' && git push)
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-
     - name: Update Bundle Version / MANIFEST
       if: ${{ inputs.release_version != '' }}
       run: |

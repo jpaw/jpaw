@@ -35,7 +35,7 @@ public class JsonException extends ApplicationException {
     }
 
     public JsonException(final int errorCode, final int pos) {
-        super(errorCode, String.format("At pos %d", pos));
+        super(errorCode, null, null, pos);
     }
 
     public JsonException(final int errorCode, final String text) {

@@ -192,23 +192,49 @@ public class ApplicationException extends RuntimeException {
         return foundDuplicates;
     }
 
-    private final int errorCode;
+    private final int errorCode;      // the unique 9 digit exception code
+    private final String fieldName;   // if known, the name of the field where the error occurred
+    private final String className;   // if known, the name of the class which contained the field
+    private final Integer index;      // if application, a character index or array index
 
     /** Returns the error code for this exception */
     public final int getErrorCode() {
         return errorCode;
     }
 
-    /** Creates a new ApplicationException for a given error code. */
-    public ApplicationException(final int errorCode) {
+    /** Creates a new ApplicationException for a given error code, plus additional information. */
+    public ApplicationException(final int errorCode, final String fieldName, final String className, final Integer index) {
         super();
         this.errorCode = errorCode;
+        this.fieldName = fieldName;
+        this.className = className;
+        this.index = index;
+    }
+
+    public ApplicationException(final int errorCode) {
+        this(errorCode, null, null, null);
     }
 
     /** Creates a new ApplicationException for a given error code, with some explanatory details. */
     public ApplicationException(final int errorCode, final String detailedMessage) {
         super("Code " + Integer.toString(errorCode) + (detailedMessage == null ? "" : " @ " + detailedMessage));
         this.errorCode = errorCode;
+        this.fieldName = null;
+        this.className = null;
+        this.index = null;
+    }
+
+    // some boilerplate code to retrieve exception properties
+    public int getIndex() {
+        return index;
+    }
+
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public String getClassName() {
+        return className;
     }
 
     /** Returns the classification code for this exception. */

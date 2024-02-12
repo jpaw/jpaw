@@ -170,6 +170,11 @@ public class ApplicationException extends RuntimeException {
         }
     }
 
+    /** Returns the number of registered error codes. */
+    public static int getNumberOfErrorCodes() {
+        return CODE_TO_DESCRIPTION.size();
+    }
+
     /**
      * Checks all stored codes for duplicate values - including duplicates of just the base value.
      */

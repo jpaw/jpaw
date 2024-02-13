@@ -32,47 +32,47 @@
         <min-maven.version>3.8.5</min-maven.version>
 
         <!-- logging -->
-        <slf4j.version>2.0.7</slf4j.version>            <!-- http://www.slf4j.org/ -->
-        <logback.version>1.4.5</logback.version>        <!-- http://logback.qos.ch/ -->
+        <slf4j.version>2.0.12</slf4j.version>            <!-- http://www.slf4j.org/ -->
+        <logback.version>1.4.14</logback.version>        <!-- http://logback.qos.ch/ -->
         <log4j.version>1.2.17</log4j.version>           <!-- Log4j Rev 1 (deprecated, not compatible with Java 9+) -->
-        <log4j2.version>2.19.0</log4j2.version>
+        <log4j2.version>2.22.1</log4j2.version>
 
         <!-- core tools used -->
         <guava.version>32.1.2-jre</guava.version>         <!-- http://code.google.com/p/guava-libraries/, 20 is the last Java 6 compatible one -->
         <xtext.version>2.32.0</xtext.version>           <!-- version of xtext, xtend, and the related libs -->
-        <jodatime.version>2.12.5</jodatime.version>
+        <jodatime.version>2.12.7</jodatime.version>
         <jsap.version>2.1</jsap.version>
         <reflections.version>0.9.10</reflections.version>  <!-- 0.9.11 got issues while scanning -->
-        <icu.version>73.2</icu.version>
+        <icu.version>74.2</icu.version>
         <disruptor.version>3.3.11</disruptor.version>
-        <jackson.version>2.14.3</jackson.version>
-        <jackson-databind.version>2.14.3</jackson-databind.version>       <!-- separate version due to frequent CVE updates which do not release the full set -->
-        <commons-text.version>1.10.0</commons-text.version>               <!-- not used in t9t, but DM made to cover for transitive dependencies -->
-        <commons-lang3.version>3.13.0</commons-lang3.version>             <!-- regularly updated again -->
+        <jackson.version>2.15.3</jackson.version>
+        <jackson-databind.version>2.15.3</jackson-databind.version>       <!-- separate version due to frequent CVE updates which do not release the full set -->
+        <commons-text.version>1.11.0</commons-text.version>               <!-- not used in t9t, but DM made to cover for transitive dependencies -->
+        <commons-lang3.version>3.14.0</commons-lang3.version>             <!-- regularly updated again -->
         <commons-collections4.version>4.4</commons-collections4.version>
-        <poi.version>5.2.3</poi.version>
+        <poi.version>5.2.5</poi.version>
         <hdrHistogram.version>2.1.12</hdrHistogram.version>
 
         <!-- new dependencies required for jigsaw (Java 9 and up) -->
-        <asm.version>9.5</asm.version>                  <!-- 7.0 is minimally required version for compiler plugin with version 11, 9.1 for Java 17 -->
-        <javassist.version>3.29.2-GA</javassist.version>
+        <asm.version>9.6</asm.version>                  <!-- 7.0 is minimally required version for compiler plugin with version 11, 9.1 for Java 17 -->
+        <javassist.version>3.30.2-GA</javassist.version>
         <cglib.version>3.3.0</cglib.version>
         <error-prone.version>2.18.0</error-prone.version>
 
         <!-- Jakarta (all with jakarta.* namespaces now, no more javax.) -->
         <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
         <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
-        <jakarta.xml-bind-api.version>4.0.0</jakarta.xml-bind-api.version>
-        <jakarta.xml-bind.version>4.0.3</jakarta.xml-bind.version>
+        <jakarta.xml-bind-api.version>4.0.1</jakarta.xml-bind-api.version>
+        <jakarta.xml-bind.version>4.0.4</jakarta.xml-bind.version>
         <jakarta.activation-api.version>2.1.2</jakarta.activation-api.version>
-        <jakarta.activation.version>2.0.0</jakarta.activation.version>
+        <jakarta.activation.version>2.0.1</jakarta.activation.version>
         <jakarta.el-api.version>5.0.1</jakarta.el-api.version>
         <jakarta.el.version>4.0.2</jakarta.el.version>
         <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
 
         <!-- testing support -->
         <junit.version>4.13.2</junit.version>
-        <junit5.version>5.10.0</junit5.version>
+        <junit5.version>5.10.2</junit5.version>
         <spotbugs.version>4.7.3.5</spotbugs.version>
 
         <!--  benchmarking -->

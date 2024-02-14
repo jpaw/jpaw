@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,6 +117,62 @@ public class ApplicationException extends RuntimeException {
      * An error code modulus the classification factor gives details about where and why the problem occurred.
      */
     public static final int CLASSIFICATION_FACTOR = 100000000;
+
+    /** Defines the layer which defines the exception code. */
+    public enum ApplicationLevelType {
+        CORE_LIBRARY,        // jpaw or bonaparte
+        FRAMEWORK,           // for example t9t
+        APPLICATION,         // standard application modules
+        CUSTOMIZATION        // some derivative
+    }
+
+    /** Description of the exception code range. */
+    public record ExceptionRangeDescription(int errorCodeOffset, int range, Class<? extends ApplicationException> exceptionClass, ApplicationLevelType layer) { }
+
+    private static Map<Integer, ExceptionRangeDescription> EXCEPTION_RANGES = new ConcurrentHashMap<>(64);
+    private static final int BIG_RANGE = 10_000;   // ranges of 10000 are used by large application modules (often anything except core libraries)
+    private static final int SMALL_RANGE = 1_000;  // ranges of 1000 are used by small core libraries.
+
+    /**
+     * Registers a new exception code range.
+     * Performs a simple check for overlaps, but currently does not validate intersection of big and small ranges.
+     */
+    public static void registerRange(final int errorCodeOffset, final boolean bigRange, final Class<? extends ApplicationException> exceptionClass, final ApplicationLevelType layer) {
+        final int rangeSize = bigRange ? BIG_RANGE : SMALL_RANGE;
+        if (errorCodeOffset % rangeSize != 0) {
+            LOGGER.error("Invalid exception code starting offset {}: not at range boundary for {}", errorCodeOffset, rangeSize, exceptionClass.getCanonicalName());
+            return;
+        }
+        final int base = errorCodeOffset % CLASSIFICATION_FACTOR;
+        final ExceptionRangeDescription newEntry = new ExceptionRangeDescription(base, rangeSize, exceptionClass, layer);
+        final ExceptionRangeDescription oldEntry = EXCEPTION_RANGES.put(base, newEntry);
+        if (oldEntry != null && !oldEntry.equals(newEntry)) {
+            LOGGER.error("Duplicate range definition: {} / {}", oldEntry, newEntry);
+        }
+    }
+
+    /** Iterates the registered exception code ranges. */
+    public static void forEachRange(final Consumer<ExceptionRangeDescription> processor) {
+        for (final ExceptionRangeDescription r: EXCEPTION_RANGES.values()) {
+            processor.accept(r);
+        }
+    }
+
+    /** Returns the number of registered error codes. */
+    public static int getNumberOfRanges() {
+        return EXCEPTION_RANGES.size();
+    }
+
+    /** Retrieves a description of the exception code range (if it exists). */
+    public static ExceptionRangeDescription getRangeInfoForExceptionCode(final int exceptionCode) {
+        final Integer smallRangeStart = (exceptionCode - exceptionCode % SMALL_RANGE) % CLASSIFICATION_FACTOR;
+        final ExceptionRangeDescription smallRangeEntry = EXCEPTION_RANGES.get(smallRangeStart);
+        if (smallRangeEntry != null) {
+            return smallRangeEntry;
+        }
+        final Integer bigRangeStart = (exceptionCode - exceptionCode % BIG_RANGE) % CLASSIFICATION_FACTOR;
+        return EXCEPTION_RANGES.get(bigRangeStart);
+    }
 
     private static final Map<Integer, String> CODE_TO_DESCRIPTION = new ConcurrentHashMap<>(2000);
     private static final Map<Integer, Integer> DUPLICATE_CODE_COUNTER = new ConcurrentHashMap<>(2000);

@@ -25,6 +25,8 @@ public class JsonException extends ApplicationException {
     public static final int JSON_BAD_ESCAPE              = OFFSET + 7;
 
     static {
+        registerRange(OFFSET, false, JsonException.class, ApplicationLevelType.CORE_LIBRARY);
+
         registerCode(JSON_PREMATURE_END,             "Premature end of embedded JSON object");
         registerCode(JSON_GARBAGE_AT_END,            "Garbage at end of embedded JSON object");
         registerCode(JSON_BAD_IDENTIFIER,            "Bad JSON identifier");

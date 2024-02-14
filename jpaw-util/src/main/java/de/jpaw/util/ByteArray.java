@@ -62,20 +62,10 @@ public final class ByteArray implements Externalizable, Cloneable {
 
     /** Constructs a ByteArray from a source byte[], which is defensively copied. */
     public ByteArray(final byte[] source) {
-        if (source == null || source.length == 0) {
-            buffer = ZERO_JAVA_BYTE_ARRAY;
-            offset = 0;
-            length = 0;
-        } else {
-            buffer = source.clone();  // benchmarks have shown that clone() is equally fast as System.arraycopy for all lengths > 0
-            offset = 0;
-            length = buffer.length;
-        }
+        this(source, false);
     }
 
-    // construct a ByteArray from a trusted source byte[]
-    // this method is always called with unsafeTrustedReuseOfJavaByteArray = true, the parameter is only required in order to distinguish the constructor
-    // from the copying one
+    // construct a ByteArray from a trusted or untrusted source byte[] (the untrusted one is cloned).
     private ByteArray(final byte[] source, final boolean unsafeTrustedReuseOfJavaByteArray) {
         if (source == null || source.length == 0) {
             buffer = ZERO_JAVA_BYTE_ARRAY;
@@ -86,6 +76,15 @@ public final class ByteArray implements Externalizable, Cloneable {
             offset = 0;
             length = buffer.length;
         }
+    }
+
+    /**
+     * Wraps an existing byte buffer.
+     * This method is unsafe with respect to that a later modified content of the parameter will lead to undesired results.
+     * It is provided however in order to avoid inefficient data copies, for cases when the parameter byte array is not used otherwise afterwards.
+     */
+    public static ByteArray wrap(final byte[] source) {
+        return source.length == 0 ? ZERO_BYTE_ARRAY : new ByteArray(source, true);
     }
 
     /** Constructs a ByteArray from a ByteArrayOutputStream, which has just been contructed by some previous process.

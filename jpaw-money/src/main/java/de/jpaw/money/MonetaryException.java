@@ -50,7 +50,7 @@ public class MonetaryException extends ApplicationException {
     public static final int UNEXPECTED_ROUNDING_PROBLEM  = OFFSET_ILE + 21;
 
     static {
-        registerRange(OFFSET, false, MonetaryException.class, ApplicationLevelType.CORE_LIBRARY);
+        registerRange(OFFSET, false, MonetaryException.class, ApplicationLevelType.CORE_LIBRARY, "Monetary functions based on the standard BigDecimal data type");
 
         registerCode(ILLEGAL_CURRENCY_CODE,         "Currency code may not be null, must have 3 upper case characters length");
         registerCode(ILLEGAL_NUMBER_OF_DECIMALS,    "The number of fractional digits must be between 0 and 6");

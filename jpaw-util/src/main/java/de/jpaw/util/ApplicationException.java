@@ -24,6 +24,9 @@ import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 /**
  * Parent class of all related exception codes.
  *
@@ -127,7 +130,8 @@ public class ApplicationException extends RuntimeException {
     }
 
     /** Description of the exception code range. */
-    public record ExceptionRangeDescription(int errorCodeOffset, int range, Class<? extends ApplicationException> exceptionClass, ApplicationLevelType layer) { }
+    public record ExceptionRangeDescription(int errorCodeOffset, int range, @Nonnull Class<? extends ApplicationException> exceptionClass,
+      @Nonnull ApplicationLevelType layer, @Nonnull String description) {}
 
     private static Map<Integer, ExceptionRangeDescription> EXCEPTION_RANGES = new ConcurrentHashMap<>(64);
     private static final int BIG_RANGE = 10_000;   // ranges of 10000 are used by large application modules (often anything except core libraries)
@@ -137,14 +141,15 @@ public class ApplicationException extends RuntimeException {
      * Registers a new exception code range.
      * Performs a simple check for overlaps, but currently does not validate intersection of big and small ranges.
      */
-    public static void registerRange(final int errorCodeOffset, final boolean bigRange, final Class<? extends ApplicationException> exceptionClass, final ApplicationLevelType layer) {
+    public static void registerRange(final int errorCodeOffset, final boolean bigRange, @Nonnull final Class<? extends ApplicationException> exceptionClass,
+      @Nonnull final ApplicationLevelType layer, @Nonnull final String description) {
         final int rangeSize = bigRange ? BIG_RANGE : SMALL_RANGE;
         if (errorCodeOffset % rangeSize != 0) {
             LOGGER.error("Invalid exception code starting offset {}: not at range boundary for {}", errorCodeOffset, rangeSize, exceptionClass.getCanonicalName());
             return;
         }
         final int base = errorCodeOffset % CLASSIFICATION_FACTOR;
-        final ExceptionRangeDescription newEntry = new ExceptionRangeDescription(base, rangeSize, exceptionClass, layer);
+        final ExceptionRangeDescription newEntry = new ExceptionRangeDescription(base, rangeSize, exceptionClass, layer, description);
         final ExceptionRangeDescription oldEntry = EXCEPTION_RANGES.put(base, newEntry);
         if (oldEntry != null && !oldEntry.equals(newEntry)) {
             LOGGER.error("Duplicate range definition: {} / {}", oldEntry, newEntry);
@@ -152,7 +157,7 @@ public class ApplicationException extends RuntimeException {
     }
 
     /** Iterates the registered exception code ranges. */
-    public static void forEachRange(final Consumer<ExceptionRangeDescription> processor) {
+    public static void forEachRange(@Nonnull final Consumer<ExceptionRangeDescription> processor) {
         for (final ExceptionRangeDescription r: EXCEPTION_RANGES.values()) {
             processor.accept(r);
         }
@@ -164,6 +169,7 @@ public class ApplicationException extends RuntimeException {
     }
 
     /** Retrieves a description of the exception code range (if it exists). */
+    @Nullable
     public static ExceptionRangeDescription getRangeInfoForExceptionCode(final int exceptionCode) {
         final Integer smallRangeStart = (exceptionCode - exceptionCode % SMALL_RANGE) % CLASSIFICATION_FACTOR;
         final ExceptionRangeDescription smallRangeEntry = EXCEPTION_RANGES.get(smallRangeStart);

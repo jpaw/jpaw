@@ -145,7 +145,8 @@ public class ApplicationException extends RuntimeException {
       @Nonnull final ApplicationLevelType layer, @Nonnull final String description) {
         final int rangeSize = bigRange ? BIG_RANGE : SMALL_RANGE;
         if (errorCodeOffset % rangeSize != 0) {
-            LOGGER.error("Invalid exception code starting offset {}: not at range boundary for {}", errorCodeOffset, rangeSize, exceptionClass.getCanonicalName());
+            LOGGER.error("Invalid exception code starting offset {}: not at range boundary for {}: {}",
+              errorCodeOffset, rangeSize, exceptionClass.getCanonicalName());
             return;
         }
         final int base = errorCodeOffset % CLASSIFICATION_FACTOR;

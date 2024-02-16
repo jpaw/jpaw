@@ -3,7 +3,7 @@ Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Bundle-ManifestVersion: 2
 Bundle-Name: jpaw utility libraries
 Bundle-SymbolicName: jpaw.core
-Bundle-Version: 3.3.0
+Bundle-Version: 3.3.1
 Bundle-Vendor: Michael Bischoff
 Export-Package: de.jpaw.function
 Bundle-ActivationPolicy: lazy

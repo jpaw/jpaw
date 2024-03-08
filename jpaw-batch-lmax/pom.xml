@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.jpaw</groupId>
         <artifactId>jpaw-base</artifactId>
-        <version>3.3.2-SNAPSHOT</version>
+        <version>3.3.2</version>
     </parent>
 
     <artifactId>jpaw-batch-lmax</artifactId>

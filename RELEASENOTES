@@ -5,4 +5,3 @@ This files lists the changes, starting after revision 1.2.0:
 
 1.2.2:
 - bugfix: the hasNext() was not working correctly in the Iterator of EnumSet<String> and XenumSet.
-

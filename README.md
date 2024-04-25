@@ -269,4 +269,3 @@ Therefore all annotations used by Jdp are in a different package on purpose and 
 It is also not planned to support injecting objects of a shorter lived scope into a longer one, like a PerThread object into a Singleton.
 This can only be achieved via proxies, which is exactly one of the key goals of this project to to have any. In such a case, what you
 really want is to inject a provider, and that is what you should code.
-

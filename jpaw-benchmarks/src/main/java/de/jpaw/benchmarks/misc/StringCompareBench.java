@@ -37,7 +37,7 @@ public class StringCompareBench {
     private static final int NUM = 1000;
     private static final Integer ZERO = Integer.valueOf(0);
     private static final Integer ONE = Integer.valueOf(1);
-    
+
     private final String string1 = "haksdhsakdhsajkdhFFFF";
     private final String string2 = "haksdhsakdhsajshdhjsh";
 

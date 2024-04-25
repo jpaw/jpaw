@@ -487,7 +487,7 @@ public class Jdp {
             LOGGER.debug("    not registering class {}: it's abstract! (Set Jdp.registerAbstractClasses to true if you want that.)", cls.getCanonicalName());
             return;
         }
-        
+
         LOGGER.debug("register({})", cls.getCanonicalName());
         JdpEntry<T> newEntry = new JdpEntry<T>(cls, scope);
         if (allAutodetectedClasses.put(cls, newEntry) != null) {
@@ -507,7 +507,7 @@ public class Jdp {
 //      LOGGER.info("<<< register CUSTOM done for class {}", cls.getCanonicalName());
     }
 
-    private static <T> void registerSub(Class<T> cls, JdpEntry<T> newEntry, boolean skipCheck, boolean withSpecializes) { 
+    private static <T> void registerSub(Class<T> cls, JdpEntry<T> newEntry, boolean skipCheck, boolean withSpecializes) {
         Set<Class<?>> classesDone = new HashSet<Class<?>>();
         registerClassAndAllInterfaces(cls, newEntry, classesDone, skipCheck);
         Class<? super T> parent = cls.getSuperclass();

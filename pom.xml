@@ -29,39 +29,39 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <min-maven.version>3.8.5</min-maven.version>
+        <min-maven.version>3.9.6</min-maven.version>
 
         <!-- logging -->
-        <slf4j.version>2.0.12</slf4j.version>            <!-- http://www.slf4j.org/ -->
-        <logback.version>1.5.2</logback.version>         <!-- http://logback.qos.ch/ -->
+        <slf4j.version>2.0.13</slf4j.version>            <!-- http://www.slf4j.org/ -->
+        <logback.version>1.5.6</logback.version>         <!-- http://logback.qos.ch/ -->
         <log4j.version>1.2.17</log4j.version>           <!-- Log4j Rev 1 (deprecated, not compatible with Java 9+) -->
         <log4j2.version>2.22.1</log4j2.version>
 
         <!-- core tools used -->
-        <guava.version>33.0.0-jre</guava.version>         <!-- http://code.google.com/p/guava-libraries/, 20 is the last Java 6 compatible one -->
-        <xtext.version>2.34.0</xtext.version>           <!-- version of xtext, xtend, and the related libs -->
+        <guava.version>33.2.1-jre</guava.version>         <!-- http://code.google.com/p/guava-libraries/, 20 is the last Java 6 compatible one -->
+        <xtext.version>2.35.0</xtext.version>           <!-- version of xtext, xtend, and the related libs -->
         <jodatime.version>2.12.7</jodatime.version>
         <jsap.version>2.1</jsap.version>
         <reflections.version>0.9.10</reflections.version>  <!-- 0.9.11 got issues while scanning -->
-        <icu.version>74.2</icu.version>
+        <icu.version>75.1</icu.version>
         <disruptor.version>3.3.11</disruptor.version>
-        <jackson.version>2.16.1</jackson.version>
-        <jackson-databind.version>2.16.1</jackson-databind.version>       <!-- separate version due to frequent CVE updates which do not release the full set -->
-        <commons-text.version>1.11.0</commons-text.version>               <!-- not used in t9t, but DM made to cover for transitive dependencies -->
+        <jackson.version>2.17.1</jackson.version>
+        <jackson-databind.version>2.17.1</jackson-databind.version>       <!-- separate version due to frequent CVE updates which do not release the full set -->
+        <commons-text.version>1.12.0</commons-text.version>               <!-- not used in t9t, but DM made to cover for transitive dependencies -->
         <commons-lang3.version>3.14.0</commons-lang3.version>             <!-- regularly updated again -->
         <commons-collections4.version>4.4</commons-collections4.version>
         <poi.version>5.2.5</poi.version>
         <hdrHistogram.version>2.1.12</hdrHistogram.version>
 
         <!-- new dependencies required for jigsaw (Java 9 and up) -->
-        <asm.version>9.6</asm.version>                  <!-- 7.0 is minimally required version for compiler plugin with version 11, 9.1 for Java 17 -->
+        <asm.version>9.7</asm.version>                  <!-- 7.0 is minimally required version for compiler plugin with version 11, 9.1 for Java 17 -->
         <javassist.version>3.30.2-GA</javassist.version>
         <cglib.version>3.3.0</cglib.version>
-        <error-prone.version>2.18.0</error-prone.version>
+        <error-prone.version>2.28.0</error-prone.version>
 
         <!-- Jakarta (all with jakarta.* namespaces now, no more javax.) -->
-        <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
-        <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
+        <jakarta.annotation-api.version>3.0.0</jakarta.annotation-api.version>
+        <jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
         <jakarta.xml-bind-api.version>4.0.2</jakarta.xml-bind-api.version>
         <jakarta.xml-bind.version>4.0.5</jakarta.xml-bind.version>
         <jakarta.activation-api.version>2.1.3</jakarta.activation-api.version>
@@ -73,35 +73,35 @@
         <!-- testing support -->
         <junit.version>4.13.2</junit.version>
         <junit5.version>5.10.2</junit5.version>
-        <spotbugs.version>4.7.3.5</spotbugs.version>
+        <spotbugs.version>4.8.5.0</spotbugs.version>
 
         <!--  benchmarking -->
         <jmh.version>1.37</jmh.version>               <!-- http://openjdk.java.net/projects/code-tools/jmh/ -->
 
         <!-- org.apache.maven.plugins (maven-xxx-plugin) -->
         <exec.plugin.version>3.0.0</exec.plugin.version>
-        <antrun.plugin.version>3.0.0</antrun.plugin.version>
-        <compiler.plugin.version>3.12.1</compiler.plugin.version>
+        <antrun.plugin.version>3.1.0</antrun.plugin.version>
+        <compiler.plugin.version>3.13.0</compiler.plugin.version>
         <clean.plugin.version>3.3.2</clean.plugin.version>
-        <enforcer.plugin.version>3.4.1</enforcer.plugin.version>
-        <jar.plugin.version>3.3.0</jar.plugin.version>
+        <enforcer.plugin.version>3.5.0</enforcer.plugin.version>
+        <jar.plugin.version>3.4.1</jar.plugin.version>
         <war.plugin.version>3.3.2</war.plugin.version>
-        <javadoc.plugin.version>3.6.3</javadoc.plugin.version>
-        <shade.plugin.version>3.5.2</shade.plugin.version>
-        <source.plugin.version>3.3.0</source.plugin.version>
+        <javadoc.plugin.version>3.7.0</javadoc.plugin.version>
+        <shade.plugin.version>3.6.0</shade.plugin.version>
+        <source.plugin.version>3.3.1</source.plugin.version>
         <surefire.plugin.version>3.1.2</surefire.plugin.version>
         <failsafe.plugin.version>3.1.2</failsafe.plugin.version>
         <assembly.plugin.version>3.3.0</assembly.plugin.version>
-        <deploy.plugin.version>3.1.1</deploy.plugin.version>
-        <install.plugin.version>3.1.1</install.plugin.version>
+        <deploy.plugin.version>3.1.2</deploy.plugin.version>
+        <install.plugin.version>3.1.2</install.plugin.version>
         <site.plugin.version>3.12.1</site.plugin.version>
         <checkstyle.plugin.version>3.3.1</checkstyle.plugin.version>
         <project-info-reports.plugin.version>3.5.0</project-info-reports.plugin.version>
         <release.plugin.version>3.0.1</release.plugin.version>
 
         <!-- org.codehaus.mojo maven plugins (xxx-maven-plugin) -->
-        <exec.plugin.version>3.2.0</exec.plugin.version>
-        <build-helper.plugin.version>3.5.0</build-helper.plugin.version>
+        <exec.plugin.version>3.3.0</exec.plugin.version>
+        <build-helper.plugin.version>3.6.0</build-helper.plugin.version>
         <buildnumber.plugin.version>3.2.0</buildnumber.plugin.version>
         <properties.plugin.version>1.2.1</properties.plugin.version>
 

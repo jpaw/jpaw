@@ -29,7 +29,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <min-maven.version>3.9.6</min-maven.version>
+        <min-maven.version>3.8.8</min-maven.version>
 
         <!-- logging -->
         <slf4j.version>2.0.13</slf4j.version>            <!-- http://www.slf4j.org/ -->

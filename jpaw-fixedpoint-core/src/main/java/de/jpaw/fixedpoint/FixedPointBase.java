@@ -2,6 +2,7 @@ package de.jpaw.fixedpoint;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.EnumMap;
 
@@ -71,13 +72,20 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         this.mantissa = mantissa;
     }
 
-    /** Returns a fixed point value object which has the same number of decimals as this, with a given mantissa.
-     * This implementation returns cached instances for 0 and 1. Otherwise, in case this has the same mantissa, this is returned. */
+    /**
+     * Returns a fixed point value object which has the same number of decimals as this, with a given mantissa.
+     * This implementation returns cached instances for 0 and 1. Otherwise, in case this has the same mantissa, this is returned.
+     */
     public abstract CLASS newInstanceOf(long xmantissa);
 
     /** Computes the mantissa for a fixed point number of target scale, for a given double. */
     public static long mantissaFor(final double value, final int scale) {
-        return Math.round(value * POWERS_OF_TEN[scale]);
+        final double unrounded = value * POWERS_OF_TEN[scale];
+        // the intermediate double should not exceed the number of digits of the maximum integral double which can be represented without rounding
+        if (unrounded > 9.007199254740992E15 || unrounded < -9.007199254740992E15) {  // 2^53
+            throw new ArithmeticException("Precision loss converting double to long - attempting to convert number too large to be exact as long");
+        }
+        return Math.round(unrounded);
     }
 
     /** Get the number of decimals. */
@@ -90,7 +98,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     public abstract CLASS getUnit();
 
     /**
-     * Get a reference to myself (essentially "this", but avoids a type cast).
+     * Returns a reference to myself (essentially "this", but avoids a type cast).
      * This is a workaround, required because the compiler currently does not acknowledge that this class is abstract.
      * Invocation is only done from this class (only private callers),
      * but it must be protected because the derived classed have to override it.
@@ -190,8 +198,10 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         }
     }
 
-    /** Appends a separately provided mantissa in a human readable form to the provided StringBuilder, based on settings of a reference number (this).
-     * Method is also used by external classes. */
+    /**
+     * Appends a separately provided mantissa in a human readable form to the provided StringBuilder, based on settings of a reference number (this).
+     * This method is also used by external classes.
+     */
     public static void append(final StringBuilder sb, final long mantissa, final int scale) {
         append(sb, mantissa, scale, 0);
     }
@@ -280,8 +290,9 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         }
     }
 
-    /** Parses a string for a maximum number of decimal digits. Extra digits will be ignored as long as they are 0, but
-     * an ArithmeticException will be raised if there are more significant digits than allowed, i.e. no rounding is allowed.
+    /**
+     * Parses a string for a maximum number of decimal digits. Extra digits will be ignored as long as they are 0,
+     * but an ArithmeticException will be raised if there are more significant digits than allowed, i.e. no rounding is allowed.
      *
      * The method should be final, because it is also used as a constructor subrountine.
      *
@@ -426,8 +437,10 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         }
     }
 
-    /** Returns the signum of this number, -1, 0, or +1.
-     * Special care is taken in this implementation to work around any kind of integral overflows. */
+    /**
+     * Returns the signum of this number, -1, 0, or +1.
+     * Special care is taken in this implementation to work around any kind of integral overflows.
+     */
     @Override
     public int compareTo(final FixedPointBase<?> that) {
         // first, tackle the case of same scale, which reduces to integer comparison. This is done first, because it should be the most common case
@@ -471,6 +484,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             return 0;
         }
     }
+
     /** Xtend syntax sugar. spaceship maps to the compareTo method. */
     public int operator_spaceship(final FixedPointBase<?> that) {
         return compareTo(that);
@@ -695,7 +709,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     /**
      * Use of native code for scaling and rounding, if required.
      * Private method, currently exposed for benchmarking purposes (to avoid effect of GC).
-     * */
+     */
     public long mantissa_of_multiplication(final FixedPointBase<?> that, final int targetScale, final RoundingMode rounding) {
         final int digitsToScale = scale() + that.scale() - targetScale;
         // This method is called for nonzero operands only. Now test for sign to reduce to unsigned operation. No worries about LONG_MIN overflow because we support up to 18 digits only for the largest mantissa
@@ -799,7 +813,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         return newInstanceOf(newMantissa);
     }
 
-    /** Divide a / b and round according to specification. Does not need JNI, because we stay in range of a long here. */
+    /** Divides a / b and rounds according to specification. Does not need JNI, because we stay in range of a long here. */
     public static long divide_longs(final long a, final long b, final RoundingMode rounding) {
         final long tmp = a / b;
         final long mod = a % b;
@@ -870,6 +884,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             return this.negate();       // x * -1 = -x
         return newInstanceOf(mantissa_of_multiplication(that, this.scale(), rounding));
     }
+
     /** Multiplies a fixed point number by an another one. The type / scale of the result is the same than that of the left operand. */
     public CLASS multiply(final FixedPointBase<?> that, final RoundingMode rounding) {
         if (mantissa == 0 || that.mantissa == 0)
@@ -890,7 +905,8 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
      * Multiplies a fixed point number by an another one. The type of the result is the same than that of the left operand.
      * The scale of the result is also the same as of the left operand, but the result is rounded to fewer digits.
      * This must be performed directly after multiplication, because a two step rounding could return different results:
-     * for 0.445: round(2) = 0.45, then round(1) = 0.5, while for 0.445: round(1) = 0.4 */
+     * for 0.445: round(2) = 0.45, then round(1) = 0.5, while for 0.445: round(1) = 0.4
+     */
     public CLASS multiplyAndRound(final FixedPointBase<?> that, final int desiredDecimals, final RoundingMode rounding) {
         if (desiredDecimals > scale() || desiredDecimals < 0) {
             // cannot round to more than what we have
@@ -1025,6 +1041,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         else
             return that.newInstanceOf(-that.mantissa + POWERS_OF_TEN[-diff] * this.mantissa);
     }
+
     /** Subtracts two fixed point numbers of exactly same type. For variable scale subtypes, the scale of the sum is the bigger of the operand scales. */
     public CLASS subtract(final CLASS that) {
         if (that.mantissa == 0L) {
@@ -1033,12 +1050,35 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         return this.newInstanceOf(this.mantissa - that.mantissa);
     }
 
-    /** Computes this * a/b, using a specified RoundingMode. */
+    /**
+     * Computes this * a/b, using a specified RoundingMode.
+     * There are checks implemented to validate that the intermediate number does not become too big.
+     * If everything fits, we stick to straightforward computation.
+     * In case not, we use BigIntegers. Unfortunately this is significantly slower, causes quite a lot of GC overhead ignores the roundingMode.
+     */
     public CLASS multAndDivide(final int multiplicator, final int divisor, final RoundingMode roundingMode) {
-        if (divisor == 0)
+        if (divisor == 0) {
             throw new ArithmeticException("Division by 0");
-        final long newMantissa = divide_longs(mantissa * multiplicator, divisor, roundingMode);
-        return newInstanceOf(newMantissa);
+        }
+        if (multiplicator == 0) {
+            return getZero();
+        }
+        // compute the nominator, checking for possible overflow. See Hacker's Delight, Section 2-12
+        final int leadingZeros = Long.numberOfLeadingZeros(mantissa) + Long.numberOfLeadingZeros(-mantissa)
+            + Integer.numberOfLeadingZeros(multiplicator) + Integer.numberOfLeadingZeros(-multiplicator);
+        if (leadingZeros > Integer.SIZE + 1) {
+            // there will be no overflow, because the result has more leading 0 bits than the multiplicator
+            final long nominator = mantissa * multiplicator;
+            final long newMantissa = divide_longs(nominator, divisor, roundingMode);
+            return newInstanceOf(newMantissa);
+        } else {
+            // potential overflow. Use BigInteger for the computation as a fallback.
+            // Why does Java hide BigInteger.multiply(long), forcing us to construct another BigInteger? This causes unnecessary GC :-(
+            final BigInteger nominator = BigInteger.valueOf(mantissa).multiply(BigInteger.valueOf(multiplicator));
+            // Another temp BigInteger must be constructed, and division offers no rounding mode :-(
+            final BigInteger newMantissa = nominator.divide(BigInteger.valueOf(divisor));
+            return newInstanceOf(newMantissa.longValueExact());
+        }
     }
 
     /** Divides a number by an integer, at maximum precision, using RoundingMode.DOWN. */
@@ -1072,7 +1112,8 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     }
 
 
-    /** A scaling and error distribution method with the following properties.
+    /**
+     * A scaling and error distribution method with the following properties.
      * Input is an array of numbers, which fulfills the condition that array element 0 is the sum of the others.
      * Desired output is an array with the same condition, plus all values scaled to this currency's scale.
      *

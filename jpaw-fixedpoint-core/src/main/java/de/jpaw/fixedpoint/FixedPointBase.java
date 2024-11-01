@@ -379,7 +379,7 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
         if (that == null || getClass() != that.getClass())
             return false;
         final FixedPointBase<?> _that = (FixedPointBase<?>)that;
-        return scale() == _that.scale() && mantissa == _that.mantissa && this.getClass() == that.getClass();
+        return scale() == _that.scale() && mantissa == _that.mantissa;
     }
 
     /** Returns the absolute value of this, using the same type and scale. */

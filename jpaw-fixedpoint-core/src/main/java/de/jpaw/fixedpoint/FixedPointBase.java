@@ -374,12 +374,13 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
     /** As with BigDecimal, equals returns true only of both objects are identical in all aspects. Use compareTo for numerical identity. */
     @Override
     public boolean equals(final Object that) {
-        if (this == that)
+        if (this == that) {
             return true;
-        if (that == null || getClass() != that.getClass())
-            return false;
-        final FixedPointBase<?> _that = (FixedPointBase<?>)that;
-        return scale() == _that.scale() && mantissa == _that.mantissa;
+        }
+        if (that instanceof FixedPointBase<?> _that) {
+            return scale() == _that.scale() && mantissa == _that.mantissa;
+        }
+        return false;
     }
 
     /** Returns the absolute value of this, using the same type and scale. */

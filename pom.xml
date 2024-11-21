@@ -11,8 +11,8 @@
     <!-- useful commands to check current versions:
          mvn dependency:resolve
          mvn dependency:resolve-plugins
-         mvn versions:display-dependency-updates
-         mvn versions:display-plugin-updates
+         mvn -N versions:display-dependency-updates
+         mvn -N versions:display-plugin-updates
     -->
 
     <scm>
@@ -29,6 +29,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jpaw.version>${project.version}</jpaw.version>
         <min-maven.version>3.8.8</min-maven.version>
 
         <!-- logging -->

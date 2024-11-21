@@ -32,14 +32,15 @@
         <min-maven.version>3.8.8</min-maven.version>
 
         <!-- logging -->
-        <slf4j.version>2.0.16</slf4j.version>            <!-- http://www.slf4j.org/ -->
-        <logback.version>1.5.6</logback.version>         <!-- http://logback.qos.ch/ -->
+        <slf4j.version>2.0.16</slf4j.version>           <!-- http://www.slf4j.org/ -->
+        <logback.version>1.5.6</logback.version>        <!-- http://logback.qos.ch/ -->
         <log4j.version>1.2.17</log4j.version>           <!-- Log4j Rev 1 (deprecated, not compatible with Java 9+) -->
         <log4j2.version>2.22.1</log4j2.version>
 
         <!-- core tools used -->
-        <guava.version>33.3.1-jre</guava.version>         <!-- http://code.google.com/p/guava-libraries/, 20 is the last Java 6 compatible one -->
+        <guava.version>33.3.1-jre</guava.version>       <!-- http://code.google.com/p/guava-libraries/ -->
         <xtext.version>2.37.0</xtext.version>           <!-- version of xtext, xtend, and the related libs -->
+        <jdt.version>3.39.0</jdt.version>                <!-- requires min 3.37.0 for Java 17/21 features in Xtext -->
         <jodatime.version>2.13.0</jodatime.version>
         <jsap.version>2.1</jsap.version>
         <reflections.version>0.9.10</reflections.version>  <!-- 0.9.11 got issues while scanning -->
@@ -58,7 +59,7 @@
         <javassist.version>3.30.2-GA</javassist.version>
         <cglib.version>3.3.0</cglib.version>
         <error-prone.version>2.36.0</error-prone.version>
-		<checkstyle.version>10.20.1</checkstyle.version>
+        <checkstyle.version>10.20.1</checkstyle.version>
 
         <!-- Jakarta (all with jakarta.* namespaces now, no more javax.) -->
         <jakarta.annotation-api.version>3.0.0</jakarta.annotation-api.version>
@@ -348,6 +349,16 @@
             </dependency>
 
             <dependency>
+                <groupId>org.eclipse.jdt</groupId>
+                <artifactId>ecj</artifactId>
+                <version>${jdt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jdt</groupId>
+                <artifactId>org.eclipse.jdt.core</artifactId>
+                <version>${jdt.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.eclipse.xtext</groupId>
                 <artifactId>xtext-dev-bom</artifactId>
                 <version>${xtext.version}</version>
@@ -542,6 +553,18 @@
                             </configuration>
                         </execution>
                     </executions>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.eclipse.jdt</groupId>
+                            <artifactId>ecj</artifactId>
+                            <version>${jdt.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.eclipse.jdt</groupId>
+                            <artifactId>org.eclipse.jdt.core</artifactId>
+                            <version>${jdt.version}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
 
                 <!-- ensure consistency for tagged releases -->

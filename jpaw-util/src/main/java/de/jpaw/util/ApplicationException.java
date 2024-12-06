@@ -262,6 +262,7 @@ public class ApplicationException extends RuntimeException {
     }
 
     private final int errorCode;      // the unique 9 digit exception code
+    private final String detailedMessage;// any specific message provided by the application
     private final String fieldName;   // if known, the name of the field where the error occurred
     private final String className;   // if known, the name of the class which contained the field
     private final Integer index;      // if application, a character index or array index
@@ -273,21 +274,29 @@ public class ApplicationException extends RuntimeException {
 
     /** Creates a new ApplicationException for a given error code, plus additional information. */
     public ApplicationException(final int errorCode, final String fieldName, final String className, final Integer index) {
-        super();
+        super("Code " + Integer.toString(errorCode) + " @ " + className + "." + fieldName + (index == null ? "" : ": " + index));
         this.errorCode = errorCode;
+        this.detailedMessage = null;
         this.fieldName = fieldName;
         this.className = className;
         this.index = index;
-    }
-
-    public ApplicationException(final int errorCode) {
-        this(errorCode, null, null, null);
     }
 
     /** Creates a new ApplicationException for a given error code, with some explanatory details. */
     public ApplicationException(final int errorCode, final String detailedMessage) {
         super("Code " + Integer.toString(errorCode) + (detailedMessage == null ? "" : " @ " + detailedMessage));
         this.errorCode = errorCode;
+        this.detailedMessage = detailedMessage;
+        this.fieldName = null;
+        this.className = null;
+        this.index = null;
+    }
+
+    /** Creates a new ApplicationException for a given error code, without any further details. */
+    public ApplicationException(final int errorCode) {
+        super("Code " + Integer.toString(errorCode));
+        this.errorCode = errorCode;
+        this.detailedMessage = null;
         this.fieldName = null;
         this.className = null;
         this.index = null;
@@ -304,6 +313,21 @@ public class ApplicationException extends RuntimeException {
 
     public String getClassName() {
         return className;
+    }
+
+    public String getDetailedMessage() {
+        return detailedMessage;
+    }
+
+    /** Returns error details, for both field related and generic details. */
+    public String getErrorDetails() {
+        if (detailedMessage != null) {
+            return detailedMessage;
+        }
+        if (fieldName == null && className == null && index == null) {
+            return null;
+        }
+        return className + "." + fieldName + (index == null ? "" : ": " + index);
     }
 
     /** Returns the classification code for this exception. */

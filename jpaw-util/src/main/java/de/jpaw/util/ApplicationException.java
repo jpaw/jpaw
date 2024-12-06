@@ -381,4 +381,12 @@ public class ApplicationException extends RuntimeException {
     public String getLocalizedStandardDescription() {
         return getStandardDescription();
     }
+
+    /**
+     * Outputs the exception as stack trace and then throws it.
+     */
+    public void logTraceAndThrow() {
+        LOGGER.error("Stacktrace is ", this);
+        throw this;
+    }
 }

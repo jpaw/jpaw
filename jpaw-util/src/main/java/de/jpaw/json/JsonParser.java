@@ -10,16 +10,22 @@ import java.util.function.Consumer;
 import de.jpaw.util.CharTestsASCII;
 
 public class JsonParser {
+    private final boolean forbidNumericKeys;
     private final boolean useFloat;
     private final CharSequence s;
     private final int len;
     private int i;
 
-    public JsonParser(final CharSequence s, final boolean useFloat) {
+    public JsonParser(final CharSequence s, final boolean useFloat, final boolean forbidNumericKeys) {
         this.s = s;
         this.useFloat = useFloat;
+        this.forbidNumericKeys = forbidNumericKeys;
         len = s == null ? 0 : s.length();
         i = 0;
+    }
+
+    public JsonParser(final CharSequence s, final boolean useFloat) {
+        this(s, useFloat, false);
     }
 
     private void skipSpaces() {
@@ -79,26 +85,10 @@ public class JsonParser {
         ++i;
     }
 
-    // parse a string which contains an ID
+    // parses a string which contains an ID. By constructor setting it is defined if numeric identifiers are allowed.
     private String parseId() throws JsonException {
-//        requireNext('"');
-//        StringBuilder sb = new StringBuilder(40);
-//        char c = s.charAt(i);
-////        // cannot start with a digit
-////        if (CharTestsASCII.isAsciiDigit(c))
-////            throw new JsonException(JsonException.JSON_BAD_IDENTIFIER, i);
-//        while (CharTestsASCII.isJavascriptIdChar(c)) {
-//            sb.append(c);
-//            ++i;
-//            c = peekNeededChar();
-//        }
-//        if (c != '\"' || sb.length() == 0)
-//            throw new JsonException(JsonException.JSON_BAD_IDENTIFIER, i);
-//        ++i;
-//        skipSpaces();
-//        return sb.toString();
         final String s2 = parseStringSub();
-        if (s2.length() == 0 || CharTestsASCII.isAsciiDigit(s2.charAt(0)))
+        if (s2.length() == 0 || (forbidNumericKeys && CharTestsASCII.isAsciiDigit(s2.charAt(0))))
             throw new JsonException(JsonException.JSON_BAD_IDENTIFIER, i);
         return s2;
     }

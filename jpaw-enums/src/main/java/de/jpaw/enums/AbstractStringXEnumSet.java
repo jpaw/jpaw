@@ -2,6 +2,7 @@ package de.jpaw.enums;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /** An alternate implementation of EnumSet, which stores the contained elements as a component inside Strings.
  * The class is not thread safe. Implementations which intend to perform parallel modification must use external locking mechanisms.
@@ -44,15 +45,21 @@ public abstract class AbstractStringXEnumSet<E extends AbstractXEnumBase<E>> ext
 
         @Override
         public boolean hasNext() {
-            return index< bitmap.length();
+            return index < bitmap.length();
         }
 
         @Override
         public E next() {
-            if (bitmap.length() <= index)
-                return null;                // shortcut
+            if (bitmap.length() <= index) {
+                // by contract, NoSuchElement exception should be thrown
+                throw new NoSuchElementException();
+            }
             ++index;
-            return myFactory.getByToken(bitmap.substring(index-1, index));
+            final E nextEnum = myFactory.getByToken(bitmap.substring(index-1, index));
+            if (nextEnum == null) {
+                throw new NoSuchElementException();
+            }
+            return nextEnum;
         }
 
         @Override

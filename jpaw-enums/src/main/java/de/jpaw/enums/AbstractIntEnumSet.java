@@ -1,6 +1,7 @@
 package de.jpaw.enums;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /** An alternate implementation of EnumSet, but with the ability to obtain the resulting bitmap, for either transfer or storing in a database.
  * The underlying object is a int, therefore the maximum number of enum tokens is 31 (as we don't want negative values). */
@@ -183,8 +184,10 @@ public abstract class AbstractIntEnumSet<E extends Enum<E>> extends AbstractFree
 
         @Override
         public E next() {
-            if (bitmap == 0)
-                return null;
+            if (bitmap == 0) {
+                // by contract, NoSuchElement exception should be thrown
+                throw new NoSuchElementException();
+            }
             ++index;                                    // index was at previous position. At least increment once
             while ((bitmap & (BIT << index)) == 0) {
                 ++index;

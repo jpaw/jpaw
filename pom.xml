@@ -42,13 +42,13 @@
         <guava.version>33.3.1-jre</guava.version>       <!-- http://code.google.com/p/guava-libraries/ -->
         <xtext.version>2.37.0</xtext.version>           <!-- version of xtext, xtend, and the related libs -->
         <jdt.version>3.39.0</jdt.version>                <!-- requires min 3.37.0 for Java 17/21 features in Xtext -->
-        <jodatime.version>2.13.0</jodatime.version>
+        <jodatime.version>2.13.1</jodatime.version>
         <jsap.version>2.1</jsap.version>
         <reflections.version>0.9.10</reflections.version>  <!-- 0.9.11 got issues while scanning -->
         <icu.version>76.1</icu.version>
         <disruptor.version>3.3.11</disruptor.version>
-        <jackson.version>2.18.1</jackson.version>
-        <jackson-databind.version>2.18.1</jackson-databind.version>       <!-- separate version due to frequent CVE updates which do not release the full set -->
+        <jackson.version>2.18.2</jackson.version>
+        <jackson-databind.version>2.18.2</jackson-databind.version>       <!-- separate version due to frequent CVE updates which do not release the full set -->
         <commons-text.version>1.12.0</commons-text.version>               <!-- not used in t9t, but DM made to cover for transitive dependencies -->
         <commons-lang3.version>3.17.0</commons-lang3.version>             <!-- regularly updated again -->
         <commons-collections4.version>4.4</commons-collections4.version>
@@ -75,9 +75,9 @@
 
         <!-- testing support -->
         <junit.version>4.13.2</junit.version>
-        <junit5.version>5.11.3</junit5.version>
-        <junit5.platform.version>1.11.3</junit5.platform.version>
-        <spotbugs.version>4.8.6</spotbugs.version>
+        <junit5.version>5.11.4</junit5.version>
+        <junit5.platform.version>1.11.4</junit5.platform.version>
+        <spotbugs.version>4.9.1</spotbugs.version>
 
         <!--  benchmarking -->
         <jmh.version>1.37</jmh.version>               <!-- http://openjdk.java.net/projects/code-tools/jmh/ -->

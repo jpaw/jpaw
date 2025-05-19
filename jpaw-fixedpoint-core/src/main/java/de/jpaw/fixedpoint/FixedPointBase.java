@@ -737,14 +737,62 @@ public abstract class FixedPointBase<CLASS extends FixedPointBase<CLASS>> extend
             // invoke the computation. If we have changed the sign, adjust the requested rounding mode accordingly.
             // check if we can do it with a long
             if (((mantissaA | mantissaB) & 0xffffffff80000000L) == 0L) {
-                // both have 31 bits only
+                // both have 31 bits only => result is surely positive
                 productAbsolute = roundMantissa(mantissaA * mantissaB, POWERS_OF_TEN[digitsToScale], negateResult ? ROUNDING_MODE_MAPPING.get(rounding) : rounding);
             } else {
                 if (Math.multiplyHigh(mantissaA, mantissaB) == 0) {
                     // another chance to do it within a single multiplication - this covers additional asymmetric operands
                     final long prodTmp = mantissaA * mantissaB;
                     if (prodTmp >= 0) {
-                        return negateResult ? -prodTmp : prodTmp;
+                        productAbsolute = roundMantissa(prodTmp, POWERS_OF_TEN[digitsToScale], negateResult ? ROUNDING_MODE_MAPPING.get(rounding) : rounding);
+                        return negateResult ? -productAbsolute : productAbsolute;
+                    }
+                    // as we do not have a true 128 bit multiplication, we first try to shave off any extra powers of ten
+                    // in chunks of 3, first A, then B
+                    int newDigitsToScale = digitsToScale;
+                    long newMantissaA = mantissaA;
+                    long newMantissaB = mantissaB;
+                    while (newDigitsToScale >= 3) {
+                        if (newMantissaA % 1000 == 0) {
+                            newMantissaA /= 1000;
+                            newDigitsToScale -= 3;
+                        } else {
+                            break;
+                        }
+                    }
+                    while (newDigitsToScale >= 3) {
+                        if (newMantissaB % 1000 == 0) {
+                            newMantissaB /= 1000;
+                            newDigitsToScale -= 3;
+                        } else {
+                            break;
+                        }
+                    }
+                    while (newDigitsToScale > 0) {
+                        if (newMantissaA % 10 == 0) {
+                            newMantissaA /= 10;
+                            --newDigitsToScale;
+                        } else {
+                            break;
+                        }
+                    }
+                    while (newDigitsToScale > 0) {
+                        if (newMantissaB % 10 == 0) {
+                            newMantissaB /= 10;
+                            --newDigitsToScale;
+                        } else {
+                            break;
+                        }
+                    }
+                    if (digitsToScale != newDigitsToScale) {
+                        // at least one reduction worked
+                        if (Math.multiplyHigh(newMantissaA, newMantissaB) == 0) {
+                            final long newProdTmp = newMantissaA * newMantissaB;
+                            if (newProdTmp >= 0) {
+                                productAbsolute = roundMantissa(newProdTmp, POWERS_OF_TEN[newDigitsToScale], negateResult ? ROUNDING_MODE_MAPPING.get(rounding) : rounding);
+                                return negateResult ? -productAbsolute : productAbsolute;
+                            }
+                        }
                     }
                     // else fall through and do the complex one
                 }

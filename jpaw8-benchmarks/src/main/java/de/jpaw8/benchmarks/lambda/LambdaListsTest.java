@@ -71,6 +71,11 @@ public class LambdaListsTest {
     @Param({"0", "2", "4", "6"})
     public int exponent;
 
+    /** Computes the initial size for a HashMap, given the known number of elements. */
+    private int getIdealInitialSize(final int maxElements) {
+        return (int) (maxElements * 1.5 + 1);
+    }
+
 //
 //  Benchmarks to measure the overhead of lambdas in standard processing scenarios
 //  Filter: extract an element of an object list, and collect it into a list of just that element
@@ -119,6 +124,14 @@ public class LambdaListsTest {
         bh.consume(indexed);
     }
     @Benchmark
+    public void javaIndexClassicWithKnownResultSizeScaled(Blackhole bh) {
+        // classic java approach: preallocate the target, loop
+        final List<IndexedString> data = offsets.get(exponent);
+        final Map<Integer, IndexedString> indexed = new HashMap<>(getIdealInitialSize(data.size()));
+        for (IndexedString obj: data) indexed.put(obj.ind, obj);
+        bh.consume(indexed);
+    }
+    @Benchmark
     public void javaIndexClassicWithDynamicResultSize(Blackhole bh) {
         // classic java approach: preallocate the target, with small initial size, then loop (causes GC overhead due to reallocations)
         final List<IndexedString> data = offsets.get(exponent);
@@ -135,10 +148,26 @@ public class LambdaListsTest {
         bh.consume(indexed);
     }
     @Benchmark
+    public void javaIndexStreamWithKnownResultSizeScaled(Blackhole bh) {
+        // streams approach with forEach
+        final List<IndexedString> data = offsets.get(exponent);
+        final Map<Integer, IndexedString> indexed = new HashMap<>(getIdealInitialSize(data.size()));
+        data.stream().forEach(obj -> indexed.put(obj.ind,  obj));
+        bh.consume(indexed);
+    }
+    @Benchmark
     public void javaIndexForeachWithKnownResultSize(Blackhole bh) {
         // functional approach with forEach directly applied to collection
         final List<IndexedString> data = offsets.get(exponent);
         final Map<Integer, IndexedString> indexed = new HashMap<>(data.size());
+        data.forEach(obj -> indexed.put(obj.ind,  obj));
+        bh.consume(indexed);
+    }
+    @Benchmark
+    public void javaIndexForeachWithKnownResultSizeScaled(Blackhole bh) {
+        // functional approach with forEach directly applied to collection
+        final List<IndexedString> data = offsets.get(exponent);
+        final Map<Integer, IndexedString> indexed = new HashMap<>(getIdealInitialSize(data.size()));
         data.forEach(obj -> indexed.put(obj.ind,  obj));
         bh.consume(indexed);
     }

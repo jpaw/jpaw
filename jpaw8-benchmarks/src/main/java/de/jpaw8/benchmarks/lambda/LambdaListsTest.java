@@ -23,8 +23,21 @@ import org.openjdk.jmh.infra.Blackhole;
 //java -jar target/jpaw8-benchmarks.jar -i 3 -f 3 -wf 1 -wi 3 ".*LambdaListsTest.*"
 //# Run complete. Total time: 00:02:31
 //
+// MacBook Air M3
 //Benchmark                                             Mode  Samples    Score  Score error  Units
-
+//Benchmark                                                  (exponent)  Mode  Cnt         Score          Error  Units
+//LambdaListsTest.javaIndexClassicWithDynamicResultSize               0  avgt    3        10.406 ±        0.202  ns/op
+//LambdaListsTest.javaIndexClassicWithDynamicResultSize               2  avgt    3       939.140 ±      111.354  ns/op
+//LambdaListsTest.javaIndexClassicWithDynamicResultSize               4  avgt    3     71450.640 ±     6447.443  ns/op
+//LambdaListsTest.javaIndexClassicWithDynamicResultSize               6  avgt    3  16283625.551 ±  2047453.320  ns/op
+//LambdaListsTest.javaIndexClassicWithKnownResultSize                 0  avgt    3        15.075 ±        6.446  ns/op
+//LambdaListsTest.javaIndexClassicWithKnownResultSize                 2  avgt    3       729.511 ±       93.417  ns/op
+//LambdaListsTest.javaIndexClassicWithKnownResultSize                 4  avgt    3     50272.016 ±     3997.944  ns/op
+//LambdaListsTest.javaIndexClassicWithKnownResultSize                 6  avgt    3  13874395.597 ±  7494169.052  ns/op
+//LambdaListsTest.javaIndexClassicWithKnownResultSizeScaled           0  avgt    3        10.969 ±        1.518  ns/op
+//LambdaListsTest.javaIndexClassicWithKnownResultSizeScaled           2  avgt    3       525.903 ±       30.017  ns/op
+//LambdaListsTest.javaIndexClassicWithKnownResultSizeScaled           4  avgt    3     50147.646 ±     7889.817  ns/op
+//LambdaListsTest.javaIndexClassicWithKnownResultSizeScaled           6  avgt    3  11876301.011 ± 14835197.782  ns/op
 
 @State(value = Scope.Thread)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)

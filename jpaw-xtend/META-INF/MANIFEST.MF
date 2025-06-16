@@ -3,7 +3,7 @@ Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Bundle-ManifestVersion: 2
 Bundle-Name: jpaw xtend library addons
 Bundle-SymbolicName: jpaw.xtend
-Bundle-Version: 3.6.2
+Bundle-Version: 3.6.3
 Bundle-Vendor: Michael Bischoff
 Export-Package: de.jpaw.xtend
 Bundle-ActivationPolicy: lazy

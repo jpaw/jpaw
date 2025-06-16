@@ -3,7 +3,7 @@
 
     <groupId>de.jpaw</groupId>
     <artifactId>jpaw-base</artifactId>
-    <version>3.6.3</version>
+    <version>3.6.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <description>Common configuration settings for all jpaw basic / utility projects and 3rd party BoM</description>
@@ -17,7 +17,7 @@
 
     <scm>
       <developerConnection>scm:git:https://github.com/arvato-systems-jacs/jpaw.git</developerConnection>
-      <tag>v3.6.3</tag>
+      <tag>HEAD</tag>
     </scm>
 
     <licenses>

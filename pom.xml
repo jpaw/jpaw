@@ -50,7 +50,7 @@
         <jackson.version>2.19.1</jackson.version>
         <jackson-databind.version>2.19.1</jackson-databind.version>       <!-- separate version due to frequent CVE updates which do not release the full set -->
         <commons-text.version>1.13.1</commons-text.version>               <!-- not used in t9t, but DM made to cover for transitive dependencies -->
-        <commons-lang3.version>3.17.0</commons-lang3.version>             <!-- regularly updated again -->
+        <commons-lang3.version>3.18.0</commons-lang3.version>             <!-- regularly updated again -->
         <commons-collections4.version>4.4</commons-collections4.version>
         <poi.version>5.2.5</poi.version>
         <hdrHistogram.version>2.1.12</hdrHistogram.version>

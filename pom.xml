@@ -47,7 +47,7 @@
         <reflections.version>0.9.10</reflections.version>  <!-- 0.9.11 got issues while scanning -->
         <icu.version>77.1</icu.version>
         <disruptor.version>3.3.11</disruptor.version>
-        <jackson.version>2.19.1</jackson.version>
+        <jackson.version>2.21.1</jackson.version>
         <jackson-databind.version>2.19.1</jackson-databind.version>       <!-- separate version due to frequent CVE updates which do not release the full set -->
         <commons-text.version>1.13.1</commons-text.version>               <!-- not used in t9t, but DM made to cover for transitive dependencies -->
         <commons-lang3.version>3.17.0</commons-lang3.version>             <!-- regularly updated again -->
